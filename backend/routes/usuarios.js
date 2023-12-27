@@ -11,7 +11,6 @@ const router = Router(); //Declaramos un router de tipo Router
 router.get('/usuarios', validarJWT, obtenerUsuarios);
 
 router.post('/usuarios', [
-    validarJWT,
     check('email', "El email está vacío").not().isEmpty(),
     check('nombre', "El nombre está vacío").not().isEmpty(),
     check('apellido', "El apellido está vacío").not().isEmpty(),
