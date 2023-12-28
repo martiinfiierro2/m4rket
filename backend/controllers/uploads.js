@@ -56,6 +56,7 @@ const subirArchivo = async(req, res = response) => {
     const path = `${process.env.PATHUPLOAD}/${tipo}`;
     const nombreArchivo = `${uuidv4()}.${extension}`;
     const patharchivo = `${path}/${nombreArchivo}`;
+    console.log(patharchivo);
 
     archivo.mv(patharchivo, (err) => {
         if (err) {
@@ -94,10 +95,19 @@ const subirArchivo = async(req, res = response) => {
 }
 
 const enviarArchivo = async(req, res = response) => {
-    res.json({
-        ok: true,
-        msg: 'enviarArchivo'
-    })
+    const tipo = req.params.tipo; // fotoperfil   fotoproducto
+    const nombrearchivo = req.params.nombrearchivo;
+
+    const path = `${process.env.PATHUPLOAD}/${tipo}`;
+    const patharchivo = `${path}/${nombrearchivo}`;
+
+    if(!fs.existsSync(patharchivo)){
+        res.status(400).json({
+            ok: false,
+            msg: 'No existe archivo'
+        })
+    }
+    res.sendFile(patharchivo);
 }
 
 module.exports = { subirArchivo, enviarArchivo }
