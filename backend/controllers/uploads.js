@@ -3,6 +3,7 @@ require('dotenv').config();
 const { v4: uuidv4 } = require('uuid');
 const { actualizarBD } = require('../helpers/actualizarbd');
 const fs = require('fs');
+const path = require('path');
 
 const subirArchivo = async(req, res = response) => {
     if (!req.files || Object.keys(req.files).length === 0) {
@@ -95,19 +96,24 @@ const subirArchivo = async(req, res = response) => {
 }
 
 const enviarArchivo = async(req, res = response) => {
-    const tipo = req.params.tipo; // fotoperfil   fotoproducto
-    const nombrearchivo = req.params.nombrearchivo;
 
-    const path = `${process.env.PATHUPLOAD}/${tipo}`;
-    const patharchivo = `${path}/${nombrearchivo}`;
+    const tipo = req.params.tipo; // fotoproducto
+    const nombreArchivo = req.params.nombrearchivo;
 
-    if(!fs.existsSync(patharchivo)){
-        res.status(400).json({
-            ok: false,
-            msg: 'No existe archivo'
-        })
+    const directorio = `${process.env.PATHUPLOAD}/${tipo}`;
+    const pathArchivo = path.resolve(directorio, nombreArchivo);
+
+    if (!fs.existsSync(pathArchivo)) {
+        if (tipo !== 'fotoproducto') {
+            return res.status(400).json({
+                ok: false,
+                msg: 'Archivo no existe'
+            });
+        }
+        const imagenPorDefecto = path.resolve(`${process.env.PATHUPLOAD}/${tipo}`, 'no-imagen.png');
+        return res.sendFile(imagenPorDefecto);
     }
-    res.sendFile(patharchivo);
+    res.sendFile(pathArchivo);
 }
 
 module.exports = { subirArchivo, enviarArchivo }
