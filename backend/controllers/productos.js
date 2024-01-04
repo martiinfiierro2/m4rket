@@ -1,10 +1,9 @@
 const { Producto } = require('../models/productos');
 const { Ubicacion } = require('../models/ubicaciones');
 const { Promocion } = require('../models/promociones');
+const { Op } = require('sequelize');
 
 const obtenerProducto = async(req, res) => {
-
-    //Obtenemos el ID del usuario por si solo quiere buscar por usuario
     const id = req.query.id;
 
     //Paginación 
@@ -60,6 +59,53 @@ const obtenerProducto = async(req, res) => {
         });
     }
 };
+
+const buscarProducto = async(req, res) => {
+    const datos = req.params.datos;
+
+    //Paginación 
+    const desde = Number(req.query.desde) || 0; //Si no dan nada o no dan un numero es 0
+    const registropp = 4;
+
+    try{
+        let productos, total;
+        [productos, total] = await Promise.all([
+            Producto.findAll({
+                where: {
+                    [Op.or]: [
+                        { nombre: { [Op.like]: `%${datos}%` } },
+                        { marca: { [Op.like]: `%${datos}%` } },
+                        { categoria: { [Op.like]: `%${datos}%` } },
+                    ],
+                },
+                offset: desde,
+                limit: registropp,
+                include: [
+                    Ubicacion,
+                    Promocion,
+                ]
+            }),
+            //Total de usuarios que hay en la base de datos
+            Producto.count()
+        ]);
+        res.json({
+            ok: true,
+            msg: 'buscarProductos',
+            productos: productos,
+            page: {
+                desde,
+                registropp,
+                total
+            }
+        });
+    }catch (error) {
+        return res.status(400).json({
+            ok: false,
+            msg: 'Error buscando productos',
+            error: error
+        });
+    }
+}
 
 const crearProducto = async(req, res) => {
     try{
@@ -141,4 +187,4 @@ const borrarProducto = async(req, res) => {
     }
 }
 
-module.exports = { obtenerProducto, crearProducto, actualizarProducto, borrarProducto };
+module.exports = { obtenerProducto, crearProducto, actualizarProducto, borrarProducto, buscarProducto };

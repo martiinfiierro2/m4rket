@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs'); //Para cifrar contraseñas
+const { generarJWT } = require('../helpers/jwt');
 const { Usuario, serializeUsuario, serializarListaUsuarios } = require('../models/usuarios');
 
 const obtenerUsuarios = async(req, res) => {
@@ -77,10 +78,14 @@ const crearUsuarios = async (req, res) => {
 
         //Hacemos la request
         await usuario.save();
+
+        //Generamos el token
+        const token = await generarJWT(usuario.id, usuario.rol);
         res.json({
             ok: true,
             msg: 'crearUsuarios',
-            usuario: usuario
+            usuario: usuario,
+            token: token
         });
     }catch (error) {
         return res.status(400).json({
