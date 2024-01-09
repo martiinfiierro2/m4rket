@@ -8,7 +8,7 @@ const obtenerProducto = async(req, res) => {
 
     //Paginación 
     const desde = Number(req.query.desde) || 0; //Si no dan nada o no dan un numero es 0
-    const registropp = 4;
+    const registropp = 10;
 
     try{
         let productos, total;
@@ -65,29 +65,61 @@ const buscarProducto = async(req, res) => {
 
     //Paginación 
     const desde = Number(req.query.desde) || 0; //Si no dan nada o no dan un numero es 0
-    const registropp = 4;
+    const registropp = 10;
 
     try{
         let productos, total;
-        [productos, total] = await Promise.all([
-            Producto.findAll({
-                where: {
-                    [Op.or]: [
-                        { nombre: { [Op.like]: `%${datos}%` } },
-                        { marca: { [Op.like]: `%${datos}%` } },
-                        { categoria: { [Op.like]: `%${datos}%` } },
-                    ],
-                },
-                offset: desde,
-                limit: registropp,
-                include: [
-                    Ubicacion,
-                    Promocion,
-                ]
-            }),
-            //Total de usuarios que hay en la base de datos
-            Producto.count()
-        ]);
+        if(datos == 'cantidad'){
+            [productos, total] = await Promise.all([
+                Producto.findAll({
+                    order: [['stock', 'DESC']],
+                    offset: desde,
+                    limit: registropp,
+                    include: [
+                        Ubicacion,
+                        Promocion,
+                    ]
+                }),
+                //Total de usuarios que hay en la base de datos
+                Producto.count()
+            ]);
+        }
+        else if(datos == 'precio'){
+            [productos, total] = await Promise.all([
+                Producto.findAll({
+                    order: [['precio', 'DESC']],
+                    offset: desde,
+                    limit: registropp,
+                    include: [
+                        Ubicacion,
+                        Promocion,
+                    ]
+                }),
+                //Total de usuarios que hay en la base de datos
+                Producto.count()
+            ]);
+        }
+        else{
+            [productos, total] = await Promise.all([
+                Producto.findAll({
+                    where: {
+                        [Op.or]: [
+                            { nombre: { [Op.like]: `%${datos}%` } },
+                            { marca: { [Op.like]: `%${datos}%` } },
+                            { categoria: { [Op.like]: `%${datos}%` } },
+                        ],
+                    },
+                    offset: desde,
+                    limit: registropp,
+                    include: [
+                        Ubicacion,
+                        Promocion,
+                    ]
+                }),
+                //Total de usuarios que hay en la base de datos
+                Producto.count()
+            ]);
+        }
         res.json({
             ok: true,
             msg: 'buscarProductos',
