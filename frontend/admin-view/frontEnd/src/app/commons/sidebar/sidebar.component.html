@@ -1,0 +1,32 @@
+<div id="sidebar_menu">
+    <div id="head">
+        <img src="/assets/img/logo_blanco.png" alt="Logo de la aplicación">
+        <h2>M4RKET</h2>
+    </div>
+    <div id="menuContent">
+        <div id="topMenu">
+            <div class="linea" id="lineaProductos">
+                <span class="icono"><a href="/productos" class="icon-doc-text"></a></span>
+                <span><a href="/productos">Stock</a></span>
+            </div>
+            <div class="linea" id="lineaPromociones">
+                <span class="icono"><a href="/promociones" class="icon-folder-open-empty"></a></span>
+                <span><a href="/promociones">Promociones</a></span>
+            </div>
+            <div class="linea" id="lineaUbicaciones">
+                <span class="icono"><a href="/ubicaciones" class="icon-location"></a></span>
+                <span><a href="/ubicaciones">Ubicaciones</a></span>
+            </div>
+        </div>
+        <div id="bottomMenu">
+            <div class="linea">
+                <span class="icono icon-user-o enlace"></span>
+                <span id="nombreUsuario" class="enlace"></span>
+            </div>
+            <div class="linea">
+                <span class="icono icon-logout-1 enlace"></span>
+                <span (click)="logOut()" class="enlace">Cerrar sesión</span>
+            </div>
+        </div>
+    </div>
+</div>
