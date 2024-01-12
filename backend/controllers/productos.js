@@ -141,11 +141,9 @@ const buscarProducto = async(req, res) => {
 
 const crearProducto = async(req, res) => {
     try{
-        //Creamos el usuario
-        const producto = new Producto(req.body);
         
         //Hacemos la request
-        await producto.save();
+        const producto = await Producto.create(req.body);
 
         res.json({
             ok: true,

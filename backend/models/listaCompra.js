@@ -5,6 +5,7 @@ const Listacompra = sequelize.define('lista_compra', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
+        autoIncrement: true,
     },
     idUsu: {
         type: DataTypes.INTEGER,
