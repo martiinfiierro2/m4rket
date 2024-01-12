@@ -33,7 +33,7 @@ export class NewProductoComponent {
     fibra: [null],
     proteina: [null],
     sal: [null],
-    foto: ['']  
+    foto: ['', [Validators.required]]  
   });
 
   public srcImagen: string = '';
@@ -70,19 +70,24 @@ export class NewProductoComponent {
 
   newProducto(){
 
+    let idProducto = '';
+
     if (!this.productoForm.valid) {
       console.warn('errores en el formulario');
     }
     else{  
 
-      console.log(this.productoForm.value);
-
       this.productoService.postProducto(this.productoForm.value)
       .subscribe( res => {
         console.log(res);
-        //this.atras();
+        idProducto = res.producto.id;
+        //subida de la foto
+        this.productoService.postFotoProducto(this.foto!, idProducto)
+          .subscribe( res =>{
+            console.log('Foto añadida: ', res);
+            this.atras();
+          })
       })
-    
     }
   }
 
