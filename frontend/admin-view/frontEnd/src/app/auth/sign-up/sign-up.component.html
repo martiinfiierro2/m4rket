@@ -1,0 +1,20 @@
+<form (ngSubmit)="sign_up()" [formGroup]="sign_upForm">
+    <h2>Registrarse</h2>
+    <label for="nombre">Nombre<input type="text" name="nombre" id="nombre" formControlName="nombre"></label>
+    <label for="apellido">Apellido<input type="text" name="apellido" id="apellido" formControlName="apellido"></label>
+    <label for="email">Email<input type="email" name="email" id="email" formControlName="email"></label>
+    <label for="pwd">Contraseña<input type="password" name="pwd" id="pwd" formControlName="pwd"></label>
+    <label for="genero">Género
+        <select name="genero" id="genero" formControlName="genero">
+            <option value="hombre">Hombre</option>
+            <option value="mujer">Mujer</option>
+        </select>
+    </label>
+    <label for="rol">Rol
+        <select name="rol" id="rol" formControlName="rol">
+            <option value="usuario">Usuario</option>
+            <option value="admin">Administrador</option>
+        </select>
+    </label>
+    <input type="submit" value="Enviar">
+</form>

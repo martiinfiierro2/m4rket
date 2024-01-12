@@ -67,59 +67,103 @@ const buscarProducto = async(req, res) => {
     const desde = Number(req.query.desde) || 0; //Si no dan nada o no dan un numero es 0
     const registropp = 10;
 
+    console.log(datos);
+
     try{
         let productos, total;
-        if(datos == 'cantidad'){
-            [productos, total] = await Promise.all([
-                Producto.findAll({
-                    order: [['stock', 'DESC']],
-                    offset: desde,
-                    limit: registropp,
-                    include: [
-                        Ubicacion,
-                        Promocion,
-                    ]
-                }),
-                //Total de usuarios que hay en la base de datos
-                Producto.count()
-            ]);
+
+        //Comprobacion si se ordena por cantidad(ASC/DESC) o precio(ASC/DESC)
+        switch (datos) {
+            case 'cantidadDESC':
+                    [productos, total] = await Promise.all([
+                    Producto.findAll({
+                        order: [['stock', 'DESC']],
+                        offset: desde,
+                        limit: registropp,
+                        include: [
+                            Ubicacion,
+                            Promocion,
+                        ]
+                    }),
+                    //Total de usuarios que hay en la base de datos
+                    Producto.count()
+                    ]);
+
+                break;
+            case 'cantidadASC':
+                    [productos, total] = await Promise.all([
+                    Producto.findAll({
+                        order: [['stock', 'ASC']],
+                        offset: desde,
+                        limit: registropp,
+                        include: [
+                            Ubicacion,
+                            Promocion,
+                        ]
+                    }),
+                    //Total de usuarios que hay en la base de datos
+                    Producto.count()
+                    ]);
+
+                break;
+            case 'precioASC':
+                    [productos, total] = await Promise.all([
+                    Producto.findAll({
+                        order: [['precio', 'ASC']],
+                        offset: desde,
+                        limit: registropp,
+                        include: [
+                            Ubicacion,
+                            Promocion,
+                        ]
+                    }),
+                    //Total de usuarios que hay en la base de datos
+                    Producto.count()
+                    ]);
+
+                break;
+            case 'precioDESC':
+                    [productos, total] = await Promise.all([
+                    Producto.findAll({
+                        order: [['precio', 'DESC']],
+                        offset: desde,
+                        limit: registropp,
+                        include: [
+                            Ubicacion,
+                            Promocion,
+                        ]
+                    }),
+                    //Total de usuarios que hay en la base de datos
+                    Producto.count()
+                    ]);
+
+                break;
+                   
+            default:
+                    [productos, total] = await Promise.all([
+                        Producto.findAll({
+                            where: {
+                                [Op.or]: [
+                                    { nombre: { [Op.like]: `%${datos}%` } },
+                                    { marca: { [Op.like]: `%${datos}%` } },
+                                    { categoria: { [Op.like]: `%${datos}%` } },
+                                ],
+                            },
+                            offset: desde,
+                            limit: registropp,
+                            include: [
+                                Ubicacion,
+                                Promocion,
+                            ]
+                        }),
+                        //Total de usuarios que hay en la base de datos
+                        Producto.count()
+                    ]);
+                break;
+            
         }
-        else if(datos == 'precio'){
-            [productos, total] = await Promise.all([
-                Producto.findAll({
-                    order: [['precio', 'DESC']],
-                    offset: desde,
-                    limit: registropp,
-                    include: [
-                        Ubicacion,
-                        Promocion,
-                    ]
-                }),
-                //Total de usuarios que hay en la base de datos
-                Producto.count()
-            ]);
-        }
-        else{
-            [productos, total] = await Promise.all([
-                Producto.findAll({
-                    where: {
-                        [Op.or]: [
-                            { nombre: { [Op.like]: `%${datos}%` } },
-                            { marca: { [Op.like]: `%${datos}%` } },
-                            { categoria: { [Op.like]: `%${datos}%` } },
-                        ],
-                    },
-                    offset: desde,
-                    limit: registropp,
-                    include: [
-                        Ubicacion,
-                        Promocion,
-                    ]
-                }),
-                //Total de usuarios que hay en la base de datos
-                Producto.count()
-            ]);
-        }
+
+        
         res.json({
             ok: true,
             msg: 'buscarProductos',
@@ -139,7 +183,9 @@ const buscarProducto = async(req, res) => {
     }
 }
 
+
 const crearProducto = async(req, res) => {
+    
     try{
         //Creamos el usuario
         const producto = new Producto(req.body);
@@ -159,6 +205,7 @@ const crearProducto = async(req, res) => {
             error: error
         });
     }
+    
 }
 
 const actualizarProducto = async(req,res) => {

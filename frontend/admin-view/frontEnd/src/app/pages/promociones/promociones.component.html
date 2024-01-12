@@ -1,0 +1,61 @@
+<div id="header">
+    <div id="divSearch">
+        <form>
+            <input type="text" name="search" id="search" placeholder="Búsqueda">
+            <input type="submit" value="Buscar">
+        </form>
+    </div>
+    <div id="botonesHeader">
+        <button (click)="irNuevaPromo()">Añadir promoción</button>
+        <button (click)="irNuevoTipoPromo()">Añadir tipo promoción</button>
+    </div>
+</div>
+
+<div id="addPromo">
+    <form>
+    </form>
+</div>
+<div id="addUbi">
+
+</div>
+
+<div id="listadoPromociones" *ngIf="promociones">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Fecha inicio</th>
+                <th>Fecha fin</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let promocion of promociones">
+                <td> {{ promocion.nombre }} </td>
+                <td> {{ promocion.tipopromo.nombre }} </td>
+                <td> {{ promocion.fecha_ini }} </td>
+                <td> {{ promocion.fecha_fin }}</td>
+                <td>
+                    <select [(ngModel)]="promocionSeleccionada" id="selectAccion" (change)="ejecutarAccion(promocion.id)">
+                        <option value="default" selected></option>
+                        <option value="editar">Editar</option>
+                        <option value="borrar">Borrar</option>
+                    </select>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<!-- Modal -->
+<div class="modal" id="mensajeModal">
+    <div class="modal-content">
+      <span class="close" (click)="cerrarModal()">&times;</span>
+      <div class="center-text">
+        <p>¿Realmente deseas borrar este producto?</p>
+        <button (click)="confirmarBorrado()">Confirmar</button>
+      </div>
+    </div>
+</div>

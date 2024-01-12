@@ -1,0 +1,66 @@
+<div id="header">
+    <div id="divSearch">
+        <form id="busqueda" (ngSubmit)="getBusquedaProducto()">
+            <input type="text" name="search" id="search" placeholder="Búsqueda" [(ngModel)]="valueBusquedaInput" ngModel>
+            <input type="submit" value="Buscar">
+        </form>
+        <button (click)="getProductos(); valueBusquedaInput=''">Cancelar</button>
+    </div>
+    <div id="botonesHeader">
+        <button (click)="irNuevoProducto()">Añadir producto</button>
+        <button>Filtros</button>
+    </div>
+</div>
+<div id="listadoProductos" *ngIf="productos">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Imagen</th>
+                <th>Producto</th>
+                <th>Marca</th>
+                <th (click)="cambiarCriterioOrdenacion('disponibilidad')" class="enlace" [style]="estiloOrdenacionDispo">Disponibilidad <span  [ngClass]="iconoOrdenacionDispo"></span></th>
+                <th (click)="cambiarCriterioOrdenacion('precio')" class="enlace" [style]="estiloOrdenacionPrecio">Precio <span [ngClass]="iconoOrdenacionPrecio"></span></th>
+                <th>Ubicaciones</th>
+                <th>Promoción</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let producto of productos">
+                <td><img [src]="urlFotoProducto + producto.foto + '?token=' +tokenUsuario" alt="Imagen del producto"></td>
+                <td> {{ producto.nombre }} </td>
+                <td> {{ producto.marca }} </td>
+                <td><div id="divStock" [ngStyle]="colorStock(producto.stock)"> {{ producto.stock }} </div></td>
+                <td> {{ producto.precio }} €</td>
+                <td *ngIf="producto.Ubicacions.length > 0"><span *ngFor="let ubicaciones of producto.Ubicacions"> {{ ubicaciones.referencia }} </span></td>
+                <td *ngIf="producto.Ubicacions.length == 0"> --- </td>
+                <td *ngIf="producto.Promocions.length == 0">
+                    <select name="selectPromociones" id="selectPromociones">
+                        <option value="default" selected></option>
+                        <option *ngFor="let promocion of promociones" value="promocion.nombre">{{ promocion.nombre }}</option>
+                    </select>
+                </td>
+                <td *ngIf="producto.Promocions.length > 0"><span *ngFor="let promocion_prod of producto.Promocions">{{ promocion_prod.nombre }}</span></td>
+                <td>
+                    <select [(ngModel)]="productoSeleccionado" id="selectAccion" (change)="cambioAccion(producto.id)">
+                        <option value="default" selected></option>
+                        <option value="editar">Editar</option>
+                        <option value="borrar">Borrar</option>
+                    </select>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<!-- Modal -->
+<div class="modal" id="mensajeModal">
+    <div class="modal-content">
+      <span class="close" (click)="cerrarModal()">&times;</span>
+      <div class="center-text">
+        <p>¿Realmente deseas borrar este producto?</p>
+        <button (click)="confirmarBorrado()">Confirmar</button>
+      </div>
+    </div>
+</div>
