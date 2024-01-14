@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable } from 'rxjs';
+import { environment } from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ export class UbicacionesService {
 
   constructor( private http: HttpClient) { }
 
-  private url: string = 'http://localhost:3000/api/ubicaciones';
+  private url: string = environment.base_url + '/ubicaciones';
 
   private token: string|any;
   private cabeceras: any;
@@ -46,7 +47,9 @@ export class UbicacionesService {
 
   postUbicacionProducto(datos: any){
 
-    return this.http.post('http://localhost:3000/api/enubicacion', datos, {headers: this.cabeceras});
+    let urlCompleta = environment.base_url + '/enubicacion';
+
+    return this.http.post(urlCompleta, datos, {headers: this.cabeceras});
   }
 
 }

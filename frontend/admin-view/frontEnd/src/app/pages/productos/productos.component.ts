@@ -7,7 +7,7 @@ import { PromocionesService} from '../../services/promociones.service';
 import { Promocion } from '../promociones/promociones.component';
 import { UbicacionesService } from '../../services/ubicaciones.service';
 import { Ubicacion } from '../ubicaciones/ubicaciones.component';
-import { isNull } from 'util';
+import { environment } from '../../../environments/environment.development';
 
 
 export interface Producto{
@@ -75,7 +75,7 @@ export class ProductosComponent {
 
   //variables para mostrar foto
   tokenUsuario = sessionStorage.getItem('tokenUsuario') || localStorage.getItem('tokenUsuario');
-  urlFotoProducto = 'http://localhost:3000/api/uploads/fotoproducto/';
+  urlFotoProducto = environment.base_url + '/uploads/fotoproducto/';
 
   modals = document.getElementsByClassName('modal') as HTMLCollectionOf<HTMLElement>;
 

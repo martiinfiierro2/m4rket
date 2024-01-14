@@ -1,0 +1,15 @@
+{
+  "routes": [
+    "/login",
+    "/productos",
+    "/productos/editProducto",
+    "/productos/newProducto",
+    "/promociones",
+    "/promociones/editPromocion",
+    "/promociones/newPromocion",
+    "/promociones/newTipoPromocion",
+    "/recovery",
+    "/registro",
+    "/ubicaciones"
+  ]
+}

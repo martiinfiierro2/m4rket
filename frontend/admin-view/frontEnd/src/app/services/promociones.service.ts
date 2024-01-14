@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable } from 'rxjs';
+import { environment } from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ export class PromocionesService {
 
   constructor( private http: HttpClient) { }
 
-  private url: string = 'http://localhost:3000/api/promociones';
+  private url: string = environment.base_url + '/promociones';
 
   private token: string|any;
 
@@ -56,13 +57,13 @@ export class PromocionesService {
 
 
   postTipoPromocion(datosFormulario: any){
-    let urlCompleta = 'http://localhost:3000/api/tipopromo';
+    let urlCompleta = environment.base_url + '/tipopromo';
 
     return this.http.post(urlCompleta, datosFormulario, {headers: this.cabeceras})
   }
 
   getAllTipoPromociones(): Observable<any>{
-    let urlCompleta = 'http://localhost:3000/api/tipopromo';
+    let urlCompleta = environment.base_url + '/tipopromo';
 
     return this.http.get(urlCompleta, {headers: this.cabeceras})
   }
