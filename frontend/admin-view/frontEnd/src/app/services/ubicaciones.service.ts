@@ -44,4 +44,9 @@ export class UbicacionesService {
     return this.http.post(this.url, dataForm, {headers: this.cabeceras});
   }
 
+  postUbicacionProducto(datos: any){
+
+    return this.http.post('http://localhost:3000/api/enubicacion', datos, {headers: this.cabeceras});
+  }
+
 }

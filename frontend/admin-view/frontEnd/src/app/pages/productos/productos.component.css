@@ -71,7 +71,6 @@ img{
 
 /*MODAL*/
 .modal {
-    display: none;
     position: fixed;
     z-index: 1;
     left: 0;
@@ -91,6 +90,7 @@ img{
     width: 80%;
     max-width: 400px;
   }
+
 
     .modal-content > p{
         text-align: center;
@@ -120,4 +120,27 @@ img{
   .modal button{
     width: 20%;
   }
-  
+
+
+
+  /*MODAL UBICACIÓN*/
+
+  .modal-content2{
+    max-width: 800px;
+  }
+
+    .center-text > p{
+        border-bottom: 1px solid gray;
+        padding-bottom: .5em;
+    }
+
+  #datos-producto{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 2em 0;
+  }
+
+    #datos-producto *{
+        margin: 0 .9em;
+    }

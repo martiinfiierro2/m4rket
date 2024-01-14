@@ -5,10 +5,13 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PromocionesService} from '../../services/promociones.service';
 import { Promocion } from '../promociones/promociones.component';
+import { UbicacionesService } from '../../services/ubicaciones.service';
+import { Ubicacion } from '../ubicaciones/ubicaciones.component';
+import { isNull } from 'util';
 
 
 export interface Producto{
-  id: number,
+  id: string,
   nombre: string,
   marca: string,
   categoria: string,
@@ -61,15 +64,17 @@ export class ProductosComponent {
 
   productos: Producto[] = [];
   promociones: Promocion[] = [];
+  ubicaciones: Ubicacion[] = [];
   
-  productoSeleccionado: string = '';
   promocionSeleccionada: string = '';
+
+  producto_ubicacion!: Producto;
 
   idProdSelected: string = '';
 
+
+  //variables para mostrar foto
   tokenUsuario = sessionStorage.getItem('tokenUsuario') || localStorage.getItem('tokenUsuario');
-
-
   urlFotoProducto = 'http://localhost:3000/api/uploads/fotoproducto/';
 
   modals = document.getElementsByClassName('modal') as HTMLCollectionOf<HTMLElement>;
@@ -82,11 +87,19 @@ export class ProductosComponent {
   criterioOrdenacionDispo: string = '';
   criterioOrdenacionPrecio: string = '';
 
+  visualizacionModalBorrado = 'display: none';
+  visualizacionModalUbicacion = 'display: none';
+
+  valorUbicacionProucto: string = '';
+  fechaFinUbicacionProducto!: Date;
 
   valueBusquedaInput = '';
  
 
-  constructor ( private productoService: ProductosService, private promocionesService: PromocionesService, private route: Router){
+  constructor ( private productoService: ProductosService, 
+                private promocionesService: PromocionesService, 
+                private ubicacionService: UbicacionesService,
+                private route: Router){
 
   }
 
@@ -111,12 +124,12 @@ export class ProductosComponent {
 
 
   //funcionamiento del select de acción
-  cambioAccion(idProd: number){    
+  cambioAccion(idProd: string){    
     let selects = document.querySelectorAll('select');
 
     for (let i = 0; i < selects.length; i++) {
       if (selects[i].value === 'borrar') {
-        this.mostrarModal();
+        this.mostrarModal('borrado');
         this.idProdSelected = ''+idProd;
       }
       if(selects[i].value === 'editar') {
@@ -124,6 +137,12 @@ export class ProductosComponent {
         
         let url = 'productos/editProducto?id='+idProd;
         window.location.href = url;
+      }
+      if (selects[i].value === 'ubicar' ) {
+        this.getProductoId(idProd);
+        this.getUbicaciones();
+        this.mostrarModal('ubicacion');
+        this.idProdSelected = '' + idProd;
       }
       
     }
@@ -207,16 +226,20 @@ export class ProductosComponent {
 
 
 
-  //MODAL
-  mostrarModal(){
-    for (let i = 0; i < this.modals.length; i++) {
-      this.modals[i].style.display = 'block';
+  //MODALES
+  mostrarModal(queModal: string){
+    if (queModal === 'borrado') {
+      this.visualizacionModalBorrado = 'display: block';
+    } else {
+      this.visualizacionModalUbicacion = 'display: block';
     }
   }
-  cerrarModal() {
-    // Oculta el modal al hacer clic en la 'X'
-    for (let i = 0; i < this.modals.length; i++) {
-      this.modals[i].style.display = 'none';
+
+  cerrarModal(queModal: string) {
+    if (queModal === 'borrado') {
+      this.visualizacionModalBorrado = 'display: none';
+    } else {
+      this.visualizacionModalUbicacion = 'display: none';
     }
 
     let selects = document.querySelectorAll('select');
@@ -226,12 +249,42 @@ export class ProductosComponent {
   } 
 
   confirmarBorrado() {
-    this.cerrarModal();
+    this.cerrarModal('borrado');
     this.borrarProd();
   }
 
+  anyadirUbicacion(){
+  
+    let fecha_sistema = new Date();
+
+    let datosUbicacion = {
+      idProd: this.producto_ubicacion.id,
+      idUbi: parseInt(this.valorUbicacionProucto),
+      fecha_ini: this.formatDate(),
+      fecha_fin: this.fechaFinUbicacionProducto
+    }
+
+    this.postUbicacionProducto(datosUbicacion);
+  }
+
+
+  //FROMATEAR FECHAS
+  formatDate() {
+    var d = new Date(),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+  } 
 
   
+
   //FUNCIONES CRUD
   getProductos(){
     this.productoService.getAllProductos()
@@ -239,6 +292,13 @@ export class ProductosComponent {
         this.productos = result.productos;
         console.log(this.productos);
     });
+  }
+
+  getProductoId(idProd: string){
+    this.productoService.getProductoId(idProd).
+      subscribe( res =>{
+        this.producto_ubicacion = res.productos;    
+      })
   }
 
   borrarProd(){
@@ -266,6 +326,25 @@ export class ProductosComponent {
         this.productos = res.productos;
       })
   }
+
+  getUbicaciones(){
+    this.ubicacionService.getAllUbicaciones()
+      .subscribe( res => {
+        this.ubicaciones = res.ubicaciones;
+      })
+  }
+
+  
+  postUbicacionProducto(datos: any){
+    this.ubicacionService.postUbicacionProducto(datos)
+      .subscribe( res => {
+        console.log(res);
+        this.cerrarModal('ubicacion');
+        this.getProductos();
+      })
+  }
+  
+
 }
 
 

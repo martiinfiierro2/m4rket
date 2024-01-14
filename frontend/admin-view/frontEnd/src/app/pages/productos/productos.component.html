@@ -42,10 +42,11 @@
                 </td>
                 <td *ngIf="producto.Promocions.length > 0"><span *ngFor="let promocion_prod of producto.Promocions">{{ promocion_prod.nombre }}</span></td>
                 <td>
-                    <select [(ngModel)]="productoSeleccionado" id="selectAccion" (change)="cambioAccion(producto.id)">
+                    <select id="selectAccion" (change)="cambioAccion(producto.id)">
                         <option value="default" selected></option>
                         <option value="editar">Editar</option>
                         <option value="borrar">Borrar</option>
+                        <option value="ubicar">Ubicar</option>
                     </select>
                 </td>
             </tr>
@@ -54,13 +55,39 @@
 </div>
 
 
-<!-- Modal -->
-<div class="modal" id="mensajeModal">
+<!-- Modal Borrado -->
+<div class="modal" id="mensajeModal" [style]="visualizacionModalBorrado">
     <div class="modal-content">
-      <span class="close" (click)="cerrarModal()">&times;</span>
+      <span class="close" (click)="cerrarModal('borrado')">&times;</span>
       <div class="center-text">
         <p>¿Realmente deseas borrar este producto?</p>
         <button (click)="confirmarBorrado()">Confirmar</button>
+      </div>
+    </div>
+</div>
+
+
+<!-- Modal Ubicación -->
+<div class="modal" id="mensajeModal" *ngIf="producto_ubicacion" [style]="visualizacionModalUbicacion">
+    <div class="modal-content modal-content2">
+      <span class="close" (click)="cerrarModal('ubciacion')">&times;</span>
+      <div class="center-text">
+        <p>Añade la ubicación al producto</p>
+        <div id="datos-producto">
+            <img [src]="urlFotoProducto + producto_ubicacion.foto + '?token=' +tokenUsuario" alt="Imagen del producto">
+            <p>{{ producto_ubicacion.nombre }}</p>
+            <p>{{ producto_ubicacion.marca }}</p> 
+            <div>
+                <select name="selectPromociones" id="selectPromociones" placeholder="ubicación"  [(ngModel)]="valorUbicacionProucto">
+                    <option value="default" selected></option>
+                    <option *ngFor="let ubicacion of ubicaciones" value="{{ubicacion.id}}">{{ ubicacion.referencia }}</option>
+                </select>
+            </div>
+            <div>
+                <input type="date" name="fecha_fin" id="fecha_fin" [(ngModel)]="fechaFinUbicacionProducto">
+            </div>
+        </div>
+        <button (click)="anyadirUbicacion()">Añadir ubicacion</button>    
       </div>
     </div>
 </div>
