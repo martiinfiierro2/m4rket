@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterOutlet } from '@angular/router';
 import {  HttpClientModule } from "@angular/common/http";
 
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -13,20 +14,10 @@ import {  HttpClientModule } from "@angular/common/http";
 export class AppComponent {
   title = 'frontEnd';
 
+  constructor(private route: Router){}
+
   ngOnInit(): void{
-    this.comprobarUsuario();
+    
   }
-
-
-  constructor( private routes: Router){}
-
-  
-  comprobarUsuario(){
-    if (sessionStorage.getItem('tokenUsuario') || localStorage!.getItem('tokenUsuario')) {
-      this.routes.navigate(['/productos']);
-    }
-    else{
-      this.routes.navigate(['/login']);
-    }
-  }
+    
 }

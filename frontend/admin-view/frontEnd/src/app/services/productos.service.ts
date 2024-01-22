@@ -62,8 +62,6 @@ export class ProductosService {
 
   postProducto(datosFormulario: any): Observable<any>{
     
-    console.log("Datos que llegan al servicio: ", datosFormulario);
-    
     return this.http.post(this.url, datosFormulario, {headers: this.cabeceras} );
   }
 
@@ -77,9 +75,9 @@ export class ProductosService {
   postFotoProducto(foto:File, idProducto: string){
 
     const formData: FormData = new FormData();
-    formData.append('archivo', foto, foto.name);
+    formData.append('archivo', foto, foto.name)  
 
-    return this.http.post('http://localhost:3000/api/uploads/fotoproducto/' + idProducto, formData, {headers: this.cabeceras});
+    return this.http.post(environment.base_url +'/uploads/fotoproducto/' + idProducto, formData, {headers: this.cabeceras});
   }
   
 

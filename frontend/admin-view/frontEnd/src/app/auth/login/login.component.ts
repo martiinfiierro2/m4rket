@@ -5,7 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common'
 import { Router } from '@angular/router';
 
-
+declare const gapi: any;
 
 interface Usuario {
   email: String,
@@ -29,6 +29,8 @@ export class LoginComponent {
 
   public avisoError = false;
 
+  public auth2: any;
+
 
   public loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -36,13 +38,21 @@ export class LoginComponent {
     check:  [Validators.required]
   });
 
+  loginGoogle(data: any): void{
+    console.log('Callback function executed with data:', data);
+  }
+
   constructor( private fb: FormBuilder,
                private usuarioService: UsuariosService,
-               private route: Router){}
+               private route: Router){
+                (window as any).myCallbackFunction = this.loginGoogle.bind(this);
+               }
+
 
   ngOnInit(): void {
   
-  }
+  }  
+
 
   login(){
 

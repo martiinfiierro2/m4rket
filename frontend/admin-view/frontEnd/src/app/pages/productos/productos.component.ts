@@ -7,7 +7,7 @@ import { PromocionesService} from '../../services/promociones.service';
 import { Promocion } from '../promociones/promociones.component';
 import { UbicacionesService } from '../../services/ubicaciones.service';
 import { Ubicacion } from '../ubicaciones/ubicaciones.component';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 
 
 export interface Producto{

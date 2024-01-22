@@ -40,11 +40,11 @@ export class SignUpComponent {
       .subscribe( res =>{
         console.log(res);
         this.tokenUsuario = res.token;
-        this.idUsuario = res.idUsuario;
+        this.idUsuario = res.usuario.id;
 
-        sessionStorage.setItem('tokenUsuario', this.tokenUsuario);
         sessionStorage.setItem('idUsuario', this.idUsuario);
-
+        sessionStorage.setItem('tokenUsuario', this.tokenUsuario);
+        
         this.route.navigate(['/productos']);
       }) 
   }

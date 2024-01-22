@@ -72,6 +72,7 @@ export class EditPorductoComponent {
     this.productoService.putProducto(this.productoForm.value, this.idProd)
     .subscribe( res => {
       console.log(res);
+      this.atras();
     })
     
   }

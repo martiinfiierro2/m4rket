@@ -12,10 +12,12 @@ import { NewPromocionComponent } from './promociones/new-promocion/new-promocion
 import { EditPromocionComponent } from './promociones/edit-promocion/edit-promocion.component';
 import { NewTipoPromocionComponent } from './promociones/new-tipo-promocion/new-tipo-promocion.component';
 import { UbicacionesComponent } from './pages/ubicaciones/ubicaciones.component';
+import { LandingComponent } from "./pages/landing/landing.component";
 
 
 export const routes: Routes = [
 
+  { path: '', component: LandingComponent},
   { path: 'login', component: AuthLayoutComponent,
       children: [
         { path: '', component: LoginComponent},
