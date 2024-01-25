@@ -25,7 +25,7 @@ export interface Producto{
   proteina: Float32Array,
   sal: Float32Array,
   precio_kg: Float32Array,
-  ingerdientes: string,
+  ingredientes: string,
   foto: string,
   precio: Float32Array,
   Ubicacions: Ubicaciones[]

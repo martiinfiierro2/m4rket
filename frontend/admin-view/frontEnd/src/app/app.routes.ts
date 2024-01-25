@@ -13,11 +13,16 @@ import { EditPromocionComponent } from './promociones/edit-promocion/edit-promoc
 import { NewTipoPromocionComponent } from './promociones/new-tipo-promocion/new-tipo-promocion.component';
 import { UbicacionesComponent } from './pages/ubicaciones/ubicaciones.component';
 import { LandingComponent } from "./pages/landing/landing.component";
+import { DatasetComponent } from './pages/dataset/dataset.component';
+import { DatasetProductoComponent } from './dataset/dataset-producto/dataset-producto.component';
 
 
 export const routes: Routes = [
 
   { path: '', component: LandingComponent},
+  { path: 'dataset', component: DatasetComponent},
+  { path: 'dataset-producto', component: DatasetProductoComponent},
+  
   { path: 'login', component: AuthLayoutComponent,
       children: [
         { path: '', component: LoginComponent},

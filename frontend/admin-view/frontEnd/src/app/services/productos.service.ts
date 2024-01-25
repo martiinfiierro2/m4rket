@@ -18,6 +18,7 @@ export class ProductosService {
   private token: string|any;
   private cabeceras: any;
   
+  
 
   //CREACIÓN CABECERA CON TOKEN USUARIO
   cargarCabeceras(){
@@ -36,10 +37,21 @@ export class ProductosService {
     return this.http.get(this.url, {headers: this.cabeceras});
   }
 
+  getAllProductosDataset(): Observable<any>{
+    return this.http.get(environment.base_url + '/dataset/productos');
+  }
+
+
   getProductoId(idProd: string): Observable<any>{
     let urlCompleta = this.url + '?id=' + idProd; 
 
     return this.http.get(urlCompleta, {headers: this.cabeceras});
+  }
+  
+  getProductioIdDataset(searchIdProd: number): Observable<any>{
+    let urlCompleta = environment.base_url + '/dataset/productos' + searchIdProd;
+
+    return this.http.get( urlCompleta );
   }
 
   getProductoOrdenado(criterioOrdenacion: string): Observable<any>{
@@ -52,6 +64,10 @@ export class ProductosService {
     let urlCompleta = this.url + '/' + busqueda;
 
     return this.http.get(urlCompleta, {headers: this.cabeceras});
+  }
+
+  getFotoProductoDataset(){
+    return this.http.get('http://localhost:3030/api/uploadsDataset/fotoproducto/920f2323-c072-4a8e-a374-c8c47e6f1995.png');; 
   }
 
   deleteProducto(idProd: string){
