@@ -1,0 +1,23 @@
+
+.add{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+}
+
+    label{
+        display: flex;
+        flex-direction: column;
+        margin: 5px;
+    }
+
+    #botones{
+        display: flex;
+        justify-content: space-evenly;
+        margin-top: 5px;
+    }

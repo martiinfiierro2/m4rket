@@ -14,7 +14,6 @@ router.post('/tipopromo', [
     validarJWT,
     check('nombre', "El nombre está vacío").not().isEmpty(),
     check('descripcion', "La descripción está vacía").not().isEmpty(),
-    check('modificador', "El modificador esta vacío").not().isEmpty(),
     validarCampos,
 ], crearTipoPromocion);
 
@@ -22,7 +21,6 @@ router.put('/tipopromo/:id', [
     validarJWT,
     check('nombre', "El nombre está vacío").not().isEmpty(),
     check('descripcion', "La descripción está vacía").not().isEmpty(),
-    check('modificador', "El modificador esta vacío").not().isEmpty(),
     validarCampos,
 ], actualizarTipoPromocion);
 

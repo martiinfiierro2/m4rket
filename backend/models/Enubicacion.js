@@ -5,6 +5,7 @@ const Enubicacion = sequelize.define('en_ubicacion', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
+        autoIncrement: true,
     },
     idProd: {
         type: DataTypes.INTEGER,

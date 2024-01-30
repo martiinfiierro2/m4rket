@@ -7,7 +7,7 @@ async function obtenerProductoPromocion(req, res) {
 
     //Paginación 
     const desde = Number(req.query.desde) || 0; //Si no dan nada o no dan un numero es 0
-    const registropp = 4;
+    const registropp = 10;
 
     try {
         let prodPromo, total;

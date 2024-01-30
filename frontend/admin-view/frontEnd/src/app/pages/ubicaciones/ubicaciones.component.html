@@ -1,0 +1,52 @@
+<div id="header">
+    <div id="idSearch">
+        <form>
+            <input type="text" name="search" id="search" placeholder="Búsqueda">
+            <input type="submit" value="Buscar">
+        </form>
+    </div>
+    <div id="botonesHeader">
+        <button (click)= "botonAddUbicacion()">Añadir ubicación</button>
+    </div>
+</div>
+
+<div id="addUbicacion" style="display: none">
+    <form (ngSubmit)="anyadirUbicacion()" [formGroup]="formUbi">
+        <input type="text" placeholder="Referencia" id="referencia" formControlName="referencia">
+        <input type="submit" value="Añadir">
+    </form>
+</div>
+
+<div id="listadoUbicaciones">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Referencia</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let ubicacion of ubicaciones">
+                <td> {{ ubicacion.referencia }}</td>
+                <td>
+                    <select [(ngModel)]="ubicacionSeleccionada" id="selectAccion" (change)="ejecutarAccion(ubicacion.id)">
+                        <option value="default" selected></option>
+                        <option value="borrar">Borrar</option>
+                    </select>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<!-- Modal -->
+<div class="modal" id="mensajeModal">
+    <div class="modal-content">
+      <span class="close" (click)="cerrarModal()">&times;</span>
+      <div class="center-text">
+        <p>¿Realmente deseas borrar este producto?</p>
+        <button (click)="confirmarBorrado()">Confirmar</button>
+      </div>
+    </div>
+</div>

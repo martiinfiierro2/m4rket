@@ -5,6 +5,7 @@ const Enpromocion = sequelize.define('en_promocion', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
+        autoIncrement: true,
     },
     fecha: {
         type: DataTypes.DATE,

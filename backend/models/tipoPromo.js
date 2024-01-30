@@ -5,6 +5,7 @@ const tipopromo = sequelize.define('tipopromo', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
+        autoIncrement: true,
     },
     nombre: {
         type: DataTypes.STRING,

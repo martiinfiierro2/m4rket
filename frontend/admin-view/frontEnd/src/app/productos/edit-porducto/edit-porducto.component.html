@@ -1,0 +1,30 @@
+<div id="divEdit">
+    <div id="titulo"><h2>Editar producto</h2></div> 
+    <form (ngSubmit)="editProducto()" [formGroup]="productoForm"  *ngIf="productoEditar">
+        <div class="col">
+            <label for="nombre">Nombre<input type="text" name="nombre" id="nombre" required formControlName="nombre" [(ngModel)]="productoEditar.nombre"></label>
+            <label for="marca">Marca<input type="text" name="marca" id="marca" required formControlName="marca" [(ngModel)]="productoEditar.marca"></label>
+            <label for="precio">Precio<input type="number" name="precio" id="precio" required formControlName="precio" [(ngModel)]="productoEditar.precio"></label>
+            <label for="precio/kg">Precio el kg<input type="number" name="precio/kg" id="precio/kg" formControlName="precio_kg" [(ngModel)]="productoEditar.precio_kg"></label>
+            <label for="stock">Stock disponible<input type="number" name="stock" id="stock" required formControlName="stock" [(ngModel)]="productoEditar.stock"></label>
+            <label for="ingredientes">Ingredientes<textarea name="ingredientes" id="ingredientes" cols="10" rows="10" formControlName="ingredientes" [(ngModel)]="productoEditar.ingredientes"></textarea></label>
+            <label for="categoria">Categoría<input type="text" name="categoria" id="categoria" required formControlName="categoria" [(ngModel)]="productoEditar.categoria"></label>
+        </div>
+        <div class="col">
+            <label for="valor_energ">Valor energético<input type="number" name="valor_energ" id="valor_energ" formControlName="valor_energ" [(ngModel)]="productoEditar.valor_energetico"></label>
+            <label for="grasas">Grasas<input type="number" name="grasas" id="grasas" formControlName="grasas" [(ngModel)]="productoEditar.grasas"></label>
+            <label for="saturadas">Grasas saturadas<input type="number" name="saturadas" id="saturadas" formControlName="saturadas" [(ngModel)]="productoEditar.grasas_saturadas"></label>
+            <label for="hidratos">Hidratos de carbono<input type="number" name="hidratos" id="hidratos" formControlName="hidratos" [(ngModel)]="productoEditar.hidratos_carbono"></label>
+            <label for="azucares">Azúcares<input type="number" name="azucares" id="azucares" formControlName="azucares" [(ngModel)]="productoEditar.azucares"></label>
+            <label for="fibra">Fibra alimentaria<input type="number" name="fibra" id="fibra" formControlName="fibra" [(ngModel)]="productoEditar.fibra"></label>
+            <label for="proteinas">Proteínas<input type="number" name="proteinas" id="proteinas" formControlName="proteinas" [(ngModel)]="productoEditar.proteina"></label>
+            <label for="sal">Sales<input type="number" name="sal" id="sal" formControlName="sal" [(ngModel)]="productoEditar.sal"></label>
+            <label for="foto">Imagen del producto <input type="file" name="foto" id="foto" formControlName="foto" [(ngModel)]="productoEditar.foto"></label>
+            <div id="buttons">
+                <input type="submit" value="Actualizar">
+                <input type="button" value="Cancelar" (click)="atras()">
+            </div>
+        </div>
+    </form>
+</div>
+

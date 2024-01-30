@@ -1,15 +1,14 @@
 const { Producto } = require('../models/productos');
 const { Ubicacion } = require('../models/ubicaciones');
 const { Promocion } = require('../models/promociones');
+const { Op } = require('sequelize');
 
 const obtenerProducto = async(req, res) => {
-
-    //Obtenemos el ID del usuario por si solo quiere buscar por usuario
     const id = req.query.id;
 
     //Paginación 
     const desde = Number(req.query.desde) || 0; //Si no dan nada o no dan un numero es 0
-    const registropp = 4;
+    const registropp = 10;
 
     try{
         let productos, total;
@@ -61,13 +60,136 @@ const obtenerProducto = async(req, res) => {
     }
 };
 
-const crearProducto = async(req, res) => {
+const buscarProducto = async(req, res) => {
+    const datos = req.params.datos;
+
+    //Paginación 
+    const desde = Number(req.query.desde) || 0; //Si no dan nada o no dan un numero es 0
+    const registropp = 10;
+
+    console.log(datos);
+
     try{
-        //Creamos el usuario
-        const producto = new Producto(req.body);
+        let productos, total;
+
+        //Comprobacion si se ordena por cantidad(ASC/DESC) o precio(ASC/DESC)
+        switch (datos) {
+            case 'cantidadDESC':
+                    [productos, total] = await Promise.all([
+                    Producto.findAll({
+                        order: [['stock', 'DESC']],
+                        offset: desde,
+                        limit: registropp,
+                        include: [
+                            Ubicacion,
+                            Promocion,
+                        ]
+                    }),
+                    //Total de usuarios que hay en la base de datos
+                    Producto.count()
+                    ]);
+
+                break;
+            case 'cantidadASC':
+                    [productos, total] = await Promise.all([
+                    Producto.findAll({
+                        order: [['stock', 'ASC']],
+                        offset: desde,
+                        limit: registropp,
+                        include: [
+                            Ubicacion,
+                            Promocion,
+                        ]
+                    }),
+                    //Total de usuarios que hay en la base de datos
+                    Producto.count()
+                    ]);
+
+                break;
+            case 'precioASC':
+                    [productos, total] = await Promise.all([
+                    Producto.findAll({
+                        order: [['precio', 'ASC']],
+                        offset: desde,
+                        limit: registropp,
+                        include: [
+                            Ubicacion,
+                            Promocion,
+                        ]
+                    }),
+                    //Total de usuarios que hay en la base de datos
+                    Producto.count()
+                    ]);
+
+                break;
+            case 'precioDESC':
+                    [productos, total] = await Promise.all([
+                    Producto.findAll({
+                        order: [['precio', 'DESC']],
+                        offset: desde,
+                        limit: registropp,
+                        include: [
+                            Ubicacion,
+                            Promocion,
+                        ]
+                    }),
+                    //Total de usuarios que hay en la base de datos
+                    Producto.count()
+                    ]);
+
+                break;
+                   
+            default:
+                    [productos, total] = await Promise.all([
+                        Producto.findAll({
+                            where: {
+                                [Op.or]: [
+                                    { nombre: { [Op.like]: `%${datos}%` } },
+                                    { marca: { [Op.like]: `%${datos}%` } },
+                                    { categoria: { [Op.like]: `%${datos}%` } },
+                                ],
+                            },
+                            offset: desde,
+                            limit: registropp,
+                            include: [
+                                Ubicacion,
+                                Promocion,
+                            ]
+                        }),
+                        //Total de usuarios que hay en la base de datos
+                        Producto.count()
+                    ]);
+                break;
+            
+        }
+
+        
+        res.json({
+            ok: true,
+            msg: 'buscarProductos',
+            productos: productos,
+            page: {
+                desde,
+                registropp,
+                total
+            }
+        });
+    }catch (error) {
+        return res.status(400).json({
+            ok: false,
+            msg: 'Error buscando productos',
+            error: error
+        });
+    }
+}
+
+
+const crearProducto = async(req, res) => {
+    
+    try{
         
         //Hacemos la request
-        await producto.save();
+        const producto = await Producto.create(req.body);
 
         res.json({
             ok: true,
@@ -81,6 +203,7 @@ const crearProducto = async(req, res) => {
             error: error
         });
     }
+    
 }
 
 const actualizarProducto = async(req,res) => {
@@ -141,4 +264,4 @@ const borrarProducto = async(req, res) => {
     }
 }
 
-module.exports = { obtenerProducto, crearProducto, actualizarProducto, borrarProducto };
+module.exports = { obtenerProducto, crearProducto, actualizarProducto, borrarProducto, buscarProducto };

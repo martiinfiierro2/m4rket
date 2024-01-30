@@ -1,0 +1,15 @@
+#sidebar{
+    width: 15%;
+}
+
+#contenido{
+    margin-top: 2em;
+    width:85%;
+    padding-left: 2em;
+}
+
+#divAll{
+    display: flex;
+    flex-direction: row;
+    /*background-color: rgb(174, 174, 174);*/
+}

@@ -5,6 +5,7 @@ const Ubicacion = sequelize.define('Ubicacion', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
+        autoIncrement: true,
     },
     referencia: {
         type: DataTypes.STRING,

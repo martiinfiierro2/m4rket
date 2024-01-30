@@ -1,0 +1,45 @@
+
+<form (ngSubmit)="login()" [formGroup]="loginForm">
+    <h2>Iniciar sesión</h2>
+    <label for=" email">
+        Correo eléctrónico
+        <input type="email" name="email" formControlName="email" id="email"> 
+    </label>
+    <label for="pwd">
+        Contraseña
+        <input type="password" name="pwd" formControlName="pwd" id="pwd">
+    </label>
+    <label for="recordarme">Recordarme <input type="checkbox" formControlName="check" name="recordarme" id="recordarme"></label>
+    <div id="avisos">
+        <p class="text-danger" *ngIf="!campoValido('email')">El usuario es obligatorio y debe ser un email</p>
+        <p class="text-danger" *ngIf="!campoValido('pwd')">El campo contraseña es obligatorio</p>
+        <p class="text-danger" *ngIf="avisoError">Campos incorrectos</p>
+    </div>
+    <input type="submit" value="Entrar">
+
+    <!--OAuth2-->
+    <div id="g_id_onload"
+        data-client_id="793314809978-dv770tm0rn161ejbimn52bejfn4j1eqt.apps.googleusercontent.com"
+        data-context="use"
+        data-ux_mode="popup"
+        data-callback="window.loginGoogle"
+        data-auto_select="true"
+        data-itp_support="true">
+    </div>
+
+    <div class="g_id_signin"
+        data-type="icon"
+        data-shape="circle"
+        data-theme="outline"
+        data-text="signin_with"
+        data-size="medium">
+    </div>
+
+    <p><a href="/registro">Crear una cuenta</a></p>
+
+    <script>
+        function loginGoogle(){
+
+        }
+    </script>
+</form>
