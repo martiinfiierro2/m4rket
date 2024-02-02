@@ -66,10 +66,6 @@ export class ProductosService {
     return this.http.get(urlCompleta, {headers: this.cabeceras});
   }
 
-  getFotoProductoDataset(){
-    return this.http.get('http://localhost:3030/api/uploadsDataset/fotoproducto/920f2323-c072-4a8e-a374-c8c47e6f1995.png');; 
-  }
-
   deleteProducto(idProd: string){
     let urlCompleta = this.url+'/'+idProd;    
     

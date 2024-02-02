@@ -1,6 +1,8 @@
 {
   "routes": [
     "/",
+    "/dataset",
+    "/dataset-producto",
     "/login",
     "/productos",
     "/productos/editProducto",

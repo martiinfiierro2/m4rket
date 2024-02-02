@@ -1,19 +1,26 @@
-<body>
-    <div class="header">
-        <span id="logoTitulo" class="header">
+<header>
+        <div id="logoTitulo">
             <img src="../../../assets/img/logoM4RKET.png" alt="Logo de la aplicación de M4RKET">
             <h1>M4RKET</h1>
-        </span>
-        <nav>
-            <a href="/login">Panel administración</a>
-            <a href="/corp">4AM</a>
-            <a href="/objetoAprendizaje">Tutoriales</a>
-            <div id="redesSociales">
-                <a href="https://www.instagram.com/m4rketapp/" class="icon-instagram"></a>
-                <a href="https://www.twitter.com/m4rketapp/"><img src="../../../assets/img/twitter.png" alt="Logo Twitter" class="logos"></a>
-            </div>
+        </div>
+        <button class="icono-burguer" (click)="abrirMenu()">&#9776;</button>
+        <nav id="menu">
+            <button class="btnCerrar" (click)="cerrarMenu()">X</button>
+            <ul class="nav-list">
+                <li><a href="/login">Panel administración</a></li>
+                <li><a href="/corp">4AM</a></li>
+                <li><a href="/objetoAprendizaje">Tutoriales</a></li>
+                <li><a href="/dataset">Dataset</a></li>
+                <li>
+                    <div id="redesSociales">
+                        <a href="https://www.instagram.com/m4rketapp/" class="icon-instagram"></a>
+                        <a href="https://www.twitter.com/m4rketapp/"><img src="../../../assets/img/twitter.png" alt="Logo Twitter" class="logos"></a>
+                    </div>
+                </li>
+            </ul>
         </nav>
-    </div>
+</header>
+    
     
     <main>
         <section>
@@ -37,36 +44,37 @@
 
         <section>
             <h2>¿Porque elegir M4RKET?</h2>
-            <p>Nuestra aplicación ofrece unas ventajas que las hacen destacar del resto de apps del mercado, tanto como si eres un comercio interesado en contactar nuestros servicios o como si eres un usuario interesado en probar los beneficio de la aplicación</p>
-            <div id="listadoMotivos">
-                <article>
-                    <p>Como comercio</p>
-                    <ul>
-                        <li>Acceso a múltiples estádisticas</li>
-                        <li>Focalización del personal en sus tareas</li>
-                        <li>Gestión de stock de manera precisa</li>
-                        <li>Modernización de sus servicios</li>
-                    </ul>
-                </article>
-                <article>
-                    <p>Como usuario</p>
-                    <ul>
-                        <li>Lista de la compra interactiva</li>
-                        <li>Mapa de la ruta óptima</li>
-                        <li>Asistente virtual informativo</li>
-                        <li>Buscador con localización</li>
-                    </ul>
-                </article>
+            <div class="contenidoCentrado">
+                <p>Nuestra aplicación ofrece unas ventajas que las hacen destacar del resto de apps del mercado, tanto como si eres un comercio interesado en contactar nuestros servicios o como si eres un usuario interesado en probar los beneficio de la aplicación</p>
+                <div id="listadoMotivos">
+                    <article>
+                        <p>Como comercio</p>
+                        <ul>
+                            <li>Acceso a múltiples estádisticas</li>
+                            <li>Focalización del personal en sus tareas</li>
+                            <li>Gestión de stock de manera precisa</li>
+                            <li>Modernización de sus servicios</li>
+                        </ul>
+                    </article>
+                    <article>
+                        <p>Como usuario</p>
+                        <ul>
+                            <li>Lista de la compra interactiva</li>
+                            <li>Mapa de la ruta óptima</li>
+                            <li>Asistente virtual informativo</li>
+                            <li>Buscador con localización</li>
+                        </ul>
+                    </article>
+                </div>
             </div>
         </section>
 
         <section id="comoUsar">
             <h2>¿Como usar M4RKET?</h2>
-            <p>M4RKET tiene un funcionamiento muy sencillo e intuitivo para que todo tipo de usuarios puedan accedere y hacer uso de la aplicación, ya sean usuarios con conocimientos tecnológicos como usarios que no.</p>
-            <p>Para la gente que tenga alguna duda o quiera consultar más información sobre nuestra app y su temática, puede acceder a nuestro <a href="/objetoAprendizaje">objeto de aprendizaje</a> para nutrirse de conocimiento</p>
-            <div id="divImg">
+            <div id="contenidoComoUsar">
+                <p>M4RKET tiene un funcionamiento muy sencillo e intuitivo para que todo tipo de usuarios puedan accedere y hacer uso de la aplicación, ya sean usuarios con conocimientos tecnológicos como usarios que no.</p>
+                <p>Para la gente que tenga alguna duda o quiera consultar más información sobre nuestra app y su temática, puede acceder a nuestro <a href="/objetoAprendizaje">objeto de aprendizaje</a> para nutrirse de conocimiento</p>
                 <a href="/objetoAprendizaje"><img src="../../../assets/img/ObjetoAprendizaje.png" alt="Captura de pantalla del objeto de aprendizaje"></a>
             </div>
         </section>
     </main>
-</body>
