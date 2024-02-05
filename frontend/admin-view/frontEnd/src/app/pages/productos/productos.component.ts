@@ -8,6 +8,7 @@ import { Promocion } from '../promociones/promociones.component';
 import { UbicacionesService } from '../../services/ubicaciones.service';
 import { Ubicacion } from '../ubicaciones/ubicaciones.component';
 import { environment } from '../../../environments/environment';
+import { MatIconModule } from '@angular/material/icon';
 
 
 export interface Producto{
@@ -55,7 +56,7 @@ export interface en_Promocion{
 @Component({
   selector: 'app-productos',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MatIconModule],
   templateUrl: './productos.component.html',
   styleUrl: './productos.component.css'
 })
@@ -122,31 +123,6 @@ export class ProductosComponent {
     }
   }
 
-
-  //funcionamiento del select de acción
-  cambioAccion(idProd: string){    
-    let selects = document.querySelectorAll('select');
-
-    for (let i = 0; i < selects.length; i++) {
-      if (selects[i].value === 'borrar') {
-        this.mostrarModal('borrado');
-        this.idProdSelected = ''+idProd;
-      }
-      if(selects[i].value === 'editar') {
-        this.idProdSelected = ''+idProd;
-        
-        let url = 'productos/editProducto?id='+idProd;
-        window.location.href = url;
-      }
-      if (selects[i].value === 'ubicar' ) {
-        this.getProductoId(idProd);
-        this.getUbicaciones();
-        this.mostrarModal('ubicacion');
-        this.idProdSelected = '' + idProd;
-      }
-      
-    }
-  }
 
   //ordenar por disponibilidad o precio
   cambiarCriterioOrdenacion(criterio: string){
@@ -219,8 +195,20 @@ export class ProductosComponent {
 
   
 
+  //BOTONES ACCIÓN
   irNuevoProducto(){
     this.route.navigate(['productos/newProducto']);
+  }
+
+  irEditarProducto(idProd){
+    let url = 'productos/editProducto?id='+idProd;
+    window.location.href = url;
+  }
+
+  ubicarProducto(idProd){
+    this.getProductoId(idProd);
+    this.getUbicaciones();
+    this.mostrarModal('ubicacion');
   }
 
 
@@ -248,10 +236,6 @@ export class ProductosComponent {
     }
   } 
 
-  confirmarBorrado() {
-    this.cerrarModal('borrado');
-    this.borrarProd();
-  }
 
   anyadirUbicacion(){
   
@@ -301,8 +285,8 @@ export class ProductosComponent {
       })
   }
 
-  borrarProd(){
-    this.productoService.deleteProducto(this.idProdSelected).subscribe((result) =>{
+  borrarProd(idProd){
+    this.productoService.deleteProducto(idProd).subscribe((result) =>{
       this.getProductos(); //Recarga la lista de productos
     });
   }

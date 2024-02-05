@@ -144,3 +144,34 @@ img{
     #datos-producto *{
         margin: 0 .9em;
     }
+
+  
+  .iconoAccion{
+    color: #51877A;
+  }
+  
+
+  .btnIcon{
+    font-size: 1em;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    border: none;
+    margin: 0 2px;
+  }
+
+    .btnIcon:hover{
+      cursor: pointer;
+    }
+
+    #btnBorrar :hover{
+      color: rgb(164, 12, 12);
+    }
+
+    #btnEdit :hover{
+      color: rgb(179, 179, 0);
+    }
+
+    #btnUbicar :hover{
+      color: rgb(99, 154, 243);
+    }

@@ -41,28 +41,14 @@
                 </td>
                 <td *ngIf="producto.Promocions.length > 0"><span *ngFor="let promocion_prod of producto.Promocions">{{ promocion_prod.nombre }}</span></td>
                 <td>
-                    <select id="selectAccion" (change)="cambioAccion(producto.id)">
-                        <option value="default" selected></option>
-                        <option value="editar">Editar</option>
-                        <option value="borrar">Borrar</option>
-                        <option value="ubicar">Ubicar</option>
-                    </select>
+                    <button (click)="borrarProd(producto.id)" class="btnIcon" id="btnBorrar"><mat-icon class="iconoAccion">delete</mat-icon></button>
+                    <button (click)="irEditarProducto(producto.id)" class="btnIcon" id="btnEdit"><mat-icon class="iconoAccion">edit</mat-icon></button>
+                    <button (click)="ubicarProducto(producto.id)" class="btnIcon" id="btnUbicar"><mat-icon class="iconoAccion">location_on</mat-icon></button>
+                    
                 </td>
             </tr>
         </tbody>
     </table>
-</div>
-
-
-<!-- Modal Borrado -->
-<div class="modal" id="mensajeModal" [style]="visualizacionModalBorrado">
-    <div class="modal-content">
-      <span class="close" (click)="cerrarModal('borrado')">&times;</span>
-      <div class="center-text">
-        <p>¿Realmente deseas borrar este producto?</p>
-        <button (click)="confirmarBorrado()">Confirmar</button>
-      </div>
-    </div>
 </div>
 
 
