@@ -21,8 +21,8 @@
             <label for="sal">Sales<input type="number" name="sal" id="sal" formControlName="sal" [(ngModel)]="productoEditar.sal"></label>
             <label for="foto">Imagen del producto <input type="file" name="foto" id="foto" formControlName="foto" [(ngModel)]="productoEditar.foto"></label>
             <div id="buttons">
-                <input type="submit" value="Actualizar">
-                <input type="button" value="Cancelar" (click)="atras()">
+                <input type="submit" value="Actualizar" class="btnPrimario">
+                <input type="button" value="Cancelar" (click)="atras()" class="btnSecundario">
             </div>
         </div>
     </form>

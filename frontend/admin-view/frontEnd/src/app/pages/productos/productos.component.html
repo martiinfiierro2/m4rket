@@ -2,13 +2,12 @@
     <div id="divSearch">
         <form id="busqueda" (ngSubmit)="getBusquedaProducto()">
             <input type="text" name="search" id="search" placeholder="Búsqueda" [(ngModel)]="valueBusquedaInput" ngModel>
-            <input type="submit" value="Buscar">
+            <input type="submit" value="Buscar" class="btnPrimario">
         </form>
-        <button (click)="getProductos(); valueBusquedaInput=''">Cancelar</button>
+        <button (click)="getProductos(); valueBusquedaInput=''" class="btnSecundario">Cancelar</button>
     </div>
     <div id="botonesHeader">
-        <button (click)="irNuevoProducto()">Añadir producto</button>
-        <button>Filtros</button>
+        <button (click)="irNuevoProducto()" class="btnPrimario" >Añadir producto</button>
     </div>
 </div>
 <div id="listadoProductos" *ngIf="productos">

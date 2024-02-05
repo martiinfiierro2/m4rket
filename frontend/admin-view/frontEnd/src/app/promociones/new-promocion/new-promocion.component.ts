@@ -45,6 +45,9 @@ export class NewPromocionComponent {
                private promocionService: PromocionesService){}
 
 
+  irAtras(){
+    this.router.navigate(['/promociones']);
+  }
 
   getTipoPromociones(){
     this.promocionService.getAllTipoPromociones()
@@ -60,4 +63,5 @@ export class NewPromocionComponent {
         this.router.navigate(['/promociones']);
       });
   }
+
 }
