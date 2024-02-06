@@ -37,25 +37,10 @@
                 <td> {{ promocion.fecha_ini }} </td>
                 <td> {{ promocion.fecha_fin }}</td>
                 <td>
-                    <select [(ngModel)]="promocionSeleccionada" id="selectAccion" (change)="ejecutarAccion(promocion.id)">
-                        <option value="default" selected></option>
-                        <option value="editar">Editar</option>
-                        <option value="borrar">Borrar</option>
-                    </select>
+                    <button (click)="borrarPromo(promocion.id)" class="btnIcon" id="btnBorrar"><mat-icon class="iconoAccion">delete</mat-icon></button>
+                    <button (click)="irEditPromo(promocion.id)" class="btnIcon" id="btnEdit"><mat-icon class="iconoAccion">edit</mat-icon></button>
                 </td>
             </tr>
         </tbody>
     </table>
-</div>
-
-
-<!-- Modal -->
-<div class="modal" id="mensajeModal">
-    <div class="modal-content">
-      <span class="close" (click)="cerrarModal()">&times;</span>
-      <div class="center-text">
-        <p>¿Realmente deseas borrar este producto?</p>
-        <button (click)="confirmarBorrado()">Confirmar</button>
-      </div>
-    </div>
 </div>

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PromocionesService } from '../../services/promociones.service';
+import { MatIconModule } from '@angular/material/icon';
 
 
 export interface Promocion{
@@ -22,7 +23,7 @@ export interface Promocion{
 @Component({
   selector: 'app-promociones',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MatIconModule],
   templateUrl: './promociones.component.html',
   styleUrl: './promociones.component.css'
 })
@@ -84,12 +85,6 @@ export class PromocionesComponent {
     }
   } 
 
-  confirmarBorrado() {
-    this.cerrarModal();
-    this.borrarPromo();
-  }
-
-
   irNuevaPromo(){
     this.route.navigate(['promociones/newPromocion']);
   }
@@ -98,6 +93,11 @@ export class PromocionesComponent {
     this.route.navigate(['promociones/newTipoPromocion']);
   }
 
+  irEditPromo(idPromo){
+    let url = 'promociones/editPromocion?id='+idPromo;
+    window.location.href = url;
+  }
+  
 
   //CRUD
   getPromociones(){
@@ -109,8 +109,8 @@ export class PromocionesComponent {
     
   }
 
-  borrarPromo(){
-    this.promocionesService.deletePromociones(this.idPromoSelected).subscribe(res => {
+  borrarPromo(idPromo){
+    this.promocionesService.deletePromociones(idPromo).subscribe(res => {
       console.log(res);
       window.location.reload();
     })
