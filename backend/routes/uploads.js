@@ -13,6 +13,11 @@ router.get('/uploads/:tipo/:nombrearchivo', [
     validarCampos,
 ], enviarArchivo);
 
+router.get('/uploadsDataset/:tipo/:nombrearchivo', [
+    check('nombrearchivo', 'El nombre del archivo debe de ser válido').trim(),
+    validarCampos,
+], enviarArchivo);
+
 router.post('/uploads/:tipo/:id', [
     validarJWT,
     validarCampos,

@@ -7,6 +7,9 @@ const cors = require('cors');
 const logger = require('morgan');
 const fileUpload = require('express-fileupload');
 
+const fs = require('fs');
+const https = require('https'); 
+
 require('dotenv').config()
 
 const app = express();
@@ -44,7 +47,7 @@ app.use('/api', require('./routes/listaCompra'));
 //Archivos
 app.use('/api', require('./routes/uploads'));
 
-// Abrir la aplicacíon en el puerto 3000
+// Abrir la aplicacíon en el puerto 3030
 app.listen(process.env.PORT, () => {
     console.log('Servidor corriendo en el puerto ', process.env.PORT);
 });

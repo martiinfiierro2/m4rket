@@ -60,6 +60,63 @@ const obtenerProducto = async(req, res) => {
     }
 };
 
+const obtenerProductoDataset = async(req, res) => {
+    const id = req.query.id;
+
+    //Paginación 
+    const desde = Number(req.query.desde) || 0; //Si no dan nada o no dan un numero es 0
+    const registropp = 10;
+
+    try{
+        let productos, total;
+        if(id){
+            productos = await Producto.findOne({ 
+                where: { id: id },
+                include: [
+                    Ubicacion,
+                    Promocion,
+                ]
+            });
+            if(!productos){
+                return res.json({
+                    ok: false,
+                    msg: 'El id del producto debe ser válido'
+                });
+            }
+        }
+        else{
+            [productos, total] = await Promise.all([
+                Producto.findAll({
+                    offset: desde,
+                    limit: registropp,
+                    include: [
+                        Ubicacion,
+                        Promocion,
+                    ]
+                }),
+                //Total de usuarios que hay en la base de datos
+                Producto.count()
+            ]);
+        }
+        res.json({
+            ok: true,
+            msg: 'getProductos',
+            productos: productos,
+            page: {
+                desde,
+                registropp,
+                total
+            }
+        });
+    }catch (error) {
+        return res.status(400).json({
+            ok: false,
+            msg: 'Error obteniendo productos para el dataset',
+            error: error
+        });
+    }
+};
+
 const buscarProducto = async(req, res) => {
     const datos = req.params.datos;
 
@@ -264,4 +321,4 @@ const borrarProducto = async(req, res) => {
     }
 }
 
-module.exports = { obtenerProducto, crearProducto, actualizarProducto, borrarProducto, buscarProducto };
+module.exports = { obtenerProducto, crearProducto, obtenerProductoDataset, actualizarProducto, borrarProducto, buscarProducto };
