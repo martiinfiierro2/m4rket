@@ -1,0 +1,158 @@
+//Contenedor superior
+ion-toolbar.custom-toolbar {
+	height: 120px;
+	background-color: #51877a;
+	display: flex;
+	align-items: flex-end; 
+	justify-content: space-between; 
+	padding: 0 20px; 
+  }
+  .content-producto{
+    margin-left: 10px;
+  }
+  .volver-atras{
+    background-color: transparent;
+    font-size: 24px;
+    display: flex;
+    color: white;
+    margin-bottom: 10px;
+  }
+
+    
+  .menu-inferior {
+    display: flex;
+    justify-content: space-around; 
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 90px;
+    background-color: #f7f7f7; 
+    border-top: 1px solid #ccc; 
+  }
+
+  .menu-inferior button{
+    background-color: transparent;
+    margin-top: 4px;
+  }
+    .icono-menu{
+      font-size: 40px;
+      margin-bottom: 30px;
+      color: #666666;     
+    }
+
+
+  .producto-container {
+    width: 362px;
+    height: 81px;
+    border: 1px solid #f2f2f2;
+    background: rgba(255, 255, 255, 1);
+    border-radius: 10px;
+    margin: 10px;
+    display: flex;
+    position: relative; 
+  }
+
+  .navegador-producto{
+    display: flex;
+    position: relative; 
+  }
+  
+  .producto-container img {
+    margin-left: 5px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    height: 73px;
+    width: auto;
+    border-radius: 10px;
+  }
+  
+  .product-text {
+    margin-left: 10px;
+  }
+  
+  .product-text h3 {
+    font-size: 15px;
+    font-weight: regular;
+  }
+  
+  .product-text p {
+    font-size: 24px;
+    margin: 0px;
+  }
+  
+  .product-buttons {
+    font-size: 15px;
+    position: absolute;
+    bottom: 5px; /* Ajusta la posición desde la parte inferior */
+    right: 5px; /* Ajusta la posición desde la derecha */
+  }
+  
+  .add {
+    font-size: 17px;
+    background-color: transparent;
+    display: flex; /* Utiliza flexbox para centrar verticalmente */
+    align-items: center; /* Centra verticalmente el texto e icono */
+    padding: 5px; /* Ajusta el espaciado para un mejor aspecto */
+  }
+  
+  .add-button {
+    font-size: 20px;
+    margin-left: 5px;
+    color: #51877a;
+  }
+
+  .add2 button{
+    font-size: 20px;
+    background-color: transparent;
+
+  }
+
+  .add2 {
+    //font-size: 17px;
+    display: flex;
+    align-items: center;
+    padding: 4px;
+    justify-content: center;
+  }
+
+  .add2 button-icon {
+    font-size: 20px;
+  }
+  .add2 span{
+    margin-left: 3px;
+    font-size: 20px;
+  }
+
+
+  //Buscador
+
+  .divSearch{
+    margin-top: 10px;
+    text-align: center;
+  }
+
+  .divSearch input {
+    width: 250px;
+    height: 30px;
+    border-radius: 10px;
+    border-color: #f2f2f2;
+    text-shadow: none;
+  }
+
+  .divSearch input:focus{
+    border: #51877a;
+  }
+
+  .divSearch button{
+    background-color: transparent;
+  }
+  .lupa{
+    margin-left: 5px;
+    height: 17px;
+    width: 17px;
+    color: #51877a;
+  }
+
+ 
+
