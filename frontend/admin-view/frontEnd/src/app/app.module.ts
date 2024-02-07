@@ -15,19 +15,21 @@ import { NavbarComponent } from './commons/navbar/navbar.component';
 import { FooterComponent } from './commons/footer/footer.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { HttpClientModule } from '@angular/common/http';
+import { FilterPipe } from './pipes/filter.pipe'
 
 
 
 
 @NgModule({
   declarations: [
+    FilterPipe
   ],
   imports: [
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    MatIconModule
+    MatIconModule,
   ],
   providers: [
     provideClientHydration()

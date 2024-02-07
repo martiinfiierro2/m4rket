@@ -9,6 +9,10 @@ import { UbicacionesService } from '../../services/ubicaciones.service';
 import { Ubicacion } from '../ubicaciones/ubicaciones.component';
 import { environment } from '../../../environments/environment';
 import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { FilterPipe } from '../../pipes/filter.pipe';
 
 
 export interface Producto{
@@ -56,12 +60,15 @@ export interface en_Promocion{
 @Component({
   selector: 'app-productos',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule],
+  imports: [CommonModule, FormsModule, MatIconModule, MatAutocompleteModule, MatFormFieldModule, MatInputModule],
   templateUrl: './productos.component.html',
   styleUrl: './productos.component.css'
 })
 
 export class ProductosComponent {
+  //Buscador de promociones
+  promocionesFiltradas: any[] = [];
+  searchText: string = '';
 
   productos: Producto[] = [];
   promociones: Promocion[] = [];
@@ -101,7 +108,7 @@ export class ProductosComponent {
                 private promocionesService: PromocionesService, 
                 private ubicacionService: UbicacionesService,
                 private route: Router){
-
+                this.promocionesFiltradas = this.promociones;
   }
 
   ngOnInit(): void {
@@ -109,6 +116,13 @@ export class ProductosComponent {
     this.getProductos();
     this.getPromociones();
   
+  }
+
+  //Filtro buscar promociones
+  filtrarPromociones() {
+    this.promocionesFiltradas = this.promociones.filter(promocion =>
+      promocion.nombre.toLowerCase().includes(this.searchText.toLowerCase())
+    );
   }
 
   
@@ -193,7 +207,6 @@ export class ProductosComponent {
     }
   }
 
-  
 
   //BOTONES ACCIÓN
   irNuevoProducto(){
