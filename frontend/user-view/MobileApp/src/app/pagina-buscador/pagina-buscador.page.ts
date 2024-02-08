@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 
 import { ProductosService } from "../services/productos.service";
+import { environment } from '../../environments/environment'
 
 
 import { Router } from '@angular/router';
+import { UsuariosService } from '../services/usuarios.service';
 export interface Producto{
   id: number,
   nombre: string,
@@ -41,6 +43,9 @@ export interface ListaCompra{
   styleUrls: ['./pagina-buscador.page.scss'],
 })
 export class PaginaBuscadorPage {
+  
+  imgUrl = `${environment.baseUrl}/uploads/fotoproducto/`;
+  tokenUsuario = sessionStorage.getItem('tokenUsuario') || localStorage.getItem('tokenUsuario');
 
   productos: Producto [] = [];
   
@@ -56,6 +61,7 @@ export class PaginaBuscadorPage {
   ngOnInit(): void {
     this.getUsuarioLog();
     this.getListaCompraUsu();
+    this.productosService.cargarCabeceras();
   }
 
   volverAtras() {
@@ -130,8 +136,7 @@ export class PaginaBuscadorPage {
     this.productosService.getBusquedaProducto(this.valueBusquedaInput)
       .subscribe(res => {
         this.productos = res.productos;
-        console.log(this.productos);
-
+        console.log(res.productos);
         this.compararListaBusqueda();
       });
 

@@ -68,6 +68,13 @@ export class PromocionesService {
     return this.http.get(urlCompleta, {headers: this.cabeceras})
   }
 
+  postPromocionProducto(datos: any){
+
+    let urlCompleta = environment.base_url + '/enpromocion';
+
+    return this.http.post(urlCompleta, datos, {headers: this.cabeceras});
+  }
+
 
 
 }
