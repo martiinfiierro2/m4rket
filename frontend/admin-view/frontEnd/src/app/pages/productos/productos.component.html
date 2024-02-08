@@ -36,7 +36,7 @@
                 <td *ngIf="producto.Promocions.length == 0">
                     <select name="selectPromociones" id="selectPromociones">
                         <option value="default" selected>{{ searchText }}</option>
-                        <option *ngFor="let promocion of promociones | filtroPromo: searchText" [value]="promocion.nombre">{{ promocion.nombre }}</option>
+                        <option *ngFor="let promocion of promociones" [value]="promocion.nombre">{{ promocion.nombre }}</option>
                       </select>
                       <input type="text" [(ngModel)]="searchText" placeholder="Buscar promoción">
                       
