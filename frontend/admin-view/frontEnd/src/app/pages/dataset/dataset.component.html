@@ -13,6 +13,7 @@
                 <option value="default">Descargar</option>
                 <option value="pdf">PDF</option>
                 <option value="xlsx">XLSX</option>
+                <option value="csv">CSV</option>
             </select>
         </div>
     </div>
@@ -23,4 +24,30 @@
             <p>{{producto.marca}}</p>
         </article>
     </div>
+    <!-- Paginación -->
+    <div class="d-flex justify-content-center">
+        <app-pagination (cambiarPagina)="cambiarPagina( $event )" [texto]="true" [totalRegistros]="totalregistros" [registroActual]="posicionactual+1" [registrosPorPagina]="registrosporpagina">
+        </app-pagination>
+    </div>
+
 </main>
+
+
+
+<script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "dataset",
+        "url": "https://m4rket.ovh/dataset",
+        "name": "Productos disponibles en el mercado",
+        "description": "Tabla/listado de los productos disponibles en el mercado con sus datos nutricionales",
+        "keywords": "productos, valores nutricionales, nutricion, precio, precio productos",
+        "license": "http://m4rket.ovh/corp",
+        "creator": {
+            "@type": "Organization",
+            "name": "4AM"
+        },
+        "dateCreated": "2023-01-10",
+        "dateModified": "",
+    }
+</script>

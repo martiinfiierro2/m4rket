@@ -4,7 +4,10 @@ import { CommonModule } from '@angular/common';
 import { ProductosService } from "../../services/productos.service";
 import { environment } from '../../../environments/environment';
 import { FormsModule } from '@angular/forms';
+import { PaginationComponent } from "../../pagination/pagination.component";
 import * as XLSX from 'xlsx';
+import * as Papa from 'papaparse';
+
 
 
 import pdfMake from 'pdfmake/build/pdfmake';
@@ -18,11 +21,11 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 
 @Component({
-  selector: 'app-dataset',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './dataset.component.html',
-  styleUrl: './dataset.component.css'
+    selector: 'app-dataset',
+    standalone: true,
+    templateUrl: './dataset.component.html',
+    styleUrl: './dataset.component.css',
+    imports: [CommonModule, FormsModule, PaginationComponent]
 })
 export class DatasetComponent {
 
@@ -30,6 +33,14 @@ export class DatasetComponent {
   public urlFotoProducto = environment.base_url + '/uploadsDataset/fotoproducto/';
 
   public imagen: any;
+
+  //Variables paginación
+  public totalregistros=98;
+  public posicionactual=0;
+  public registrosporpagina=4;
+
+
+
 
 
   constructor( private productoService: ProductosService,
@@ -43,13 +54,24 @@ export class DatasetComponent {
     this.productoService.getAllProductosDataset()
       .subscribe( res =>{
         this.productos = res.productos;
-      })
+        this.totalregistros = res.page.total
+      })    
   }
+
 
   redirigirProducto(idProd: string){
     
     window.location.href = '/dataset-producto?id=' + idProd;
     
+  }
+
+  cambiarPagina( pagina:number ){
+    pagina = (pagina < 0 ? 0 : pagina);
+    this.posicionactual = ((pagina - 1) * this.registrosporpagina >=0 ? (pagina - 1) * this.registrosporpagina : 0);
+    this.productoService.getProductosDatasetPaginacion(this.posicionactual)
+      .subscribe(res =>{
+        this.productos = res.productos;
+      })
   }
 
   formatoDescarga( event: any){
@@ -62,6 +84,11 @@ export class DatasetComponent {
       this.descargaXLSX();
       event.target.value = 'default';
     }
+    if (event.target.value == 'csv') {
+      this.descargarCSV();
+      event.target.value = 'default';
+    }
+
   }
 
 
@@ -97,7 +124,6 @@ export class DatasetComponent {
 
     });
 
-    
     const documentDefinition = {
       content,
       styles: { header: { fontSize: 18, bold: true, margin: [0, 0, 0, 10] }, subheader: { fontSize: 14, bold: true, margin: [0, 10, 0, 5] } },
@@ -109,7 +135,7 @@ export class DatasetComponent {
 
 
 
-  //DESCARGA CSV
+  //DESCARGA XLSX
   descargaXLSX(){
 
     let data: any[] = [];
@@ -139,6 +165,18 @@ export class DatasetComponent {
     XLSX.utils.book_append_sheet(wb, ws, 'Productos');
     
     XLSX.writeFile(wb, 'Productos.xlsx');
+  }
+
+  //DESCARGAR CSV
+  descargarCSV(): void {
+    const csv = Papa.unparse(this.productos);
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const enlace = document.createElement('a');
+    enlace.setAttribute('href', URL.createObjectURL(blob));
+    enlace.setAttribute('download', 'datos.csv');
+    document.body.appendChild(enlace);
+    enlace.click();
+    document.body.removeChild(enlace);
   }
   
 

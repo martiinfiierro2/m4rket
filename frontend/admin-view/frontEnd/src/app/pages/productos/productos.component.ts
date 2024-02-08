@@ -12,7 +12,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { FilterPipe } from '../../pipes/filter.pipe';
 import { PaginationComponent } from "../../pagination/pagination.component";
 
 
