@@ -18,7 +18,7 @@
 
       <div *ngFor="let producto of productos" class="producto-container">
         <div class="navegador-producto" (click)="cambiaPag(producto.id)"> <!--[routerLink]="['/pagina-producto', producto.idProd]"-->
-          <img [src]="'assets/images/' + producto.id + '.jpg'" alt="Product Image" />
+          <img [src]="imgUrl + producto.foto + '?token=' +tokenUsuario" alt="Product Image" />
           <div class="product-text">
             <h3>{{producto.nombre}}</h3>
             <p> {{ producto.precio }}€</p>
