@@ -21,7 +21,10 @@ form{
 
     form > label[for="recordarme"]{
         display: inline-flex;
+        align-items: center;
         flex-direction: row-reverse;
+        font-size: .9em;
+        margin-top: 5px;
     }
 
         form > label[for="recordarme"] > input{

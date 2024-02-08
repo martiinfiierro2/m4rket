@@ -1,0 +1,40 @@
+.row{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.active{
+    background-color: #51877A;
+    color: white;
+}
+
+.disabled{
+    pointer-events: none;
+    cursor: default;
+    opacity: 0.5;
+}
+
+
+#textoPaginacion{
+    font-size: .7em;
+}
+
+#listadoPaginas{
+    list-style: none;
+    font-size: .7em;
+}
+
+    .page-item{
+        margin: 5px;
+        padding: 5px 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .page-item:hover{
+        cursor: pointer;
+        background-color: #ccc;
+    }

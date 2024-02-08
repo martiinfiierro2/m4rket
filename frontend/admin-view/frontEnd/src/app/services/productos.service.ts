@@ -37,6 +37,10 @@ export class ProductosService {
     return this.http.get(this.url, {headers: this.cabeceras});
   }
 
+  getProductosPaginacion(desde: number): Observable<any>{
+    return this.http.get( this.url + '?desde=' + desde, {headers: this.cabeceras});
+  }
+
   getAllProductosDataset(): Observable<any>{
     return this.http.get(environment.base_url + '/dataset/productos');
   }

@@ -18,10 +18,7 @@ form{
         display: inline-flex;
         flex-direction: column;
     }
-        input[type='submit']{
-            margin-top: 0.5em;
-        }
-
+        
         form > p{
             font-size: small;
         } 
@@ -30,3 +27,11 @@ form{
             width: 2em;
         }
 
+    #botones{
+        display: flex;
+        flex-direction: row;
+        margin: .5em;
+    }
+        #botones > *{
+            margin: 0 .5em;
+        }

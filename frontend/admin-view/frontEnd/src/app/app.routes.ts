@@ -15,6 +15,7 @@ import { UbicacionesComponent } from './pages/ubicaciones/ubicaciones.component'
 import { LandingComponent } from "./pages/landing/landing.component";
 import { DatasetComponent } from './pages/dataset/dataset.component';
 import { DatasetProductoComponent } from './dataset/dataset-producto/dataset-producto.component';
+import { PaginationComponent } from './pagination/pagination.component';
 
 
 export const routes: Routes = [
@@ -23,6 +24,8 @@ export const routes: Routes = [
   { path: 'dataset', component: DatasetComponent},
   { path: 'dataset-producto', component: DatasetProductoComponent},
   
+  { path: 'pruebaPaginacion', component: PaginationComponent},
+
   { path: 'login', component: AuthLayoutComponent,
       children: [
         { path: '', component: LoginComponent},

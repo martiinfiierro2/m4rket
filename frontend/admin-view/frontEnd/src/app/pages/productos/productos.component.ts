@@ -13,6 +13,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { FilterPipe } from '../../pipes/filter.pipe';
+import { PaginationComponent } from "../../pagination/pagination.component";
 
 
 export interface Producto{
@@ -58,11 +59,11 @@ export interface en_Promocion{
 }
 
 @Component({
-  selector: 'app-productos',
-  standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule, MatAutocompleteModule, MatFormFieldModule, MatInputModule],
-  templateUrl: './productos.component.html',
-  styleUrl: './productos.component.css'
+    selector: 'app-productos',
+    standalone: true,
+    templateUrl: './productos.component.html',
+    styleUrl: './productos.component.css',
+    imports: [CommonModule, FormsModule, MatIconModule, MatAutocompleteModule, MatFormFieldModule, MatInputModule, PaginationComponent]
 })
 
 export class ProductosComponent {
@@ -102,6 +103,11 @@ export class ProductosComponent {
   fechaFinUbicacionProducto!: Date;
 
   valueBusquedaInput = '';
+
+  //Variables paginación
+  public totalregistros=98;
+  public posicionactual=0;
+  public registrosporpagina=4;
  
 
   constructor ( private productoService: ProductosService, 
@@ -280,6 +286,17 @@ export class ProductosComponent {
     return [year, month, day].join('-');
   } 
 
+
+  //PAGINACION
+  cambiarPagina( pagina:number ){
+    pagina = (pagina < 0 ? 0 : pagina);
+    this.posicionactual = ((pagina - 1) * this.registrosporpagina >=0 ? (pagina - 1) * this.registrosporpagina : 0);
+    this.productoService.getProductosPaginacion(this.posicionactual)
+      .subscribe(res =>{
+        this.productos = res.productos;
+      })
+  }
+
   
 
   //FUNCIONES CRUD
@@ -288,6 +305,9 @@ export class ProductosComponent {
       .subscribe((result) =>{
         this.productos = result.productos;
         console.log(this.productos);
+        
+        //Paginacion
+        this.totalregistros = result.page.total;
     });
   }
 

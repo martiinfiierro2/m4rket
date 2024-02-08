@@ -21,7 +21,7 @@ export class SignUpComponent {
   
   constructor( private fb: FormBuilder,
                private usuarioService: UsuariosService,
-                private route: Router){}
+               private route: Router){}
 
   public sign_upForm = this.fb.group({
     nombre: ['', Validators.required],
@@ -47,5 +47,9 @@ export class SignUpComponent {
         
         this.route.navigate(['/productos']);
       }) 
+  }
+
+  volverAtras(){
+    this.route.navigate(['/login']);
   }
 } 
