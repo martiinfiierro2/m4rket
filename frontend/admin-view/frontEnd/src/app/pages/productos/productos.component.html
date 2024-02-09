@@ -30,7 +30,7 @@
                 <td> {{ producto.nombre }} </td>
                 <td> {{ producto.marca }} </td>
                 <td><div id="divStock" [ngStyle]="colorStock(producto.stock)"> {{ producto.stock }} </div></td>
-                <td> {{ producto.precio }} €</td>
+                <td *ngIf="producto.Promocions.length == 0"> {{ producto.precio }} €</td>
                 <td *ngIf="producto.Ubicacions.length > 0"><span *ngFor="let ubicaciones of producto.Ubicacions"> {{ ubicaciones.referencia }} </span></td>
                 <td *ngIf="producto.Ubicacions.length == 0"> --- </td>
                 <td *ngIf="producto.Promocions.length == 0">

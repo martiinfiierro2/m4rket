@@ -34,7 +34,7 @@ export interface Producto{
   ingredientes: string,
   foto: string,
   precio: Float32Array,
-  Ubicacions: Ubicaciones[]
+  Ubicacions: Ubicaciones[],
   Promocions: Promociones[]
 }
 
@@ -76,11 +76,13 @@ export class ProductosComponent {
 
   promociones: Promocion[] = [];
   tipoPromociones: tipoPromocion[] = [];
+  en_promocion: en_Promocion[] = [];
   ubicaciones: Ubicacion[] = [];
   
   promocionSeleccionada: string = '';
 
   producto_ubicacion!: Producto;
+  producto_promocion!: Producto;
 
   idProdSelected: string = '';
 
@@ -432,6 +434,9 @@ export class ProductosComponent {
         console.log(res);
         this.getProductos();
     })
+  }
+  cargar(){
+    console.log("Hola");
   }
 }
 
