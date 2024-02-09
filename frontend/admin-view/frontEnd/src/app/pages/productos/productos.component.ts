@@ -71,6 +71,8 @@ export class ProductosComponent {
   searchText: string = '';
 
   productos: Producto[] = [];
+  productosOrdenados: Producto[] = [];
+
   promociones: Promocion[] = [];
   ubicaciones: Ubicacion[] = [];
   
@@ -181,7 +183,6 @@ export class ProductosComponent {
     }
 
     if (criterio == 'precio'){
-
       this.iconoOrdenacionDispo = 'icon-angle-left';
       this.estiloOrdenacionDispo = '';
 
@@ -332,7 +333,7 @@ export class ProductosComponent {
   getProductosOrdenados(tipoOrdenacion: string){   
     this.productoService.getProductoOrdenado(tipoOrdenacion)
       .subscribe( res =>{
-        this.productos = res.productos;
+        this.productosOrdenados = res.productos;
       })
   }
 

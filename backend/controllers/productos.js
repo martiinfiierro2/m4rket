@@ -8,7 +8,7 @@ const obtenerProducto = async(req, res) => {
 
     //Paginación 
     const desde = Number(req.query.desde) || 0; //Si no dan nada o no dan un numero es 0
-    const registropp = 10;
+    const registropp = 4;
 
     try{
         let productos, total;
@@ -65,7 +65,7 @@ const obtenerProductoDataset = async(req, res) => {
 
     //Paginación 
     const desde = Number(req.query.desde) || 0; //Si no dan nada o no dan un numero es 0
-    const registropp = 10;
+    const registropp = 4;
 
     try{
         let productos, total;
@@ -122,7 +122,7 @@ const buscarProducto = async(req, res) => {
 
     //Paginación 
     const desde = Number(req.query.desde) || 0; //Si no dan nada o no dan un numero es 0
-    const registropp = 10;
+    const registropp = 4;
 
     console.log(datos);
 
