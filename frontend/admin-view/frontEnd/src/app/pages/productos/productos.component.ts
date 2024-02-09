@@ -91,6 +91,7 @@ export class ProductosComponent {
 
   modals = document.getElementsByClassName('modal') as HTMLCollectionOf<HTMLElement>;
 
+  //Variables ordenación
   iconoOrdenacionDispo: string = 'icon-angle-left';
   iconoOrdenacionPrecio: string = 'icon-angle-left';
   estiloOrdenacionDispo: string = '';
@@ -102,6 +103,8 @@ export class ProductosComponent {
   visualizacionModalBorrado = 'display: none';
   visualizacionModalUbicacion = 'display: none';
 
+  ordenacionActiva: boolean = false;
+
   valorUbicacionProucto: string = '';
   fechaFinUbicacionProducto!: Date;
 
@@ -111,6 +114,8 @@ export class ProductosComponent {
   public totalregistros=98;
   public posicionactual=0;
   public registrosporpagina=4;
+
+  private paginaUsada = 0;
  
 
   constructor ( private productoService: ProductosService, 
@@ -155,10 +160,11 @@ export class ProductosComponent {
     if (criterio == 'disponibilidad') {
 
       this.iconoOrdenacionPrecio = 'icon-angle-left';
-      this.estiloOrdenacionPrecio = '';      
+      this.estiloOrdenacionPrecio = ''; 
 
       if (this.criterioOrdenacionDispo == '' && !cambiado) {
         cambiado = true;
+        this.ordenacionActiva = true;
         
         this.criterioOrdenacionDispo = 'DESC';
         this.iconoOrdenacionDispo = 'icon-angle-down';
@@ -167,6 +173,7 @@ export class ProductosComponent {
       }
       if (this.criterioOrdenacionDispo == 'DESC' && !cambiado){
         cambiado = true;
+        this.ordenacionActiva = true;
 
         this.criterioOrdenacionDispo = 'ASC';
         this.iconoOrdenacionDispo = 'icon-angle-up';
@@ -175,6 +182,7 @@ export class ProductosComponent {
       }
       if (this.criterioOrdenacionDispo == 'ASC' && !cambiado){  //al tercer toque vuelve a la ordenacion por defecto
         cambiado = true;
+        this.ordenacionActiva = false;
 
         this.criterioOrdenacionDispo = '';
         this.iconoOrdenacionDispo = 'icon-angle-left';
@@ -190,6 +198,7 @@ export class ProductosComponent {
 
       if (this.criterioOrdenacionPrecio == '' && !cambiado) {
         cambiado = true;
+        this.ordenacionActiva = true;
 
         this.criterioOrdenacionPrecio = 'DESC';
         this.iconoOrdenacionPrecio = 'icon-angle-down';
@@ -198,14 +207,16 @@ export class ProductosComponent {
       }
       if (this.criterioOrdenacionPrecio == 'DESC' && !cambiado){
         cambiado = true;
+        this.ordenacionActiva = true;
 
         this.criterioOrdenacionPrecio = 'ASC';
         this.iconoOrdenacionPrecio = 'icon-angle-up';
         this.estiloOrdenacionPrecio = 'color: #51877A; font-weight: bold';
         this.getProductosOrdenados('precio'+this.criterioOrdenacionPrecio);
       }
-      if (this.criterioOrdenacionPrecio == 'ASC' && !cambiado){
+      if (this.criterioOrdenacionPrecio == 'ASC' && !cambiado){ //al tercer toque vuelve a la ordenacion por defecto
         cambiado = true;
+        this.ordenacionActiva = false;
 
         this.criterioOrdenacionPrecio = '';
         this.iconoOrdenacionPrecio = 'icon-angle-left';
@@ -293,20 +304,38 @@ export class ProductosComponent {
   cambiarPagina( pagina:number ){
     pagina = (pagina < 0 ? 0 : pagina);
     this.posicionactual = ((pagina - 1) * this.registrosporpagina >=0 ? (pagina - 1) * this.registrosporpagina : 0);
-    this.productoService.getProductosPaginacion(this.posicionactual)
+    this.paginaUsada = pagina;
+
+    if (!this.ordenacionActiva) { //si no hay ordenación se hace normal
+      this.productoService.getAllProductos(this.posicionactual)
       .subscribe(res =>{
         this.productos = res.productos;
+        console.log(this.productos);
       })
+    }
+    
+    else if (this.ordenacionActiva){
+      this.productos = [];
+      let pos = 0;
+    
+      for (let i = this.posicionactual; i < pagina * this.registrosporpagina; i++) {
+        if (i < this.productosOrdenados.length) {
+          this.productos[pos] = this.productosOrdenados[i];
+          pos++; 
+        }
+      }
+    }  
+    
+    console.log("Desde: " + this.posicionactual);
   }
 
   
 
   //FUNCIONES CRUD
   getProductos(){
-    this.productoService.getAllProductos()
+    this.productoService.getAllProductos(this.posicionactual)
       .subscribe((result) =>{
         this.productos = result.productos;
-        console.log(this.productos);
         
         //Paginacion
         this.totalregistros = result.page.total;
@@ -332,10 +361,20 @@ export class ProductosComponent {
     });
   }
 
-  getProductosOrdenados(tipoOrdenacion: string){   
+  getProductosOrdenados(tipoOrdenacion: string){
+
     this.productoService.getProductoOrdenado(tipoOrdenacion)
       .subscribe( res =>{
         this.productosOrdenados = res.productos;
+        this.productos = [];
+        if (this.posicionactual == 0) {
+          for (let i = 0; i < 4; i++) {
+            this.productos[i] = this.productosOrdenados[i];
+          }
+        }
+        else{
+          this.cambiarPagina(this.paginaUsada)
+        }
       })
   }
 

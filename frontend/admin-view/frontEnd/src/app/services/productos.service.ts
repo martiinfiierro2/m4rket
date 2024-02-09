@@ -31,10 +31,10 @@ export class ProductosService {
   
   
   //CRUD
-  getAllProductos(): Observable<any>{
-    console.log("getProductos() desde el servicio");
+  getAllProductos(desde: number): Observable<any>{
+   let urlCompleta = this.url + '?desde=' + desde;
     
-    return this.http.get(this.url, {headers: this.cabeceras});
+    return this.http.get(urlCompleta, {headers: this.cabeceras});
   }
 
   getProductosPaginacion(desde: number): Observable<any>{
