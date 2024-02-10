@@ -25,12 +25,16 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let producto of productos">
+            <tr *ngFor="let producto of productos; let i = index">
                 <td><img [src]="urlFotoProducto + producto.foto + '?token=' +tokenUsuario" alt="Imagen del producto"></td>
                 <td> {{ producto.nombre }} </td>
                 <td> {{ producto.marca }} </td>
                 <td><div id="divStock" [ngStyle]="colorStock(producto.stock)"> {{ producto.stock }} </div></td>
-                <td *ngIf="producto.Promocions.length == 0"> {{ producto.precio }} €</td>
+                <td *ngIf="producto.Promocions.length == 0 || producto.Promocions[0].en_promocion.precio == producto.precio"> {{ producto.precio }} €</td>
+                <td *ngIf="producto.Promocions.length > 0 && producto.Promocions[0].en_promocion.precio != producto.precio">
+                    <div style="text-decoration: line-through; color: gray;">{{ producto.precio}}€</div>
+                    <div>{{producto.Promocions[0].en_promocion.precio}}€</div>
+                </td>
                 <td *ngIf="producto.Ubicacions.length > 0"><span *ngFor="let ubicaciones of producto.Ubicacions"> {{ ubicaciones.referencia }} </span></td>
                 <td *ngIf="producto.Ubicacions.length == 0"> --- </td>
                 <td *ngIf="producto.Promocions.length == 0">

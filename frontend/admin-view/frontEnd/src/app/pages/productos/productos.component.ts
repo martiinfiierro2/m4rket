@@ -49,13 +49,15 @@ export interface Promociones{
   fecha_ini: Date,
   fecha_fin: Date,
   id_tipoPromo: number,
-  Promocions: en_Promocion[]
+  en_promocion: en_Promocion
 }
 
 export interface en_Promocion{
   id: string,
   fecha: string,
-  precio: Float32Array
+  precio: Float32Array,
+  idPromo: number,
+  idProd: number
 }
 
 @Component({
@@ -300,6 +302,13 @@ export class ProductosComponent {
 
     return [year, month, day].join('-');
   } 
+
+
+  acccesoPosicion(i: number){
+    //return this.productos[i].Promocions[0].en_promocion;
+    console.log(this.productos[i].Promocions[0].en_promocion.precio);
+    return 'hola';
+  }
 
 
   //PAGINACION
