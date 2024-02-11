@@ -433,6 +433,27 @@ export class ProductosComponent {
     this.postPromocionProducto(datosPromocion);
   }
 
+  actualizarPromocion(idProd, precioProd, event, id){
+    console.log(id);
+    this.promocionSeleccionada = event.target.value;
+
+    //Modificador de precio
+    const promo = this.getPromocionPorNombre(this.promocionSeleccionada);
+
+    //Cambiamos precio
+    const precio_promo = ((promo.tipopromo.modificador * 100) * precioProd) / 100;
+    const precio_final = precioProd - precio_promo;
+
+    let datosPromocion = {
+      fecha: this.formatDate(), 
+      precio: precio_final,
+      idPromo: promo.id,
+      idProd: idProd,
+    }
+    console.log(datosPromocion);
+    this.actualizarPromocionProducto(datosPromocion, id);
+  }
+
   getPromocionPorNombre(nombrePromocion: string): Promocion | undefined {
     return this.promociones.find(promocion => promocion.nombre === nombrePromocion);
   }
@@ -444,6 +465,15 @@ export class ProductosComponent {
         this.getProductos();
     })
   }
+
+  actualizarPromocionProducto(datos, id){
+    this.promocionesService.updatePromocionProducto(datos, id)
+      .subscribe( res => {
+        console.log(res);
+        this.getProductos();
+    })
+  }
+
   cargar(){
     console.log("Hola");
   }

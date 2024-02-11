@@ -48,8 +48,9 @@ export class PromocionesService {
     return this.http.delete(urlCompleta, {headers: this.cabeceras});
   }
 
-  editPromocion(idPromo: string, datosFormulario: any){
+  editPromocion(idPromo: any, datosFormulario: any){
     let urlCompleta = this.url + '/' + idPromo;
+    console.log(urlCompleta);
 
     return this.http.put(urlCompleta, datosFormulario, {headers: this.cabeceras});
   }
@@ -73,6 +74,14 @@ export class PromocionesService {
     let urlCompleta = environment.base_url + '/enpromocion';
 
     return this.http.post(urlCompleta, datos, {headers: this.cabeceras});
+  }
+
+  
+  updatePromocionProducto(datosFormulario: any, id: any){
+
+    let urlCompleta = environment.base_url + '/enpromocion/' + id;
+
+    return this.http.put(urlCompleta, datosFormulario, {headers: this.cabeceras});
   }
 
 

@@ -86,15 +86,6 @@ const actualizarPromocion = async(req,res) => {
         const id = req.params.id;
         const { nombre, id_tipoPromo } = req.body;
 
-        //Comprobar nombre
-        const promo = await Promocion.findOne({ where: {nombre: nombre}});
-        if(promo){
-            return res.status(400).json({
-                ok: false,
-                msg: 'Ya existe esta promoción'
-            });
-        }
-
         //Comprobar tipo promo
         const tipopromocion = await tipopromo.findOne({ where: { id: id_tipoPromo }});
         if(!tipopromocion){

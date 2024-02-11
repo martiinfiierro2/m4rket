@@ -42,9 +42,13 @@
                     <datalist id="promociones">
                         <option *ngFor="let promocion of promociones" [value]="promocion.nombre">{{ promocion.nombre }}</option>
                     </datalist>
-                      
                 </td>
-                <td *ngIf="producto.Promocions.length > 0"><span *ngFor="let promocion_prod of producto.Promocions">{{ promocion_prod.nombre }}</span></td>
+                <td *ngIf="producto.Promocions.length > 0">
+                    <input list="promociones" placeholder="{{ producto.Promocions[0].nombre }}" (change)="actualizarPromocion(producto.id, producto.precio, $event, producto.Promocions[0].en_promocion.id)">
+                    <datalist id="promociones">
+                        <option *ngFor="let promocion of promociones" [value]="promocion.nombre">{{ promocion.nombre }}</option>
+                    </datalist>
+                </td>
                 <td>
                     <button (click)="borrarProd(producto.id)" class="btnIcon" id="btnBorrar"><mat-icon class="iconoAccion">delete</mat-icon></button>
                     <button (click)="irEditarProducto(producto.id)" class="btnIcon" id="btnEdit"><mat-icon class="iconoAccion">edit</mat-icon></button>
