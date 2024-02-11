@@ -29,10 +29,7 @@
             <tr *ngFor="let ubicacion of ubicaciones">
                 <td> {{ ubicacion.referencia }}</td>
                 <td>
-                    <select [(ngModel)]="ubicacionSeleccionada" id="selectAccion" (change)="ejecutarAccion(ubicacion.id)">
-                        <option value="default" selected></option>
-                        <option value="borrar">Borrar</option>
-                    </select>
+                    <button (click)="ejecutarAccion(ubicacion.id)" class="btnIcon" id="btnBorrar"><mat-icon class="iconoAccion">delete</mat-icon></button>
                 </td>
             </tr>
         </tbody>

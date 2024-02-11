@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { UbicacionesService } from '../../services/ubicaciones.service';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
 
 export interface Ubicacion{
   id: number,
@@ -12,7 +13,7 @@ export interface Ubicacion{
 @Component({
   selector: 'app-ubicaciones',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, MatIconModule],
   templateUrl: './ubicaciones.component.html',
   styleUrl: './ubicaciones.component.css'
 })
@@ -40,17 +41,8 @@ export class UbicacionesComponent {
 
   //FUNCIONES SELECT
   ejecutarAccion(idUbicacion: number){
-
-    let selects = document.querySelectorAll('select');
-
-    for (let i = 0; i < selects.length; i++) {
-      if (selects[i].value === 'borrar') {
-        this.mostrarModal();
-        this.idUbiSelected = ''+idUbicacion;
-
-      }
-    }
-
+    this.mostrarModal();
+    this.idUbiSelected = ''+idUbicacion;
   }
 
   botonAddUbicacion(){
