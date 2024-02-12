@@ -25,6 +25,11 @@ app.use(fileUpload({
     abortOnLimit: true,
     createParentPath: true,
 }));
+
+//Estadisticas
+
+app.use('/api', require('./routes/estadisticas'));
+
 //Usuarios
 app.use('/api', require('./routes/usuarios'));
 app.use('/api', require('./routes/login'));
