@@ -4,6 +4,11 @@ h2{
     margin-top: 0;
 }
 
+.error{
+  color: red;
+  font-size: small;
+}
+
 #header{
     display: flex;
     flex-direction: row;

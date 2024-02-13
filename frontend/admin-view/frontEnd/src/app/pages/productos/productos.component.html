@@ -42,12 +42,14 @@
                     <datalist id="promociones">
                         <option *ngFor="let promocion of promociones" [value]="promocion.nombre">{{ promocion.nombre }}</option>
                     </datalist>
+                    <p *ngIf="cambioPromoPorFila[i] == false" class="error">Elija una promoción existente</p>
                 </td>
                 <td *ngIf="producto.Promocions.length > 0">
-                    <input list="promociones" placeholder="{{ producto.Promocions[0].nombre }}" (change)="actualizarPromocion(producto.id, producto.precio, $event, producto.Promocions[0].en_promocion.id)">
+                    <input list="promociones" placeholder="{{ producto.Promocions[0].nombre }}" (change)="actualizarPromocion(producto.id, producto.precio, $event, producto.Promocions[0].en_promocion.id, producto.Promocions[0].nombre, i)">
                     <datalist id="promociones">
                         <option *ngFor="let promocion of promociones" [value]="promocion.nombre">{{ promocion.nombre }}</option>
                     </datalist>
+                    <p *ngIf="cambioPromoPorFila[i] == false" class="error">Elija una promoción existente</p>
                 </td>
                 <td>
                     <button (click)="borrarProd(producto.id)" class="btnIcon" id="btnBorrar"><mat-icon class="iconoAccion">delete</mat-icon></button>

@@ -108,6 +108,7 @@ export class ProductosComponent {
   visualizacionModalUbicacion = 'display: none';
 
   ordenacionActiva: boolean = false;
+  cambioPromoPorFila: boolean[] = [];
 
   valorUbicacionProucto: string = '';
   fechaFinUbicacionProducto!: Date;
@@ -133,6 +134,7 @@ export class ProductosComponent {
 
     this.getProductos();
     this.getPromociones();
+    this.productos.forEach(() => this.cambioPromoPorFila.push(true));
   
   }
 
@@ -433,25 +435,55 @@ export class ProductosComponent {
     this.postPromocionProducto(datosPromocion);
   }
 
-  actualizarPromocion(idProd, precioProd, event, id){
-    console.log(id);
+  actualizarPromocion(idProd, precioProd, event, id, defecto, index){
     this.promocionSeleccionada = event.target.value;
 
-    //Modificador de precio
-    const promo = this.getPromocionPorNombre(this.promocionSeleccionada);
+    let existePromo = 0;
 
-    //Cambiamos precio
-    const precio_promo = ((promo.tipopromo.modificador * 100) * precioProd) / 100;
-    const precio_final = precioProd - precio_promo;
-
-    let datosPromocion = {
-      fecha: this.formatDate(), 
-      precio: precio_final,
-      idPromo: promo.id,
-      idProd: idProd,
+    for(let i = 0; i < this.promociones.length; i++){
+      if(this.promociones[i].nombre == this.promocionSeleccionada){
+        existePromo += 1;
+      }
     }
-    console.log(datosPromocion);
-    this.actualizarPromocionProducto(datosPromocion, id);
+
+    if(existePromo != 0){
+      //Modificador de precio
+      const promo = this.getPromocionPorNombre(this.promocionSeleccionada);
+
+      //Cambiamos precio
+      const precio_promo = ((promo.tipopromo.modificador * 100) * precioProd) / 100;
+      const precio_final = precioProd - precio_promo;
+
+      let datosPromocion = {
+        fecha: this.formatDate(), 
+        precio: precio_final,
+        idPromo: promo.id,
+        idProd: idProd,
+      }
+      console.log(datosPromocion);
+      this.actualizarPromocionProducto(datosPromocion, id);
+      this.cambioPromoPorFila[index] = true;
+    }
+    else{
+      //Modificador de precio
+      const promo = this.getPromocionPorNombre(defecto);
+
+      //Cambiamos precio
+      const precio_promo = ((promo.tipopromo.modificador * 100) * precioProd) / 100;
+      const precio_final = precioProd - precio_promo;
+
+      let datosPromocion = {
+        fecha: this.formatDate(), 
+        precio: precio_final,
+        idPromo: promo.id,
+        idProd: idProd,
+      }
+      
+      console.log(datosPromocion);
+      this.actualizarPromocionProducto(datosPromocion, id);
+      this.cambioPromoPorFila[index] = false;
+    }
+
   }
 
   getPromocionPorNombre(nombrePromocion: string): Promocion | undefined {
