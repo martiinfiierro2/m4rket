@@ -414,25 +414,38 @@ export class ProductosComponent {
       })
   }
 
-  asignarPromocion(idProd, precioProd, event){
-    console.log(idProd);
+  asignarPromocion(idProd, precioProd, event, index){
     this.promocionSeleccionada = event.target.value;
 
-    //Modificador de precio
-    const promo = this.getPromocionPorNombre(this.promocionSeleccionada);
+    let existePromo = 0;
 
-    //Cambiamos precio
-    const precio_promo = ((promo.tipopromo.modificador * 100) * precioProd) / 100;
-    const precio_final = precioProd - precio_promo;
-
-    let datosPromocion = {
-      fecha: this.formatDate(), 
-      precio: precio_final,
-      idPromo: promo.id,
-      idProd: idProd,
+    for(let i = 0; i < this.promociones.length; i++){
+      if(this.promociones[i].nombre == this.promocionSeleccionada){
+        existePromo += 1;
+      }
     }
-    console.log(datosPromocion);
-    this.postPromocionProducto(datosPromocion);
+
+    if(existePromo != 0){
+      //Modificador de precio
+      const promo = this.getPromocionPorNombre(this.promocionSeleccionada);
+
+      //Cambiamos precio
+      const precio_promo = ((promo.tipopromo.modificador * 100) * precioProd) / 100;
+      const precio_final = precioProd - precio_promo;
+
+      let datosPromocion = {
+        fecha: this.formatDate(), 
+        precio: precio_final,
+        idPromo: promo.id,
+        idProd: idProd,
+      }
+      console.log(datosPromocion);
+      this.postPromocionProducto(datosPromocion);
+      this.cambioPromoPorFila[index] = true;
+    }
+    else{
+      this.cambioPromoPorFila[index] = false;
+    }
   }
 
   actualizarPromocion(idProd, precioProd, event, id, defecto, index){

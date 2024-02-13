@@ -38,7 +38,7 @@
                 <td *ngIf="producto.Ubicacions.length > 0"><span *ngFor="let ubicaciones of producto.Ubicacions"> {{ ubicaciones.referencia }} </span></td>
                 <td *ngIf="producto.Ubicacions.length == 0"> --- </td>
                 <td *ngIf="producto.Promocions.length == 0">
-                    <input list="promociones" placeholder="Selecciona promoción..." (change)="asignarPromocion(producto.id, producto.precio, $event)">
+                    <input list="promociones" placeholder="Selecciona promoción..." (change)="asignarPromocion(producto.id, producto.precio, $event, i)">
                     <datalist id="promociones">
                         <option *ngFor="let promocion of promociones" [value]="promocion.nombre">{{ promocion.nombre }}</option>
                     </datalist>
