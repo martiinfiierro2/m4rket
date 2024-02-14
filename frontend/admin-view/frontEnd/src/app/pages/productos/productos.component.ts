@@ -341,6 +341,7 @@ export class ProductosComponent {
     }  
     
     console.log("Desde: " + this.posicionactual);
+    this.productos.forEach(() => this.cambioPromoPorFila.push(true));
   }
 
   
