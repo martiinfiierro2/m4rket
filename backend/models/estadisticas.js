@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../database/conexionDB');
 
-const Listacompra = sequelize.define('estadisticas', {
+const Estadisticas = sequelize.define('estadisticas', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
