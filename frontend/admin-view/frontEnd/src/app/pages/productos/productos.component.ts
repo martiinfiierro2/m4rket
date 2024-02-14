@@ -135,6 +135,7 @@ export class ProductosComponent {
     this.getProductos();
     this.getPromociones();
     this.productos.forEach(() => this.cambioPromoPorFila.push(true));
+    console.log(this.productos);
   
   }
 
@@ -349,9 +350,11 @@ export class ProductosComponent {
     this.productoService.getAllProductos(this.posicionactual)
       .subscribe((result) =>{
         this.productos = result.productos;
+        console.log(this.productos);
         
         //Paginacion
         this.totalregistros = result.page.total;
+        console.log(this.totalregistros)
     });
   }
 
