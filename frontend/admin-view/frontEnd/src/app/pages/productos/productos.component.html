@@ -38,16 +38,18 @@
                 <td *ngIf="producto.Ubicacions.length > 0"><span *ngFor="let ubicaciones of producto.Ubicacions"> {{ ubicaciones.referencia }} </span></td>
                 <td *ngIf="producto.Ubicacions.length == 0"> --- </td>
                 <td *ngIf="producto.Promocions.length == 0">
-                    <input list="promociones" placeholder="Selecciona promoción..." (change)="asignarPromocion(producto.id, producto.precio, $event)">
+                    <input list="promociones" placeholder="Selecciona promoción..." (change)="asignarPromocion(producto.id, producto.precio, $event, producto.id)">
                     <datalist id="promociones">
                         <option *ngFor="let promocion of promociones" [value]="promocion.nombre">{{ promocion.nombre }}</option>
                     </datalist>
+                    <p *ngIf="cambioPromoPorFila[producto.id] == false" class="error">Elija una promoción existente</p>
                 </td>
                 <td *ngIf="producto.Promocions.length > 0">
-                    <input list="promociones" placeholder="{{ producto.Promocions[0].nombre }}" (change)="actualizarPromocion(producto.id, producto.precio, $event, producto.Promocions[0].en_promocion.id)">
+                    <input list="promociones" placeholder="{{ producto.Promocions[0].nombre }}" (change)="actualizarPromocion(producto.id, producto.precio, $event, producto.Promocions[0].en_promocion.id, producto.Promocions[0].nombre, i)">
                     <datalist id="promociones">
                         <option *ngFor="let promocion of promociones" [value]="promocion.nombre">{{ promocion.nombre }}</option>
                     </datalist>
+                    <p *ngIf="cambioPromoPorFila[i] == false" class="error">Elija una promoción existente</p>
                 </td>
                 <td>
                     <button (click)="borrarProd(producto.id)" class="btnIcon" id="btnBorrar"><mat-icon class="iconoAccion">delete</mat-icon></button>
