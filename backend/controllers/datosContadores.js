@@ -2,7 +2,7 @@ const { DatosContadores} = require('../models/datosContadores');
 const { Producto } = require('../models/productos');
 
 async function obtenerDatosContadores(req, res) {
-    const nombre = req.query.nombre;
+    const nombre = req.query.nombre; //?nombre=nombre_estadistica
 
     try {
         let datosContadores, total;
