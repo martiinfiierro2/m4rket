@@ -16,6 +16,7 @@ import { LandingComponent } from "./pages/landing/landing.component";
 import { DatasetComponent } from './pages/dataset/dataset.component';
 import { DatasetProductoComponent } from './dataset/dataset-producto/dataset-producto.component';
 import { PaginationComponent } from './pagination/pagination.component';
+import { EstadisticasComponent } from './pages/estadisticas/estadisticas.component';
 
 
 export const routes: Routes = [
@@ -67,6 +68,12 @@ export const routes: Routes = [
         { path: '*', redirectTo: ''}
       ]
 
+  },
+  { path: 'estadisticas', component: AdminLayoutComponent,
+      children: [
+        { path: '', component: EstadisticasComponent},
+        { path: '*', redirectTo: ''}
+      ]
   }
   
 

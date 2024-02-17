@@ -57,6 +57,9 @@ export class SidebarComponent {
     if (window.location.pathname.includes('/ubicaciones')) {
       document.getElementById('lineaUbicaciones')?.classList.add('actual');
     }
+    if (window.location.pathname.includes('/estadisticas')) {
+      document.getElementById('lineaEstadisticas')?.classList.add('actual');
+    }
 
   }
 

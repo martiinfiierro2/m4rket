@@ -1,0 +1,22 @@
+body{
+    justify-content: space-evenly;
+}
+
+#global {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+}
+
+.caja2{
+    background-color: rgb(255, 255, 255);
+    border: solid #c1c1c1 1px;
+    border-radius: 0.8em;
+    padding: 5%;
+}
+
+table{
+    border-collapse: collapse;
+    width: 70%;
+    font-size: small;
+}
