@@ -12,6 +12,8 @@ router.get('/tiempos', validarJWT, obtenerDatosTiempo);
 router.post('/tiempos', [ 
     validarJWT,
     check('nombre', "El nombre de la estadística está vacío").not().isEmpty(),
+    check('fecha_ini', "La fecha de inicio está vacía").not().isEmpty(),
+    check('fecha_fin', "La fecha de fin está vacía").not().isEmpty(),
     validarCampos,
 ], crearDatosTiempo);
 
