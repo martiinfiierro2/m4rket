@@ -8,7 +8,9 @@ import { environment } from "../../environments/environment";
 })
 export class EstadisticasService {
 
-  constructor( private http: HttpClient) { }
+  constructor( private http: HttpClient) { 
+    this.cargarCabeceras();
+  }
 
   private url: string = environment.base_url + '/contadores';
   private url2: string = environment.base_url + '/tiempos';
@@ -27,8 +29,9 @@ export class EstadisticasService {
   }
 
   //CRUD
-  getAllContadores(): Observable<any>{
-    return this.http.get(this.url, {headers: this.cabeceras});
+  getCountAnadidos(): Observable<any>{
+    let urlCompleta = this.url + '?nombre=anadido';
+    return this.http.get(urlCompleta, {headers: this.cabeceras});
   }
 
   postContador(dataForm: any){
@@ -42,7 +45,7 @@ export class EstadisticasService {
     return this.http.delete( urlCompleta, {headers: this.cabeceras});
   }
 
-  getAllTimepos(): Observable<any>{
+  getAllTiempos(): Observable<any>{
     return this.http.get(this.url2, {headers: this.cabeceras});
   }
 

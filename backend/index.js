@@ -28,8 +28,8 @@ app.use(fileUpload({
 
 //Estadisticas
 
-app.use('/api', require('./routes/contadores'));
-app.use('/api', require('./routes/tiempo'));
+app.use('/api', require('./routes/datosContadores'));
+app.use('/api', require('./routes/datosTiempo'));
 
 //Usuarios
 app.use('/api', require('./routes/usuarios'));

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { EstadisticasService } from '../../services/estadisticas.service';
 import { ProductosService } from '../../services/productos.service';
+import { Producto } from "../productos/productos.component";
 import { PromocionesService } from '../../services/promociones.service';
 import { Promocion } from '../promociones/promociones.component';
 import { UbicacionesService } from '../../services/ubicaciones.service';
@@ -18,7 +19,7 @@ import { UsuariosService } from '../../services/usuarios.service';
 export interface Contador{
   id: number,
   nombre: string,
-  id_Prod: number,
+  idProd: number,
   qr: number
   fecha: Date,
 }
@@ -28,9 +29,13 @@ export interface Tiempo{
   nombre: string,
   fecha_ini: Date,
   fecha_fin: Date,
-  id_Lista: number,
-  id_Usu: number
+  idLista: number,
+  idUsu: number
+}
 
+export class DatosContadores{
+  idProd: number;
+  totalCount: number;
 }
 
 @Component({
@@ -42,8 +47,9 @@ export interface Tiempo{
 })
 
 export class EstadisticasComponent {
-  contadores: Contador[] = [];
+  contadores: DatosContadores[] = [];
   tiempos: Tiempo[] = [];
+  productos: Producto[] = [];
 
   constructor (
     private estadisticasService: EstadisticasService,
@@ -51,14 +57,14 @@ export class EstadisticasComponent {
   }
 
   ngOnInit(): void {
-    this.getContadores();
+    this.getContadoresMasAnadidos();
   }
 
   //CRUD
-  getContadores(){
-    this.estadisticasService.getAllContadores().subscribe(res =>{
-      this.contadores = res.datos_contadores;
-      console.log(res);
+  getContadoresMasAnadidos(){
+    this.estadisticasService.getCountAnadidos().subscribe(res =>{
+      this.contadores = res.datosContadores;
+      console.log(this.contadores);
     })
   }
 }

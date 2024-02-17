@@ -5,8 +5,14 @@ async function obtenerDatosContadores(req, res) {
     const nombre = req.query.nombre; //?nombre=nombre_estadistica
 
     try {
-        let datosContadores, total;
-        datosContadores = await DatosContadores.count({ where: { nombre: nombre } });
+        let datosContadores;
+        datosContadores = await DatosContadores.findAll({
+            attributes: ['idProd', [Sequelize.fn('COUNT', Sequelize.col('*')), 'totalCount']],
+            where: { nombre: nombre },
+            group: ['idProd'],
+            order: [[Sequelize.literal('totalCount'), 'DESC']]
+        });
+        
         if (!datosContadores) {
             return res.json({
                 ok: false,

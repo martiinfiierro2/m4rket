@@ -3,10 +3,8 @@
         <div class="caja2">
             <h5>Productos más buscados</h5>
             <table>
-                <tr>
-                    <td>Nombre producto</td>
-                    <td>Unidades</td>
-                    <td>Fechas</td>
+                <tr *ngFor="let contador of contadores">
+                    <td> {{ contador.totalCount }} </td><td> {{ contador.idProd }} </td>
                 </tr>
             </table>
         </div>

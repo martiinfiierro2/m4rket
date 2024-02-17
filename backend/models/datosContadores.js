@@ -19,6 +19,10 @@ const DatosContadores = sequelize.define('datos_contadores', {
         type: DataTypes.INTEGER,
         allowNull: true,
     },
+    fecha:{
+        type: DataTypes.DATE,
+        allowNull: false,
+    }
 }, {
     tableName: 'datos_contadores',
     timestamps: false
