@@ -6,7 +6,7 @@ async function obtenerDatosContadores(req, res) {
 
     try {
         let datosContadores, total;
-        datosContadores = await DatosContadores.findAll({ where: { nombre: nombre } });
+        datosContadores = await DatosContadores.count({ where: { nombre: nombre } });
         if (!datosContadores) {
             return res.json({
                 ok: false,
