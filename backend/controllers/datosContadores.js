@@ -1,17 +1,57 @@
 const { DatosContadores} = require('../models/datosContadores');
 const { Producto } = require('../models/productos');
+const { Sequelize } = require('sequelize');
+const { Op } = require('sequelize');
 
 async function obtenerDatosContadores(req, res) {
     const nombre = req.query.nombre; //?nombre=nombre_estadistica
 
     try {
         let datosContadores;
-        datosContadores = await DatosContadores.findAll({
-            attributes: ['idProd', [Sequelize.fn('COUNT', Sequelize.col('*')), 'totalCount']],
-            where: { nombre: nombre },
-            group: ['idProd'],
-            order: [[Sequelize.literal('totalCount'), 'DESC']]
-        });
+        if(nombre == "anadido"){
+            datosContadores = await DatosContadores.findAll({
+                attributes: ['idProd', [Sequelize.fn('COUNT', Sequelize.col('*')), 'totalCount']],
+                where: { nombre: nombre },
+                group: ['idProd'],
+                order: [[Sequelize.literal('totalCount'), 'DESC']]
+            });
+        }
+        if(nombre == "qr"){
+            // Obtener la fecha actual
+            let currentDate = new Date();
+
+            // Calcular la fecha hace una semana
+            let oneWeekAgo = new Date(currentDate);
+            oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+            // Calcular la fecha hace una semana
+            let twoWeekAgo = new Date(currentDate);
+            twoWeekAgo.setDate(twoWeekAgo.getDate() - 14);
+
+            qrEstaSemana = await DatosContadores.findAll({
+                attributes: [[Sequelize.fn('COUNT', Sequelize.col('*')), 'totalCount']],
+                where: {
+                    nombre: nombre,
+                    fecha: {
+                      [Op.between]: [oneWeekAgo, currentDate] // Filtrar por la última semana
+                    }
+                }
+            });
+
+            qrSemanaPasada = await DatosContadores.findAll({
+                attributes: [[Sequelize.fn('COUNT', Sequelize.col('*')), 'totalCount']],
+                where: {
+                    nombre: nombre,
+                    fecha: {
+                      [Op.between]: [twoWeekAgo, oneWeekAgo] // Filtrar por la última semana
+                    }
+                }
+            });
+            datosContadores = {
+                qrEstaSemana: qrEstaSemana[0].dataValues.totalCount,
+                qrSemanaPasada: qrSemanaPasada[0].dataValues.totalCount
+            };
+        }
         
         if (!datosContadores) {
             return res.json({

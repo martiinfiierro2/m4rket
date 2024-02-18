@@ -48,6 +48,7 @@ export class DatosContadores{
 
 export class EstadisticasComponent {
   contadores: DatosContadores[] = [];
+  numQR: number[] = [];
   tiempos: Tiempo[] = [];
   productos: Producto[] = [];
 
@@ -59,22 +60,46 @@ export class EstadisticasComponent {
 
   ngOnInit(): void {
     this.getContadoresMasAnadidos();
+    this.getQR();
   }
 
   //CRUD
-  getContadoresMasAnadidos(){
-    this.estadisticasService.getCountAnadidos().subscribe(res =>{
-      console.log(res);
-      for (let index = 0; index < res.datosContadores.length; index++) {
-        this.productoService.getProductoId(res.datosContadores[index].idProd).subscribe(res2 =>{
-          const contador = new DatosContadores();
-          contador.nombre = res2.productos.nombre;
-          contador.totalCount = res.datosContadores[index].totalCount;
-          console.log(contador);
-          this.contadores.push(contador);
-        });
-      }
-    });
 
+  getQR(){
+    this.estadisticasService.getCountQR().subscribe(res => {
+      this.numQR.push(res.datosContadores.qrEstaSemana);
+      this.numQR.push(res.datosContadores.qrSemanaPasada);
+      console.log(res);
+      console.log(this.numQR);
+      this.calcularCambioPorcentual(this.numQR[0], this.numQR[1]);
+    });
+  }
+
+  calcularCambioPorcentual(valorInicial: number, valorFinal: number){
+    // Calcula la diferencia entre los dos valores
+    const diferencia = valorFinal - valorInicial;
+  
+    // Calcula el porcentaje de cambio
+    const porcentajeCambio = (diferencia / valorInicial) * 100;
+  
+    // Retorna el resultado
+    this.numQR.push(porcentajeCambio);
+  }
+
+  async getContadoresMasAnadidos() {
+    try {
+      const res = await this.estadisticasService.getCountAnadidos().toPromise();
+  
+      for (let index = 0; index < res.datosContadores.length; index++) {
+        let contador = new DatosContadores();
+  
+        const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
+        contador.nombre = res2.productos.nombre;
+        contador.totalCount = res.datosContadores[index].totalCount;
+        this.contadores.push(contador);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 }

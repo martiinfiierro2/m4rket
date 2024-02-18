@@ -34,6 +34,11 @@ export class EstadisticasService {
     return this.http.get(urlCompleta, {headers: this.cabeceras});
   }
 
+  getCountQR(): Observable<any>{
+    let urlCompleta = this.url + '?nombre=qr';
+    return this.http.get(urlCompleta, {headers: this.cabeceras});
+  }
+
   postContador(dataForm: any){
     return this.http.post(this.url, dataForm, {headers: this.cabeceras});
   }
