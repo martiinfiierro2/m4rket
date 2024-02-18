@@ -47,7 +47,8 @@ export class DatosContadores{
 })
 
 export class EstadisticasComponent {
-  contadores: DatosContadores[] = [];
+  anadidos: DatosContadores[] = [];
+  eliminados: DatosContadores[] = [];
   numQR: number[] = [];
   tiempos: Tiempo[] = [];
   productos: Producto[] = [];
@@ -60,6 +61,7 @@ export class EstadisticasComponent {
 
   ngOnInit(): void {
     this.getContadoresMasAnadidos();
+    this.getContadoresMasEliminados();
     this.getQR();
   }
 
@@ -96,7 +98,25 @@ export class EstadisticasComponent {
         const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
         contador.nombre = res2.productos.nombre;
         contador.totalCount = res.datosContadores[index].totalCount;
-        this.contadores.push(contador);
+        this.anadidos.push(contador);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async getContadoresMasEliminados() {
+    try {
+      const res = await this.estadisticasService.getCountEliminados().toPromise();
+      console.log(res);
+  
+      for (let index = 0; index < res.datosContadores.length; index++) {
+        let contador = new DatosContadores();
+  
+        const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
+        contador.nombre = res2.productos.nombre;
+        contador.totalCount = res.datosContadores[index].totalCount;
+        this.eliminados.push(contador);
       }
     } catch (error) {
       console.error(error);

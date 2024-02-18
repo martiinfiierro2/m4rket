@@ -34,6 +34,11 @@ export class EstadisticasService {
     return this.http.get(urlCompleta, {headers: this.cabeceras});
   }
 
+  getCountEliminados(): Observable<any>{
+    let urlCompleta = this.url + '?nombre=eliminado';
+    return this.http.get(urlCompleta, {headers: this.cabeceras});
+  }
+
   getCountQR(): Observable<any>{
     let urlCompleta = this.url + '?nombre=qr';
     return this.http.get(urlCompleta, {headers: this.cabeceras});

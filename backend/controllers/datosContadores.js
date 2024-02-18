@@ -16,6 +16,14 @@ async function obtenerDatosContadores(req, res) {
                 order: [[Sequelize.literal('totalCount'), 'DESC']]
             });
         }
+        if(nombre == "eliminado"){
+            datosContadores = await DatosContadores.findAll({
+                attributes: ['idProd', [Sequelize.fn('COUNT', Sequelize.col('*')), 'totalCount']],
+                where: { nombre: nombre },
+                group: ['idProd'],
+                order: [[Sequelize.literal('totalCount'), 'DESC']]
+            });
+        }
         if(nombre == "qr"){
             // Obtener la fecha actual
             let currentDate = new Date();

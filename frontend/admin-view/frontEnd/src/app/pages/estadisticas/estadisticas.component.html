@@ -1,10 +1,18 @@
 <body>
     <div id="global">
         <div class="caja2">
-            <h5>Productos más buscados</h5>
+            <h5>Productos más añadidos</h5>
             <table>
-                <tr *ngFor="let contador of contadores">
-                    <td> {{ contador.totalCount }} </td><td> {{ contador.nombre }} </td>
+                <tr *ngFor="let anadido of anadidos">
+                    <td> {{ anadido.totalCount }} </td><td> {{ anadido.nombre }} </td>
+                </tr>
+            </table>
+        </div>
+        <div class="caja2">
+            <h5>Productos más eliminados</h5>
+            <table>
+                <tr *ngFor="let eliminado of eliminados">
+                    <td> {{ eliminado.totalCount }} </td><td> {{ eliminado.nombre }} </td>
                 </tr>
             </table>
         </div>
