@@ -34,7 +34,7 @@ export interface Tiempo{
 }
 
 export class DatosContadores{
-  idProd: number;
+  nombre: string;
   totalCount: number;
 }
 
@@ -53,6 +53,7 @@ export class EstadisticasComponent {
 
   constructor (
     private estadisticasService: EstadisticasService,
+    private productoService: ProductosService,
     private route: Router){
   }
 
@@ -63,8 +64,17 @@ export class EstadisticasComponent {
   //CRUD
   getContadoresMasAnadidos(){
     this.estadisticasService.getCountAnadidos().subscribe(res =>{
-      this.contadores = res.datosContadores;
-      console.log(this.contadores);
-    })
+      console.log(res);
+      for (let index = 0; index < res.datosContadores.length; index++) {
+        this.productoService.getProductoId(res.datosContadores[index].idProd).subscribe(res2 =>{
+          const contador = new DatosContadores();
+          contador.nombre = res2.productos.nombre;
+          contador.totalCount = res.datosContadores[index].totalCount;
+          console.log(contador);
+          this.contadores.push(contador);
+        });
+      }
+    });
+
   }
 }
