@@ -1,20 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { EstadisticasService } from '../../services/estadisticas.service';
 import { ProductosService } from '../../services/productos.service';
 import { Producto } from "../productos/productos.component";
-import { PromocionesService } from '../../services/promociones.service';
-import { Promocion } from '../promociones/promociones.component';
-import { UbicacionesService } from '../../services/ubicaciones.service';
-import { Ubicacion } from '../ubicaciones/ubicaciones.component';
-import { environment } from '../../../environments/environment';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { PaginationComponent } from "../../pagination/pagination.component";
-import { UsuariosService } from '../../services/usuarios.service';
+import * as echarts from 'echarts';
+
 
 export interface Contador{
   id: number,
@@ -23,7 +19,6 @@ export interface Contador{
   qr: number
   fecha: Date,
 }
-
 export interface Tiempo{
   id: number,
   nombre: string,
@@ -32,7 +27,6 @@ export interface Tiempo{
   idLista: number,
   idUsu: number
 }
-
 export class DatosContadores{
   nombre: string;
   totalCount: number;
@@ -49,20 +43,110 @@ export class DatosContadores{
 export class EstadisticasComponent {
   anadidos: DatosContadores[] = [];
   eliminados: DatosContadores[] = [];
-  numQR: number[] = [];
+  numQR: any[] = [];
   tiempos: Tiempo[] = [];
   productos: Producto[] = [];
+  masAnadido: any;
+  masEliminado: any;
 
   constructor (
     private estadisticasService: EstadisticasService,
     private productoService: ProductosService,
+    private elementRef: ElementRef,
     private route: Router){
   }
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.getContadoresMasAnadidos();
     this.getContadoresMasEliminados();
     this.getQR();
+  }
+
+  private configurarGraficoEliminados(): void {
+    const opciones = {
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'shadow'
+        }
+      },
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+      },
+      xAxis: [
+        {
+          type: 'value'
+        }
+      ],
+      yAxis: [
+        {
+          type: 'category',
+          data: this.eliminados.map(eliminado => eliminado.nombre).reverse(),
+          axisTick: {
+            alignWithLabel: true
+          }
+        }
+      ],
+      series: [
+        {
+          name: 'Veces eliminado',
+          type: 'bar',
+          barWidth: '60%',
+          data: this.eliminados.map(eliminado => eliminado.totalCount).reverse()
+        }
+      ]
+    };
+    this.masEliminado = echarts.init(this.elementRef.nativeElement.querySelector('#masEliminado'));
+    this.masEliminado.setOption(opciones);
+  };
+
+  private configurarGraficoAnadidos(): void {
+      const opciones = {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: [
+          {
+            type: 'value'
+          }
+        ],
+        yAxis: [
+          {
+            type: 'category',
+            data: this.anadidos.map(anadido => anadido.nombre).reverse(),
+            axisTick: {
+              alignWithLabel: true
+            }
+          }
+        ],
+        series: [
+          {
+            name: 'Veces añadido',
+            type: 'bar',
+            barWidth: '60%',
+            data: this.anadidos.map(anadido => anadido.totalCount).reverse()
+          }
+        ]
+      };
+  
+    this.masAnadido = echarts.init(this.elementRef.nativeElement.querySelector('#masAnadido'));
+    this.masAnadido.setOption(opciones);
+  };
+  
+
+  ngOnInit(): void {
   }
 
   //CRUD
@@ -78,14 +162,8 @@ export class EstadisticasComponent {
   }
 
   calcularCambioPorcentual(valorInicial: number, valorFinal: number){
-    // Calcula la diferencia entre los dos valores
-    const diferencia = valorFinal - valorInicial;
-  
-    // Calcula el porcentaje de cambio
-    const porcentajeCambio = (diferencia / valorInicial) * 100;
-  
-    // Retorna el resultado
-    this.numQR.push(porcentajeCambio);
+    const despejarX = ((valorInicial - valorFinal)/valorFinal).toFixed(2);
+    this.numQR.push(despejarX);
   }
 
   async getContadoresMasAnadidos() {
@@ -100,6 +178,9 @@ export class EstadisticasComponent {
         contador.totalCount = res.datosContadores[index].totalCount;
         this.anadidos.push(contador);
       }
+
+      //Lamamos al gráfico para cargarlo después de obtener los datos
+      this.configurarGraficoAnadidos();
     } catch (error) {
       console.error(error);
     }
@@ -118,6 +199,9 @@ export class EstadisticasComponent {
         contador.totalCount = res.datosContadores[index].totalCount;
         this.eliminados.push(contador);
       }
+
+      //Lamamos al gráfico para cargarlo después de obtener los datos
+      this.configurarGraficoEliminados();
     } catch (error) {
       console.error(error);
     }

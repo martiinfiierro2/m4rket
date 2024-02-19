@@ -15,7 +15,8 @@ import { NavbarComponent } from './commons/navbar/navbar.component';
 import { FooterComponent } from './commons/footer/footer.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { HttpClientModule } from '@angular/common/http';
-import { FilterPipe } from './pipes/filter.pipe'
+import { FilterPipe } from './pipes/filter.pipe';
+import { NgxEchartsModule } from 'ngx-echarts';
 
 
 
@@ -30,6 +31,7 @@ import { FilterPipe } from './pipes/filter.pipe'
     ReactiveFormsModule,
     HttpClientModule,
     MatIconModule,
+    NgxEchartsModule
   ],
   providers: [
     provideClientHydration()

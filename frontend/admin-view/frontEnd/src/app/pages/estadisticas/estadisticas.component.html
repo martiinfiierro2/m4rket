@@ -1,20 +1,13 @@
+<script src="ruta/a/echarts.min.js"></script>
 <body>
     <div id="global">
         <div class="caja2">
             <h5>Productos más añadidos</h5>
-            <table>
-                <tr *ngFor="let anadido of anadidos">
-                    <td> {{ anadido.totalCount }} </td><td> {{ anadido.nombre }} </td>
-                </tr>
-            </table>
+            <div id="masAnadido" style="width: 300px; height: 200px;"></div>
         </div>
         <div class="caja2">
             <h5>Productos más eliminados</h5>
-            <table>
-                <tr *ngFor="let eliminado of eliminados">
-                    <td> {{ eliminado.totalCount }} </td><td> {{ eliminado.nombre }} </td>
-                </tr>
-            </table>
+            <div id="masEliminado" style="width: 300px; height: 200px;"></div>
         </div>
         <div class="caja2">
             <h5>QR usados en la última semana</h5>
