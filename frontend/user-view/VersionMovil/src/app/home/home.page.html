@@ -1,0 +1,54 @@
+
+<ion-content scrollY="false">
+  
+  <div class="contenedor" >
+
+    <div class="botones-accion">
+      <div class="listado-info">
+        <div class="boton-desplegar">
+          <button class="button"> &nbsp; ▼</button>
+          <div class="dropdown-content">
+            <p id="top">Ocultar productos comprados</p>
+            <p id="middle">Actualizar lista</p>
+            <p id="bottom">Eliminar lista actual</p>
+          </div>
+        </div>
+        <div class="contador-productos">
+          <p>10/14</p>
+        </div>
+      </div>
+      <div class="boton-qr">
+        <ion-icon name="qr-code-outline"></ion-icon>
+      </div>
+    </div>
+    <div class="mapa">
+      <div *ngFor="let productoDetalle of detallesProductos" class="producto-container">
+        <div class="navegador-producto" (click)="llamarFuncionDrawer(productoDetalle.idProducto)"> <!--(click)="getProductoSelect(productoDetalle.idProducto)"-->
+          <img [src]="urlFotoProducto + productoDetalle.foto + '?token=' +tokenUsuario" alt="Product Image" />
+          <div class="product-text">
+            <h3>{{productoDetalle.nombre}}</h3>
+            <p> {{ productoDetalle.precio }}€</p>
+          </div>
+        </div>
+      ©
+        <div class="product-buttons">
+          <div class="add2">
+            <button (click)="decrementar(productoDetalle)">
+              <ion-icon class="add-button" name="remove-circle-outline"></ion-icon>
+            </button>
+            <span>{{ productoDetalle.cantidad}}</span>
+            <button (click)="incrementar(productoDetalle)">
+              <ion-icon class="add-button" name="add-circle-outline"></ion-icon>
+            </button>
+            <button (click)="eliminar(productoDetalle);">
+              <ion-icon class="add-button" name="trash-outline"></ion-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+
+  <app-drawer></app-drawer>
+</ion-content>

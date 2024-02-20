@@ -1,0 +1,92 @@
+
+<div class="drawer" #drawer>
+  <div class="botonchatbot" #botonchatbot>
+    <ion-icon name="chatbubbles-outline"></ion-icon>
+  </div>
+  <div class="tarjeta">
+    <div class="ion-text-center" (click)="toggleDrawer()">
+      <div class="drawer-pull" > </div>
+    </div>
+    <div class="contenido-drawer">
+      <div class="contenido-buscador" *ngIf="!productoSelect" [@fadeAnimation]>
+        <div class="drawer-header">
+          <ion-searchbar show-clear-button="never" show-cancel-button="focus" cancel-button-text="Cancelar" 
+            placeholder="Buscar en M4rket" class="buscador" (ionChange)="toggleDrawer2(2)" (ionFocus)="toggleDrawer2(1)"
+            (ionChange)="getBusquedaProducto($event.detail.value)">
+          </ion-searchbar>
+  
+          <div class="profile"></div>
+        </div>
+        <div>
+          <div *ngFor="let producto of productos" class="producto-container">
+            <div class="navegador-producto" (click)="getProducto(producto.id)">
+              <img [src]="urlFotoProducto + producto.foto + '?token=' +tokenUsuario" alt="Product Image" />
+              <div class="product-text">
+                <h3>{{producto.nombre}}</h3>
+                <p> {{ producto.precio }}€</p>
+              </div>
+            </div>
+          
+            <div class="product-buttons">
+              <button *ngIf="!producto.enListaCompra" (click)="getProducto(producto.id)" (click)="anadirProducto(producto)"class="add" >Añadir
+                <ion-icon class="add-button" name="add-circle-outline"></ion-icon>
+              </button>
+              <div *ngIf="producto.enListaCompra" class="add2">
+                <button (click)="decrementar(producto)">
+                  <ion-icon class="add-button" name="remove-circle-outline"></ion-icon>
+                </button>
+                <span>{{ producto.cantidad }}</span>
+                <button (click)="incrementar(producto)">
+                  <ion-icon class="add-button" name="add-circle-outline"></ion-icon>
+                </button>
+                <button (click)="eliminar(producto);">
+                  <ion-icon class="add-button" name="trash-outline"></ion-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="recientes">
+          <p>Recientes<p>
+        </div>
+        <div class="favoritos">
+        </div>
+      </div>
+      <div class="contenido-producto"  *ngIf="productoSelect" [@fadeAnimation] >
+        <div class="drawer-header">
+          <h2 class="nombre_producto">{{ productoSelect.nombre }}</h2>
+          <button (click)="EliminarProductoSelect()">X</button>  
+        </div>
+        <div class="contenido-scroll">
+          <div>
+            <button>Marcar como comprado</button>
+            <div class="disponibilidad">
+              <ion-icon name="ellipse" id="divStock" [ngStyle]="colorStock(productoSelect.stock)" class></ion-icon> 
+              <p class="dispo">{{dispo}}</p>
+            </div>
+            <div class="precio">
+              <p class="precio_producto">{{ productoSelect.precio }}€</p>
+              <p class="precio_kg_producto">{{ productoSelect.precio_kg }}€/kg</p>
+            </div>
+            <img [src]="'assets/images/' + productoSelect.id + '.jpg'" alt="Product Image" />
+        </div>
+        <div>
+          <h2 class="nombre_producto">{{ productoSelect.nombre }}</h2>
+          <button (click)="EliminarProductoSelect()">X</button>  
+            <button>Marcar como comprado</button>
+            <div class="disponibilidad">
+              <ion-icon name="ellipse" id="divStock" [ngStyle]="colorStock(productoSelect.stock)" class></ion-icon> 
+              <p class="dispo">{{dispo}}</p>
+            </div>
+            <div class="precio">
+              <p class="precio_producto">{{ productoSelect.precio }}€</p>
+              <p class="precio_kg_producto">{{ productoSelect.precio_kg }}€/kg</p>
+            </div>
+            <img [src]="'assets/images/' + productoSelect.id + '.jpg'" alt="Product Image" />
+        </div>
+        </div>   
+      </div>
+    </div>
+  </div>
+ 
+</div>
