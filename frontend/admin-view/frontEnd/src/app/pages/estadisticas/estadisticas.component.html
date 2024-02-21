@@ -1,19 +1,38 @@
 <script src="ruta/a/echarts.min.js"></script>
 <body>
     <div id="global">
-        <div class="caja2">
-            <h5>Productos más añadidos</h5>
-            <div id="masAnadido" style="width: 300px; height: 200px;"></div>
-        </div>
-        <div class="caja2">
-            <h5>Productos más eliminados</h5>
-            <div id="masEliminado" style="width: 300px; height: 200px;"></div>
-        </div>
-        <div class="caja2">
+        <div class="cajaMini">
             <h5>QR usados en la última semana</h5>
-            <p>Esta semana {{numQR[0]}} </p>
-            <p>Semana pasada {{numQR[1]}} </p>
-            <p>{{numQR[2]}}%</p>
+            <article>
+                <p class="valor">{{numQR[0]}}
+                    <sup><p class="datoQRP" *ngIf="numQR[2] >= 0"><i class="fa-solid fa-arrow-trend-up"></i>{{numQR[2]}}%</p></sup>
+                    <sup><p class="datoQRN" *ngIf="numQR[2] < 0"><i class="fa-solid fa-arrow-trend-down"></i>{{numQR[2]}}%</p></sup>
+                </p>
+            </article>
+        </div>
+        <div class="cajaDatosProd" (click)="mostrarGrafico('masAnadido')">
+            <h5>Productos más añadidos</h5>
+            <div *ngIf="prodMasAnadido" class="cajaDatos">
+                <div>
+                    <p>{{prodMasAnadido.nombre}}</p>
+                    <img [src]="urlFotoProducto + prodMasAnadido.foto + '?token=' +tokenUsuario" alt="Imagen del producto">
+                </div>
+                <div class="enlinea">
+                    <p class="grande"> {{anadidos[0].totalCount}} Uds.</p>
+                </div>
+            </div>
+        </div>
+        <div class="cajaDatosProd" (click)="mostrarGrafico('masEliminado')">
+            <h5>Productos más eliminados</h5>
+            <div *ngIf="prodMasEliminado" class="cajaDatos">
+                <div>
+                    <p>{{prodMasEliminado.nombre}}</p>
+                    <img [src]="urlFotoProducto + prodMasEliminado.foto + '?token=' +tokenUsuario" alt="Imagen del producto">
+                </div>
+                <div class="enlinea">
+                    <p class="grande"> {{eliminados[0].totalCount}} Uds.</p>
+                </div>
+            </div>
         </div>
     </div>
 </body>

@@ -25,39 +25,19 @@ async function obtenerDatosContadores(req, res) {
             });
         }
         if(nombre == "qr"){
-            // Obtener la fecha actual
-            let currentDate = new Date();
-
-            // Calcular la fecha hace una semana
-            let oneWeekAgo = new Date(currentDate);
-            oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-
-            // Calcular la fecha hace una semana
-            let twoWeekAgo = new Date(currentDate);
-            twoWeekAgo.setDate(twoWeekAgo.getDate() - 14);
-
-            qrEstaSemana = await DatosContadores.findAll({
-                attributes: [[Sequelize.fn('COUNT', Sequelize.col('*')), 'totalCount']],
+            qrPorSemana = await DatosContadores.findAll({
+                attributes: [
+                    [Sequelize.fn('COUNT', Sequelize.col('*')), 'totalCount'],
+                    [Sequelize.fn('WEEK', Sequelize.col('fecha')), 'semana_del_anio']
+                ],
                 where: {
-                    nombre: nombre,
-                    fecha: {
-                      [Op.between]: [oneWeekAgo, currentDate] // Filtrar por la última semana
-                    }
-                }
-            });
-
-            qrSemanaPasada = await DatosContadores.findAll({
-                attributes: [[Sequelize.fn('COUNT', Sequelize.col('*')), 'totalCount']],
-                where: {
-                    nombre: nombre,
-                    fecha: {
-                      [Op.between]: [twoWeekAgo, oneWeekAgo] // Filtrar por la última semana
-                    }
-                }
+                    nombre: nombre
+                },
+                group: [Sequelize.fn('WEEK', Sequelize.col('fecha'))], // Agrupar por semana del año
+                order: [[Sequelize.fn('WEEK', Sequelize.col('fecha')), 'ASC']]
             });
             datosContadores = {
-                qrEstaSemana: qrEstaSemana[0].dataValues.totalCount,
-                qrSemanaPasada: qrSemanaPasada[0].dataValues.totalCount
+                qrPorSemana: qrPorSemana
             };
         }
         
