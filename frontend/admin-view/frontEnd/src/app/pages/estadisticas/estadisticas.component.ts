@@ -10,7 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { PaginationComponent } from "../../pagination/pagination.component";
 import * as echarts from 'echarts';
-
+import { environment } from '../../../environments/environment';
 
 export interface Contador{
   id: number,
@@ -42,12 +42,18 @@ export class DatosContadores{
 
 export class EstadisticasComponent {
   anadidos: DatosContadores[] = [];
+  prodMasAnadido: Producto;
+  prodMasEliminado: Producto;
   eliminados: DatosContadores[] = [];
   numQR: any[] = [];
   tiempos: Tiempo[] = [];
   productos: Producto[] = [];
   masAnadido: any;
   masEliminado: any;
+
+  //variables para mostrar foto
+  tokenUsuario = sessionStorage.getItem('tokenUsuario') || localStorage.getItem('tokenUsuario');
+  urlFotoProducto = environment.base_url + '/uploads/fotoproducto/';
 
   constructor (
     private estadisticasService: EstadisticasService,
@@ -56,95 +62,16 @@ export class EstadisticasComponent {
     private route: Router){
   }
 
+  mostrarGrafico(nombre: string): void {
+    let url = '/datos?nombre='+nombre;
+    window.location.href = url;
+  }  
+
   ngAfterViewInit(): void {
     this.getContadoresMasAnadidos();
     this.getContadoresMasEliminados();
     this.getQR();
   }
-
-  private configurarGraficoEliminados(): void {
-    const opciones = {
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'shadow'
-        }
-      },
-      grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true
-      },
-      xAxis: [
-        {
-          type: 'value'
-        }
-      ],
-      yAxis: [
-        {
-          type: 'category',
-          data: this.eliminados.map(eliminado => eliminado.nombre).reverse(),
-          axisTick: {
-            alignWithLabel: true
-          }
-        }
-      ],
-      series: [
-        {
-          name: 'Veces eliminado',
-          type: 'bar',
-          barWidth: '60%',
-          data: this.eliminados.map(eliminado => eliminado.totalCount).reverse()
-        }
-      ]
-    };
-    this.masEliminado = echarts.init(this.elementRef.nativeElement.querySelector('#masEliminado'));
-    this.masEliminado.setOption(opciones);
-  };
-
-  private configurarGraficoAnadidos(): void {
-      const opciones = {
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'shadow'
-          }
-        },
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
-        },
-        xAxis: [
-          {
-            type: 'value'
-          }
-        ],
-        yAxis: [
-          {
-            type: 'category',
-            data: this.anadidos.map(anadido => anadido.nombre).reverse(),
-            axisTick: {
-              alignWithLabel: true
-            }
-          }
-        ],
-        series: [
-          {
-            name: 'Veces añadido',
-            type: 'bar',
-            barWidth: '60%',
-            data: this.anadidos.map(anadido => anadido.totalCount).reverse()
-          }
-        ]
-      };
-  
-    this.masAnadido = echarts.init(this.elementRef.nativeElement.querySelector('#masAnadido'));
-    this.masAnadido.setOption(opciones);
-  };
-  
 
   ngOnInit(): void {
   }
@@ -153,8 +80,8 @@ export class EstadisticasComponent {
 
   getQR(){
     this.estadisticasService.getCountQR().subscribe(res => {
-      this.numQR.push(res.datosContadores.qrEstaSemana);
-      this.numQR.push(res.datosContadores.qrSemanaPasada);
+      this.numQR.push(res.datosContadores.qrPorSemana[res.datosContadores.qrPorSemana.length - 1].totalCount);
+      this.numQR.push(res.datosContadores.qrPorSemana[res.datosContadores.qrPorSemana.length - 2].totalCount);
       console.log(res);
       console.log(this.numQR);
       this.calcularCambioPorcentual(this.numQR[0], this.numQR[1]);
@@ -174,13 +101,15 @@ export class EstadisticasComponent {
         let contador = new DatosContadores();
   
         const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
+        if(index == 0){
+          this.prodMasAnadido = res2.productos;
+          console.log(this.prodMasAnadido);
+        }
+
         contador.nombre = res2.productos.nombre;
         contador.totalCount = res.datosContadores[index].totalCount;
         this.anadidos.push(contador);
       }
-
-      //Lamamos al gráfico para cargarlo después de obtener los datos
-      this.configurarGraficoAnadidos();
     } catch (error) {
       console.error(error);
     }
@@ -189,19 +118,19 @@ export class EstadisticasComponent {
   async getContadoresMasEliminados() {
     try {
       const res = await this.estadisticasService.getCountEliminados().toPromise();
-      console.log(res);
-  
       for (let index = 0; index < res.datosContadores.length; index++) {
         let contador = new DatosContadores();
   
         const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
+        if(index == 0){
+          this.prodMasEliminado = res2.productos;
+          console.log(this.prodMasEliminado);
+        }
         contador.nombre = res2.productos.nombre;
         contador.totalCount = res.datosContadores[index].totalCount;
         this.eliminados.push(contador);
       }
 
-      //Lamamos al gráfico para cargarlo después de obtener los datos
-      this.configurarGraficoEliminados();
     } catch (error) {
       console.error(error);
     }

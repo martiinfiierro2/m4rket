@@ -17,6 +17,7 @@ import { DatasetComponent } from './pages/dataset/dataset.component';
 import { DatasetProductoComponent } from './dataset/dataset-producto/dataset-producto.component';
 import { PaginationComponent } from './pagination/pagination.component';
 import { EstadisticasComponent } from './pages/estadisticas/estadisticas.component';
+import { DatosComponent } from './pages/datos/datos.component';
 
 
 export const routes: Routes = [
@@ -74,6 +75,13 @@ export const routes: Routes = [
         { path: '', component: EstadisticasComponent},
         { path: '*', redirectTo: ''}
       ]
+  },
+  
+  { path: 'datos', component: AdminLayoutComponent,
+    children: [
+      { path: '', component: DatosComponent},
+      { path: '*', redirectTo: ''}
+    ]
   }
   
 
