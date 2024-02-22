@@ -5,26 +5,34 @@ const { Op } = require('sequelize');
 
 async function obtenerDatosContadores(req, res) {
     const nombre = req.query.nombre; //?nombre=nombre_estadistica
+    const inicio = req.query.inicio ? new Date(req.query.inicio) : null;
+    const fin = req.query.fin ? new Date(req.query.fin) : null;
 
     try {
         let datosContadores;
-        if(nombre == "anadido"){
-            datosContadores = await DatosContadores.findAll({
-                attributes: ['idProd', [Sequelize.fn('COUNT', Sequelize.col('*')), 'totalCount']],
-                where: { nombre: nombre },
-                group: ['idProd'],
-                order: [[Sequelize.literal('totalCount'), 'DESC']]
-            });
+        if (nombre === "anadido" || nombre === "eliminado") {
+            if (inicio !== null && fin !== null) {
+                datosContadores = await DatosContadores.findAll({
+                    attributes: ['idProd', [Sequelize.fn('COUNT', Sequelize.col('*')), 'totalCount']],
+                    where: {
+                        nombre: nombre,
+                        fecha: {
+                            [Sequelize.Op.between]: [inicio, fin]
+                        }
+                    },
+                    group: ['idProd'],
+                    order: [[Sequelize.literal('totalCount'), 'DESC']]
+                });
+            } else {
+                datosContadores = await DatosContadores.findAll({
+                    attributes: ['idProd', [Sequelize.fn('COUNT', Sequelize.col('*')), 'totalCount']],
+                    where: { nombre: nombre },
+                    group: ['idProd'],
+                    order: [[Sequelize.literal('totalCount'), 'DESC']]
+                });
+            }
         }
-        if(nombre == "eliminado"){
-            datosContadores = await DatosContadores.findAll({
-                attributes: ['idProd', [Sequelize.fn('COUNT', Sequelize.col('*')), 'totalCount']],
-                where: { nombre: nombre },
-                group: ['idProd'],
-                order: [[Sequelize.literal('totalCount'), 'DESC']]
-            });
-        }
-        if(nombre == "qr"){
+        else if(nombre === "qr"){
             qrPorSemana = await DatosContadores.findAll({
                 attributes: [
                     [Sequelize.fn('COUNT', Sequelize.col('*')), 'totalCount'],
