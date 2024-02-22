@@ -28,7 +28,7 @@ export class SignUpComponent {
     email: ['', [Validators.required, Validators.email]],
     pwd: ['', Validators.required],
     genero: ['', Validators.required],
-    rol: ['', Validators.required]
+    rol: ['usuario', Validators.required]
   });
 
 
@@ -41,7 +41,7 @@ export class SignUpComponent {
         this.tokenUsuario = res.token;
         sessionStorage.setItem('tokenUsuario', this.tokenUsuario);
 
-        this.route.navigate(['/productos']);
+        this.route.navigate(['/home']);
       }) 
   }
 } 
