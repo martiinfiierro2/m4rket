@@ -1,6 +1,20 @@
 
+<div class="chatbot" #chatbot>
+  <div class="chatbot-header">
+    <button class="cerrar-chatbot" (click)="cerrarChatbot()">
+      X
+    </button>
+  </div>
+  <div class="box-envio">
+      <input class="text-chat" placeholder="Escribe tu pregunta...">
+      <button class="boton-envio">
+        <ion-icon name="send"></ion-icon>
+      </button>
+  </div> 
+</div>
+
 <div class="drawer" #drawer>
-  <div class="botonchatbot" #botonchatbot>
+  <div class="botonchatbot" #botonchatbot (click)="abrirChatbot()">
     <ion-icon name="chatbubbles-outline"></ion-icon>
   </div>
   <div class="tarjeta">
@@ -15,7 +29,7 @@
             (ionChange)="getBusquedaProducto($event.detail.value)">
           </ion-searchbar>
   
-          <div class="profile"></div>
+          <div class="profile" #profile (click)="abrirPerfil();"></div>
         </div>
         <div>
           <div *ngFor="let producto of productos" class="producto-container">
@@ -55,38 +69,43 @@
       <div class="contenido-producto"  *ngIf="productoSelect" [@fadeAnimation] >
         <div class="drawer-header">
           <h2 class="nombre_producto">{{ productoSelect.nombre }}</h2>
-          <button (click)="EliminarProductoSelect()">X</button>  
+          <button (click)="EliminarProductoSelect()" class="cerrar-tarjeta">X</button>  
         </div>
         <div class="contenido-scroll">
-          <div>
-            <button>Marcar como comprado</button>
-            <div class="disponibilidad">
-              <ion-icon name="ellipse" id="divStock" [ngStyle]="colorStock(productoSelect.stock)" class></ion-icon> 
-              <p class="dispo">{{dispo}}</p>
+            <button class="marcarcomprado">Marcar como comprado</button>
+            <div class="acciones">
+              <div class="dispo-precio">
+                <div class="disponibilidad">
+                  <ion-icon name="ellipse" id="divStock" [ngStyle]="colorStock(productoSelect.stock)" class></ion-icon> 
+                  <p class="dispo">{{dispo}}</p>
+                </div>
+                <div class="precio">
+                  <p class="precio_producto">{{ productoSelect.precio }}€</p>
+                  <p class="precio_kg_producto">{{ productoSelect.precio_kg }}€/kg</p>
+                </div>
+              </div>
+                <div class="cantidades">
+                  <div class="add2">
+                    <button (click)="decrementar(productoSelect)">
+                      <ion-icon class="add-button" name="remove-circle-outline"></ion-icon>
+                    </button>
+                    <span>{{ productoSelect.cantidad }}</span>
+                    <button (click)="incrementar(productoSelect)">
+                      <ion-icon class="add-button" name="add-circle-outline"></ion-icon>
+                    </button>
+                  </div>
+                  <button class="boton-eliminar"(click)="eliminar(productoSelect);">
+                    Eliminar
+                  </button>
+                </div>
             </div>
-            <div class="precio">
-              <p class="precio_producto">{{ productoSelect.precio }}€</p>
-              <p class="precio_kg_producto">{{ productoSelect.precio_kg }}€/kg</p>
+            <div class="foto_producto">
+              <img [src]="urlFotoProducto + productoSelect.foto + '?token=' +tokenUsuario" alt="Product Image" />
             </div>
-            <img [src]="'assets/images/' + productoSelect.id + '.jpg'" alt="Product Image" />
-        </div>
-        <div>
-          <h2 class="nombre_producto">{{ productoSelect.nombre }}</h2>
-          <button (click)="EliminarProductoSelect()">X</button>  
-            <button>Marcar como comprado</button>
-            <div class="disponibilidad">
-              <ion-icon name="ellipse" id="divStock" [ngStyle]="colorStock(productoSelect.stock)" class></ion-icon> 
-              <p class="dispo">{{dispo}}</p>
-            </div>
-            <div class="precio">
-              <p class="precio_producto">{{ productoSelect.precio }}€</p>
-              <p class="precio_kg_producto">{{ productoSelect.precio_kg }}€/kg</p>
-            </div>
-            <img [src]="'assets/images/' + productoSelect.id + '.jpg'" alt="Product Image" />
-        </div>
+            
         </div>   
       </div>
     </div>
   </div>
- 
 </div>
+

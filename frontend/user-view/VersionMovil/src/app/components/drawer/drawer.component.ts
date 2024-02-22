@@ -59,10 +59,12 @@ export class DrawerComponent  implements AfterViewInit {
   @ViewChild('drawer', { read: ElementRef}) drawer!: ElementRef;
  // @Output('openStateChanged') openState: EventEmitter<boolean> = new EventEmitter();
   @ViewChild('botonchatbot', {read: ElementRef}) botonchatbot!: ElementRef;
+  @ViewChild('chatbot', {read: ElementRef}) chatbot!: ElementRef;
+  @ViewChild('profile', {read: ElementRef}) profile!: ElementRef;
+
   isOpen = true;
   openHeight = 0;
   isMiddle = true;
-
 
   //PRODUCTO SELECCIONADO
   productoSelect: any;
@@ -81,11 +83,11 @@ export class DrawerComponent  implements AfterViewInit {
   const drawer = this.drawer.nativeElement;
   this.openHeight = (this.plt.height() / 100);
   const botonchatbot = this.botonchatbot.nativeElement;
-
-
+  //const chatbot = this.chatbot.nativeElement;
+  const profile = this.profile.nativeElement;
   
 
-  drawer.style.transform = `translateY(400px)`;
+  drawer.style.transform = `translateY(500px)`;
   
   const gesture = await this.gestureCtrl.create({
     el: drawer,
@@ -104,6 +106,7 @@ export class DrawerComponent  implements AfterViewInit {
           this.isMiddle = false;
           this.isOpen = true;
           botonchatbot.style.display = 'none';
+          profile.style.display = 'none';
           console.log('Vamos arriba');
         } else if (ev.deltaY > 50) { 
           drawer.style.transition = '.4s ease-out';
@@ -114,14 +117,14 @@ export class DrawerComponent  implements AfterViewInit {
           console.log('Vamos abajo');
         } else { 
           drawer.style.transition = '.4s ease-out';
-          drawer.style.transform = `translateY(${this.openHeight * 45}px)`;
+          drawer.style.transform = `translateY(${this.openHeight * 60}px)`;
           botonchatbot.style.display = 'flex';
           console.log('Vamos medio');
         }
       } else if (this.isOpen) { 
         if (ev.deltaY > 50) { 
           drawer.style.transition = '.4s ease-out';
-          drawer.style.transform = `translateY(${this.openHeight * 45}px)`; // Ir a la posición media
+          drawer.style.transform = `translateY(${this.openHeight * 60}px)`; // Ir a la posición media
           this.isOpen = false;
           this.isMiddle = true;
           botonchatbot.style.display = 'flex';
@@ -130,7 +133,7 @@ export class DrawerComponent  implements AfterViewInit {
       } else { 
         if (ev.deltaY < -50) { 
           drawer.style.transition = '.4s ease-out';
-          drawer.style.transform = `translateY(${this.openHeight * 45}px)`; // Ir a la posición media
+          drawer.style.transform = `translateY(${this.openHeight * 60}px)`; // Ir a la posición media
           this.isOpen = true;
           this.isMiddle = true;
           botonchatbot.style.display = 'flex';
@@ -160,7 +163,7 @@ export class DrawerComponent  implements AfterViewInit {
     } 
     if (position == 2){
       drawer.style.transition = '.4s ease-out';
-      drawer.style.transform = `translateY(${this.openHeight * 45}px)`;
+      drawer.style.transform = `translateY(${this.openHeight * 60}px)`;
       this.isMiddle = true;
       this.isOpen = true;
       botonchatbot.style.display = 'flex';
@@ -194,7 +197,7 @@ export class DrawerComponent  implements AfterViewInit {
       console.log('Vamos abajo');
     } else if(!this.isOpen){
       drawer.style.transition = '.4s ease-out';
-      drawer.style.transform = `translateY(${this.openHeight * 45}px)`;
+      drawer.style.transform = `translateY(${this.openHeight * 60}px)`;
       this.isMiddle = true;
       this.isOpen = true;
       botonchatbot.style.display = 'flex';
@@ -368,5 +371,33 @@ EliminarProductoSelect(){
         }
       );
   }
+
+//CHATBOT
+abrirChatbot() {
+  const chatbot = this.chatbot.nativeElement;
+  chatbot.style.display = 'block';
+  setTimeout(() => {
+    chatbot.style.opacity = '1';
+    chatbot.style.transform = 'translateY(25px)';
+  }, 50); // Agregar un pequeño retraso para asegurar que la transición se aplique correctamente
+}
+
+cerrarChatbot() {
+  const chatbot = this.chatbot.nativeElement;
+  chatbot.style.opacity = '0';
+  chatbot.style.transform = 'translateY(700px)';
+  setTimeout(() => {
+    chatbot.style.display = 'none';
+  }, 500); // Asegurarse de ocultar el chatbot después de la transición completa
+}
+
+
+//PROFILE
+
+abrirPerfil(){
+  
+}
+
+
 
 }

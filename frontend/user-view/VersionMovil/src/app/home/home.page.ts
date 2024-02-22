@@ -122,43 +122,12 @@ getUsuarioLog() {
   }
 }
 
-
-//PRODUCTO SELECCIONADO
-  idProdSelect: any;
-  setProductoSeleccionado(idProd: string){
-    this.idProdSelect = idProd;
-  }
-
-//2
-
-getProductoSelect(idProd: string): void {
-  this.getProducto(idProd);
-  this.seleccionado = true;
-}
-
 getProducto(idProd: string){
   this.productosService.getProductoId(idProd).subscribe( result => {
     this.productoSelect = result.productos;
     console.log(this.productoSelect.nombre);
   });
 }
-
-colorStock(disponibilidad: number): any{
-  if (disponibilidad = 0) {
-    this.dispo = 'Agotado';
-    return { 'color': 'red' };
-    
-  } else {
-    this.dispo = 'Disponible'
-    return { 'color': 'green'  };
-  }
-}
-
-EliminarProductoSelect(){
-  this.productoSelect = null;
-  this.seleccionado = false;
-}
-
 //Funciones CRUD LISTA COMPRA
 
 

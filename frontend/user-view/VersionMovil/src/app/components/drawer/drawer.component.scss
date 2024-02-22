@@ -1,165 +1,335 @@
 .drawer{
-    position: relative;
-    width: 100%;
+  position: relative;
+  width: 100%;
 }
 
 .botonchatbot{
-  background: #fff;
-  width: 50px;
-  height: 50px;
-  box-shadow: rgba(0, 0, 0, 0.12) 0px 4px 16px;
-  border-radius: 15px;
-  font-size: 37px;
-  color: #51877a;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-left: 10px;
-  margin-bottom: 6px;
+background: #fff;
+width: 50px;
+height: 50px;
+box-shadow: rgba(0, 0, 0, 0.12) 0px 4px 16px;
+border-radius: 15px;
+font-size: 37px;
+color: #51877a;
+display: flex;
+justify-content: center;
+align-items: center;
+margin-left: 10px;
+margin-bottom: 6px;
+
+@media (prefers-color-scheme: dark) {
+  background: #282828;
+  color: #9dbbb3;  // Cambia el color de fondo en modo oscuro
+}
 }
 
 .tarjeta{
-  box-shadow: rgba(0, 0, 0, 0.12) 0px 4px 16px;
-  width: 100%;
-  border-radius: 20px;   
-  height: 100vh;
-  z-index: 11;
-  background: #fff;
+box-shadow: rgba(0, 0, 0, 0.12) 0px 4px 16px;
+width: 100%;
+border-radius: 20px;   
+height: 100vh;
+z-index: 11;
+background: #fff;
+
+@media (prefers-color-scheme: dark) {
+  background: #282828; // Cambia el color de fondo en modo oscuro
+}
 }
 .ion-text-center{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 
 .drawer-pull{
-    background: #cccccc;
-    height: 4px;
-    width: 60px;
-    border-radius: 2px;
-    margin-top: 10px;
+  background: #cccccc;
+  height: 4px;
+  width: 60px;
+  border-radius: 2px;
+  margin-top: 10px;
 }
 
 
 .drawer-header{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-right: 10px;
-    height: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 20px;
+  height: 50px;
+}
+
+.drawer-header h2{
+margin-left: 20px;
 }
 
 
 .buscador{
-    width: max-content;
+  width: 100%;
 }
 .profile{
-    background: darkgray;
-    border-radius: 20px;
-    height: 30px;
-    width: 30px;
+  background: darkgray;
+  border-radius: 40px;
+  height: 30px;
+  width: 30px;
+  display: block;
+}
+
+.cerrar-tarjeta{
+  width: 30px;
+  height: 30px;
+  border-radius: 20px;
+  font-size: 25px;
+  background: none;
+  color: #51877a;
+
+  @media (prefers-color-scheme: dark) {
+    color: #9dbbb3;  // Cambia el color de fondo en modo oscuro
+  }
 }
 
 .contenido-scroll{
-    height: 90vh;
-    overflow-y: auto; 
+  height: 90vh;
+  overflow-y: auto; 
+  margin: 20px;
 }
 
+.marcarcomprado{
+  background-color: #B9D6CC;
+  border-radius: 20px;
+  color: #2C433F;
+  padding: 6px;
+  @media (prefers-color-scheme: dark) {
+    background-color: #c8dfd7;
+    color: #121212; 
+  }
+}
+.acciones{
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding-top: 10px;
+padding-bottom: 10px;
+}
 
+.dispo-precio{
+align-items: left;
+}
+
+.disponibilidad{
+display: flex;
+justify-content: center;
+align-items: center;
+margin: 0;
+padding: 0;
+}
+.disponibilidad p{
+padding: 0;
+margin: 0;
+}
+.precio{
+display: flex;
+justify-content: left;
+align-items: baseline;
+}
+.precio p {
+margin: 0;
+padding: 0;
+}
+.precio_producto{
+font-size: 30px;
+
+}
+
+.boton-eliminar{
+  background-color: #FDA4AF;
+  color: #9F1239;
+  border-radius: 20px;
+  padding: 6px;
+  @media (prefers-color-scheme: dark) {
+    background-color: #d1858a;
+    color: #121212; 
+  }
+}
+
+.foto_producto{
+margin-top: 30px;
+text-align: center;
+}
+.foto_producto img{
+width: 70%;
+}
 //Transicion suave
 .contenido-drawer, .contenido-producto {
-  transition: opacity 0.3s ease; 
+transition: opacity 0.3s ease; 
 }
 
 .contenido-drawer.ng-leave, .contenido-producto.ng-enter {
-  opacity: 0;
+opacity: 0;
 }
 
 .contenido-drawer.ng-enter, .contenido-producto.ng-leave {
-  opacity: 1; 
+opacity: 1; 
 }
 
 //Tarjeta de buscador: 
 .producto-container {
-    width: 362px;
-    height: 81px;
-    border: 1px solid #f2f2f2;
-    background: rgba(255, 255, 255, 1);
-    border-radius: 10px;
-    margin: 10px;
-    display: flex;
-    position: relative; 
+  width: 362px;
+  height: 81px;
+  border: 1px solid #f2f2f2;
+  background: rgba(255, 255, 255, 1);
+  border-radius: 10px;
+  margin: 10px;
+  display: flex;
+  position: relative; 
+  @media (prefers-color-scheme: dark) {
+    background: #3f3f3f; // Cambia el color de fondo en modo oscuro
   }
+}
 
-  .navegador-producto{
-    display: flex;
-    position: relative; 
-  }
-  
-  .producto-container img {
-    margin-left: 5px;
-    margin-top: 4px;
-    margin-bottom: 4px;
-    height: 73px;
-    width: auto;
-    border-radius: 10px;
-  }
-  
-  .product-text {
-    margin-left: 10px;
-  }
-  
-  .product-text h3 {
-    font-size: 15px;
-    font-weight: regular;
-  }
-  
-  .product-text p {
-    font-size: 24px;
-    margin: 0px;
-  }
-  
-  .product-buttons {
-    font-size: 15px;
-    position: absolute;
-    bottom: 5px; /* Ajusta la posición desde la parte inferior */
-    right: 5px; /* Ajusta la posición desde la derecha */
-  }
-  
-  .add {
-    font-size: 17px;
-    background-color: transparent;
-    display: flex; /* Utiliza flexbox para centrar verticalmente */
-    align-items: center; /* Centra verticalmente el texto e icono */
-    padding: 5px; /* Ajusta el espaciado para un mejor aspecto */
-  }
-  
-  .add-button {
-    font-size: 20px;
-    margin-left: 5px;
-    color: #51877a;
-  }
+.navegador-producto{
+  display: flex;
+  position: relative; 
+}
 
-  .add2 button{
-    font-size: 20px;
-    background-color: transparent;
+.producto-container img {
+  margin-left: 5px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  height: 73px;
+  width: auto;
+  border-radius: 10px;
+}
 
-  }
+.product-text {
+  margin-left: 10px;
+}
 
-  .add2 {
-    //font-size: 17px;
-    display: flex;
-    align-items: center;
-    padding: 4px;
-    justify-content: center;
-  }
+.product-text h3 {
+  font-size: 15px;
+  font-weight: regular;
+}
 
-  .add2 button-icon {
-    font-size: 20px;
-  }
-  .add2 span{
-    margin-left: 3px;
-    font-size: 20px;
-  }
+.product-text p {
+  font-size: 24px;
+  margin: 0px;
+}
 
+.product-buttons {
+  font-size: 15px;
+  position: absolute;
+  bottom: 5px; /* Ajusta la posición desde la parte inferior */
+  right: 5px; /* Ajusta la posición desde la derecha */
+}
+
+.add {
+  font-size: 17px;
+  background-color: transparent;
+  display: flex; /* Utiliza flexbox para centrar verticalmente */
+  align-items: center; /* Centra verticalmente el texto e icono */
+  padding: 5px; /* Ajusta el espaciado para un mejor aspecto */
+}
+
+.add-button {
+  font-size: 20px;
+  margin-left: 5px;
+  color: #51877a;
+  @media (prefers-color-scheme: dark) {
+    color: #9dbbb3;
+  }
+}
+
+.add2 button{
+  font-size: 20px;
+  background-color: transparent;
+
+}
+
+.add2 {
+  //font-size: 17px;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  justify-content: center;
+}
+
+.add2 button-icon {
+  font-size: 20px;
+}
+.add2 span{
+  margin-left: 3px;
+  font-size: 20px;
+}
+
+
+//CHATBOT INTERFACE
+
+.chatbot{
+  position: absolute;
+  display: none;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 4px 16px;
+  z-index: 14;
+  top: 0;
+  left: 0;
+  opacity: 0; 
+  transform: translateY(700px); 
+  transition: opacity 0.5s, transform 0.5s;
+
+  @media (prefers-color-scheme: dark) {
+    background: #282828; // Cambia el color de fondo en modo oscuro
+  }
+}
+
+.chatbot-header{
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  margin: 10px;
+}
+
+.cerrar-chatbot{
+  width: 30px;
+  height: 30px;
+  border-radius: 20px;
+  font-size: 25px;
+  background: none;
+  color: #51877a;
+}
+
+.box-envio{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 50px;
+}
+.text-chat{
+  width: 80%;
+  height: 40px;
+  border-radius: 20px;
+  border-color:#cccccc;
+  border-width: 1px;
+}
+
+.text-chat::placeholder{
+  margin-left: 5px;
+}
+
+.text-chat::selection{
+  border-color: #51877a;
+}
+
+.boton-envio{
+  color: white;
+  padding: 6px 10px 6px 10px;
+  border-radius: 50px;
+  background-color: #51877a;
+  font-size: 25px;
+  margin-left: 10px
+}

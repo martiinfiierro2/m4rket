@@ -5,6 +5,10 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
+
+    @media (prefers-color-scheme: dark) {
+        background-color: #121212; // Cambia el color de fondo en modo oscuro
+      }
 }
 
     img{

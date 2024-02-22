@@ -24,6 +24,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
+  @media (prefers-color-scheme: dark) {
+    background: #282828;
+    color: #fff; // Cambia el color de fondo en modo oscuro
+  }
 }
 
 
@@ -37,6 +42,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
+  @media (prefers-color-scheme: dark) {
+    background: #282828;
+    color: #fff; // Cambia el color de fondo en modo oscuro
+  }
 }
 .contador-productos{
   width: 70px;
@@ -64,6 +74,11 @@
   border: 2px solid transparent;
   border-radius: 15px;
   cursor: pointer;
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #282828;
+    color: #fff; // Cambia el color de fondo en modo oscuro
+  }
 }
 
 .dropdown-content {
@@ -77,6 +92,9 @@
   border-radius: 0px 15px 15px 15px;
   box-shadow:rgba(0, 0, 0, 0.12) 0px 10px 10px;
   z-index: 5;
+  @media (prefers-color-scheme: dark) {
+    background-color: #282828;
+  }
 }
 
 .dropdown-content p {
@@ -86,6 +104,10 @@
   text-decoration: none;
   display: block;
   transition: 0.1s;
+
+  @media (prefers-color-scheme: dark) {
+    color: #fff;
+  }
 }
 
 .dropdown-content p:active {
@@ -106,7 +128,7 @@
   border-radius: 0px 0px 13px 13px;
 }
 
-.boton-desplegar:active {
+.boton-desplegar:hover .listado-info {
   border-radius: 15px 15px 0px 0px;
 }
 
@@ -116,6 +138,7 @@
 
 .boton-desplegar:hover .dropdown-content {
   display: block;
+  
 }
 
 //------
@@ -138,6 +161,11 @@
     margin-top: 20px;
     display: flex;
     position: relative; 
+
+    @media (prefers-color-scheme: dark) {
+      background-color: #282828;
+      border: 1px solid #282828;
+    }
     
   }
 
@@ -188,6 +216,10 @@
     font-size: 20px;
     margin-left: 5px;
     color: #51877a;
+
+    @media (prefers-color-scheme: dark) {
+      color: #9dbbb3;
+    }
   }
 
   .add2 button{
