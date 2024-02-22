@@ -17,7 +17,6 @@ export class EstadisticasService {
 
   private token: string|any;
   private cabeceras: any;
-  
 
   //CREACIÓN CABECERA CON TOKEN USUARIO
   cargarCabeceras(){
@@ -31,11 +30,21 @@ export class EstadisticasService {
   //CRUD
   getCountAnadidos(): Observable<any>{
     let urlCompleta = this.url + '?nombre=anadido';
-    return this.http.get(urlCompleta, {headers: this.cabeceras});
+    return this.http.get(urlCompleta, {headers: this.cabeceras})
   }
 
   getCountEliminados(): Observable<any>{
     let urlCompleta = this.url + '?nombre=eliminado';
+    return this.http.get(urlCompleta, {headers: this.cabeceras});
+  }
+
+  getCountAnadidosFecha(inicio: string, fin: string): Observable<any>{
+    let urlCompleta = this.url + '?nombre=anadido&inicio=' + inicio + '&fin=' + fin;
+    return this.http.get(urlCompleta, {headers: this.cabeceras});
+  }
+
+  getCountEliminadosFecha(inicio: string, fin: string): Observable<any>{
+    let urlCompleta = this.url + '?nombre=eliminado&inicio=' + inicio + '&fin=' + fin;
     return this.http.get(urlCompleta, {headers: this.cabeceras});
   }
 
