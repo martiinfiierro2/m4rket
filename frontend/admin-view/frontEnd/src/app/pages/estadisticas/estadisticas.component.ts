@@ -11,6 +11,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { PaginationComponent } from "../../pagination/pagination.component";
 import * as echarts from 'echarts';
 import { environment } from '../../../environments/environment';
+import { FormsModule } from '@angular/forms';
 
 export interface Contador{
   id: number,
@@ -28,14 +29,14 @@ export interface Tiempo{
   idUsu: number
 }
 export class DatosContadores{
-  nombre: string;
-  totalCount: number;
+  value: string;
+  name: number;
 }
 
 @Component({
   selector: 'app-estadisticas',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatAutocompleteModule, MatFormFieldModule, MatInputModule, PaginationComponent],
+  imports: [FormsModule, CommonModule, MatIconModule, MatAutocompleteModule, MatFormFieldModule, MatInputModule, PaginationComponent],
   templateUrl: './estadisticas.component.html',
   styleUrl: './estadisticas.component.css'
 })
@@ -50,6 +51,10 @@ export class EstadisticasComponent {
   productos: Producto[] = [];
   masAnadido: any;
   masEliminado: any;
+
+  //Fitro fechas
+  fechaInicio: string="";
+  fechaFin: string="";
 
   //variables para mostrar foto
   tokenUsuario = sessionStorage.getItem('tokenUsuario') || localStorage.getItem('tokenUsuario');
@@ -76,14 +81,70 @@ export class EstadisticasComponent {
   ngOnInit(): void {
   }
 
+  private configurarGraficoEliminados(): void {
+    const opciones = {
+      title: {
+        text: 'Productos más eliminados',
+        left: 'center'
+      },
+      tooltip: {
+        trigger: 'item'
+      },
+      series: [
+        {
+          name: 'Veces añadido',
+          type: 'pie',
+          radius: '50%',
+          data: this.eliminados.reverse(),
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+          }
+        }
+      ]
+    };
+    this.masEliminado = echarts.init(this.elementRef.nativeElement.querySelector('#masEliminados'));
+    this.masEliminado.setOption(opciones);
+  }
+
+  private configurarGraficoAnadidos(): void {
+    const opciones = {
+      title: {
+        text: 'Productos más anadidos',
+        left: 'center'
+      },
+      toltip: {
+        trigger: 'item'
+      },
+      series: [
+        {
+          name: 'Veces añadido',
+          type: 'pie',
+          radius: '50%',
+          data: this.anadidos.reverse(),
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+          }
+        }
+      ]
+    };
+    this.masAnadido = echarts.init(this.elementRef.nativeElement.querySelector('#masAnadidos'));
+    this.masAnadido.setOption(opciones);
+  }
+
   //CRUD
 
   getQR(){
     this.estadisticasService.getCountQR().subscribe(res => {
       this.numQR.push(res.datosContadores.qrPorSemana[res.datosContadores.qrPorSemana.length - 1].totalCount);
       this.numQR.push(res.datosContadores.qrPorSemana[res.datosContadores.qrPorSemana.length - 2].totalCount);
-      console.log(res);
-      console.log(this.numQR);
       this.calcularCambioPorcentual(this.numQR[0], this.numQR[1]);
     });
   }
@@ -94,45 +155,91 @@ export class EstadisticasComponent {
   }
 
   async getContadoresMasAnadidos() {
-    try {
-      const res = await this.estadisticasService.getCountAnadidos().toPromise();
-  
-      for (let index = 0; index < res.datosContadores.length; index++) {
-        let contador = new DatosContadores();
-  
-        const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
-        if(index == 0){
-          this.prodMasAnadido = res2.productos;
-          console.log(this.prodMasAnadido);
-        }
-
-        contador.nombre = res2.productos.nombre;
-        contador.totalCount = res.datosContadores[index].totalCount;
-        this.anadidos.push(contador);
+    this.anadidos = [];
+    if(this.fechaFin != "" && this.fechaInicio != ""){
+      try {
+        this.estadisticasService.getCountAnadidosFecha(this.fechaInicio, this.fechaFin).subscribe(res => {
+          for (let index = 0; index < res.datosContadores.length; index++) {
+            let contador = new DatosContadores();
+      
+            this.productoService.getProductoId(res.datosContadores[index]).subscribe(res2 =>{
+              contador.name = res2.productos.nombre;
+              contador.value = res.datosContadores[index].totalCount;
+              this.anadidos.push(contador);
+            });
+          }
+          this.configurarGraficoAnadidos();
+        });
+        } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error(error);
+    }
+    else{
+      try {
+        this.estadisticasService.getCountAnadidos().subscribe(res => {
+          for (let index = 0; index < res.datosContadores.length; index++) {
+            let contador = new DatosContadores();
+      
+            this.productoService.getProductoId(res.datosContadores[index].idProd).subscribe(res2 => {
+              contador.name = res2.productos.nombre;
+              contador.value = res.datosContadores[index].totalCount;
+              this.anadidos.push(contador);
+            });
+          }
+          this.configurarGraficoAnadidos();
+        });
+        } catch (error) {
+        console.error(error);
+      }
     }
   }
 
   async getContadoresMasEliminados() {
-    try {
-      const res = await this.estadisticasService.getCountEliminados().toPromise();
-      for (let index = 0; index < res.datosContadores.length; index++) {
-        let contador = new DatosContadores();
-  
-        const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
-        if(index == 0){
-          this.prodMasEliminado = res2.productos;
-          console.log(this.prodMasEliminado);
-        }
-        contador.nombre = res2.productos.nombre;
-        contador.totalCount = res.datosContadores[index].totalCount;
-        this.eliminados.push(contador);
+    this.eliminados = [];
+    if(this.fechaFin != "" && this.fechaInicio != ""){  
+      try {
+        this.estadisticasService.getCountEliminadosFecha(this.fechaInicio, this.fechaFin).subscribe(res => {  
+          for (let index = 0; index < res.datosContadores.length; index++) {
+            let contador = new DatosContadores();
+      
+            this.productoService.getProductoId(res.datosContadores[index]).subscribe(res2 => { 
+              //Añadir a vector de datos
+              contador.name = res2.productos.nombre;
+              contador.value = res.datosContadores[index].totalCount;
+              this.eliminados.push(contador);
+            })
+          }
+          
+          this.configurarGraficoEliminados();
+        });
+      } catch (error) {
+        console.error(error);
       }
-
-    } catch (error) {
-      console.error(error);
     }
+    else{
+      try {
+        this.estadisticasService.getCountEliminados().subscribe(res => {  
+          for (let index = 0; index < res.datosContadores.length; index++) {
+            let contador = new DatosContadores();
+      
+            this.productoService.getProductoId(res.datosContadores[index].idProd).subscribe(res2 =>{   
+              //Añadir a vector de datos
+              contador.name = res2.productos.nombre;
+              contador.value = res.datosContadores[index].totalCount;
+              this.eliminados.push(contador);
+            });
+          }
+          this.configurarGraficoEliminados();
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
+
+  filtrar(){
+    this.getContadoresMasAnadidos();
+    this.getContadoresMasEliminados();
+    this.getQR();
   }
 }

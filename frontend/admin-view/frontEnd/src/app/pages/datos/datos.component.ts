@@ -56,7 +56,7 @@ export class DatosComponent {
       yAxis: [
         {
           type: 'category',
-          data: this.anadidos.map(anadido => anadido.nombre).reverse(),
+          data: this.anadidos.map(anadido => anadido.name).reverse(),
           axisTick: {
             alignWithLabel: true
           }
@@ -67,7 +67,7 @@ export class DatosComponent {
           name: 'Veces añadido',
           type: 'bar',
           barWidth: '60%',
-          data: this.anadidos.map(anadido => anadido.totalCount).reverse()
+          data: this.anadidos.map(anadido => anadido.value).reverse()
         }
       ]
     };
@@ -97,7 +97,7 @@ export class DatosComponent {
       yAxis: [
         {
           type: 'category',
-          data: this.eliminados.map(eliminado => eliminado.nombre).reverse(),
+          data: this.eliminados.map(eliminado => eliminado.name).reverse(),
           axisTick: {
             alignWithLabel: true
           }
@@ -108,7 +108,7 @@ export class DatosComponent {
           name: 'Veces eliminado',
           type: 'bar',
           barWidth: '60%',
-          data: this.eliminados.map(eliminado => eliminado.totalCount).reverse()
+          data: this.eliminados.map(eliminado => eliminado.value).reverse()
         }
       ]
     };
@@ -125,8 +125,8 @@ export class DatosComponent {
   
         const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
 
-        contador.nombre = res2.productos.nombre;
-        contador.totalCount = res.datosContadores[index].totalCount;
+        contador.name = res2.productos.nombre;
+        contador.value = res.datosContadores[index].totalCount;
         this.anadidos.push(contador);
       }
 
@@ -145,8 +145,8 @@ export class DatosComponent {
         let contador = new DatosContadores();
   
         const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
-        contador.nombre = res2.productos.nombre;
-        contador.totalCount = res.datosContadores[index].totalCount;
+        contador.name = res2.productos.nombre;
+        contador.value = res.datosContadores[index].totalCount;
         this.eliminados.push(contador);
       }
 
