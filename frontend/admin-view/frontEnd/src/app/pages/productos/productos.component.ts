@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ProductosService } from "../../services/productos.service";
 import { CommonModule } from '@angular/common';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PromocionesService} from '../../services/promociones.service';
 import { Promocion } from '../promociones/promociones.component';
@@ -65,7 +65,7 @@ export interface en_Promocion{
     standalone: true,
     templateUrl: './productos.component.html',
     styleUrl: './productos.component.css',
-    imports: [CommonModule, FormsModule, MatIconModule, MatAutocompleteModule, MatFormFieldModule, MatInputModule, PaginationComponent]
+    imports: [CommonModule, FormsModule, MatIconModule, MatAutocompleteModule, MatFormFieldModule, MatInputModule, PaginationComponent, ReactiveFormsModule]
 })
 
 export class ProductosComponent {
@@ -307,13 +307,6 @@ export class ProductosComponent {
   } 
 
 
-  acccesoPosicion(i: number){
-    //return this.productos[i].Promocions[0].en_promocion;
-    console.log(this.productos[i].Promocions[0].en_promocion.precio);
-    return 'hola';
-  }
-
-
   //PAGINACION
   cambiarPagina( pagina:number ){
     pagina = (pagina < 0 ? 0 : pagina);
@@ -332,15 +325,14 @@ export class ProductosComponent {
       this.productos = [];
       let pos = 0;
     
-      for (let i = this.posicionactual; i < pagina * this.registrosporpagina; i++) {
+      for (let i = this.posicionactual; i < pagina * this.registrosporpagina; i++) {  
         if (i < this.productosOrdenados.length) {
           this.productos[pos] = this.productosOrdenados[i];
           pos++; 
         }
       }
-    }  
-    
-    console.log("Desde: " + this.posicionactual);
+    } 
+
     this.productos.forEach(() => this.cambioPromoPorFila.push(true));
   }
 
@@ -399,6 +391,10 @@ export class ProductosComponent {
     this.productoService.getBusquedaProducto(this.valueBusquedaInput)
       .subscribe( res => {
         this.productos = res.productos;
+        
+        //Paginacion
+        this.totalregistros = res.productos.length;
+        console.log(this.totalregistros)
       })
   }
 

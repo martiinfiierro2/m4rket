@@ -71,6 +71,9 @@ export class ProductosService {
   getBusquedaProducto(busqueda: string): Observable<any>{
     let urlCompleta = this.url + '/' + busqueda;
 
+    console.log("Url completa: ", urlCompleta);
+    
+
     return this.http.get(urlCompleta, {headers: this.cabeceras});
   }
 

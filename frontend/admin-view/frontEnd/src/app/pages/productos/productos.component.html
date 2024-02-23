@@ -78,7 +78,7 @@
             <p>{{ producto_ubicacion.nombre }}</p>
             <p>{{ producto_ubicacion.marca }}</p> 
             <div>
-                <select name="selectPromociones" id="selectPromociones" placeholder="ubicación"  [(ngModel)]="valorUbicacionProucto">
+                <select name="selectPromociones" id="selectPromociones" placeholder="ubicación" [(ngModel)]="valorUbicacionProucto">
                     <option value="default" selected></option>
                     <option *ngFor="let ubicacion of ubicaciones" value="{{ubicacion.id}}">{{ ubicacion.referencia }}</option>
                 </select>
