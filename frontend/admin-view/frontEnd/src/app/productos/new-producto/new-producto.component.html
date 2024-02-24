@@ -21,7 +21,7 @@
             <label for="sal">Sales<input type="number" name="sal" id="sal" formControlName="sal"></label>
             <label for="foto">Imagen del producto 
                 <img [src]="srcImagen" alt="foto del producto" style="display: none" id="previewImagen">
-                <input type="file" accept="image/png,image/jpg,image/jpeg" name="foto" id="foto" formControlName="foto" (change)="cambioImagen( $event )">
+                <input type="file" accept="image/png" name="foto" id="foto" formControlName="foto" (change)="cambioImagen( $event )">
             </label>
             <div id="buttons">
                 <input type="submit" value="Añadir" class="btnPrimario">

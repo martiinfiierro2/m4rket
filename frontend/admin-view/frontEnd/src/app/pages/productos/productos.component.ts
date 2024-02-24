@@ -519,9 +519,7 @@ export class ProductosComponent {
     })
   }
 
-  cargar(){
-    console.log("Hola");
-  }
+ 
 }
 
 
