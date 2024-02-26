@@ -39,6 +39,8 @@ export class EstadisticasService {
   }
 
   getCountAnadidosFecha(inicio: string, fin: string): Observable<any>{
+    const fechaInicioCodificada = encodeURIComponent(inicio);
+    const fechaFinCodificada = encodeURIComponent(fin);
     let urlCompleta = this.url + '?nombre=anadido&inicio=' + inicio + '&fin=' + fin;
     return this.http.get(urlCompleta, {headers: this.cabeceras});
   }
@@ -47,7 +49,6 @@ export class EstadisticasService {
     const fechaInicioCodificada = encodeURIComponent(inicio);
     const fechaFinCodificada = encodeURIComponent(fin);
     let urlCompleta = this.url + '?nombre=eliminado&inicio=' + fechaInicioCodificada + '&fin=' + fechaFinCodificada;
-    
     return this.http.get(urlCompleta, {headers: this.cabeceras});
   }
 
