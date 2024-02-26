@@ -44,7 +44,10 @@ export class EstadisticasService {
   }
 
   getCountEliminadosFecha(inicio: string, fin: string): Observable<any>{
-    let urlCompleta = this.url + '?nombre=eliminado&inicio=' + inicio + '&fin=' + fin;
+    const fechaInicioCodificada = encodeURIComponent(inicio);
+    const fechaFinCodificada = encodeURIComponent(fin);
+    let urlCompleta = this.url + '?nombre=eliminado&inicio=' + fechaInicioCodificada + '&fin=' + fechaFinCodificada;
+    
     return this.http.get(urlCompleta, {headers: this.cabeceras});
   }
 

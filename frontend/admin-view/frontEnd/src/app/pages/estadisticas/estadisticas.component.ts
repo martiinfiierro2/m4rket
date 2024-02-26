@@ -51,6 +51,7 @@ export class EstadisticasComponent {
   productos: Producto[] = [];
   masAnadido: any;
   masEliminado: any;
+  aux: DatosContadores[] = [];
 
   //Fitro fechas
   fechaInicio: string="";
@@ -70,15 +71,12 @@ export class EstadisticasComponent {
   mostrarGrafico(nombre: string): void {
     let url = '/datos?nombre='+nombre;
     window.location.href = url;
-  }  
-
-  ngAfterViewInit(): void {
-    this.getContadoresMasAnadidos();
-    this.getContadoresMasEliminados();
-    this.getQR();
   }
 
   ngOnInit(): void {
+    this.getContadoresMasAnadidos();
+    this.getContadoresMasEliminados();
+    this.getQR();
   }
 
   private configurarGraficoEliminados(): void {
@@ -111,12 +109,13 @@ export class EstadisticasComponent {
   }
 
   private configurarGraficoAnadidos(): void {
+    console.log(this.anadidos);
     const opciones = {
       title: {
         text: 'Productos más anadidos',
         left: 'center'
       },
-      toltip: {
+      tooltip: {
         trigger: 'item'
       },
       series: [
@@ -156,39 +155,37 @@ export class EstadisticasComponent {
 
   async getContadoresMasAnadidos() {
     this.anadidos = [];
-    if(this.fechaFin != "" && this.fechaInicio != ""){
+    if(this.fechaFin !== "" && this.fechaInicio !== ""){
       try {
-        this.estadisticasService.getCountAnadidosFecha(this.fechaInicio, this.fechaFin).subscribe(res => {
-          for (let index = 0; index < res.datosContadores.length; index++) {
-            let contador = new DatosContadores();
-      
-            this.productoService.getProductoId(res.datosContadores[index]).subscribe(res2 =>{
-              contador.name = res2.productos.nombre;
-              contador.value = res.datosContadores[index].totalCount;
-              this.anadidos.push(contador);
-            });
-          }
-          this.configurarGraficoAnadidos();
-        });
-        } catch (error) {
+        const res = await this.estadisticasService.getCountAnadidosFecha(this.fechaInicio, this.fechaFin).toPromise();
+        console.log(res);
+        for (let index = 0; index < res.datosContadores.length; index++) {
+          let contador = new DatosContadores();
+    
+          const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
+          contador.name = res2.productos.nombre;
+          contador.value = res.datosContadores[index].totalCount;
+          this.anadidos.push(contador);
+        }
+        this.configurarGraficoAnadidos();
+      } catch (error) {
         console.error(error);
       }
     }
     else{
       try {
-        this.estadisticasService.getCountAnadidos().subscribe(res => {
-          for (let index = 0; index < res.datosContadores.length; index++) {
-            let contador = new DatosContadores();
-      
-            this.productoService.getProductoId(res.datosContadores[index].idProd).subscribe(res2 => {
-              contador.name = res2.productos.nombre;
-              contador.value = res.datosContadores[index].totalCount;
-              this.anadidos.push(contador);
-            });
-          }
-          this.configurarGraficoAnadidos();
-        });
-        } catch (error) {
+        const res = await this.estadisticasService.getCountAnadidos().toPromise();
+    
+        for (let index = 0; index < res.datosContadores.length; index++) {
+          let contador = new DatosContadores();
+    
+          const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
+          contador.name = res2.productos.nombre;
+          contador.value = res.datosContadores[index].totalCount;
+          this.anadidos.push(contador);
+        }
+        this.configurarGraficoAnadidos();
+      } catch (error) {
         console.error(error);
       }
     }
@@ -196,41 +193,36 @@ export class EstadisticasComponent {
 
   async getContadoresMasEliminados() {
     this.eliminados = [];
-    if(this.fechaFin != "" && this.fechaInicio != ""){  
+    if(this.fechaFin !== "" && this.fechaInicio !== ""){
       try {
-        this.estadisticasService.getCountEliminadosFecha(this.fechaInicio, this.fechaFin).subscribe(res => {  
-          for (let index = 0; index < res.datosContadores.length; index++) {
-            let contador = new DatosContadores();
-      
-            this.productoService.getProductoId(res.datosContadores[index]).subscribe(res2 => { 
-              //Añadir a vector de datos
-              contador.name = res2.productos.nombre;
-              contador.value = res.datosContadores[index].totalCount;
-              this.eliminados.push(contador);
-            })
-          }
-          
-          this.configurarGraficoEliminados();
-        });
+        const res = await this.estadisticasService.getCountEliminadosFecha(this.fechaInicio, this.fechaFin).toPromise();
+        console.log(res);
+        for (let index = 0; index < res.datosContadores.length; index++) {
+          let contador = new DatosContadores();
+    
+          const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
+          contador.name = res2.productos.nombre;
+          contador.value = res.datosContadores[index].totalCount;
+          this.eliminados.push(contador);
+        }
+        this.configurarGraficoEliminados();
       } catch (error) {
         console.error(error);
       }
     }
     else{
       try {
-        this.estadisticasService.getCountEliminados().subscribe(res => {  
-          for (let index = 0; index < res.datosContadores.length; index++) {
-            let contador = new DatosContadores();
-      
-            this.productoService.getProductoId(res.datosContadores[index].idProd).subscribe(res2 =>{   
-              //Añadir a vector de datos
-              contador.name = res2.productos.nombre;
-              contador.value = res.datosContadores[index].totalCount;
-              this.eliminados.push(contador);
-            });
-          }
-          this.configurarGraficoEliminados();
-        });
+        const res = await this.estadisticasService.getCountEliminados().toPromise();
+        console.log(res);
+        for (let index = 0; index < res.datosContadores.length; index++) {
+          let contador = new DatosContadores();
+    
+          const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
+          contador.name = res2.productos.nombre;
+          contador.value = res.datosContadores[index].totalCount;
+          this.eliminados.push(contador);
+        }
+        this.configurarGraficoEliminados();
       } catch (error) {
         console.error(error);
       }

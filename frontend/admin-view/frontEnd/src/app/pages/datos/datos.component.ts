@@ -76,6 +76,7 @@ export class DatosComponent {
   };
 
   private configurarGraficoEliminados(): void {
+    console.log(this.eliminados.map(eliminado => eliminado.name).reverse());
     const opciones = {
       tooltip: {
         trigger: 'axis',

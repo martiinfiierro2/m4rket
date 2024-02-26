@@ -5,8 +5,8 @@ const { Op } = require('sequelize');
 
 async function obtenerDatosContadores(req, res) {
     const nombre = req.query.nombre; //?nombre=nombre_estadistica
-    const inicio = req.query.inicio ? new Date(req.query.inicio) : null;
-    const fin = req.query.fin ? new Date(req.query.fin) : null;
+    const inicio = req.query.inicio || null;
+    const fin = req.query.fin || null;
 
     try {
         let datosContadores;
@@ -47,13 +47,6 @@ async function obtenerDatosContadores(req, res) {
             datosContadores = {
                 qrPorSemana: qrPorSemana
             };
-        }
-        
-        if (!datosContadores) {
-            return res.json({
-                ok: false,
-                msg: 'El nombre de los datos debe ser válido'
-            });
         }
         
         res.json({
