@@ -4,6 +4,7 @@ import { FormBuilder, Validators, ReactiveFormsModule, FormsModule } from '@angu
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common'
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2'
 
 declare const gapi: any;
 
@@ -24,13 +25,6 @@ interface Usuario {
 export class LoginComponent {
 
   public formSubmint = false;
-  private tokenUsuario = '';
-  private idUsuario = '';
-
-  public avisoError = false;
-
-  public auth2: any;
-
 
   public loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -38,15 +32,9 @@ export class LoginComponent {
     check:  [Validators.required]
   });
 
-  loginGoogle(data: any): void{
-    console.log('Callback function executed with data:', data);
-  }
-
   constructor( private fb: FormBuilder,
                private usuarioService: UsuariosService,
-               private route: Router){
-                (window as any).myCallbackFunction = this.loginGoogle.bind(this);
-               }
+               private route: Router){}
 
 
   ngOnInit(): void {
@@ -64,24 +52,26 @@ export class LoginComponent {
     else{
       this.usuarioService.login( this.loginForm.value)
       .subscribe( res =>{
-
-        console.log('Respuesta al suscribirse', res);
-        this.tokenUsuario = res.token;
-        this.idUsuario = res.idUsuario;
-        
-        //Recordar sesion
+   
+        //Recordar correo
         if (this.loginForm.value.check) {
-          localStorage.setItem('tokenUsuario', this.tokenUsuario);
-          localStorage.setItem('idUsuario', this.idUsuario);
+          localStorage.setItem('tokenUsuario', res.tokenUsuario);
+          localStorage.setItem('idUsuario', res.idUsuario);
+          localStorage.setItem('email', res.email);
           this.route.navigate(['/productos']);
         }
         else{
-          sessionStorage.setItem('tokenUsuario', this.tokenUsuario);
-          sessionStorage.setItem('idUsuario', this.idUsuario);
+          localStorage.setItem('tokenUsuario', res.tokenUsuario);
+          localStorage.setItem('idUsuario', res.idUsuario);
           this.route.navigate(['/productos']);
         }
-      },error =>{
-        this.avisoError = true;
+      },(error) =>{
+        Swal.fire({
+          title: 'Error!',
+          text: error.error.msg,
+          icon: 'error',
+          confirmButtonText: 'Ok'
+        })
       })
     }   
   }
