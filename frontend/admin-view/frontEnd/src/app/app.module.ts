@@ -3,7 +3,6 @@ import { BrowserModule, provideClientHydration } from '@angular/platform-browser
 import { AppComponent } from './app.component';
 import { MatIconModule } from '@angular/material/icon';
 
-
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';

@@ -1,11 +1,13 @@
 .datoQRP{
     color: green;
     font-size: small;
+    display: inline;
 }
 
 .datoQRN{
     color: red;
     font-size: small;
+    display: inline;
 }
 
 .valor{
@@ -26,17 +28,21 @@
 
 .parent {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(4, 1fr);
-    grid-column-gap: 0px;
-    grid-row-gap: 0px;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
     }
     
-    .div1 { grid-area: 1 / 1 / 3 / 2; }
-    .div2 { grid-area: 3 / 1 / 5 / 2; }
-    .div3 { grid-area: 1 / 2 / 2 / 3; }
-    .div4 { grid-area: 1 / 3 / 2 / 4; }
-    .div5 { grid-area: 2 / 2 / 3 / 3; }
+    .div1 { grid-area: 1 / 1 / 3 / 3; }
+    .div2 { grid-area: 3 / 1 / 5 / 3; }
+    .div3 { 
+        grid-area: 1 / 3 / 2 / 4;
+        text-align: center;
+     }
+    .div4 { grid-area: 1 / 4 / 2 / 5; }
+    .div5 { grid-area: 2 / 4 / 3 / 5; }
     .div6 { grid-area: 2 / 3 / 3 / 4; }
-    .div7 { grid-area: 3 / 2 / 5 / 4; }
-    .div8 { grid-area: 1 / 4 / 5 / 6; } 
+    .div7 { grid-area: 3 / 3 / 5 / 5; }
+    .div8 { grid-area: 1 / 5 / 5 / 7; }
+

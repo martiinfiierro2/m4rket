@@ -38,10 +38,15 @@ export class EstadisticasService {
     return this.http.get(urlCompleta, {headers: this.cabeceras});
   }
 
+  getCountSecciones(): Observable<any>{
+    let urlCompleta = this.url + '?nombre=secciones';
+    return this.http.get(urlCompleta, {headers: this.cabeceras});
+  }
+
   getCountAnadidosFecha(inicio: string, fin: string): Observable<any>{
     const fechaInicioCodificada = encodeURIComponent(inicio);
     const fechaFinCodificada = encodeURIComponent(fin);
-    let urlCompleta = this.url + '?nombre=anadido&inicio=' + inicio + '&fin=' + fin;
+    let urlCompleta = this.url + '?nombre=anadido&inicio=' + fechaInicioCodificada + '&fin=' + fechaFinCodificada;
     return this.http.get(urlCompleta, {headers: this.cabeceras});
   }
 

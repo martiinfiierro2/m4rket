@@ -46,11 +46,13 @@ export class EstadisticasComponent {
   prodMasAnadido: Producto;
   prodMasEliminado: Producto;
   eliminados: DatosContadores[] = [];
+  datosSecciones: DatosContadores[] = [];
   numQR: any[] = [];
   tiempos: Tiempo[] = [];
   productos: Producto[] = [];
   masAnadido: any;
   masEliminado: any;
+  secciones: any;
   aux: DatosContadores[] = [];
 
   //Fitro fechas
@@ -79,8 +81,55 @@ export class EstadisticasComponent {
     this.getQR();
   }
 
+  private configurarGraficoSecciones(): void {
+    let opciones = {
+      title: {
+        text: 'Ventas en secciones',
+        left: 'center',
+      },
+      tooltip: {
+        trigger: 'item'
+      },
+      legend: {
+        width: '70%',
+        height: "100%",
+        padding: [15, 5, 3, 5],
+        bottom: "0%",
+        orient: "horizontal"
+      },
+      series: [
+        {
+          name: 'Access From',
+          type: 'pie',
+          radius: ['40%', '70%'],
+          avoidLabelOverlap: false,
+          label: {
+            show: false,
+            position: 'center'
+          },
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+          },
+          data: [
+            { value: 1048, name: 'Search Engine' },
+            { value: 735, name: 'Direct' },
+            { value: 580, name: 'Email' },
+            { value: 484, name: 'Union Ads' },
+            { value: 300, name: 'Video Ads' }
+          ]
+        }
+      ]
+    };
+    this.secciones = echarts.init(this.elementRef.nativeElement.querySelector('#graficoSecciones'));
+    this.secciones.setOption(opciones);
+  }
+
   private configurarGraficoEliminados(): void {
-    const opciones = {
+    let opciones = {
       title: {
         text: 'Productos más eliminados',
         left: 'center'
@@ -92,7 +141,7 @@ export class EstadisticasComponent {
         {
           name: 'Veces añadido',
           type: 'pie',
-          radius: '50%',
+          radius: '50%',  
           data: this.eliminados.reverse(),
           emphasis: {
             itemStyle: {
@@ -109,8 +158,7 @@ export class EstadisticasComponent {
   }
 
   private configurarGraficoAnadidos(): void {
-    console.log(this.anadidos);
-    const opciones = {
+    let opciones = {
       title: {
         text: 'Productos más anadidos',
         left: 'center'
