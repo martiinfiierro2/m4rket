@@ -89,7 +89,7 @@ margin-left: 20px;
 }
 
 .contenido-scroll{
-  height: 90vh;
+  height: 85vh;
   overflow-y: auto; 
   margin: 20px;
 }
@@ -259,6 +259,30 @@ opacity: 1;
 .add2 span{
   margin-left: 3px;
   font-size: 20px;
+}
+.valores-nutricionales{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.valor{
+  display: flex;
+  align-items: center;
+  height: 40px;
+}
+.color_valor{
+  width: 40px;
+  height: 25px;
+  border-radius: 30px;
+}
+
+.valor p {
+  margin-left: 10px;
+}
+
+.texto_valor{
+  margin-left: auto;
 }
 
 
