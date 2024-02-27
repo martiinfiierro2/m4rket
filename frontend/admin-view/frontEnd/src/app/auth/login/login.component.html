@@ -13,7 +13,6 @@
     <div id="avisos">
         <p class="text-danger" *ngIf="!campoValido('email')">El usuario es obligatorio y debe ser un email</p>
         <p class="text-danger" *ngIf="!campoValido('pwd')">El campo contraseña es obligatorio</p>
-        <p class="text-danger" *ngIf="avisoError">Campos incorrectos</p>
     </div>
     <input type="submit" value="Entrar" class="btnPrimario">
     <p><a href="/registro">Crear una cuenta</a></p>

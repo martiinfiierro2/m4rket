@@ -291,7 +291,7 @@ export class ProductosComponent {
   }
 
 
-  //FROMATEAR FECHAS
+  //FORMATEAR FECHAS
   formatDate() {
     var d = new Date(),
         month = '' + (d.getMonth() + 1),
@@ -431,7 +431,7 @@ export class ProductosComponent {
 
       //Cambiamos precio
       const precio_promo = ((promo.tipopromo.modificador * 100) * precioProd) / 100;
-      const precio_final = precioProd - precio_promo;
+      const precio_final = (precioProd - precio_promo).toFixed(2);
 
       let datosPromocion = {
         fecha: this.formatDate(), 
@@ -465,7 +465,7 @@ export class ProductosComponent {
 
       //Cambiamos precio
       const precio_promo = ((promo.tipopromo.modificador * 100) * precioProd) / 100;
-      const precio_final = precioProd - precio_promo;
+      const precio_final = (precioProd - precio_promo).toFixed(2);
 
       let datosPromocion = {
         fecha: this.formatDate(), 
@@ -483,7 +483,7 @@ export class ProductosComponent {
 
       //Cambiamos precio
       const precio_promo = ((promo.tipopromo.modificador * 100) * precioProd) / 100;
-      const precio_final = precioProd - precio_promo;
+      const precio_final = (precioProd - precio_promo).toFixed(2);
 
       let datosPromocion = {
         fecha: this.formatDate(), 
