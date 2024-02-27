@@ -57,3 +57,23 @@ app.use('/api', require('./routes/uploads'));
 app.listen(process.env.PORT, () => {
     console.log('Servidor corriendo en el puerto ', process.env.PORT);
 });
+
+let usuariosActivos = 0;
+
+app.use('/api/usuarios-activos', (req, res) => {
+  res.json({ usuariosActivos });
+});
+
+// Middleware para contar usuarios activos
+app.use((req, res, next) => {
+  usuariosActivos++;
+  next();
+});
+
+// Middleware para actualizar el conteo cuando los usuarios dejan la página
+app.use((req, res, next) => {
+  res.on('finish', () => {
+    usuariosActivos--;
+  });
+  next();
+});
