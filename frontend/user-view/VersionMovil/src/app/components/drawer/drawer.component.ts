@@ -3,6 +3,8 @@ import { GestureController, Platform } from '@ionic/angular';
 import { ProductosService } from 'src/app/services/productos.service';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { environment } from "../../environments/environment";
+import * as echarts from 'echarts';
+
 
 export interface Producto{
   id: string,
@@ -24,10 +26,9 @@ export interface Producto{
   precio: Float32Array,
   enListaCompra: boolean,
   idLista: string,
+  cantidad: number,
   //Ubicacions: Ubicaciones[]
  //Promocions: Promociones[]
-
- cantidad: number,
 }
 
 
@@ -70,7 +71,7 @@ export class DrawerComponent  implements AfterViewInit {
   productoSelect: any;
   dispo: string = '';
   seleccionado: boolean = false;
-
+  listaCompra: ListaCompra [] = [];
 
   //VARIABLES FOTO
   tokenUsuario = sessionStorage.getItem('tokenUsuario') || localStorage.getItem('tokenUsuario');
@@ -207,15 +208,79 @@ export class DrawerComponent  implements AfterViewInit {
 
 
   //PRODUCTO SELECCIONADO
-getProducto(idProd: string){
-  this.seleccionado = true;
-  this.toggleDrawer2(2);
-  this.productosService.getProductoId(idProd).subscribe( result => {
-    this.productoSelect = result.productos;
-    console.log(this.productoSelect.nombre);
-  });
-}
+  getProducto(idProd: string){
+    this.seleccionado = true;
+    this.toggleDrawer2(2);
+    this.productosService.getProductoId(idProd).subscribe( result => {
+      this.productoSelect = result.productos;
+      //console.log(this.productoSelect.nombre);
+      this.getDetalle(idProd);
+      if(this.productoSelect && this.productoSelect.grasas){
+        console.log('He entrado al if');
+        this.actualizarGraficoPie();
+      }
+    });
+  } 
 
+
+
+  getDetalle(idProd: string){
+    const productoEncontrado = this.listaCompra.find((item) => item.idProd === Number(idProd));
+      if (productoEncontrado) {
+        this.productoSelect.cantidad = productoEncontrado.cantidad;
+        this.productoSelect.idLista = productoEncontrado.id;
+        this.productoSelect.enListaCompra = true;
+        console.log('Valores asignados:', this.productoSelect);
+      } else {
+        console.log('Producto no encontrado en listaCompra');
+      }
+    }
+
+  actualizarGraficoPie () {
+      //console.log('El producto del grafico es:' + producto);
+      
+      var valoresNutricionales = document.getElementById('valores-nutricionales');
+      var myChart = echarts.init(valoresNutricionales);
+    
+      var option = {
+          tooltip: {
+              trigger: 'item',
+              formatter: '{a} <br/>{b}: {c} ({d}%)'
+          },
+          color: ['#BC4749', '#F2E8CF', '#A7C957', '#6A994E', '#386641'],
+          series: [
+              {
+                  name: 'Nutrientes',
+                  type: 'pie',
+                  radius: ['40%', '80%'],
+                  avoidLabelOverlap: false,
+                  label: {
+                      show: false,
+                      position: 'center'
+                  },
+                  emphasis: {
+                      label: {
+                          show: true,
+                          fontSize: '20',
+                          fontWeight: 'bold'
+                      }
+                  },
+                  labelLine: {
+                      show: false
+                  },
+                  data: [
+                      {value: this.productoSelect.grasas, name: 'Grasas'},
+                      {value: this.productoSelect.hidratos_carbono, name: 'Hidratos de carbono'},
+                      {value: this.productoSelect.fibra, name: 'Fibra'},
+                      {value: this.productoSelect.proteina, name: 'Proteina'},
+                      {value: this.productoSelect.sal, name: 'Sal'}
+                  ]
+              }
+          ]
+      };
+    
+      myChart.setOption(option);
+    }
 colorStock(disponibilidad: number): any{
   if (disponibilidad = 0) {
     this.dispo = 'Agotado';
@@ -233,15 +298,10 @@ EliminarProductoSelect(){
   this.toggleDrawer2(2);
 }
 
-//FUNCIONES CONTROL CSS
-
-
-
-
 //FUNCIONES BUSCADOR
   productos: Producto [] = [];
   
-  listaCompra: ListaCompra [] = [];
+  //listaCompra: ListaCompra [] = [];
 
   valueBusquedaInput = '';
 
@@ -257,7 +317,7 @@ EliminarProductoSelect(){
     
     if (idUsuario !== null) {
       this.idUsu = idUsuario;
-      console.log('El usuario logueado es: '+ this.idUsu);
+      //console.log('El usuario logueado es: '+ this.idUsu);
     } else {
       console.error('El valor de idUsuario en localStorage es nulo.');
     }
@@ -269,7 +329,7 @@ EliminarProductoSelect(){
   incrementar(producto: any){
     producto.cantidad++;
       console.log('Nueva cantidad = ' +  producto.cantidad)
-      this.actualizarCantidad(producto.id, producto.cantidad, producto.idLista) 
+      this.actualizarCantidad(this.productoSelect.id, producto.cantidad, this.productoSelect.idLista) 
   }
 
   decrementar(producto: any){
@@ -285,6 +345,8 @@ EliminarProductoSelect(){
   eliminar(producto: any){
     producto.enListaCompra = false;
     this.borrarProd(producto.idLista);
+    console.log('Producto eliminado de la lista');
+    this.EliminarProductoSelect();
   }
 
   anadirProducto(producto: any){
@@ -301,7 +363,6 @@ EliminarProductoSelect(){
     })
     this.compararListaBusqueda();
     producto.enListaCompra = true;
-    
   }
 
 
@@ -315,20 +376,22 @@ EliminarProductoSelect(){
         this.compararListaBusqueda();
       });    
   }
+
+  
   getListaCompraUsu() {
     this.productosService.getListaCompra(this.idUsu).subscribe((result) => {
       if (result.listacompra) {
         this.listaCompra = result.listacompra.map((item: ListaCompra) => 
         ({ idProd: item.idProd, 
           cantidad: item.cantidad, 
-          id: item.id
+          id: item.id,
         }));
   
-        console.log(this.listaCompra);
+        //console.log(this.listaCompra);
       } 
     });
   }
-
+  
   compararListaBusqueda(){
     this.listaCompra.forEach((productoCompra) => {
       const productoEncontrado = this.productos.find((producto) => productoCompra.idProd === parseInt(producto.id));

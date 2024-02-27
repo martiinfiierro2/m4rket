@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { ProductosService } from "../services/productos.service";
 import { DrawerComponent } from '../components/drawer/drawer.component';
 import { environment } from '../environments/environment';
+import { getLocaleFirstDayOfWeek } from '@angular/common';
 
 
 export interface Producto{
@@ -71,7 +72,9 @@ export class HomePage {
 
   llamarFuncionDrawer(idProd: string) {
     // Llama a la función del componente Drawer
+    //this.drawerComponent.getProducto(producto);
     this.drawerComponent.getProducto(idProd);
+    
   }
 
   //variables para mostrar foto
@@ -86,7 +89,6 @@ export class HomePage {
   ngOnInit(): void {
     this.getUsuarioLog();
     this.getListaCompraUsu();
-
   }
 
 
@@ -116,18 +118,19 @@ getUsuarioLog() {
   
   if (idUsuario !== null) {
     this.idUsu = idUsuario;
-    console.log('El usuario logueado es: '+ this.idUsu);
+    //console.log('El usuario logueado es: '+ this.idUsu);
   } else {
     console.error('El valor de idUsuario en localStorage es nulo.');
   }
 }
-
+/*
 getProducto(idProd: string){
   this.productosService.getProductoId(idProd).subscribe( result => {
     this.productoSelect = result.productos;
     console.log(this.productoSelect.nombre);
   });
 }
+*/
 //Funciones CRUD LISTA COMPRA
 
 
@@ -140,7 +143,7 @@ this.productosService.getListaCompra(this.idUsu).subscribe((result) => {
       id: item.id
     }));
 
-    console.log(this.listaCompra);
+   // console.log(this.listaCompra);
 
 
     const detallesProductos: ProductoDetalle[] = [];
@@ -155,32 +158,32 @@ this.productosService.getListaCompra(this.idUsu).subscribe((result) => {
 }
 
 getDetalleProducto(idProd: string, detallesProductos: ProductoDetalle[], cantidadProd: number, idLista: string) {
-const quantity = cantidadProd;
-const idP = idProd;
-const idL = idLista;
-let mostrarContador = false;
-if(quantity > 0) {
-  mostrarContador = true;
-}else{
-  mostrarContador = false;
-}
-this.productosService.getProductoId(idProd).subscribe((producto) => {
-  const productoDetalle: ProductoDetalle = {
-    nombre: producto.productos.nombre,
-    precio: producto.productos.precio,
-    foto: producto.productos.foto,
-    cantidad: quantity,
-    idProducto: idP,
-    idLista: idL,
-    contador: mostrarContador,
-  };
-  detallesProductos.push(productoDetalle);
+  const quantity = cantidadProd;
+  const idP = idProd;
+  const idL = idLista;
+  let mostrarContador = false;
+  if(quantity > 0) {
+    mostrarContador = true;
+  }else{
+    mostrarContador = false;
+  }
+  this.productosService.getProductoId(idProd).subscribe((producto) => {
+    const productoDetalle: ProductoDetalle = {
+      nombre: producto.productos.nombre,
+      precio: producto.productos.precio,
+      foto: producto.productos.foto,
+      cantidad: quantity,
+      idProducto: idP,
+      idLista: idL,
+      contador: mostrarContador,
+    };
+    detallesProductos.push(productoDetalle);
 
-  //console.log('Detalles del producto:', productoDetalle);
-  //console.log('Los productos son: ', detallesProductos);
+    //console.log('Detalles del producto:', productoDetalle);
+    //console.log('Los productos son: ', detallesProductos);
 
-  this.detallesProductos = detallesProductos;
-});
+    this.detallesProductos = detallesProductos;
+  });
 }
 //Borrar de la lista de la compra
 

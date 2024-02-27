@@ -1,4 +1,5 @@
 
+
 <div class="chatbot" #chatbot>
   <div class="chatbot-header">
     <button class="cerrar-chatbot" (click)="cerrarChatbot()">
@@ -24,10 +25,10 @@
     <div class="contenido-drawer">
       <div class="contenido-buscador" *ngIf="!productoSelect" [@fadeAnimation]>
         <div class="drawer-header">
-          <ion-searchbar show-clear-button="never" show-cancel-button="focus" cancel-button-text="Cancelar" 
-            placeholder="Buscar en M4rket" class="buscador" (ionChange)="toggleDrawer2(2)" (ionFocus)="toggleDrawer2(1)"
-            (ionChange)="getBusquedaProducto($event.detail.value)">
+          <ion-searchbar (ionChange)="getBusquedaProducto($event.detail.value)" [debounce]="50" show-clear-button="never" show-cancel-button="focus" cancel-button-text="Cancelar" 
+            placeholder="Buscar en M4rket" class="buscador" (ionFocus)="toggleDrawer2(1)">
           </ion-searchbar>
+
   
           <div class="profile" #profile (click)="abrirPerfil();"></div>
         </div>
@@ -72,7 +73,8 @@
           <button (click)="EliminarProductoSelect()" class="cerrar-tarjeta">X</button>  
         </div>
         <div class="contenido-scroll">
-            <button class="marcarcomprado">Marcar como comprado</button>
+            <button *ngIf="productoSelect.enListaCompra" class="marcarcomprado">Marcar como comprado</button>
+            <button  *ngIf="!productoSelect.enListaCompra" class="marcarcomprado" (click)="anadirProducto(productoSelect)">Añadir a la lista</button>
             <div class="acciones">
               <div class="dispo-precio">
                 <div class="disponibilidad">
@@ -84,7 +86,7 @@
                   <p class="precio_kg_producto">{{ productoSelect.precio_kg }}€/kg</p>
                 </div>
               </div>
-                <div class="cantidades">
+                <div class="cantidades" *ngIf="productoSelect.enListaCompra">
                   <div class="add2">
                     <button (click)="decrementar(productoSelect)">
                       <ion-icon class="add-button" name="remove-circle-outline"></ion-icon>
@@ -102,7 +104,27 @@
             <div class="foto_producto">
               <img [src]="urlFotoProducto + productoSelect.foto + '?token=' +tokenUsuario" alt="Product Image" />
             </div>
-            
+            <div class="ingredientes">
+              <p>Ingredientes:</p>
+              <p>{{productoSelect.ingredientes}}</p>
+            </div>
+
+            <div class="valores-nutricionales" id="valores-nutricionales" style="width: 100%; height: 300px;"></div> 
+              Valor energético:
+              <div>{{productoSelect.valor_energetico}}kcal</div>
+              <div>
+              <div class="valor">
+                <div class="color_valor" style="background-color: #BC4749;"></div>
+                <p>Grasas</p>
+                <div class="texto_valor">{{productoSelect.grasas}}g</div>
+              </div>
+              <div class="valor"><p>de las cuales saturadas</p><div class="texto_valor">{{productoSelect.grasas_saturadas}}g</div></div>
+              <div class="valor"><div class="color_valor" style="background-color: #F2E8CF;"></div><p>Hidratos de carbono</p><div class="texto_valor">{{productoSelect.hidratos_carbono}}g</div></div>
+              <div class="valor"><p>de los cuales azucares</p><div class="texto_valor">{{productoSelect.azucares}}g</div></div>
+              <div class="valor"><div class="color_valor" style="background-color: #A7C957;"></div><p>Fibra</p><div class="texto_valor">{{productoSelect.fibra}}g</div></div>
+              <div class="valor"><div class="color_valor" style="background-color: #6A994E;"></div><p>Proteina</p><div class="texto_valor">{{productoSelect.proteina}}g</div></div>
+              <div class="valor"><div class="color_valor" style="background-color: #386641;"></div><p>Sal</p><div class="texto_valor">{{productoSelect.sal}}g</div></div>
+            </div>
         </div>   
       </div>
     </div>
