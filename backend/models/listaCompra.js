@@ -23,6 +23,9 @@ const Listacompra = sequelize.define('lista_compra', {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
+    comprado: {
+        type: DataTypes.BOOLEAN,
+    }
 }, {
     tableName: 'lista_compra',
     timestamps: false

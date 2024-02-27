@@ -122,7 +122,7 @@ const buscarProducto = async(req, res) => {
 
     //Paginación 
     const desde = Number(req.query.desde) || 0; //Si no dan nada o no dan un numero es 0
-    const registropp = 4;
+    const registropp = 100000;
 
     console.log(datos);
 
@@ -266,7 +266,7 @@ const crearProducto = async(req, res) => {
 const actualizarProducto = async(req,res) => {
     try{
         const id = req.params.id;
-        const { nombre, marca, categoria, stock, valor_energetico, grasas, grasas_saturadas, azucares, fibra, proteina, sal, precio_kg, ingredientes, foto, precio } = req.body;
+        const { nombre, marca, categoria, stock, valor_energetico, grasas, hidratos_carbono, grasas_saturadas, azucares, fibra, proteina, sal, precio_kg, ingredientes, foto, precio } = req.body;
 
         const producto = await Producto.findByPk(id);
 
@@ -277,7 +277,8 @@ const actualizarProducto = async(req,res) => {
             stock: stock,
             valor_energetico: valor_energetico,
             grasas: grasas,
-            grasas_saturadaso: grasas_saturadas,
+            grasas_saturadas: grasas_saturadas,
+            hidratos_carbono: hidratos_carbono,
             azucares: azucares,
             fibra: fibra,
             proteina: proteina,

@@ -72,7 +72,8 @@ const crearListaCompra = async(req, res) => {
             idUsu: listacompra.idUsu,
             idProd: listacompra.idProd,
             fecha: listacompra.fecha,
-            cantidad: listacompra.cantidad
+            cantidad: listacompra.cantidad,
+            comprado: listacompra.comprado
         });
 
         //Hacemos la request
@@ -121,7 +122,8 @@ const actualizarListaCompra = async(req, res) => {
             idUsu: nuevaListacompra.idUsu,
             idProd: nuevaListacompra.idProd,
             fecha: nuevaListacompra.fecha,
-            cantidad: nuevaListacompra.cantidad
+            cantidad: nuevaListacompra.cantidad,
+            comprado: nuevaListacompra.comprado
         });
 
         res.json({
