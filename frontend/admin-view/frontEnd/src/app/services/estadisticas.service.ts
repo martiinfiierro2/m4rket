@@ -28,6 +28,11 @@ export class EstadisticasService {
   }
 
   //CRUD
+  getUsuariosActivos(): Observable<any> {
+    let urlCompleta = environment.base_url + '/usuarios-activos';
+    return this.http.get(urlCompleta, {headers: this.cabeceras});
+  }
+
   getCountAnadidos(): Observable<any>{
     let urlCompleta = this.url + '?nombre=anadido';
     return this.http.get(urlCompleta, {headers: this.cabeceras})

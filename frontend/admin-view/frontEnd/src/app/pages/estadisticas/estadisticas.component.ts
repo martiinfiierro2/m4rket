@@ -54,7 +54,7 @@ export class EstadisticasComponent {
   masEliminado: any;
   secciones: any;
   aux: DatosContadores[] = [];
-
+  usuariosActivos: any;
   //Fitro fechas
   fechaInicio: string="";
   fechaFin: string="";
@@ -79,6 +79,7 @@ export class EstadisticasComponent {
     this.getContadoresMasAnadidos();
     this.getContadoresMasEliminados();
     this.getQR();
+    this.getUsuariosActivos();
   }
 
   private configurarGraficoSecciones(): void {
@@ -237,6 +238,12 @@ export class EstadisticasComponent {
         console.error(error);
       }
     }
+  }
+
+  getUsuariosActivos(){
+    let res = this.estadisticasService.getUsuariosActivos().subscribe( res => {
+      this.usuariosActivos = res.usuariosActivos;
+    });
   }
 
   async getContadoresMasEliminados() {
