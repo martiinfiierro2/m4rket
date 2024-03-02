@@ -3,6 +3,8 @@
     "/",
     "/dataset",
     "/dataset-producto",
+    "/datos",
+    "/estadisticas",
     "/login",
     "/productos",
     "/productos/editProducto",

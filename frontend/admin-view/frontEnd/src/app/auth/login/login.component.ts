@@ -27,7 +27,7 @@ export class LoginComponent {
   public formSubmint = false;
 
   public loginForm = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
+    email: [localStorage.getItem('email') || '', [Validators.required, Validators.email]],
     pwd: ['', Validators.required],
     check:  [Validators.required]
   });
@@ -52,19 +52,21 @@ export class LoginComponent {
     else{
       this.usuarioService.login( this.loginForm.value)
       .subscribe( res =>{
-   
-        //Recordar correo
+
+        //Recordar sesion
         if (this.loginForm.value.check) {
-          localStorage.setItem('tokenUsuario', res.tokenUsuario);
+          localStorage.setItem('tokenUsuario', res.token);
           localStorage.setItem('idUsuario', res.idUsuario);
           localStorage.setItem('email', res.email);
-          this.route.navigate(['/productos']);
         }
         else{
-          localStorage.setItem('tokenUsuario', res.tokenUsuario);
-          localStorage.setItem('idUsuario', res.idUsuario);
-          this.route.navigate(['/productos']);
+          localStorage.removeItem('email');
+          localStorage.setItem('tokenUsuario', res.token);
+          localStorage.setItem('idUsuario', res.idUsuario); 
         }
+  
+        this.route.navigateByUrl('/productos');
+
       },(error) =>{
         Swal.fire({
           title: 'Error!',

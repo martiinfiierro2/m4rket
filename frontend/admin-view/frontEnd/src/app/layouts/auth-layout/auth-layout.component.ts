@@ -13,12 +13,4 @@ export class AuthLayoutComponent {
 
   constructor( private route: Router){}
 
-
-  ngOnInit(): void{
-    
-    //comprueba si ya hay un usuario en uso
-    if (sessionStorage.getItem('tokenUsuario') || localStorage.getItem('tokenUsuario')) {
-      this.route.navigate(['/productos']);
-    }
-  }
 }

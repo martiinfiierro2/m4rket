@@ -90,7 +90,7 @@ export class ProductosComponent {
 
 
   //variables para mostrar foto
-  tokenUsuario = sessionStorage.getItem('tokenUsuario') || localStorage.getItem('tokenUsuario');
+  tokenUsuario = localStorage.getItem('tokenUsuario');
   urlFotoProducto = environment.base_url + '/uploads/fotoproducto/';
 
   modals = document.getElementsByClassName('modal') as HTMLCollectionOf<HTMLElement>;
@@ -135,7 +135,6 @@ export class ProductosComponent {
     this.getProductos();
     this.getPromociones();
     this.productos.forEach(() => this.cambioPromoPorFila.push(true));
-    console.log(this.productos);
   
   }
 

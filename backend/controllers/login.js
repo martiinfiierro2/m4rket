@@ -1,7 +1,45 @@
 const { response } = require('express');
 const bcrypt = require('bcryptjs');
 const { Usuario } = require('../models/usuarios');
+
 const { generarJWT } = require('../helpers/jwt');
+const jwt = require('jsonwebtoken');
+
+
+const token = async(req, res = response) =>{
+
+    const token = req.headers['x-token'];
+    
+    try {
+        const { uid, rol, ...object } = jwt.verify(token, process.env.JWTSECRETA);
+
+        const nuevoToken = await generarJWT(uid, rol);
+        const usuarioExiste = await Usuario.findByPk(uid);
+
+        if (!usuarioExiste) {
+            return res.status(400).json({
+                ok: false,
+                msg: 'Token con usuario no válido',
+                token: ''
+            });
+        }
+       
+        res.json({
+            ok: true,
+            msg: 'Token renovado',
+            token: nuevoToken
+        });
+
+
+    } catch {
+        return res.status(400).json({
+            ok: false,
+            msg: 'Token no válido'
+        });
+    }
+}
+
+
 
 const login = async(req, res = response) => {
     try {
@@ -35,7 +73,8 @@ const login = async(req, res = response) => {
             ok: true,
             msg: 'login',
             token: token,
-            idUsuario: usuarioExiste.id
+            idUsuario: usuarioExiste.id,
+            email: usuarioExiste.email
         })
     }catch(error){
         return res.status(400).json({
@@ -46,4 +85,4 @@ const login = async(req, res = response) => {
     }
 }
 
-module.exports = { login }
+module.exports = { login, token }

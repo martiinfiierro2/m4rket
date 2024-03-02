@@ -8,25 +8,17 @@ import { environment } from "../../environments/environment";
 })
 export class EstadisticasService {
 
-  constructor( private http: HttpClient) { 
-    this.cargarCabeceras();
-  }
+  constructor( private http: HttpClient) {}
 
   private url: string = environment.base_url + '/contadores';
   private url2: string = environment.base_url + '/tiempos';
 
-  private token: string|any;
-  private cabeceras: any;
+  private token = localStorage.getItem('tokenUsuario');
+  private cabeceras = new HttpHeaders({
+    'x-token': this.token
+  });;
 
-  //CREACIÓN CABECERA CON TOKEN USUARIO
-  cargarCabeceras(){
-    this.token = sessionStorage.getItem('tokenUsuario') || localStorage.getItem('tokenUsuario');
-
-    this.cabeceras = new HttpHeaders({
-      'x-token': this.token
-    });
-  }
-
+  
   //CRUD
   getUsuariosActivos(): Observable<any> {
     let urlCompleta = environment.base_url + '/usuarios-activos';

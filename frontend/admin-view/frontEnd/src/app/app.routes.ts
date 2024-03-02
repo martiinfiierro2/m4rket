@@ -19,6 +19,8 @@ import { PaginationComponent } from './pagination/pagination.component';
 import { EstadisticasComponent } from './pages/estadisticas/estadisticas.component';
 import { DatosComponent } from './pages/datos/datos.component';
 
+import { authGuard, authGuard2 } from "../app/guards/auth.guard";
+
 
 export const routes: Routes = [
 
@@ -28,25 +30,26 @@ export const routes: Routes = [
   
   { path: 'pruebaPaginacion', component: PaginationComponent},
 
-  { path: 'login', component: AuthLayoutComponent,
+  { path: 'login', component: AuthLayoutComponent, canActivate: [authGuard2],
       children: [
         { path: '', component: LoginComponent},
         { path: '**', redirectTo: ''}
       ]
   },
-  { path: 'registro', component: AuthLayoutComponent,
+  { path: 'registro', component: AuthLayoutComponent, canActivate: [authGuard2],
       children: [
         { path: '', component: SignUpComponent},
         { path: '**', redirectTo: ''}
       ]
   },
-  { path: 'recovery', component: AuthLayoutComponent,
+  { path: 'recovery', component: AuthLayoutComponent, canActivate: [authGuard2],
     children: [
       { path: '', component: RecoveryComponent},
       { path: '**', redirectTo: ''}
     ]
   },
-  { path: 'productos', component: AdminLayoutComponent,
+
+  { path: 'productos', component: AdminLayoutComponent, canActivate: [authGuard],
       children: [
         { path: '', component: ProductosComponent},
         { path: 'newProducto',component: NewProductoComponent},
@@ -54,7 +57,7 @@ export const routes: Routes = [
         { path: '*', redirectTo: ''}
       ]
   },
-  { path: 'promociones', component: AdminLayoutComponent,
+  { path: 'promociones', component: AdminLayoutComponent, canActivate: [authGuard],
       children: [
         { path: '', component: PromocionesComponent},
         { path: 'newPromocion',component: NewPromocionComponent},
@@ -63,21 +66,21 @@ export const routes: Routes = [
         { path: '*', redirectTo: ''}
       ]
   },
-  { path: 'ubicaciones', component: AdminLayoutComponent,
+  { path: 'ubicaciones', component: AdminLayoutComponent, canActivate: [authGuard],
       children: [
         { path: '', component: UbicacionesComponent},
         { path: '*', redirectTo: ''}
       ]
 
   },
-  { path: 'estadisticas', component: AdminLayoutComponent,
+  { path: 'estadisticas', component: AdminLayoutComponent, canActivate: [authGuard],
       children: [
         { path: '', component: EstadisticasComponent},
         { path: '*', redirectTo: ''}
       ]
   },
   
-  { path: 'datos', component: AdminLayoutComponent,
+  { path: 'datos', component: AdminLayoutComponent, canActivate: [authGuard],
     children: [
       { path: '', component: DatosComponent},
       { path: '*', redirectTo: ''}

@@ -1,30 +1,29 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from "rxjs";
+import { Observable, of} from "rxjs";
+import { catchError, map, tap } from "rxjs/operators";
 import { environment } from "../../environments/environment";
+import e from 'express';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class UsuariosService {
+
+  private token;
+  private cabeceras;
   
-  constructor( private http: HttpClient) { }
+  constructor( private http: HttpClient) {}
 
-  private token: string|any;
-  private cabeceras: any;
   
-
-  //CREACIÓN CABECERA CON TOKEN USUARIO
-  cargarCabeceras(){
-    this.token = sessionStorage.getItem('tokenUsuario') || localStorage.getItem('tokenUsuario');
-
+  cargarCabecera(){
+    this.token = localStorage.getItem('tokenUsuario') || '';
     this.cabeceras = new HttpHeaders({
       'x-token': this.token
-    });
+    }); 
   }
-
-  
+ 
 
   //CRUDs
   login(formData: any): Observable<any> {
@@ -43,8 +42,38 @@ export class UsuariosService {
 
   getUsuario(idUsu: string): Observable<any>{
 
+    this.cargarCabecera();
+
     let urlCompleta = environment.base_url + '/usuarios/?id=' + idUsu;
 
     return this.http.get(urlCompleta, { headers: this.cabeceras});
+  }
+
+  validarToken(){
+    const urlCompleta = environment.base_url + '/token';  
+
+    this.cargarCabecera();
+  
+    console.log("Token llegado a validar token: ", this.token);
+
+    if (this.token === '') {
+      return  of(false);
+    }
+    else{
+      return this.http.get(urlCompleta, { headers: this.cabeceras})
+            .pipe(
+              tap( res =>{
+                  console.log("Actualizo token con: ", res);
+                  localStorage.setItem("tokenUsuario", res['token']);
+              }),
+              map( resp =>{
+                return true;
+              }),
+              catchError( err => {
+                console.warn(err);
+                return of(false);
+              })
+            );
+    }  
   }
 }

@@ -15,14 +15,16 @@ export class ProductosService {
 
   private url: string = environment.base_url  + '/productos';
 
-  private token: string|any;
-  private cabeceras: any;
+  private token = localStorage.getItem('tokenUsuario');
+  private cabeceras = new HttpHeaders({
+    'x-token': this.token
+  });;
   
   
 
   //CREACIÓN CABECERA CON TOKEN USUARIO
   cargarCabeceras(){
-    this.token = sessionStorage.getItem('tokenUsuario') || localStorage.getItem('tokenUsuario');
+    this.token = localStorage.getItem('tokenUsuario');
 
     this.cabeceras = new HttpHeaders({
       'x-token': this.token

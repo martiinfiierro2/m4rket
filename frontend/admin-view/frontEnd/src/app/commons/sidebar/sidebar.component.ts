@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 })
 export class SidebarComponent {
 
-  private idUsuario: string|any
+
   private nombreUsuario: string = '';
 
 
@@ -25,10 +25,8 @@ export class SidebarComponent {
   }
   
 
-  getUsuario(){
-    this.idUsuario = sessionStorage.getItem('idUsuario') || localStorage.getItem('idUsuario');
-
-    this.usuarioService.getUsuario(this.idUsuario)
+  getUsuario(){ 
+    this.usuarioService.getUsuario(localStorage.getItem('idUsuario'))
       .subscribe( res => {
         this.nombreUsuario = res.usuarios.nombre;
         document.getElementById('nombreUsuario')!.innerHTML = 'Hola, ' + this.nombreUsuario;
@@ -36,18 +34,21 @@ export class SidebarComponent {
   }
 
   logOut(){
-    if (sessionStorage.getItem('tokenUsuario') && sessionStorage.getItem('idUsuario')) {
-      sessionStorage.clear();
+    let email;
+
+    if (localStorage.getItem("email")) {
+      email = localStorage.getItem("email");
+      localStorage.clear();
+      localStorage.setItem("email", email);
     }
     else{
       localStorage.clear();
     }
-    this.route.navigate(['/login']);
+    this.route.navigateByUrl('/login');
   }
 
   paginaActual(){
-    console.log(window.location.pathname);
-
+   
     if (window.location.pathname.includes('/productos')) {
       document.getElementById('lineaProductos')?.classList.add('actual');
     }

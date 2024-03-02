@@ -12,19 +12,10 @@ export class UbicacionesService {
 
   private url: string = environment.base_url + '/ubicaciones';
 
-  private token: string|any;
-  private cabeceras: any;
-  
-
-  //CREACIÓN CABECERA CON TOKEN USUARIO
-  cargarCabeceras(){
-    this.token = sessionStorage.getItem('tokenUsuario') || localStorage.getItem('tokenUsuario');
-
-    this.cabeceras = new HttpHeaders({
-      'x-token': this.token
-    });
-  }
-
+  private token = localStorage.getItem('tokenUsuario');
+  private cabeceras = new HttpHeaders({
+    'x-token': this.token
+  });;
 
   //CRUD
   getAllUbicaciones(): Observable<any>{

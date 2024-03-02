@@ -42,8 +42,8 @@ export class SignUpComponent {
         this.tokenUsuario = res.token;
         this.idUsuario = res.usuario.id;
 
-        sessionStorage.setItem('idUsuario', this.idUsuario);
-        sessionStorage.setItem('tokenUsuario', this.tokenUsuario);
+        localStorage.setItem('idUsuario', this.idUsuario);
+        localStorage.setItem('tokenUsuario', this.tokenUsuario);
         
         this.route.navigate(['/productos']);
       }) 
