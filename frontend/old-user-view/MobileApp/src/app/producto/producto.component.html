@@ -1,0 +1,26 @@
+<div class="producto-container" >
+  <div class="navegador-producto" [routerLink]="['/pagina-producto']">
+    <!--<img [src]="producto.imageUrl" alt="Product Image" />-->
+  <div class="product-text">
+    <h3>{{ producto?.nombre }}</h3>
+    <p>{{ producto?.precio }} €</p>
+  </div>
+  </div>
+  
+  <div class="product-buttons">
+    <button *ngIf="!mostrarContador" (click)="mostrarContador = true" class="add">Añadir
+      <ion-icon class="add-button" name="add-circle-outline"></ion-icon>
+    </button>
+    <div *ngIf="mostrarContador" class="add2" >
+      <button (click)="decrementar()">
+        <ion-icon class="add-button" name="remove-circle-outline"></ion-icon>
+      </button>
+      <span>{{ cantidadProducto }}</span>
+      <button (click)="incrementar()">
+        <ion-icon class="add-button" name="add-circle-outline"></ion-icon>
+      </button>
+      <button (click)="eliminar()" (click)="mostrarContador = false">
+        <ion-icon class="add-button" name="trash-outline"></ion-icon>
+      </button>
+    </div>
+</div>

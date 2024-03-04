@@ -1,0 +1,20 @@
+
+<form (ngSubmit)="login()" [formGroup]="loginForm">
+  <h2>Iniciar sesión</h2>
+  <label for=" email">
+      Correo eléctrónico
+      <input type="email" name="email" formControlName="email" id="email"> 
+  </label>
+  <label for="pwd">
+      Contraseña
+      <input type="password" name="pwd" formControlName="pwd" id="pwd">
+  </label>
+  <label for="recordarme">Recordarme <input type="checkbox" formControlName="check" name="recordarme" id="recordarme"></label>
+  <div id="avisos">
+      <p class="text-danger" *ngIf="!campoValido('email')">El usuario es obligatorio y debe ser un email</p>
+      <p class="text-danger" *ngIf="!campoValido('pwd')">El campo contraseña es obligatorio</p>
+      <p class="text-danger" *ngIf="avisoError">Campos incorrectos</p>
+  </div>
+  <input type="submit" value="Entrar">
+  <p><a href="/recovery">¿Ha olvidado su contraseña?</a></p>
+</form>

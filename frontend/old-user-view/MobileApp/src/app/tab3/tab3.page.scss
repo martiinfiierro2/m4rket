@@ -1,0 +1,21 @@
+.custom-header{
+    position: fixed;
+  }
+  
+  ion-toolbar.custom-toolbar {
+	height: 120px;
+	background-color: #51877a;
+	display: flex;
+	align-items: flex-end; 
+	justify-content: space-between; 
+	padding: 0 20px;
+  }
+  
+  .custom-title {
+	color: white;
+	padding: 0;
+	text-align: left;
+	margin: 0;
+	font-size: 30px;
+	font-family: Amaranth;
+  }
