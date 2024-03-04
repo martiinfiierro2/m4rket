@@ -1,3 +1,7 @@
+body{
+    overflow-y: block;
+}
+
 .datoQRP{
     color: green;
     font-size: small;
