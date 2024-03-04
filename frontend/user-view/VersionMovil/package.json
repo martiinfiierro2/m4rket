@@ -22,9 +22,11 @@
     "@angular/platform-browser-dynamic": "^17.0.2",
     "@angular/router": "^17.0.2",
     "@ionic/angular": "^7.0.0",
+    "@types/three": "^0.161.2",
     "echarts": "^5.5.0",
     "ionicons": "^7.0.0",
     "rxjs": "~7.8.0",
+    "three": "^0.161.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.2"
   },
