@@ -269,7 +269,7 @@ controls.maxPolarAngle = Math.PI/3;
     function (glb) {
       object = glb.scene;
       //object.scale.set(2,2,2);
-      object.position.set(0,0,-6);
+      object.position.set(0,18,-13);
       //object.position.set(20,-20,-40);
       scene.add(object);
       console.log('se sube');
