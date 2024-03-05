@@ -257,7 +257,8 @@ stuff() {
     TWO: THREE.TOUCH.DOLLY_PAN
 }
 
-
+controls.minPolarAngle = Math.PI/3;
+controls.maxPolarAngle = Math.PI/3;
 
   let object;
   let objToRender = 'market';
@@ -283,11 +284,18 @@ stuff() {
 
   //camera.position.set(0, 1, 1);
   
-  const topLight = new THREE.DirectionalLight(0xffffff, 3); // (color, intensity)
-  topLight.position.set(500, 500, 500) //top-left-ish
+  const topLight = new THREE.DirectionalLight(0xffffff, 1.5); // (color, intensity)
+  topLight.position.set(200, 200, 200) //top-left-ish
+  const topLight2 = new THREE.DirectionalLight(0xffffff, 1.5); // (color, intensity)
+  topLight2.position.set(200, 200, -200) //top-left-ish
+  const topLight3 = new THREE.DirectionalLight(0xffffff, 1.5); // (color, intensity)
+  topLight3.position.set(-200, 200, 200) //top-left-ish
+
   topLight.castShadow = true;
   scene.add(topLight);
-  const ambientLight = new THREE.AmbientLight(0xffffff, 3); // (color, intensity)
+  scene.add(topLight2);
+  scene.add(topLight3)
+  const ambientLight = new THREE.AmbientLight(0xffffff, 50); // (color, intensity)
   scene.add(ambientLight);
 
   
