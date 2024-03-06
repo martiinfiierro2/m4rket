@@ -8,6 +8,7 @@ import { getLocaleFirstDayOfWeek } from '@angular/common';
 import * as THREE from 'three'; // we need @types/three for this to work (next to three package)
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { DomElementSchemaRegistry } from '@angular/compiler';
 
 
 export interface Producto {
@@ -273,10 +274,8 @@ export class HomePage {
         object.position.set(0, 18, -13);
         //object.position.set(20,-20,-40);
         scene.add(object);
-        console.log('se sube');
       },
       function (xhr) {
-        console.log((xhr.loaded / xhr.total * 100) + '% loaded');
       },
       function (error) {
         console.error(error);
@@ -301,17 +300,31 @@ export class HomePage {
 
 
 
-    const clock = new THREE.Clock();
+
+    let pointerRotation = 0;
+
     //Render the scene
     function animate() {
       requestAnimationFrame(animate);
       controls.update();
 
 
-      // Rotar la esfera
-      esfera.rotation.x += 0.05;
-      esfera.rotation.y += 0.05;
-
+      if(A1.length > 0){
+      pointerRotation += 0.01; // Adjust the speed as needed
+      pointer.rotation.y = pointerRotation;
+      for (let i = 0; i < A1.length ; i++) {
+        // Aplica la rotación a cada pointer del array
+        A1[i].rotation.y += 0.01; // Ejemplo de rotación en el eje X
+      }
+    }
+  if(A2.length > 0){
+      pointerRotation += 0.01; // Adjust the speed as needed
+      pointer.rotation.y = pointerRotation;
+      for (let i = 0; i < A2.length ; i++) {
+        // Aplica la rotación a cada pointer del array
+        A2[i].rotation.y += 0.01; // Ejemplo de rotación en el eje X
+      }
+    }
       renderer.render(scene, camera);
     }
 
@@ -346,68 +359,51 @@ export class HomePage {
     //actualizarPosicion();
 
 
-    //Esferas
+    //Pointer
+    let pointer: THREE.Object3D;
+    let pointerrender = 'pointer';
+    let A1: THREE.Object3D[] = []; // Array to store cloned pointers 
+    let A2: THREE.Object3D[] = []; // Array to store cloned pointers 
 
-    const esfera = new THREE.Mesh(
-      new THREE.SphereGeometry(0.8, 32, 32),
-      new THREE.MeshBasicMaterial({ color: 0x51877A })
-    );
-    esfera.position.set(-8.1, 21.6, 22.6);
-    scene.add(esfera);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    this.container.appendChild(renderer.domElement);
+    loader.load(
+      `assets/${pointerrender}/pointer.glb`,
+      function (glb) {
+        pointer = glb.scene;
+        pointer.position.set(-8.1, 20.6, 22.6);
+        pointer.scale.set(0.4, 0.4, 0.4);
+        moveSphereWithKeyboard(pointer, renderer, scene);
+        scene.add(pointer);
 
-
-    let x = -8.1;
-    let y, z = 0;
-
-    for (let j = 0; j <= 1; j++) {
-      if (j == 1) {
-        x = -8.1;
-        const hereda = new THREE.Mesh(
-          new THREE.SphereGeometry(0.8, 32, 32),
-          new THREE.MeshBasicMaterial({ color: 0x51877A })
-        );
-        hereda.position.set(-8.1, 21.6, 26.4);
-        scene.add(hereda);
-
-      }
-      for (let i = 0; i <= 13; i++) {
-        // Crea una nueva esfera
-        const hereda = new THREE.Mesh(
-          new THREE.SphereGeometry(0.8, 32, 32),
-          new THREE.MeshBasicMaterial({ color: 0x51877A })
-        );
-
-        // Calcula la posición en una secuencia
-        if (j == 0) {
-          if (i % 2 == 0 && i != 0) {
-            x = x + 2.5; // Posiciones en el eje X con una separación de 5
-            y = 21.6; // Posición fija en el eje Y
-            z = 22.6; // Posición fija en el eje Z
-          } else {
-            x = x + 2.2; // Posiciones en el eje X con una separación de 5
-            y = 21.6; // Posición fija en el eje Y
-            z = 22.6; // Posición fija en el eje Z
-          }
-        } else {
-          if (i % 2 == 0 && i != 0) {
-            x = x + 2.5; // Posiciones en el eje X con una separación de 5
-            y = 21.6; // Posición fija en el eje Y
-            z = 26.4; // Posición fija en el eje Z
-          } else {
-            x = x + 2.2; // Posiciones en el eje X con una separación de 5
-            y = 21.6; // Posición fija en el eje Y
-            z = 26.4; // Posición fija en el eje Z
-          }
+        for (let i = 0; i <= 9; i++) {
+          A1[i] = pointer.clone();
+          A1[i].position.x = i === 0 ? -8.1 : (i % 2) ? A1[i - 1].position.x + 4 : A1[i - 1].position.x + 3;
+          scene.add(A1[i]);
         }
-        hereda.position.set(x, y, z);
 
-        // Add la esfera a la escena
-        scene.add(hereda);
+        for (let i = 0; i <= 9; i++) {
+          A2[i] = pointer.clone();
+          A2[i].position.z = 26.4;
+          A2[i].position.x = i === 0 ? -8.1 : (i % 2) ? A2[i - 1].position.x + 4 : A2[i - 1].position.x + 3;
+          scene.add(A2[i]);
+        }
+
+
+
+    
+      },
+      function (xhr) {
+      },
+      function (error) {
+        console.error(error);
       }
-    }
+    );
+
+
 
     // funcion de mover el objeto y saber su pos
-    function moveSphereWithKeyboard(esfera: THREE.Mesh, renderer: THREE.WebGLRenderer, scene: THREE.Scene) {
+    function moveSphereWithKeyboard(pointer: THREE.Object3D, renderer: THREE.WebGLRenderer, scene: THREE.Scene) {
       const moveSpeed = 0.1; // Ajusta la velocidad de movimiento
 
       document.addEventListener('keydown', (event) => {
@@ -415,32 +411,33 @@ export class HomePage {
 
         switch (key) {
           case 'ArrowUp':
-            esfera.position.y += moveSpeed;
+            pointer.position.y += moveSpeed;
             break;
           case 'ArrowDown':
-            esfera.position.y -= moveSpeed;
+            pointer.position.y -= moveSpeed;
             break;
           case 'ArrowLeft':
-            esfera.position.x -= moveSpeed;
+            pointer.position.x -= moveSpeed;
             break;
           case 'ArrowRight':
-            esfera.position.x += moveSpeed;
+            pointer.position.x += moveSpeed;
             break;
           case 'o': // Mover hacia adelante en Z
-            esfera.position.z += moveSpeed;
+            pointer.position.z += moveSpeed;
             break;
           case 'l': // Mover hacia atrás en Z
-            esfera.position.z -= moveSpeed;
+            pointer.position.z -= moveSpeed;
             break;
         }
-        const position = esfera.position;
+        const position = pointer.position;
         console.log(`Posición X: ${position.x.toFixed(2)}`);
         console.log(`Posición Y: ${position.y.toFixed(2)}`);
         console.log(`Posición Z: ${position.z.toFixed(2)}`);
         renderer.render(scene, camera);
       });
     }
-    moveSphereWithKeyboard(esfera, renderer, scene);
+
+
 
     animate();
 
