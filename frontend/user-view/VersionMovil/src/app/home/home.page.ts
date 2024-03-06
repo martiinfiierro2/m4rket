@@ -309,22 +309,31 @@ export class HomePage {
       controls.update();
 
 
-      if(A1.length > 0){
-      pointerRotation += 0.01; // Adjust the speed as needed
-      pointer.rotation.y = pointerRotation;
-      for (let i = 0; i < A1.length ; i++) {
-        // Aplica la rotación a cada pointer del array
-        A1[i].rotation.y += 0.01; // Ejemplo de rotación en el eje X
+      if (A1.length > 0) {
+        pointerRotation += 0.01; // Adjust the speed as needed
+        pointer.rotation.y = pointerRotation;
+        for (let i = 0; i < A1.length; i++) {
+          // Aplica la rotación a cada pointer del array
+          A1[i].rotation.y += 0.01; // Ejemplo de rotación en el eje X
+        }
       }
-    }
-  if(A2.length > 0){
-      pointerRotation += 0.01; // Adjust the speed as needed
-      pointer.rotation.y = pointerRotation;
-      for (let i = 0; i < A2.length ; i++) {
-        // Aplica la rotación a cada pointer del array
-        A2[i].rotation.y += 0.01; // Ejemplo de rotación en el eje X
+      if (A2.length > 0) {
+        pointerRotation += 0.01; // Adjust the speed as needed
+        pointer.rotation.y = pointerRotation;
+        for (let i = 0; i < A2.length; i++) {
+          // Aplica la rotación a cada pointer del array
+          A2[i].rotation.y += 0.01; // Ejemplo de rotación en el eje X
+        }
       }
-    }
+
+      if (A3.length > 0) {
+        pointerRotation += 0.01; // Adjust the speed as needed
+        pointer.rotation.y = pointerRotation;
+        for (let i = 0; i < A3.length; i++) {
+          // Aplica la rotación a cada pointer del array
+          A3[i].rotation.y += 0.01; // Ejemplo de rotación en el eje X
+        }
+      }
       renderer.render(scene, camera);
     }
 
@@ -360,45 +369,52 @@ export class HomePage {
 
 
     //Pointer
-    let pointer: THREE.Object3D;
-    let pointerrender = 'pointer';
-    let A1: THREE.Object3D[] = []; // Array to store cloned pointers 
-    let A2: THREE.Object3D[] = []; // Array to store cloned pointers 
+let pointer: THREE.Object3D;
+let pointerrender = 'pointer';
+let A1: THREE.Object3D[] = []; // Array to store cloned pointers
+let A2: THREE.Object3D[] = []; // Array to store cloned pointers
+let A3: THREE.Object3D[] = []; // Array to store cloned pointers
 
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    this.container.appendChild(renderer.domElement);
-    loader.load(
-      `assets/${pointerrender}/pointer.glb`,
-      function (glb) {
-        pointer = glb.scene;
-        pointer.position.set(-8.1, 20.6, 22.6);
-        pointer.scale.set(0.4, 0.4, 0.4);
-        moveSphereWithKeyboard(pointer, renderer, scene);
-        scene.add(pointer);
+renderer.setSize(window.innerWidth, window.innerHeight);
+this.container.appendChild(renderer.domElement);
 
-        for (let i = 0; i <= 9; i++) {
-          A1[i] = pointer.clone();
-          A1[i].position.x = i === 0 ? -8.1 : (i % 2) ? A1[i - 1].position.x + 4 : A1[i - 1].position.x + 3;
-          scene.add(A1[i]);
-        }
+loader.load(
+  `assets/${pointerrender}/pointer.glb`,
+  function (glb) {
+    pointer = glb.scene;
+    pointer.position.set(-8.1, 20.6, 22.6);
+    pointer.scale.set(0.4, 0.4, 0.4);
+    scene.add(pointer);
+    moveSphereWithKeyboard(pointer,renderer,scene);
 
-        for (let i = 0; i <= 9; i++) {
-          A2[i] = pointer.clone();
-          A2[i].position.z = 26.4;
-          A2[i].position.x = i === 0 ? -8.1 : (i % 2) ? A2[i - 1].position.x + 4 : A2[i - 1].position.x + 3;
-          scene.add(A2[i]);
-        }
+    for (let i = 0; i <= 9; i++) {
+      A1[i] = pointer.clone();
+      A1[i].position.x = i === 0 ? -8.1 : (i % 2) ? A1[i - 1].position.x + 4 : A1[i - 1].position.x + 3;
+      scene.add(A1[i]);
+    }
 
+    for (let i = 0; i <= 9; i++) {
+      A2[i] = pointer.clone();
+      A2[i].position.z = 26.4;
+      A2[i].position.x = i === 0 ? -8.1 : (i % 2) ? A2[i - 1].position.x + 4 : A2[i - 1].position.x + 3;
+      scene.add(A2[i]);
+    }
 
+    for (let i = 0; i <= 1; i++) {
+      A3[i] = pointer.clone();
+      A3[i].position.x = -100;
+      A3[i].position.z = 11.7;
+      scene.add(A3[i]);
+    }
 
-    
-      },
-      function (xhr) {
-      },
-      function (error) {
-        console.error(error);
-      }
-    );
+  },
+  function (xhr) {
+  },
+  function (error) {
+    console.error(error);
+  }
+);
+
 
 
 
@@ -436,7 +452,6 @@ export class HomePage {
         renderer.render(scene, camera);
       });
     }
-
 
 
     animate();
