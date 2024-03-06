@@ -1,5 +1,5 @@
 import * as glMatrix from 'gl-matrix';
-import { TEntidad } from "../ts/TEntidad";
+import { TEntidad } from "../motor_grafico/TEntidad";
 
 
 
