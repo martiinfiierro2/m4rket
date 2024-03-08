@@ -1,5 +1,3 @@
-
-
 export class Malla {
 
     private vertices: number[];

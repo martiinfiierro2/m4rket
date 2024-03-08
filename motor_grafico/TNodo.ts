@@ -3,7 +3,7 @@ import { TEntidad } from "../motor_grafico/TEntidad";
 
 
 
-class TNodo {
+export class TNodo {
 
     private entidad: TEntidad;
     private hijos: TNodo[] = [];

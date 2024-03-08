@@ -1,7 +1,7 @@
-import { TEntidad } from "../ts/TEntidad";
+import { TEntidad } from "./TEntidad";
 import * as glMatrix from 'gl-matrix';
 
-class TCamara extends TEntidad {
+export class TCamara extends TEntidad {
     
     private esPerspectiva: Boolean = false;
     private esParalela: Boolean = false;

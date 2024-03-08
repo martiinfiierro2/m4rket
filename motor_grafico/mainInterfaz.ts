@@ -1,0 +1,22 @@
+import * as glMatrix from "gl-matrix";
+import { TMotorTAG } from "./TMotorTAG";
+import { TNodo } from "./TNodo";
+
+
+
+const motor = new TMotorTAG();
+
+// Crear cámara y luz, como hijas de la raiz
+
+const cam: TNodo = motor.crearCamara( null, glMatrix.vec3.fromValues(0,0,25), glMatrix.vec3.fromValues(0,7*Math.PI/4,0), glMatrix.vec3.fromValues(1,1,1), 0.1, 100); 
+const luz: TNodo = motor.crearLuz( null, glMatrix.vec3.fromValues(0,25,0), glMatrix.vec3.fromValues(3*Math.PI/2,0,0), glMatrix.vec3.fromValues(1,1,1), 1, 'puntual');
+
+// Crear nodo intermedio, y dos nodos hijos con dos mallas
+const personaje: TNodo = motor.crearNodo( null, glMatrix.vec3.fromValues(10,0,10), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(1,1,1));
+const cuerpo: TNodo = motor.crearModelo( personaje, glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(1,1,1), 'cuerpo.blend');
+const sombrero: TNodo = motor.crearModelo( personaje, glMatrix.vec3.fromValues(0,10,0), glMatrix.vec3.fromValues(0,0,Math.PI/8), glMatrix.vec3.fromValues(1,1,1), 'sombrero.blend');
+
+
+        //                  RAIZ
+        //     cam          luz             presonaje
+        //                          cuerpo               sombrero
