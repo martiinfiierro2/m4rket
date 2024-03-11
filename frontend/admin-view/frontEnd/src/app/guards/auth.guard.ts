@@ -30,6 +30,7 @@ export const authGuard2: CanActivateFn = (route, state) => {
   const usuService = inject(UsuariosService);
 
   console.log("Entro al guard del login");
+  //return true;
 
   if (localStorage.getItem('tokenUsuario')) {
     return of(false);
