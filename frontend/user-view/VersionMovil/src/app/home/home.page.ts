@@ -261,9 +261,15 @@ export class HomePage {
 
     controls.minPolarAngle = Math.PI / 3;
     controls.maxPolarAngle = Math.PI / 3;
+    const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    let objToRender;
 
+    if (prefersDarkMode) {
+      objToRender = 'marketoscuro';
+    } else {
+      objToRender = 'market';
+    }
     let object;
-    let objToRender = 'market';
     renderer.setSize(window.innerWidth, window.innerHeight);
     this.container.appendChild(renderer.domElement);
     loader.load(
@@ -284,29 +290,51 @@ export class HomePage {
 
     //camera.position.set(0, 1, 1);
 
-    const topLight = new THREE.DirectionalLight(0xffffff, 1.5); // (color, intensity)
-    topLight.position.set(200, 200, 200) //top-left-ish
-    const topLight2 = new THREE.DirectionalLight(0xffffff, 1.5); // (color, intensity)
-    topLight2.position.set(200, 200, -200) //top-left-ish
-    const topLight3 = new THREE.DirectionalLight(0xffffff, 1.5); // (color, intensity)
-    topLight3.position.set(-200, 200, 200) //top-left-ish
 
-    topLight.castShadow = true;
-    scene.add(topLight);
-    scene.add(topLight2); // Para mejorar las sombras
-    scene.add(topLight3); // Para mejorar las sombras
-    const ambientLight = new THREE.AmbientLight(0xffffff, 50); // (color, intensity)
-    scene.add(ambientLight);
+
+    if (prefersDarkMode) {
+      const topLight = new THREE.DirectionalLight(0xffffff, 2); // (color, intensity)
+      topLight.position.set(200, 200, 200) //top-left-ish
+      const topLight2 = new THREE.DirectionalLight(0xffffff, 2); // (color, intensity)
+      topLight2.position.set(200, 200, -200) //top-left-ish
+      const topLight3 = new THREE.DirectionalLight(0xffffff, 2); // (color, intensity)
+      topLight3.position.set(-200, 200, 200) //top-left-ish
+      topLight.castShadow = true;
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+      scene.add(ambientLight);
+      scene.add(topLight);
+      scene.add(topLight2);
+      scene.add(topLight3);
+    } else {
+      const topLight = new THREE.DirectionalLight(0xffffff, 1.5); // (color, intensity)
+      topLight.position.set(200, 200, 200) //top-left-ish
+      const topLight2 = new THREE.DirectionalLight(0xffffff, 1.5); // (color, intensity)
+      topLight2.position.set(200, 200, -200) //top-left-ish
+      const topLight3 = new THREE.DirectionalLight(0xffffff, 1.5); // (color, intensity)
+      topLight3.position.set(-200, 200, 200) //top-left-ish
+      topLight.castShadow = true;
+      const ambientLight = new THREE.AmbientLight(0xffffff, 30);
+      // (color, intensity)
+      scene.add(ambientLight);
+      scene.add(topLight);
+      scene.add(topLight2);
+      scene.add(topLight3);
+    }
+
+
+
 
     let pointerRotation = 0;
 
-    
+
     function rotatePointers(pointers: THREE.Object3D[], pointerRotation: number) {
       for (let i = 0; i < pointers.length; i++) {
         pointers[i].rotation.y = pointerRotation;
       }
     }
-    
+
+
+
     //Render the scene
     function animate() {
       requestAnimationFrame(animate);
@@ -395,162 +423,161 @@ export class HomePage {
 
 
     //Pointer
-let pointer: THREE.Object3D;
-let pointerrender = 'pointer';
-let A1: THREE.Object3D[] = []; // Array to store cloned pointers
-let A2: THREE.Object3D[] = []; // Array to store cloned pointers
-let A3: THREE.Object3D[] = []; // Array to store cloned pointers
-let A4: THREE.Object3D[] = []; // Array to store cloned pointers
-let A5: THREE.Object3D[] = []; // Array to store cloned pointers
-let A6: THREE.Object3D[] = []; // Array to store cloned pointers
-let A7: THREE.Object3D[] = []; // Array to store cloned pointers
-let A8: THREE.Object3D[] = []; // Array to store cloned pointers
-let A9: THREE.Object3D[] = []; // Array to store cloned pointers
-let A10: THREE.Object3D[] = []; // Array to store cloned pointers
-let A11: THREE.Object3D[] = []; // Array to store cloned pointers
-let A12: THREE.Object3D[] = []; // Array to store cloned pointers
-let B1: THREE.Object3D[] = []; // Array to store cloned pointers
-let B2: THREE.Object3D[] = []; // Array to store cloned pointers
-let B3: THREE.Object3D[] = []; // Array to store cloned pointers
+    let pointer: THREE.Object3D;
+    let pointerrender = 'pointer';
+    let A1: THREE.Object3D[] = []; // Array to store cloned pointers
+    let A2: THREE.Object3D[] = []; // Array to store cloned pointers
+    let A3: THREE.Object3D[] = []; // Array to store cloned pointers
+    let A4: THREE.Object3D[] = []; // Array to store cloned pointers
+    let A5: THREE.Object3D[] = []; // Array to store cloned pointers
+    let A6: THREE.Object3D[] = []; // Array to store cloned pointers
+    let A7: THREE.Object3D[] = []; // Array to store cloned pointers
+    let A8: THREE.Object3D[] = []; // Array to store cloned pointers
+    let A9: THREE.Object3D[] = []; // Array to store cloned pointers
+    let A10: THREE.Object3D[] = []; // Array to store cloned pointers
+    let A11: THREE.Object3D[] = []; // Array to store cloned pointers
+    let A12: THREE.Object3D[] = []; // Array to store cloned pointers
+    let B1: THREE.Object3D[] = []; // Array to store cloned pointers
+    let B2: THREE.Object3D[] = []; // Array to store cloned pointers
+    let B3: THREE.Object3D[] = []; // Array to store cloned pointers
 
-renderer.setSize(window.innerWidth, window.innerHeight);
-this.container.appendChild(renderer.domElement);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    this.container.appendChild(renderer.domElement);
 
-loader.load(
-  `assets/${pointerrender}/pointer.glb`,
-  function (glb) {
-    pointer = glb.scene;
-    pointer.position.set(-8.1, 20.6, 22.6);
-    pointer.scale.set(0.4, 0.4, 0.4);
-    scene.add(pointer);
-    moveSphereWithKeyboard(pointer,renderer,scene);
-    for (let i = 0; i <= 9; i++) {
-      A1[i] = pointer.clone();
-      A1[i].position.x = i === 0 ? -8.1 : (i % 2) ? A1[i - 1].position.x + 4 : A1[i - 1].position.x + 3;
-      scene.add(A1[i]);
-    }
+    loader.load(
+      `assets/${pointerrender}/pointer.glb`,
+      function (glb) {
+        pointer = glb.scene;
+        pointer.position.set(-8.1, 20.6, 22.6);
+        pointer.scale.set(0.4, 0.4, 0.4);
+        scene.add(pointer);
+        moveSphereWithKeyboard(pointer, renderer, scene);
+        for (let i = 0; i <= 9; i++) {
+          A1[i] = pointer.clone();
+          A1[i].position.x = i === 0 ? -8.1 : (i % 2) ? A1[i - 1].position.x + 4 : A1[i - 1].position.x + 3;
+          scene.add(A1[i]);
+        }
 
-    for (let i = 0; i <= 9; i++) {
-      A2[i] = pointer.clone();
-      A2[i].position.z = 26.4;
-      A2[i].position.x = i === 0 ? -8.1 : (i % 2) ? A2[i - 1].position.x + 4 : A2[i - 1].position.x + 3;
-      scene.add(A2[i]);
-    }
+        for (let i = 0; i <= 9; i++) {
+          A2[i] = pointer.clone();
+          A2[i].position.z = 26.4;
+          A2[i].position.x = i === 0 ? -8.1 : (i % 2) ? A2[i - 1].position.x + 4 : A2[i - 1].position.x + 3;
+          scene.add(A2[i]);
+        }
 
-    for (let i = 0; i <= 5; i++) {
-      const pointerClone = pointer.clone();
-      pointerClone.position.z = 12.1;
-      pointerClone.position.x = i === 0 ? -15 : (i % 2 === 0 ? A3[i - 1].position.x + 3.5 : A3[i - 1].position.x + 4);
-      A3[i] = pointerClone;
-      scene.add(pointerClone);
-    }
+        for (let i = 0; i <= 5; i++) {
+          const pointerClone = pointer.clone();
+          pointerClone.position.z = 12.1;
+          pointerClone.position.x = i === 0 ? -15 : (i % 2 === 0 ? A3[i - 1].position.x + 3.5 : A3[i - 1].position.x + 4);
+          A3[i] = pointerClone;
+          scene.add(pointerClone);
+        }
 
-    for (let i = 0; i <= 5; i++) {
-      const pointerClone = pointer.clone();
-      pointerClone.position.x = i === 0 ? -15 : (i % 2 === 0 ? A4[i - 1].position.x + 3.5 : A4[i - 1].position.x + 4);
-      pointerClone.position.z = 9.7;
-      A4[i] = pointerClone;
-      scene.add(pointerClone);
-    }
+        for (let i = 0; i <= 5; i++) {
+          const pointerClone = pointer.clone();
+          pointerClone.position.x = i === 0 ? -15 : (i % 2 === 0 ? A4[i - 1].position.x + 3.5 : A4[i - 1].position.x + 4);
+          pointerClone.position.z = 9.7;
+          A4[i] = pointerClone;
+          scene.add(pointerClone);
+        }
 
-    for (let i = 0; i <= 5; i++) {
-      const pointerClone = pointer.clone();
-      pointerClone.position.x = i === 0 ? -15 : (i % 2 === 0 ? A5[i - 1].position.x + 3.5 : A5[i - 1].position.x + 4);
-      pointerClone.position.z = 1.3;
-      A5[i] = pointerClone;
-      scene.add(pointerClone);
-    }
+        for (let i = 0; i <= 5; i++) {
+          const pointerClone = pointer.clone();
+          pointerClone.position.x = i === 0 ? -15 : (i % 2 === 0 ? A5[i - 1].position.x + 3.5 : A5[i - 1].position.x + 4);
+          pointerClone.position.z = 1.3;
+          A5[i] = pointerClone;
+          scene.add(pointerClone);
+        }
 
-    for (let i = 0; i <= 5; i++) {
-      const pointerClone = pointer.clone();
-      pointerClone.position.x = i === 0 ? -15 : (i % 2 === 0 ? A6[i - 1].position.x + 3.5 : A6[i - 1].position.x + 4);
-      pointerClone.position.z = -0.5;
-      A6[i] = pointerClone;
-      scene.add(pointerClone);
-    }
+        for (let i = 0; i <= 5; i++) {
+          const pointerClone = pointer.clone();
+          pointerClone.position.x = i === 0 ? -15 : (i % 2 === 0 ? A6[i - 1].position.x + 3.5 : A6[i - 1].position.x + 4);
+          pointerClone.position.z = -0.5;
+          A6[i] = pointerClone;
+          scene.add(pointerClone);
+        }
 
-    for (let i = 0; i <= 5; i++) {
-      const pointerClone = pointer.clone();
-      pointerClone.position.x = i === 0 ? -15 : (i % 2 === 0 ? A7[i - 1].position.x + 3.5 : A7[i - 1].position.x + 4);
-      pointerClone.position.z = -9.1;
-      A7[i] = pointerClone;
-      scene.add(pointerClone);
-    }
+        for (let i = 0; i <= 5; i++) {
+          const pointerClone = pointer.clone();
+          pointerClone.position.x = i === 0 ? -15 : (i % 2 === 0 ? A7[i - 1].position.x + 3.5 : A7[i - 1].position.x + 4);
+          pointerClone.position.z = -9.1;
+          A7[i] = pointerClone;
+          scene.add(pointerClone);
+        }
 
-    for (let i = 0; i <= 5; i++) {
-      const pointerClone = pointer.clone();
-      pointerClone.position.x = i === 0 ? -15 : (i % 2 === 0 ? A8[i - 1].position.x + 3.5 : A8[i - 1].position.x + 4);
-      pointerClone.position.z = -11.1;
-      A8[i] = pointerClone;
-      scene.add(pointerClone);
-    }
+        for (let i = 0; i <= 5; i++) {
+          const pointerClone = pointer.clone();
+          pointerClone.position.x = i === 0 ? -15 : (i % 2 === 0 ? A8[i - 1].position.x + 3.5 : A8[i - 1].position.x + 4);
+          pointerClone.position.z = -11.1;
+          A8[i] = pointerClone;
+          scene.add(pointerClone);
+        }
 
-    for (let i = 0; i <= 3; i++) {
-      const pointerClone = pointer.clone();
-      pointerClone.position.x = i === 0 ? 12.4 : (i % 2 === 0 ? A9[i - 1].position.x + 3.6 : A9[i - 1].position.x + 3.4);
-      pointerClone.position.z = 6.6;
-      A9[i] = pointerClone;
-      scene.add(pointerClone);
-    }
-    for (let i = 0; i <= 3; i++) {
-      const pointerClone = pointer.clone();
-      pointerClone.position.x = i === 0 ? 12.4 : (i % 2 === 0 ? A10[i - 1].position.x + 3.6 : A10[i - 1].position.x + 3.4);
-      pointerClone.position.z = 5.2;
-      A10[i] = pointerClone;
-      scene.add(pointerClone);
-    }
-    for (let i = 0; i <= 3; i++) {
-      const pointerClone = pointer.clone();
-      pointerClone.position.x = i === 0 ? 12.4 : (i % 2 === 0 ? A11[i - 1].position.x + 3.6 : A11[i - 1].position.x + 3.4);
-      pointerClone.position.z = -5.4;
-      A11[i] = pointerClone;
-      scene.add(pointerClone);
-    }
+        for (let i = 0; i <= 3; i++) {
+          const pointerClone = pointer.clone();
+          pointerClone.position.x = i === 0 ? 12.4 : (i % 2 === 0 ? A9[i - 1].position.x + 3.6 : A9[i - 1].position.x + 3.4);
+          pointerClone.position.z = 6.6;
+          A9[i] = pointerClone;
+          scene.add(pointerClone);
+        }
+        for (let i = 0; i <= 3; i++) {
+          const pointerClone = pointer.clone();
+          pointerClone.position.x = i === 0 ? 12.4 : (i % 2 === 0 ? A10[i - 1].position.x + 3.6 : A10[i - 1].position.x + 3.4);
+          pointerClone.position.z = 5.2;
+          A10[i] = pointerClone;
+          scene.add(pointerClone);
+        }
+        for (let i = 0; i <= 3; i++) {
+          const pointerClone = pointer.clone();
+          pointerClone.position.x = i === 0 ? 12.4 : (i % 2 === 0 ? A11[i - 1].position.x + 3.6 : A11[i - 1].position.x + 3.4);
+          pointerClone.position.z = -5.4;
+          A11[i] = pointerClone;
+          scene.add(pointerClone);
+        }
 
-    for (let i = 0; i <= 3; i++) {
-      const pointerClone = pointer.clone();
-      pointerClone.position.x = i === 0 ? 12.4 : (i % 2 === 0 ? A12[i - 1].position.x + 3.6 : A12[i - 1].position.x + 3.4);
-      pointerClone.position.z = -6.8;
-      A12[i] = pointerClone;
-      scene.add(pointerClone);
-    }
+        for (let i = 0; i <= 3; i++) {
+          const pointerClone = pointer.clone();
+          pointerClone.position.x = i === 0 ? 12.4 : (i % 2 === 0 ? A12[i - 1].position.x + 3.6 : A12[i - 1].position.x + 3.4);
+          pointerClone.position.z = -6.8;
+          A12[i] = pointerClone;
+          scene.add(pointerClone);
+        }
 
-    
-    for (let i = 0; i <= 3; i++) {
-      const pointerClone = pointer.clone();
 
-      pointerClone.position.z  = i === 0 ? 4.5 : B1[i - 1].position.z - 3.1;
-      pointerClone.position.x = 29.4;
-      pointerClone.position.y = 24.5;
-      B1[i] = pointerClone;
-      scene.add(pointerClone);
-    }
+        for (let i = 0; i <= 3; i++) {
+          const pointerClone = pointer.clone();
 
-    for (let i = 0; i <= 5; i++) {
-      const pointerClone = pointer.clone();
-      pointerClone.position.x  = i === 0 ? 29.1 : (i % 2 === 0 ? B2[i - 1].position.x - 3.6 : B2[i - 1].position.x - 3.7);
-      pointerClone.position.z = -22.5;
-      pointerClone.position.y = 24.5;
-      B2[i] = pointerClone;
-      scene.add(pointerClone);
-    }
+          pointerClone.position.z = i === 0 ? 4.5 : B1[i - 1].position.z - 3.1;
+          pointerClone.position.x = 29.4;
+          pointerClone.position.y = 24.5;
+          B1[i] = pointerClone;
+          scene.add(pointerClone);
+        }
 
-    for (let i = 0; i <= 2; i++) {
-      const pointerClone = pointer.clone();
-      pointerClone.position.x  = i === 0 ? -9.2 : ( B3[i - 1].position.x + 6.5 );
-      pointerClone.position.z = -22.8;
-      pointerClone.position.y = 22.5;
-      B3[i] = pointerClone;
-      scene.add(pointerClone);
-    }
-  },
-  function (xhr) {
-  },
-  function (error) {
-    console.error(error);
-  }
-);
+        for (let i = 0; i <= 5; i++) {
+          const pointerClone = pointer.clone();
+          pointerClone.position.x = i === 0 ? 29.1 : (i % 2 === 0 ? B2[i - 1].position.x - 3.6 : B2[i - 1].position.x - 3.7);
+          pointerClone.position.z = -22.5;
+          pointerClone.position.y = 24.5;
+          B2[i] = pointerClone;
+          scene.add(pointerClone);
+        }
 
+        for (let i = 0; i <= 2; i++) {
+          const pointerClone = pointer.clone();
+          pointerClone.position.x = i === 0 ? -9.2 : (B3[i - 1].position.x + 6.5);
+          pointerClone.position.z = -22.8;
+          pointerClone.position.y = 22.5;
+          B3[i] = pointerClone;
+          scene.add(pointerClone);
+        }
+      },
+      function (xhr) {
+      },
+      function (error) {
+        console.error(error);
+      }
+    );
 
 
 
