@@ -293,16 +293,20 @@ export class HomePage {
 
     topLight.castShadow = true;
     scene.add(topLight);
-    scene.add(topLight2);
-    scene.add(topLight3)
+    scene.add(topLight2); // Para mejorar las sombras
+    scene.add(topLight3); // Para mejorar las sombras
     const ambientLight = new THREE.AmbientLight(0xffffff, 50); // (color, intensity)
     scene.add(ambientLight);
 
-
-
-
     let pointerRotation = 0;
 
+    
+    function rotatePointers(pointers: THREE.Object3D[], pointerRotation: number) {
+      for (let i = 0; i < pointers.length; i++) {
+        pointers[i].rotation.y = pointerRotation;
+      }
+    }
+    
     //Render the scene
     function animate() {
       requestAnimationFrame(animate);
@@ -310,29 +314,51 @@ export class HomePage {
 
 
       if (A1.length > 0) {
-        pointerRotation += 0.01; // Adjust the speed as needed
+        pointerRotation += 0.05; // Adjust the speed as needed
         pointer.rotation.y = pointerRotation;
-        for (let i = 0; i < A1.length; i++) {
-          // Aplica la rotación a cada pointer del array
-          A1[i].rotation.y += 0.01; // Ejemplo de rotación en el eje X
-        }
+        rotatePointers(A1, pointerRotation);
       }
       if (A2.length > 0) {
-        pointerRotation += 0.01; // Adjust the speed as needed
-        pointer.rotation.y = pointerRotation;
-        for (let i = 0; i < A2.length; i++) {
-          // Aplica la rotación a cada pointer del array
-          A2[i].rotation.y += 0.01; // Ejemplo de rotación en el eje X
-        }
+        rotatePointers(A2, pointerRotation); // Use the function directly
       }
-
       if (A3.length > 0) {
-        pointerRotation += 0.01; // Adjust the speed as needed
-        pointer.rotation.y = pointerRotation;
-        for (let i = 0; i < A3.length; i++) {
-          // Aplica la rotación a cada pointer del array
-          A3[i].rotation.y += 0.01; // Ejemplo de rotación en el eje X
-        }
+        rotatePointers(A3, pointerRotation);
+      }
+      if (A4.length > 0) {
+        rotatePointers(A4, pointerRotation);
+      }
+      if (A5.length > 0) {
+        rotatePointers(A5, pointerRotation);
+      }
+      if (A6.length > 0) {
+        rotatePointers(A6, pointerRotation);
+      }
+      if (A7.length > 0) {
+        rotatePointers(A7, pointerRotation);
+      }
+      if (A8.length > 0) {
+        rotatePointers(A8, pointerRotation);
+      }
+      if (A9.length > 0) {
+        rotatePointers(A9, pointerRotation);
+      }
+      if (A10.length > 0) {
+        rotatePointers(A10, pointerRotation);
+      }
+      if (A11.length > 0) {
+        rotatePointers(A11, pointerRotation);
+      }
+      if (A12.length > 0) {
+        rotatePointers(A12, pointerRotation);
+      }
+      if (B1.length > 0) {
+        rotatePointers(B1, pointerRotation);
+      }
+      if (B2.length > 0) {
+        rotatePointers(B2, pointerRotation);
+      }
+      if (B3.length > 0) {
+        rotatePointers(B3, pointerRotation);
       }
       renderer.render(scene, camera);
     }
@@ -374,6 +400,18 @@ let pointerrender = 'pointer';
 let A1: THREE.Object3D[] = []; // Array to store cloned pointers
 let A2: THREE.Object3D[] = []; // Array to store cloned pointers
 let A3: THREE.Object3D[] = []; // Array to store cloned pointers
+let A4: THREE.Object3D[] = []; // Array to store cloned pointers
+let A5: THREE.Object3D[] = []; // Array to store cloned pointers
+let A6: THREE.Object3D[] = []; // Array to store cloned pointers
+let A7: THREE.Object3D[] = []; // Array to store cloned pointers
+let A8: THREE.Object3D[] = []; // Array to store cloned pointers
+let A9: THREE.Object3D[] = []; // Array to store cloned pointers
+let A10: THREE.Object3D[] = []; // Array to store cloned pointers
+let A11: THREE.Object3D[] = []; // Array to store cloned pointers
+let A12: THREE.Object3D[] = []; // Array to store cloned pointers
+let B1: THREE.Object3D[] = []; // Array to store cloned pointers
+let B2: THREE.Object3D[] = []; // Array to store cloned pointers
+let B3: THREE.Object3D[] = []; // Array to store cloned pointers
 
 renderer.setSize(window.innerWidth, window.innerHeight);
 this.container.appendChild(renderer.domElement);
@@ -386,7 +424,6 @@ loader.load(
     pointer.scale.set(0.4, 0.4, 0.4);
     scene.add(pointer);
     moveSphereWithKeyboard(pointer,renderer,scene);
-
     for (let i = 0; i <= 9; i++) {
       A1[i] = pointer.clone();
       A1[i].position.x = i === 0 ? -8.1 : (i % 2) ? A1[i - 1].position.x + 4 : A1[i - 1].position.x + 3;
@@ -400,13 +437,112 @@ loader.load(
       scene.add(A2[i]);
     }
 
-    for (let i = 0; i <= 1; i++) {
-      A3[i] = pointer.clone();
-      A3[i].position.x = -100;
-      A3[i].position.z = 11.7;
-      scene.add(A3[i]);
+    for (let i = 0; i <= 5; i++) {
+      const pointerClone = pointer.clone();
+      pointerClone.position.z = 12.1;
+      pointerClone.position.x = i === 0 ? -15 : (i % 2 === 0 ? A3[i - 1].position.x + 3.5 : A3[i - 1].position.x + 4);
+      A3[i] = pointerClone;
+      scene.add(pointerClone);
     }
 
+    for (let i = 0; i <= 5; i++) {
+      const pointerClone = pointer.clone();
+      pointerClone.position.x = i === 0 ? -15 : (i % 2 === 0 ? A4[i - 1].position.x + 3.5 : A4[i - 1].position.x + 4);
+      pointerClone.position.z = 9.7;
+      A4[i] = pointerClone;
+      scene.add(pointerClone);
+    }
+
+    for (let i = 0; i <= 5; i++) {
+      const pointerClone = pointer.clone();
+      pointerClone.position.x = i === 0 ? -15 : (i % 2 === 0 ? A5[i - 1].position.x + 3.5 : A5[i - 1].position.x + 4);
+      pointerClone.position.z = 1.3;
+      A5[i] = pointerClone;
+      scene.add(pointerClone);
+    }
+
+    for (let i = 0; i <= 5; i++) {
+      const pointerClone = pointer.clone();
+      pointerClone.position.x = i === 0 ? -15 : (i % 2 === 0 ? A6[i - 1].position.x + 3.5 : A6[i - 1].position.x + 4);
+      pointerClone.position.z = -0.5;
+      A6[i] = pointerClone;
+      scene.add(pointerClone);
+    }
+
+    for (let i = 0; i <= 5; i++) {
+      const pointerClone = pointer.clone();
+      pointerClone.position.x = i === 0 ? -15 : (i % 2 === 0 ? A7[i - 1].position.x + 3.5 : A7[i - 1].position.x + 4);
+      pointerClone.position.z = -9.1;
+      A7[i] = pointerClone;
+      scene.add(pointerClone);
+    }
+
+    for (let i = 0; i <= 5; i++) {
+      const pointerClone = pointer.clone();
+      pointerClone.position.x = i === 0 ? -15 : (i % 2 === 0 ? A8[i - 1].position.x + 3.5 : A8[i - 1].position.x + 4);
+      pointerClone.position.z = -11.1;
+      A8[i] = pointerClone;
+      scene.add(pointerClone);
+    }
+
+    for (let i = 0; i <= 3; i++) {
+      const pointerClone = pointer.clone();
+      pointerClone.position.x = i === 0 ? 12.4 : (i % 2 === 0 ? A9[i - 1].position.x + 3.6 : A9[i - 1].position.x + 3.4);
+      pointerClone.position.z = 6.6;
+      A9[i] = pointerClone;
+      scene.add(pointerClone);
+    }
+    for (let i = 0; i <= 3; i++) {
+      const pointerClone = pointer.clone();
+      pointerClone.position.x = i === 0 ? 12.4 : (i % 2 === 0 ? A10[i - 1].position.x + 3.6 : A10[i - 1].position.x + 3.4);
+      pointerClone.position.z = 5.2;
+      A10[i] = pointerClone;
+      scene.add(pointerClone);
+    }
+    for (let i = 0; i <= 3; i++) {
+      const pointerClone = pointer.clone();
+      pointerClone.position.x = i === 0 ? 12.4 : (i % 2 === 0 ? A11[i - 1].position.x + 3.6 : A11[i - 1].position.x + 3.4);
+      pointerClone.position.z = -5.4;
+      A11[i] = pointerClone;
+      scene.add(pointerClone);
+    }
+
+    for (let i = 0; i <= 3; i++) {
+      const pointerClone = pointer.clone();
+      pointerClone.position.x = i === 0 ? 12.4 : (i % 2 === 0 ? A12[i - 1].position.x + 3.6 : A12[i - 1].position.x + 3.4);
+      pointerClone.position.z = -6.8;
+      A12[i] = pointerClone;
+      scene.add(pointerClone);
+    }
+
+    
+    for (let i = 0; i <= 3; i++) {
+      const pointerClone = pointer.clone();
+
+      pointerClone.position.z  = i === 0 ? 4.5 : B1[i - 1].position.z - 3.1;
+      pointerClone.position.x = 29.4;
+      pointerClone.position.y = 24.5;
+      B1[i] = pointerClone;
+      scene.add(pointerClone);
+    }
+
+    for (let i = 0; i <= 5; i++) {
+      const pointerClone = pointer.clone();
+      pointerClone.position.x  = i === 0 ? 29.1 : (i % 2 === 0 ? B2[i - 1].position.x - 3.6 : B2[i - 1].position.x - 3.7);
+      pointerClone.position.z = -22.5;
+      pointerClone.position.y = 24.5;
+      B2[i] = pointerClone;
+      scene.add(pointerClone);
+    }
+
+    for (let i = 0; i <= 2; i++) {
+      const pointerClone = pointer.clone();
+      pointerClone.position.x  = i === 0 ? -9.2 : ( B3[i - 1].position.x + 6.5 );
+      pointerClone.position.z = -22.8;
+      pointerClone.position.y = 22.5;
+      B3[i] = pointerClone;
+      scene.add(pointerClone);
+    }
   },
   function (xhr) {
   },
