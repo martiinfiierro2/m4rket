@@ -601,64 +601,56 @@ export class HomePage {
       });
     }
 
-// Define la variable container y obtén una referencia al elemento HTML
-const container: HTMLElement | null = document.getElementById('canvas');
+    //Prueba de toocar objetos
 
-// Verifica si el contenedor se ha encontrado correctamente
-if (container) {
-    // Agregar un event listener para eventos táctiles en el canvas
-    container.addEventListener('touchstart', onTouchStart, false);
+    const container: HTMLElement | null = document.getElementById('canvas');
 
-    // Función para manejar eventos táctiles
-    function onTouchStart(event: TouchEvent) {
-        // Verifica si hay algún toque en el evento
+    const intersectedObjectsMap = new Map<THREE.Object3D, THREE.Object3D>();
+    
+    if (container) {
+      container.addEventListener('touchstart', onTouchStart, false);
+    
+      function onTouchStart(event: TouchEvent) {
         if (event.touches.length === 1) {
-            // Calcula la posición del toque dentro del canvas
-            const touch = event.touches[0];
-            const rect = container!.getBoundingClientRect(); // Utiliza verificación de nulidad opcional
-            const mouse = new THREE.Vector2();
-            mouse.x = ((touch.clientX - rect.left) / container!.clientWidth) * 2 - 1; // Utiliza verificación de nulidad opcional
-            mouse.y = -((touch.clientY - rect.top) / container!.clientHeight) * 2 + 1; // Utiliza verificación de nulidad opcional
-
-            // Crea un rayo desde la cámara hasta la posición del toque
-            const raycaster = new THREE.Raycaster();
-            raycaster.setFromCamera(mouse, camera);
-
-            // Encuentra los objetos intersectados por el rayo
-            const intersects = raycaster.intersectObjects(scene.children, true);
-
-            // Si se han encontrado objetos intersectados
+          const touch = event.touches[0];
+          const rect = container!.getBoundingClientRect(); // Utiliza verificación de nulidad opcional
+          const mouse = new THREE.Vector2();
+          mouse.x = ((touch.clientX - rect.left) / container!.clientWidth) * 2 - 1; // Utiliza verificación de nulidad opcional
+          mouse.y = -((touch.clientY - rect.top) / container!.clientHeight) * 2 + 1; // Utiliza verificación de nulidad opcional
+    
+          const raycaster = new THREE.Raycaster();
+          raycaster.setFromCamera(mouse, camera);
+    
+          let objectFoundInA1 = false;
+    
+          A1.forEach((originalObject, index) => {
+            const intersects = raycaster.intersectObject(originalObject, true);
+    
             if (intersects.length > 0) {
-                // Muestra información sobre el objeto tocado en la consola
-                console.log('Objeto tocado:', intersects[0].object);
+              intersectedObjectsMap.set(originalObject, intersects[0].object);
+              objectFoundInA1 = true;
+              
+              // Show array and position
+              console.log(`Array: A1`);
+              console.log(`Posición: ${index}`);
             }
+          });
+    
+          if (objectFoundInA1) {
+            // Object found in A1, message already displayed in loop
+          } else {
+            console.log("No se ha encontrado ninguna intersección con los objetos del array A1.");
+          }
         }
+      }
+    } else {
+      console.error("No se pudo encontrar el contenedor con el ID 'canvas'");
     }
-} else {
-    console.error("No se pudo encontrar el contenedor con el ID 'canvas'");
-}
 
 
 
-
-
-
-
-
-
-
-
-
-
-
+    
     animate();
-
-
-
-
-
-
-
   }
 
 
