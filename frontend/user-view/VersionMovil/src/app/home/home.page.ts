@@ -3,6 +3,7 @@ import { ProductosService } from "../services/productos.service";
 import { DrawerComponent } from '../components/drawer/drawer.component';
 import { environment } from '../environments/environment';
 import { getLocaleFirstDayOfWeek } from '@angular/common';
+import { EstadisticasService } from '../services/estadisticas.service';
 
 
 export interface Producto{
@@ -82,7 +83,8 @@ export class HomePage {
   tokenUsuario = sessionStorage.getItem('tokenUsuario') || localStorage.getItem('tokenUsuario');
 
 
-  constructor(private productosService: ProductosService) {}
+  constructor(private productosService: ProductosService,
+    private estadisticasService: EstadisticasService) {}
     
   
   //VERSION ANTIGUA
@@ -93,10 +95,24 @@ export class HomePage {
 
 
   //FUNCIONES YA CREADAS DE LA ANTIGUA VERSION LISTA DE LA COMPRA
-  incrementar(productoDetalle: any) {
+incrementar(productoDetalle: any) {
     productoDetalle.cantidad++;
     console.log('Nueva cantidad = ' +  productoDetalle.cantidad)
     this.actualizarCantidad(productoDetalle.idProducto, productoDetalle.cantidad, productoDetalle.idLista) 
+    let tipo = "anadido";
+    let fecha = new Date();
+    this.estadistica(productoDetalle.idProducto, tipo, fecha);
+}
+
+//Estadisticas
+estadistica(id: any, tipo: any, fecha: any){
+  let formData = new FormData();
+  if(tipo == "anadido" || tipo == "eliminado"){
+    formData.append('nombre', tipo);
+    formData.append('idProd', id);
+    formData.append('fecha', fecha);
+    this.estadisticasService.postContador(formData);
+  }
 }
 
 decrementar(productoDetalle: any) {
@@ -216,10 +232,6 @@ actualizarCantidad(idProd: string, nuevaCantidad: number, idLista: string) {
       }
     );
 }
-
-
-//FUNCIONES ANTIGUAS CREADAS PARA EL BUSCADOR
-
 
 
 }
