@@ -277,6 +277,7 @@ export class EstadisticasComponent {
           contador.value = res.datosContadores[index].totalCount;
           this.eliminados.push(contador);
         }
+        console.log(this.eliminados);
         this.configurarGraficoEliminados();
       } catch (error) {
         console.error(error);

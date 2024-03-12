@@ -13,10 +13,18 @@ export class EstadisticasService {
   private url: string = environment.base_url + '/contadores';
   private url2: string = environment.base_url + '/tiempos';
 
-  private token = localStorage.getItem('tokenUsuario');
-  private cabeceras = new HttpHeaders({
-    'x-token': this.token
-  });;
+  private token: string|any;
+  private cabeceras: any;
+
+  //CREACIÓN CABECERA CON TOKEN USUARIO
+  cargarCabeceras(){
+    this.token =  localStorage.getItem('tokenUsuario');
+    //console.log('El token es: ' + this.token);
+    this.cabeceras = new HttpHeaders({
+      'x-token': this.token
+    });
+    //console.log('La cabecera es: ' + this.cabeceras);
+  }
 
   
   //CRUD
@@ -59,8 +67,16 @@ export class EstadisticasService {
     return this.http.get(urlCompleta, {headers: this.cabeceras});
   }
 
-  postContador(dataForm: any){
-    return this.http.post(this.url, dataForm, {headers: this.cabeceras});
+  postContador(body: any){
+    this.cargarCabeceras();
+    return this.http.post(this.url, body, {headers: this.cabeceras}).subscribe(
+      (res) => {
+        console.log('Respuesta correcta:', res);
+      },
+      (error) => {
+        console.error('Error en la solicitud Post: again', error);
+      }
+    );
   }
 
   deleteContador(idCont: string){

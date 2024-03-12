@@ -3,6 +3,8 @@ import { ProductosService } from "../services/productos.service";
 import { DrawerComponent } from '../components/drawer/drawer.component';
 import { environment } from '../environments/environment';
 import { getLocaleFirstDayOfWeek } from '@angular/common';
+import { EstadisticasService } from '../services/estadisticas.service';
+import { json } from 'express';
 
 
 export interface Producto{
@@ -46,6 +48,13 @@ interface ProductoDetalle {
   contador: boolean,
 }
 
+interface Stats {
+  nombre: string,
+  idProd: number,
+  qr: string | null,
+  fecha: Date
+}
+
 
 @Component({
   selector: 'app-home',
@@ -82,7 +91,8 @@ export class HomePage {
   tokenUsuario = sessionStorage.getItem('tokenUsuario') || localStorage.getItem('tokenUsuario');
 
 
-  constructor(private productosService: ProductosService) {}
+  constructor(private productosService: ProductosService,
+    private estadisticasService: EstadisticasService) {}
     
   
   //VERSION ANTIGUA
@@ -93,20 +103,34 @@ export class HomePage {
 
 
   //FUNCIONES YA CREADAS DE LA ANTIGUA VERSION LISTA DE LA COMPRA
-  incrementar(productoDetalle: any) {
+incrementar(productoDetalle: any) {
     productoDetalle.cantidad++;
     console.log('Nueva cantidad = ' +  productoDetalle.cantidad)
     this.actualizarCantidad(productoDetalle.idProducto, productoDetalle.cantidad, productoDetalle.idLista) 
+    let tipo = "anadido";
+    let fecha = new Date();
+    this.estadistica(productoDetalle.idProducto, tipo, fecha);
+}
+
+//Estadisticas
+estadistica(id: any, tipo: any, fecha: any){
+  const post: Stats = {
+    nombre: tipo,
+    idProd: id,
+    qr: null,
+    fecha: fecha
+  };
+  console.log(post);
+  this.estadisticasService.postContador(post);
 }
 
 decrementar(productoDetalle: any) {
-  console.log('El id de la lista es: ' + productoDetalle.idLista);
-  if (productoDetalle.cantidad > 1) {
-    productoDetalle.cantidad--;
-    console.log('Nueva cantidad = ' +  productoDetalle.cantidad)
-    this.actualizarCantidad(productoDetalle.idProducto, productoDetalle.cantidad, productoDetalle.idLista)
-  } else {
-  }
+  productoDetalle.cantidad--;
+  console.log('Nueva cantidad = ' +  productoDetalle.cantidad)
+  this.actualizarCantidad(productoDetalle.idProducto, productoDetalle.cantidad, productoDetalle.idLista)
+  let tipo = "eliminado";
+  let fecha = new Date();
+  this.estadistica(productoDetalle.idProducto, tipo, fecha);
 }
 
 eliminar(productoDetalle: any) {
@@ -216,10 +240,6 @@ actualizarCantidad(idProd: string, nuevaCantidad: number, idLista: string) {
       }
     );
 }
-
-
-//FUNCIONES ANTIGUAS CREADAS PARA EL BUSCADOR
-
 
 
 }
