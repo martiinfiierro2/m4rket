@@ -65,16 +65,6 @@ async function obtenerDatosContadores(req, res) {
 
 const crearDatosContadores = async(req, res) => {
     try{
-        if(req.body.idProd){
-            const producto = await Producto.findOne({ where: { id: req.body.idProd }});
-            if(!producto){
-                return res.json({
-                    ok: false,
-                    msg: 'El id del producto debe ser válido'
-                });
-            }
-        }
-
         const datosContador = new DatosContadores(req.body);
         await datosContador.save();
 
