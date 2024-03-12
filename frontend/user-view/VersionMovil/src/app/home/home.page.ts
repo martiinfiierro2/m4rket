@@ -1,3 +1,5 @@
+
+
 import { Component, ViewChild } from '@angular/core';
 import { ProductosService } from "../services/productos.service";
 import { DrawerComponent } from '../components/drawer/drawer.component';
@@ -604,8 +606,8 @@ export class HomePage {
     }
 */
     //Prueba de tocar objetos
-
-    const container: HTMLElement | null = document.getElementById('canvas');
+    
+const container: HTMLElement | null = document.getElementById('canvas');
 
 let intersectedObjectsMap: Map<THREE.Object3D, THREE.Object3D>;
 
@@ -684,17 +686,10 @@ if (container) {
   console.error("No se pudo encontrar el contenedor con el ID 'canvas'");
 }
 
+
+
     animate();
   }
-
-
-
-
-
-
-
-  //FUNCIONES ANTIGUAS CREADAS PARA EL BUSCADOR
-
 
 
 }
