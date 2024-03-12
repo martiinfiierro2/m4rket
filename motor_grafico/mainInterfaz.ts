@@ -18,5 +18,5 @@ const sombrero: TNodo = motor.crearModelo( personaje, glMatrix.vec3.fromValues(0
 
 
         //                  RAIZ
-        //     cam          luz             presonaje
+        //     cam          luz             personaje
         //                          cuerpo               sombrero

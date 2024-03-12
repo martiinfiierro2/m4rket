@@ -1,7 +1,7 @@
 import { TNodo } from './TNodo';
-import { TCamara } from "./TCamara";
-import { TLuz } from "./TLuz";
-import { TModelo } from "./TModelo";
+import { ECamara } from "./ECamara";
+import { ELuz } from "./ELuz";
+import { EModelo } from "./EModelo";
 
 import { TGestorRecursos } from "./TGestorRecursos";
 import * as glMatrix from 'gl-matrix';
@@ -28,7 +28,7 @@ export class TMotorTAG {
         return nodoCreado;
     }
 
-    crearCamara( padre: TNodo|null, trasl: glMatrix.vec3, rot: glMatrix.vec3, esc: glMatrix.vec3, cercano: number, lejano: number){
+    crearCamara( padre: TNodo|null, trasl: glMatrix.vec3, rot: glMatrix.vec3, esc: glMatrix.vec3, perspectiva: Boolean, paralela: Boolean, cercano: number, lejano: number){
         
         let nodoCreado, entidadCamara;
 
@@ -37,7 +37,7 @@ export class TMotorTAG {
             padre = this.raiz;
         }
         padre.agregarHijo(nodoCreado);
-        entidadCamara = new TCamara(); //falta añadir los atributos pasados por param.
+        entidadCamara = new ECamara( perspectiva, paralela, cercano, lejano); //falta añadir los atributos pasados por param.
 
         nodoCreado.setEntidad(entidadCamara);
         nodoCreado.setTraslacion(trasl);
@@ -58,7 +58,7 @@ export class TMotorTAG {
         }
         padre.agregarHijo(nodoCreado);
 
-        entidadLuz = new TLuz(); //falta añadir los atributos pasados por param.
+        entidadLuz = new ELuz(); //falta añadir los atributos pasados por param.
         nodoCreado.setEntidad(entidadLuz);
         nodoCreado.setTraslacion(trasl);
         nodoCreado.setRotacion(rot);
@@ -78,7 +78,7 @@ export class TMotorTAG {
         }
         padre.agregarHijo(nodoCreado);
         recursoMalla = this.gestorRecursos.getRecurso(nombreFichero);
-        entidadModelo = new TModelo(recursoMalla);
+        entidadModelo = new EModelo(recursoMalla);
         nodoCreado.setEntidad(entidadModelo);
         nodoCreado.setTraslacion(trasl);
         nodoCreado.setRotacion(rot);
