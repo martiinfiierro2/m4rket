@@ -9,7 +9,7 @@ const router = Router(); //Declaramos un router de tipo Router
 
 router.get('/contadores', validarJWT, obtenerDatosContadores);
 
-router.post('/contadores', [ 
+router.post('/contadores', [
     validarJWT,
     check('nombre', "El nombre de la estadística está vacío").not().isEmpty(),
     check('fecha', "La fecha de inicio está vacía").not().isEmpty(),
