@@ -6,8 +6,13 @@ import { getLocaleFirstDayOfWeek } from '@angular/common';
 import { EstadisticasService } from '../services/estadisticas.service';
 import { json } from 'express';
 
+//modelo todo
+import * as THREE from 'three'; // we need @types/three for this to work (next to three package)
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { DomElementSchemaRegistry } from '@angular/compiler';
 
-export interface Producto{
+export interface Producto {
   id: string,
   nombre: string,
   marca: string,
@@ -26,12 +31,12 @@ export interface Producto{
   foto: string,
   precio: Float32Array,
   //Ubicacions: Ubicaciones[]
- //Promocions: Promociones[]
+  //Promocions: Promociones[]
 
- cantidad: number,
+  cantidad: number,
 }
 
-export interface ListaCompra{
+export interface ListaCompra {
   id: string,
   idUsu: string,
   idProd: string,
@@ -63,9 +68,9 @@ interface Stats {
 })
 export class HomePage {
   //VERSION ANTIGUA
-  productos: Producto [] = [];
+  productos: Producto[] = [];
   private idUsu: string = '';
-  listaCompra: ListaCompra [] = [];
+  listaCompra: ListaCompra[] = [];
 
   private idListaUsu: string = '';
   detallesProductos: ProductoDetalle[] = [];
@@ -83,7 +88,7 @@ export class HomePage {
     // Llama a la función del componente Drawer
     //this.drawerComponent.getProducto(producto);
     this.drawerComponent.getProducto(idProd);
-    
+
   }
 
   //variables para mostrar foto
@@ -133,102 +138,103 @@ decrementar(productoDetalle: any) {
   this.estadistica(productoDetalle.idProducto, tipo, fecha);
 }
 
-eliminar(productoDetalle: any) {
-  this.borrarProd(productoDetalle.idLista);
-}
-
-getUsuarioLog() {
-  const idUsuario = localStorage.getItem('idUsuario');
-  
-  if (idUsuario !== null) {
-    this.idUsu = idUsuario;
-    //console.log('El usuario logueado es: '+ this.idUsu);
-  } else {
-    console.error('El valor de idUsuario en localStorage es nulo.');
+  eliminar(productoDetalle: any) {
+    this.borrarProd(productoDetalle.idLista);
   }
-}
-/*
-getProducto(idProd: string){
-  this.productosService.getProductoId(idProd).subscribe( result => {
-    this.productoSelect = result.productos;
-    console.log(this.productoSelect.nombre);
-  });
-}
-*/
-//Funciones CRUD LISTA COMPRA
 
+  getUsuarioLog() {
+    const idUsuario = localStorage.getItem('idUsuario');
 
-getListaCompraUsu() {
-this.productosService.getListaCompra(this.idUsu).subscribe((result) => {
-  if (result.listacompra) {
-    this.listaCompra = result.listacompra.map((item: ListaCompra) => 
-    ({ idProd: item.idProd, 
-      cantidad: item.cantidad, 
-      id: item.id
-    }));
-
-   // console.log(this.listaCompra);
-
-
-    const detallesProductos: ProductoDetalle[] = [];
-
-    this.listaCompra.forEach((productoCompra) => {
-      this.getDetalleProducto(productoCompra.idProd, detallesProductos, productoCompra.cantidad, productoCompra.id);
+    if (idUsuario !== null) {
+      this.idUsu = idUsuario;
+      //console.log('El usuario logueado es: '+ this.idUsu);
+    } else {
+      console.error('El valor de idUsuario en localStorage es nulo.');
+    }
+  }
+  /*
+  getProducto(idProd: string){
+    this.productosService.getProductoId(idProd).subscribe( result => {
+      this.productoSelect = result.productos;
+      console.log(this.productoSelect.nombre);
     });
-  } else {
-    console.error('Error en la búsqueda dentro de lssta compra.');
   }
-});
-}
+  */
+  //Funciones CRUD LISTA COMPRA
 
-getDetalleProducto(idProd: string, detallesProductos: ProductoDetalle[], cantidadProd: number, idLista: string) {
-  const quantity = cantidadProd;
-  const idP = idProd;
-  const idL = idLista;
-  let mostrarContador = false;
-  if(quantity > 0) {
-    mostrarContador = true;
-  }else{
-    mostrarContador = false;
+
+  getListaCompraUsu() {
+    this.productosService.getListaCompra(this.idUsu).subscribe((result) => {
+      if (result.listacompra) {
+        this.listaCompra = result.listacompra.map((item: ListaCompra) =>
+        ({
+          idProd: item.idProd,
+          cantidad: item.cantidad,
+          id: item.id
+        }));
+
+        // console.log(this.listaCompra);
+
+
+        const detallesProductos: ProductoDetalle[] = [];
+
+        this.listaCompra.forEach((productoCompra) => {
+          this.getDetalleProducto(productoCompra.idProd, detallesProductos, productoCompra.cantidad, productoCompra.id);
+        });
+      } else {
+        console.error('Error en la búsqueda dentro de lssta compra.');
+      }
+    });
   }
-  this.productosService.getProductoId(idProd).subscribe((producto) => {
-    const productoDetalle: ProductoDetalle = {
-      nombre: producto.productos.nombre,
-      precio: producto.productos.precio,
-      foto: producto.productos.foto,
-      cantidad: quantity,
-      idProducto: idP,
-      idLista: idL,
-      contador: mostrarContador,
+
+  getDetalleProducto(idProd: string, detallesProductos: ProductoDetalle[], cantidadProd: number, idLista: string) {
+    const quantity = cantidadProd;
+    const idP = idProd;
+    const idL = idLista;
+    let mostrarContador = false;
+    if (quantity > 0) {
+      mostrarContador = true;
+    } else {
+      mostrarContador = false;
+    }
+    this.productosService.getProductoId(idProd).subscribe((producto) => {
+      const productoDetalle: ProductoDetalle = {
+        nombre: producto.productos.nombre,
+        precio: producto.productos.precio,
+        foto: producto.productos.foto,
+        cantidad: quantity,
+        idProducto: idP,
+        idLista: idL,
+        contador: mostrarContador,
+      };
+      detallesProductos.push(productoDetalle);
+
+      //console.log('Detalles del producto:', productoDetalle);
+      //console.log('Los productos son: ', detallesProductos);
+
+      this.detallesProductos = detallesProductos;
+    });
+  }
+  //Borrar de la lista de la compra
+
+  borrarProd(idLista: string) {
+    this.productosService.deleteListaCompra(idLista).subscribe((result) => {
+      this.getListaCompraUsu();
+    });
+  }
+
+  //Actualizar cantidad de producto en la lista
+
+  actualizarCantidad(idProd: string, nuevaCantidad: number, idLista: string) {
+    const fechaActual = new Date().toISOString().split('T')[0];
+    const body = {
+      idUsu: this.idUsu,
+      idProd: idProd,
+      fecha: fechaActual,
+      cantidad: nuevaCantidad
     };
-    detallesProductos.push(productoDetalle);
 
-    //console.log('Detalles del producto:', productoDetalle);
-    //console.log('Los productos son: ', detallesProductos);
-
-    this.detallesProductos = detallesProductos;
-  });
-}
-//Borrar de la lista de la compra
-
-borrarProd(idLista: string){
-this.productosService.deleteListaCompra(idLista).subscribe((result) =>{
-this.getListaCompraUsu();
-});
-}
-
-//Actualizar cantidad de producto en la lista
-
-actualizarCantidad(idProd: string, nuevaCantidad: number, idLista: string) {
-  const fechaActual = new Date().toISOString().split('T')[0];
-  const body = {
-    idUsu: this.idUsu,
-    idProd: idProd,
-    fecha: fechaActual, 
-    cantidad: nuevaCantidad
-  };
-
-  console.log('Cuerpo de la solicitud:', body);
+    console.log('Cuerpo de la solicitud:', body);
 
   this.productosService.putListaCompra(idLista, body)
     .subscribe(
