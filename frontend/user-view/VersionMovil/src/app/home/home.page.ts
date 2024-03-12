@@ -3,13 +3,13 @@ import { ProductosService } from "../services/productos.service";
 import { DrawerComponent } from '../components/drawer/drawer.component';
 import { environment } from '../environments/environment';
 import { getLocaleFirstDayOfWeek } from '@angular/common';
+import { AlertController } from '@ionic/angular';
 
 //modelo todo
 import * as THREE from 'three'; // we need @types/three for this to work (next to three package)
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DomElementSchemaRegistry } from '@angular/compiler';
-
 
 export interface Producto {
   id: string,
@@ -88,7 +88,7 @@ export class HomePage {
   tokenUsuario = sessionStorage.getItem('tokenUsuario') || localStorage.getItem('tokenUsuario');
 
 
-  constructor(private productosService: ProductosService) { }
+  constructor(private productosService: ProductosService, private alertCtrl: AlertController) { }
 
 
   //VERSION ANTIGUA
@@ -225,8 +225,8 @@ export class HomePage {
   }
 
 
-  // ESTO ES SOLO MODELO
-  container: any; // any  = ugly
+  // ESTO ES SOLO MODELO 
+  container: any;
 
   stuff() {
     this.container = document.getElementById('canvas');
@@ -240,18 +240,15 @@ export class HomePage {
       0.1,
       1000
     );
-
+    const raycaster = new THREE.Raycaster();
     const renderer = new THREE.WebGLRenderer({ alpha: true });
     const loader = new GLTFLoader();
-
-    //camera.position.set(4,10,-6);
     camera.position.set(-40.36, 28.89, 54.87);
-    //camera.rotation.set(0.2,2*(Math.PI / 2),0);
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.mouseButtons = {
       LEFT: THREE.MOUSE.ROTATE,
       MIDDLE: THREE.MOUSE.DOLLY,
-      RIGHT: THREE.MOUSE.PAN //Esto hay que comentarlo
+      //RIGHT: THREE.MOUSE.PAN //Esto hay que comentarlo
     }
 
     controls.touches = {
@@ -269,6 +266,8 @@ export class HomePage {
     } else {
       objToRender = 'market';
     }
+
+
     let object;
     renderer.setSize(window.innerWidth, window.innerHeight);
     this.container.appendChild(renderer.domElement);
@@ -276,9 +275,7 @@ export class HomePage {
       `assets/${objToRender}/market.glb`,
       function (glb) {
         object = glb.scene;
-        //object.scale.set(2,2,2);
         object.position.set(0, 18, -13);
-        //object.position.set(20,-20,-40);
         scene.add(object);
       },
       function (xhr) {
@@ -287,8 +284,6 @@ export class HomePage {
         console.error(error);
       }
     );
-
-    //camera.position.set(0, 1, 1);
 
 
 
@@ -321,11 +316,7 @@ export class HomePage {
       scene.add(topLight3);
     }
 
-
-
-
     let pointerRotation = 0;
-
 
     function rotatePointers(pointers: THREE.Object3D[], pointerRotation: number) {
       for (let i = 0; i < pointers.length; i++) {
@@ -334,20 +325,18 @@ export class HomePage {
     }
 
 
-
-    //Render the scene
     function animate() {
       requestAnimationFrame(animate);
       controls.update();
 
 
       if (A1.length > 0) {
-        pointerRotation += 0.05; // Adjust the speed as needed
+        pointerRotation += 0.05;
         pointer.rotation.y = pointerRotation;
         rotatePointers(A1, pointerRotation);
       }
       if (A2.length > 0) {
-        rotatePointers(A2, pointerRotation); // Use the function directly
+        rotatePointers(A2, pointerRotation);
       }
       if (A3.length > 0) {
         rotatePointers(A3, pointerRotation);
@@ -392,13 +381,8 @@ export class HomePage {
     }
 
     function obtenerPosicionCamara(camera: THREE.PerspectiveCamera) {
-      // Crea un vector para almacenar la posición
       const posicionVector = new THREE.Vector3();
-
-      // Obtiene la posición mundial de la cámara
       camera.getWorldPosition(posicionVector);
-
-      // Devuelve la posición
       return posicionVector;
     }
 
@@ -414,6 +398,7 @@ export class HomePage {
         posicion.z.toFixed(2)
       );
     }
+    
 
     // Actualiza la posición de la cámara cada vez que se mueve
     // controls.addEventListener("change", actualizarPosicion);
@@ -422,24 +407,24 @@ export class HomePage {
     //actualizarPosicion();
 
 
-    //Pointer
+    //Pointers //Indicadores
     let pointer: THREE.Object3D;
     let pointerrender = 'pointer';
-    let A1: THREE.Object3D[] = []; // Array to store cloned pointers
-    let A2: THREE.Object3D[] = []; // Array to store cloned pointers
-    let A3: THREE.Object3D[] = []; // Array to store cloned pointers
-    let A4: THREE.Object3D[] = []; // Array to store cloned pointers
-    let A5: THREE.Object3D[] = []; // Array to store cloned pointers
-    let A6: THREE.Object3D[] = []; // Array to store cloned pointers
-    let A7: THREE.Object3D[] = []; // Array to store cloned pointers
-    let A8: THREE.Object3D[] = []; // Array to store cloned pointers
-    let A9: THREE.Object3D[] = []; // Array to store cloned pointers
-    let A10: THREE.Object3D[] = []; // Array to store cloned pointers
-    let A11: THREE.Object3D[] = []; // Array to store cloned pointers
-    let A12: THREE.Object3D[] = []; // Array to store cloned pointers
-    let B1: THREE.Object3D[] = []; // Array to store cloned pointers
-    let B2: THREE.Object3D[] = []; // Array to store cloned pointers
-    let B3: THREE.Object3D[] = []; // Array to store cloned pointers
+    let A1: THREE.Object3D[] = []; // Frutas 1
+    let A2: THREE.Object3D[] = []; // Frutas 2
+    let A3: THREE.Object3D[] = []; // Pasillo1.1
+    let A4: THREE.Object3D[] = []; // Pasillo1.2
+    let A5: THREE.Object3D[] = []; // Pasillo 2.1
+    let A6: THREE.Object3D[] = []; // Pasillo 2.2
+    let A7: THREE.Object3D[] = []; // Pasillo 3.1
+    let A8: THREE.Object3D[] = []; // Pasillo 3.2
+    let A9: THREE.Object3D[] = [];  // Pasillos pegados 1.1
+    let A10: THREE.Object3D[] = [];  // Pasillos pegados 1.2
+    let A11: THREE.Object3D[] = []; //Pasillos pegados 2.1
+    let A12: THREE.Object3D[] = [];  // Pasillos pegados 2.2
+    let B1: THREE.Object3D[] = []; // Estanterías finas altas
+    let B2: THREE.Object3D[] = []; // Estanterías grandes
+    let B3: THREE.Object3D[] = [];  // Estantería Frío
 
     renderer.setSize(window.innerWidth, window.innerHeight);
     this.container.appendChild(renderer.domElement);
@@ -450,7 +435,7 @@ export class HomePage {
         pointer = glb.scene;
         pointer.position.set(-8.1, 20.6, 22.6);
         pointer.scale.set(0.4, 0.4, 0.4);
-        scene.add(pointer);
+        //scene.add(pointer); // Para añadir el pointer que utilizo para saber pos
         moveSphereWithKeyboard(pointer, renderer, scene);
         for (let i = 0; i <= 9; i++) {
           A1[i] = pointer.clone();
@@ -615,6 +600,55 @@ export class HomePage {
         renderer.render(scene, camera);
       });
     }
+
+// Define la variable container y obtén una referencia al elemento HTML
+const container: HTMLElement | null = document.getElementById('canvas');
+
+// Verifica si el contenedor se ha encontrado correctamente
+if (container) {
+    // Agregar un event listener para eventos táctiles en el canvas
+    container.addEventListener('touchstart', onTouchStart, false);
+
+    // Función para manejar eventos táctiles
+    function onTouchStart(event: TouchEvent) {
+        // Verifica si hay algún toque en el evento
+        if (event.touches.length === 1) {
+            // Calcula la posición del toque dentro del canvas
+            const touch = event.touches[0];
+            const rect = container!.getBoundingClientRect(); // Utiliza verificación de nulidad opcional
+            const mouse = new THREE.Vector2();
+            mouse.x = ((touch.clientX - rect.left) / container!.clientWidth) * 2 - 1; // Utiliza verificación de nulidad opcional
+            mouse.y = -((touch.clientY - rect.top) / container!.clientHeight) * 2 + 1; // Utiliza verificación de nulidad opcional
+
+            // Crea un rayo desde la cámara hasta la posición del toque
+            const raycaster = new THREE.Raycaster();
+            raycaster.setFromCamera(mouse, camera);
+
+            // Encuentra los objetos intersectados por el rayo
+            const intersects = raycaster.intersectObjects(scene.children, true);
+
+            // Si se han encontrado objetos intersectados
+            if (intersects.length > 0) {
+                // Muestra información sobre el objeto tocado en la consola
+                console.log('Objeto tocado:', intersects[0].object);
+            }
+        }
+    }
+} else {
+    console.error("No se pudo encontrar el contenedor con el ID 'canvas'");
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     animate();
