@@ -1,7 +1,7 @@
 import { TEntidad } from "./TEntidad";
 import * as glMatrix from 'gl-matrix';
 
-export class TLuz extends TEntidad {
+export class ELuz extends TEntidad {
     
     
     private intensidad: glMatrix.vec4; //rgb alpha
