@@ -379,14 +379,16 @@ export class HomePage {
       }
       renderer.render(scene, camera);
     }
-
+/*
     function obtenerPosicionCamara(camera: THREE.PerspectiveCamera) {
       const posicionVector = new THREE.Vector3();
       camera.getWorldPosition(posicionVector);
       return posicionVector;
     }
+    */
 
     // Función para actualizar la posición de la cámara en la consola
+    /*
     function actualizarPosicion() {
       const posicion = obtenerPosicionCamara(camera);
 
@@ -398,7 +400,7 @@ export class HomePage {
         posicion.z.toFixed(2)
       );
     }
-    
+    */
 
     // Actualiza la posición de la cámara cada vez que se mueve
     // controls.addEventListener("change", actualizarPosicion);
@@ -436,7 +438,7 @@ export class HomePage {
         pointer.position.set(-8.1, 20.6, 22.6);
         pointer.scale.set(0.4, 0.4, 0.4);
         //scene.add(pointer); // Para añadir el pointer que utilizo para saber pos
-        moveSphereWithKeyboard(pointer, renderer, scene);
+        //moveSphereWithKeyboard(pointer, renderer, scene);
         for (let i = 0; i <= 9; i++) {
           A1[i] = pointer.clone();
           A1[i].position.x = i === 0 ? -8.1 : (i % 2) ? A1[i - 1].position.x + 4 : A1[i - 1].position.x + 3;
@@ -565,7 +567,7 @@ export class HomePage {
     );
 
 
-
+/*
     // funcion de mover el objeto y saber su pos
     function moveSphereWithKeyboard(pointer: THREE.Object3D, renderer: THREE.WebGLRenderer, scene: THREE.Scene) {
       const moveSpeed = 0.1; // Ajusta la velocidad de movimiento
@@ -600,7 +602,7 @@ export class HomePage {
         renderer.render(scene, camera);
       });
     }
-
+*/
     //Prueba de tocar objetos
 
     const container: HTMLElement | null = document.getElementById('canvas');
