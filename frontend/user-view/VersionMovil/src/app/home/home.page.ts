@@ -601,55 +601,87 @@ export class HomePage {
       });
     }
 
-    //Prueba de toocar objetos
+    //Prueba de tocar objetos
 
     const container: HTMLElement | null = document.getElementById('canvas');
 
-    const intersectedObjectsMap = new Map<THREE.Object3D, THREE.Object3D>();
-    
-    if (container) {
-      container.addEventListener('touchstart', onTouchStart, false);
-    
-      function onTouchStart(event: TouchEvent) {
-        if (event.touches.length === 1) {
-          const touch = event.touches[0];
-          const rect = container!.getBoundingClientRect(); // Utiliza verificación de nulidad opcional
-          const mouse = new THREE.Vector2();
-          mouse.x = ((touch.clientX - rect.left) / container!.clientWidth) * 2 - 1; // Utiliza verificación de nulidad opcional
-          mouse.y = -((touch.clientY - rect.top) / container!.clientHeight) * 2 + 1; // Utiliza verificación de nulidad opcional
-    
-          const raycaster = new THREE.Raycaster();
-          raycaster.setFromCamera(mouse, camera);
-    
-          let objectFoundInA1 = false;
-    
-          A1.forEach((originalObject, index) => {
-            const intersects = raycaster.intersectObject(originalObject, true);
-    
-            if (intersects.length > 0) {
-              intersectedObjectsMap.set(originalObject, intersects[0].object);
-              objectFoundInA1 = true;
-              
-              // Show array and position
-              console.log(`Array: A1`);
-              console.log(`Posición: ${index}`);
-            }
-          });
-    
-          if (objectFoundInA1) {
-            // Object found in A1, message already displayed in loop
-          } else {
-            console.log("No se ha encontrado ninguna intersección con los objetos del array A1.");
-          }
-        }
-      }
-    } else {
-      console.error("No se pudo encontrar el contenedor con el ID 'canvas'");
+let intersectedObjectsMap: Map<THREE.Object3D, THREE.Object3D>;
+
+if (container) {
+  container.addEventListener('touchstart', onTouchStart, false);
+
+  function onTouchStart(event: TouchEvent) {
+    if (event.touches.length !== 1) {
+      return; 
     }
 
+    const touch = event.touches[0];
+    const rect = container!.getBoundingClientRect();
+    const mouse = new THREE.Vector2(
+      ((touch.clientX - rect.left) / container!.clientWidth) * 2 - 1,
+      -((touch.clientY - rect.top) / container!.clientHeight) * 2 + 1
+    );
 
+    const raycaster = new THREE.Raycaster();
+    raycaster.setFromCamera(mouse, camera);
+
+    intersectedObjectsMap = new Map<THREE.Object3D, THREE.Object3D>();
+
+    let objectFound = false;
+
+    // Loop through all arrays (A1 to A6)
+    const objectArrays: THREE.Object3D[][] = [A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, B1, B2, B3];
+    for (const objectArray of objectArrays) {
+      for (const object of objectArray) {
+        const intersects = raycaster.intersectObject(object, true);
+        if (intersects.length > 0) {
+          intersectedObjectsMap.set(object, intersects[0].object);
+          objectFound = true;
 
     
+          console.log(
+            `Array: ${
+              objectArray === A1
+                ? "A1"
+                : objectArray === A2
+                ? "A2"
+                : objectArray === A3
+                ? "A3"
+                : objectArray === A4
+                ? "A4"
+                : objectArray === A5
+                ? "A5"
+                : objectArray === A6
+                ? "A6"
+                : objectArray === A7
+                ? "A7"
+                : objectArray === A8
+                ? "A8"
+                : objectArray === A9
+                ? "A9"
+                : objectArray === A10
+                ? "A10"
+                : objectArray === A11
+                ? "A11"
+                : objectArray === A12
+                ? "A12"
+                : objectArray === B1
+                ? "B1"
+                : objectArray === B2
+                ? "B2"
+                : "B3" 
+            }`
+          );          console.log(`Position: ${objectArray.indexOf(object)}`);
+
+          break;
+        }
+      }
+    }
+  }
+} else {
+  console.error("No se pudo encontrar el contenedor con el ID 'canvas'");
+}
+
     animate();
   }
 
