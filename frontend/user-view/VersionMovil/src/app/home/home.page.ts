@@ -333,7 +333,7 @@ export class HomePage {
 
 
       if (A1.length > 0) {
-        pointerRotation += 0.05;
+        pointerRotation += 0.025;
         pointer.rotation.y = pointerRotation;
         rotatePointers(A1, pointerRotation);
       }
@@ -381,13 +381,13 @@ export class HomePage {
       }
       renderer.render(scene, camera);
     }
-/*
-    function obtenerPosicionCamara(camera: THREE.PerspectiveCamera) {
-      const posicionVector = new THREE.Vector3();
-      camera.getWorldPosition(posicionVector);
-      return posicionVector;
-    }
-    */
+    /*
+        function obtenerPosicionCamara(camera: THREE.PerspectiveCamera) {
+          const posicionVector = new THREE.Vector3();
+          camera.getWorldPosition(posicionVector);
+          return posicionVector;
+        }
+        */
 
     // Función para actualizar la posición de la cámara en la consola
     /*
@@ -569,122 +569,107 @@ export class HomePage {
     );
 
 
-/*
-    // funcion de mover el objeto y saber su pos
-    function moveSphereWithKeyboard(pointer: THREE.Object3D, renderer: THREE.WebGLRenderer, scene: THREE.Scene) {
-      const moveSpeed = 0.1; // Ajusta la velocidad de movimiento
-
-      document.addEventListener('keydown', (event) => {
-        const key = event.key;
-
-        switch (key) {
-          case 'ArrowUp':
-            pointer.position.y += moveSpeed;
-            break;
-          case 'ArrowDown':
-            pointer.position.y -= moveSpeed;
-            break;
-          case 'ArrowLeft':
-            pointer.position.x -= moveSpeed;
-            break;
-          case 'ArrowRight':
-            pointer.position.x += moveSpeed;
-            break;
-          case 'o': // Mover hacia adelante en Z
-            pointer.position.z += moveSpeed;
-            break;
-          case 'l': // Mover hacia atrás en Z
-            pointer.position.z -= moveSpeed;
-            break;
+    /*
+        // funcion de mover el objeto y saber su pos
+        function moveSphereWithKeyboard(pointer: THREE.Object3D, renderer: THREE.WebGLRenderer, scene: THREE.Scene) {
+          const moveSpeed = 0.1; // Ajusta la velocidad de movimiento
+    
+          document.addEventListener('keydown', (event) => {
+            const key = event.key;
+    
+            switch (key) {
+              case 'ArrowUp':
+                pointer.position.y += moveSpeed;
+                break;
+              case 'ArrowDown':
+                pointer.position.y -= moveSpeed;
+                break;
+              case 'ArrowLeft':
+                pointer.position.x -= moveSpeed;
+                break;
+              case 'ArrowRight':
+                pointer.position.x += moveSpeed;
+                break;
+              case 'o': // Mover hacia adelante en Z
+                pointer.position.z += moveSpeed;
+                break;
+              case 'l': // Mover hacia atrás en Z
+                pointer.position.z -= moveSpeed;
+                break;
+            }
+            const position = pointer.position;
+            console.log(`Posición X: ${position.x.toFixed(2)}`);
+            console.log(`Posición Y: ${position.y.toFixed(2)}`);
+            console.log(`Posición Z: ${position.z.toFixed(2)}`);
+            renderer.render(scene, camera);
+          });
         }
-        const position = pointer.position;
-        console.log(`Posición X: ${position.x.toFixed(2)}`);
-        console.log(`Posición Y: ${position.y.toFixed(2)}`);
-        console.log(`Posición Z: ${position.z.toFixed(2)}`);
-        renderer.render(scene, camera);
-      });
-    }
-*/
+    */
     //Prueba de tocar objetos
-    
-const container: HTMLElement | null = document.getElementById('canvas');
 
-let intersectedObjectsMap: Map<THREE.Object3D, THREE.Object3D>;
+    let infoDiv = document.getElementById('info-div');
 
-if (container) {
-  container.addEventListener('touchstart', onTouchStart, false);
+    const container: HTMLElement | null = document.getElementById('canvas');
+    let intersectedObjectsMap: Map<THREE.Object3D, THREE.Object3D>;
+    if (container) {
+      container.addEventListener('touchstart', onTouchStart, false);
+      function onTouchStart(event: TouchEvent) {
+        if (event.touches.length !== 1) {
+          return;
+        }
+        const touch = event.touches[0];
+        const rect = container!.getBoundingClientRect();
+        const mouse = new THREE.Vector2(
+          ((touch.clientX - rect.left) / container!.clientWidth) * 2 - 1,
+          -((touch.clientY - rect.top) / container!.clientHeight) * 2 + 1
+        );
 
-  function onTouchStart(event: TouchEvent) {
-    if (event.touches.length !== 1) {
-      return; 
-    }
+        const raycaster = new THREE.Raycaster();
+        raycaster.setFromCamera(mouse, camera);
+        intersectedObjectsMap = new Map<THREE.Object3D, THREE.Object3D>();
+        let objectFound = false;
 
-    const touch = event.touches[0];
-    const rect = container!.getBoundingClientRect();
-    const mouse = new THREE.Vector2(
-      ((touch.clientX - rect.left) / container!.clientWidth) * 2 - 1,
-      -((touch.clientY - rect.top) / container!.clientHeight) * 2 + 1
-    );
 
-    const raycaster = new THREE.Raycaster();
-    raycaster.setFromCamera(mouse, camera);
 
-    intersectedObjectsMap = new Map<THREE.Object3D, THREE.Object3D>();
-
-    let objectFound = false;
-
-    // Loop through all arrays (A1 to A6)
-    const objectArrays: THREE.Object3D[][] = [A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, B1, B2, B3];
-    for (const objectArray of objectArrays) {
-      for (const object of objectArray) {
-        const intersects = raycaster.intersectObject(object, true);
-        if (intersects.length > 0) {
-          intersectedObjectsMap.set(object, intersects[0].object);
-          objectFound = true;
-
-    
-          console.log(
-            `Array: ${
-              objectArray === A1
-                ? "A1"
-                : objectArray === A2
-                ? "A2"
-                : objectArray === A3
-                ? "A3"
-                : objectArray === A4
-                ? "A4"
-                : objectArray === A5
-                ? "A5"
-                : objectArray === A6
-                ? "A6"
-                : objectArray === A7
-                ? "A7"
-                : objectArray === A8
-                ? "A8"
-                : objectArray === A9
-                ? "A9"
-                : objectArray === A10
-                ? "A10"
-                : objectArray === A11
-                ? "A11"
-                : objectArray === A12
-                ? "A12"
-                : objectArray === B1
-                ? "B1"
-                : objectArray === B2
-                ? "B2"
-                : "B3" 
-            }`
-          );          console.log(`Position: ${objectArray.indexOf(object)}`);
-
-          break;
+        // Loop through all arrays (A1 to A6)
+        const objectArrays: THREE.Object3D[][] = [A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, B1, B2, B3];
+        for (const objectArray of objectArrays) {
+          for (const object of objectArray) {
+            const intersects = raycaster.intersectObject(object, true);
+            if (intersects.length > 0) {
+              intersectedObjectsMap.set(object, intersects[0].object);
+              objectFound = true;
+              if (infoDiv) {
+                  infoDiv.classList.remove('hidden');
+          
+                  // Obtener el nombre del array y la posición
+                  const arrayName = objectArray === A1 ? "A1" :
+                      objectArray === A2 ? "A2" :
+                          objectArray === A3 ? "A3" :
+                              objectArray === A4 ? "A4" :
+                                  objectArray === A5 ? "A5" :
+                                      objectArray === A6 ? "A6" :
+                                          objectArray === A7 ? "A7" :
+                                              objectArray === A8 ? "A8" :
+                                                  objectArray === A9 ? "A9" :
+                                                      objectArray === A10 ? "A10" :
+                                                          objectArray === A11 ? "A11" :
+                                                              objectArray === A12 ? "A12" :
+                                                                  objectArray === B1 ? "B1" :
+                                                                      objectArray === B2 ? "B2" : "B3";
+                  const position = objectArray.indexOf(object);
+          
+                  // Establecer el contenido del div con la información
+                  infoDiv.innerHTML = `Array: ${arrayName}<br>Position: ${position}`;
+              }
+              break;
+          }
+          }
         }
       }
+    } else {
+      console.error("No se pudo encontrar el contenedor con el ID 'canvas'");
     }
-  }
-} else {
-  console.error("No se pudo encontrar el contenedor con el ID 'canvas'");
-}
 
 
 
