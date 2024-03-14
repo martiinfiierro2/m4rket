@@ -58,11 +58,13 @@ export class LoginComponent {
           localStorage.setItem('tokenUsuario', res.token);
           localStorage.setItem('idUsuario', res.idUsuario);
           localStorage.setItem('email', res.email);
+          localStorage.setItem('rol', res.rol);
         }
         else{
           localStorage.removeItem('email');
           localStorage.setItem('tokenUsuario', res.token);
-          localStorage.setItem('idUsuario', res.idUsuario); 
+          localStorage.setItem('idUsuario', res.idUsuario);
+          localStorage.setItem('rol', res.rol); 
         }
   
         this.route.navigateByUrl('/productos');
