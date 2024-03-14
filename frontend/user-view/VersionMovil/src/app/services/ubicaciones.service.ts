@@ -24,8 +24,15 @@ export class UbicacionesService {
       });
     }
 
-    getIdUbicacion(referencia: any, posicion: any){
+    getIdUbicacion(referencia: any, posicion: any): Observable<any> {
+      this.cargarCabeceras();
       let urlCompleta = this.url + '?referencia=' + referencia + '&posicion=' + posicion;
+      return this.http.get(urlCompleta, {headers: this.cabeceras});
+    }
+
+    getProdEnUbicacion(idUbi: any): Observable<any> {
+      this.cargarCabeceras();
+      let urlCompleta = this.url2 + '?idUbi=' + idUbi;
       return this.http.get(urlCompleta, {headers: this.cabeceras});
     }
 }

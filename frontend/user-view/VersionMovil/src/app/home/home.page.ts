@@ -14,7 +14,6 @@ import * as THREE from 'three'; // we need @types/three for this to work (next t
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DomElementSchemaRegistry } from '@angular/compiler';
-
 export interface Producto {
   id: string,
   nombre: string,
@@ -63,6 +62,11 @@ interface Stats {
   fecha: Date
 }
 
+export interface Ubicacion {
+  id: number,
+  referencia: string,
+  posicion: number,
+}
 
 @Component({
   selector: 'app-home',
@@ -72,12 +76,12 @@ interface Stats {
 export class HomePage {
   //VERSION ANTIGUA
   productos: Producto[] = [];
+  ubicaciones: Ubicacion[] = [];
   private idUsu: string = '';
   listaCompra: ListaCompra[] = [];
 
   private idListaUsu: string = '';
   detallesProductos: ProductoDetalle[] = [];
-
 
   //PRODUCTO SELECCIONADO
   productoSelect: any;
@@ -112,8 +116,23 @@ export class HomePage {
 
   
   //Funciones para sacar el valor de los productos a partit de la ubicacion del motor gráfico
-  getIdUbicacion(){
-      
+  getIdUbicacion(referencia: any, posicion: any){
+    this.ubicacionesService.getIdUbicacion(referencia, posicion).subscribe( res => {
+      this.getProdEnUbicacion(res.ubicaciones.id);
+    })
+  }
+
+  getProdEnUbicacion(idUbi: number){
+    this.ubicacionesService.getProdEnUbicacion(idUbi).subscribe( res => {
+      for(let i=0; i < res.prodUbi.length; i++){
+        this.getProdId(res.prodUbi[i].idProd);
+      }
+    })
+  }
+  getProdId(idProd: any){
+    this.productosService.getProductoId(idProd).subscribe( res =>  {
+      console.log(res);
+    });
   }
 
   //FUNCIONES YA CREADAS DE LA ANTIGUA VERSION LISTA DE LA COMPRA
@@ -643,6 +662,7 @@ decrementar(productoDetalle: any) {
     let intersectedObjectsMap: Map<THREE.Object3D, THREE.Object3D>;
     if (container) {
       container.addEventListener('touchstart', onTouchStart, false);
+      const self = this;
       function onTouchStart(event: TouchEvent) {
         if (event.touches.length !== 1) {
           return;
@@ -690,6 +710,9 @@ decrementar(productoDetalle: any) {
                 const position = objectArray.indexOf(object);
                 // Establecer el contenido del div con la información
                 infoDiv.innerHTML = `Array: ${arrayName}<br>Position: ${position}`;
+                
+                //Busco la relacion con produtos
+                self.getIdUbicacion(arrayName, position);
               }
               break;
             }
