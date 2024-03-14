@@ -40,9 +40,10 @@ export class TNodo {
             this.actualizarMatriz = false;
         }
 
-        this.entidad.dibujar(this.matrizTransf, this.actualizarMatriz);
+        //this.entidad.dibujar(this.matrizTransf, this.actualizarMatriz);
         for (let index = 0; index < this.hijos.length; index++) {
             this.hijos[index].recorrer(this.matrizTransf);
+            console.log("soy hijo " + index);
         }
     }
 

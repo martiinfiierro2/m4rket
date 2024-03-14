@@ -15,7 +15,12 @@ export class TGestorRecursos{
 
         let res:TRecurso|undefined;
 
-        res = this.recursos.find((recurso) => recurso.getNombre() == nombre);
+        for (const recurso of this.recursos) {
+            if (recurso.getNombre() === nombre) {
+                res = recurso;
+                break;
+            }
+        }
 
         //si no existe se crea
         if (res == undefined) {
