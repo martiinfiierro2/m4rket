@@ -101,8 +101,7 @@ const crearUbicacion = async(req, res) => {
 const actualizarUbicacion = async(req,res) => {
     try{
         const id = req.params.id;
-        const { referencia } = req.body;
-        console.log(referencia);
+        const { referencia, posicion } = req.body;
 
         const exiteReferencia = await Ubicacion.findOne({ 
             where: { 
@@ -120,7 +119,8 @@ const actualizarUbicacion = async(req,res) => {
         const ubicacion = await Ubicacion.findByPk(id);
 
         await ubicacion.update( {
-            referencia: referencia
+            referencia: referencia,
+            posicion: posicion
         });
         
         res.json({

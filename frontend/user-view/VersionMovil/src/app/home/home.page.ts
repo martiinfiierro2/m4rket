@@ -6,6 +6,7 @@ import { DrawerComponent } from '../components/drawer/drawer.component';
 import { environment } from '../environments/environment';
 import { getLocaleFirstDayOfWeek } from '@angular/common';
 import { EstadisticasService } from '../services/estadisticas.service';
+import { UbicacionesService } from '../services/ubicaciones.service';
 import { json } from 'express';
 
 //modelo todo
@@ -99,7 +100,8 @@ export class HomePage {
 
 
   constructor(private productosService: ProductosService,
-    private estadisticasService: EstadisticasService) {}
+    private estadisticasService: EstadisticasService, 
+    private ubicacionesService: UbicacionesService) {}
     
   
   //VERSION ANTIGUA
@@ -108,6 +110,11 @@ export class HomePage {
     this.getListaCompraUsu();
   }
 
+  
+  //Funciones para sacar el valor de los productos a partit de la ubicacion del motor gráfico
+  getIdUbicacion(){
+      
+  }
 
   //FUNCIONES YA CREADAS DE LA ANTIGUA VERSION LISTA DE LA COMPRA
 incrementar(productoDetalle: any) {

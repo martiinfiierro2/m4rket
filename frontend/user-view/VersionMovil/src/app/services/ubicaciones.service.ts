@@ -24,7 +24,8 @@ export class UbicacionesService {
       });
     }
 
-    getIdUbicacion(){
-      
+    getIdUbicacion(referencia: any, posicion: any){
+      let urlCompleta = this.url + '?referencia=' + referencia + '&posicion=' + posicion;
+      return this.http.get(urlCompleta, {headers: this.cabeceras});
     }
 }
