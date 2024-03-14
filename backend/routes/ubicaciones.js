@@ -12,12 +12,14 @@ router.get('/ubicaciones', validarJWT, obtenerUbicacion);
 router.post('/ubicaciones', [
     validarJWT,
     check('referencia', "La referencia está vacía").not().isEmpty(),
+    check('posicion', "La posicion está vacía").not().isEmpty(),
     validarCampos,
 ], crearUbicacion);
 
 router.put('/ubicaciones/:id', [
     validarJWT,
     check('referencia', "La referencia está vacía").not().isEmpty(),
+    check('posicion', "La posicion está vacía").not().isEmpty(),
     validarCampos,
 ], actualizarUbicacion);
 
