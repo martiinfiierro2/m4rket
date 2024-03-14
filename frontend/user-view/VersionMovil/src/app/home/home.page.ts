@@ -640,30 +640,29 @@ export class HomePage {
               intersectedObjectsMap.set(object, intersects[0].object);
               objectFound = true;
               if (infoDiv) {
-                  infoDiv.classList.remove('hidden');
-          
-                  // Obtener el nombre del array y la posición
-                  const arrayName = objectArray === A1 ? "A1" :
-                      objectArray === A2 ? "A2" :
-                          objectArray === A3 ? "A3" :
-                              objectArray === A4 ? "A4" :
-                                  objectArray === A5 ? "A5" :
-                                      objectArray === A6 ? "A6" :
-                                          objectArray === A7 ? "A7" :
-                                              objectArray === A8 ? "A8" :
-                                                  objectArray === A9 ? "A9" :
-                                                      objectArray === A10 ? "A10" :
-                                                          objectArray === A11 ? "A11" :
-                                                              objectArray === A12 ? "A12" :
-                                                                  objectArray === B1 ? "B1" :
-                                                                      objectArray === B2 ? "B2" : "B3";
-                  const position = objectArray.indexOf(object);
-          
-                  // Establecer el contenido del div con la información
-                  infoDiv.innerHTML = `Array: ${arrayName}<br>Position: ${position}`;
+                infoDiv.classList.remove('hidden');
+
+                // Obtener el nombre del array y la posición
+                const arrayName = objectArray === A1 ? "A1" :
+                  objectArray === A2 ? "A2" :
+                    objectArray === A3 ? "A3" :
+                      objectArray === A4 ? "A4" :
+                        objectArray === A5 ? "A5" :
+                          objectArray === A6 ? "A6" :
+                            objectArray === A7 ? "A7" :
+                              objectArray === A8 ? "A8" :
+                                objectArray === A9 ? "A9" :
+                                  objectArray === A10 ? "A10" :
+                                    objectArray === A11 ? "A11" :
+                                      objectArray === A12 ? "A12" :
+                                        objectArray === B1 ? "B1" :
+                                          objectArray === B2 ? "B2" : "B3";
+                const position = objectArray.indexOf(object);
+                // Establecer el contenido del div con la información
+                infoDiv.innerHTML = `Array: ${arrayName}<br>Position: ${position}`;
               }
               break;
-          }
+            }
           }
         }
       }
