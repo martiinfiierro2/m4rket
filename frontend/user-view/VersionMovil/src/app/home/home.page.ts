@@ -669,11 +669,6 @@ export class HomePage {
     } else {
       console.error("No se pudo encontrar el contenedor con el ID 'canvas'");
     }
-
-
-
     animate();
   }
-
-
 }
