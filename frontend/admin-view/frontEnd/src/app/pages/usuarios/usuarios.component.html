@@ -1,0 +1,56 @@
+<div id="header">
+    <div id="divSearch">
+        <form id="busqueda" (ngSubmit)="getBusquedaUsuarios()">
+            <input type="text" name="search" id="search" placeholder="Búsqueda" [(ngModel)]="valueBusquedaInput" ngModel>
+            <input type="submit" value="Buscar" class="btnPrimario">
+        </form>
+        <button (click)="getUsuarios(); valueBusquedaInput=''" class="btnSecundario">Cancelar</button>
+    </div>
+    <div id="botonesHeader">
+        <button (click)="creacionUsuario = true" class="btnPrimario">Registar usuario</button>
+    </div>
+</div>
+
+<div id="formularioRegistro" *ngIf="creacionUsuario">
+    <form [formGroup]="usuarioForm" (ngSubmit)="crearUsuario()">
+        <input type="text" id="nombre" placeholder="Nombre*"  formControlName="nombre">
+        <input type="text" id="apellido" placeholder="Apellidos*" formControlName="apellido">
+        <input type="email" id="email" placeholder="Email*" formControlName="email">
+        <input type="password" id="pwd" placeholder="Contraseña*" formControlName="pwd">
+        <select name="sexo" id="sexo" formControlName="genero">
+            <option value="hombre">Hombre</option>
+            <option value="mujer">Mujer</option>
+        </select>
+        <div id="botonesForm">
+            <button type="submit" class="btnIcon" id="btnCheck"><span class="fa-solid fa-check"></span></button>
+            <button class="btnIcon" id="btnCancel" (click)="cerrarFormulario()"><span class="fa-solid fa-x"></span></button>
+        </div>
+    </form>
+</div>
+
+<div id="listadoUsuarios" *ngIf="usuarios">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th>Email</th>
+                <th>Rol</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let usuario of usuarios" >
+                <td>{{ usuario.nombre }}</td>
+                <td>{{ usuario.apellido }}</td>
+                <td>{{ usuario.email }}</td>   
+                <td>{{ usuario.rol }}</td>
+                <td>
+                    <button (click)="irEditarUsu(usuario.uid)" class="btnIcon" id="btnEdit"><span class="fa-solid fa-pen"></span></button>
+                    <button (click)="borrarUsu(usuario.uid)" class="btnIcon" id="btnBorrar"><span class="fa-solid fa-trash"></span></button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>

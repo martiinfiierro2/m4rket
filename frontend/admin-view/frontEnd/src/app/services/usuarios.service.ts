@@ -76,4 +76,17 @@ export class UsuariosService {
             );
     }  
   }
+
+  getUsuarios(): Observable<any>{
+    return this.http.get(environment.base_url + '/usuarios', {headers: this.cabeceras});
+  }
+
+  crearUsuario( datosForm){
+    return this.http.post(environment.base_url + '/usuarios', datosForm, { headers: this.cabeceras});
+  }
+
+  borrarUsuario( idUsu: number){
+    return this.http.delete(environment.base_url + '/usuarios/' + idUsu , {headers: this.cabeceras});
+  }
+
 }

@@ -1,5 +1,5 @@
 const { response } = require('express');
-const rolesPermitidos = ['admin', 'usuario'];
+const rolesPermitidos = ['admin', 'usuario', 'superAdmin'];
 
 const validarRol = (req, res = response, next) => {
     const rol = req.body.rol;

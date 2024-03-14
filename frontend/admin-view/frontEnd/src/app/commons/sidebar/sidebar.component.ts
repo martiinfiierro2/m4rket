@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { UsuariosService } from "../../services/usuarios.service";
 import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [HttpClientModule],
+  imports: [HttpClientModule, CommonModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css'
 })
@@ -14,6 +15,7 @@ export class SidebarComponent {
 
 
   private nombreUsuario: string = '';
+  superAdmin: Boolean = false;
 
 
   constructor( private usuarioService: UsuariosService,
@@ -22,6 +24,11 @@ export class SidebarComponent {
   ngOnInit(){
     this.getUsuario();
     this.paginaActual();
+
+    if (localStorage.getItem('rol') == 'superAdmin') {
+      this.superAdmin = true;
+    }
+  
   }
   
 
