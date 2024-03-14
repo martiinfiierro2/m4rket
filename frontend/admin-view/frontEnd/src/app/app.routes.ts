@@ -20,6 +20,8 @@ import { EstadisticasComponent } from './pages/estadisticas/estadisticas.compone
 import { DatosComponent } from './pages/datos/datos.component';
 
 import { authGuard, authGuard2 } from "../app/guards/auth.guard";
+import path from 'path';
+import { UsuariosComponent } from './pages/usuarios/usuarios.component';
 
 
 export const routes: Routes = [
@@ -27,8 +29,6 @@ export const routes: Routes = [
   { path: '', component: LandingComponent},
   { path: 'dataset', component: DatasetComponent},
   { path: 'dataset-producto', component: DatasetProductoComponent},
-  
-  { path: 'pruebaPaginacion', component: PaginationComponent},
 
   { path: 'login', component: AuthLayoutComponent, canActivate: [authGuard2],
       children: [
@@ -79,12 +79,18 @@ export const routes: Routes = [
         { path: '*', redirectTo: ''}
       ]
   },
-  
   { path: 'datos', component: AdminLayoutComponent, canActivate: [authGuard],
     children: [
       { path: '', component: DatosComponent},
       { path: '*', redirectTo: ''}
     ]
+  },
+  { path: 'usuarios', component: AdminLayoutComponent,
+    children: [
+      { path: '', component: UsuariosComponent},
+      { path: '*', redirectTo: ''}
+    ]
+
   }
   
 
