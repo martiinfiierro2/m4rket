@@ -3,6 +3,8 @@ const { Ubicacion } = require('../models/ubicaciones');
 
 const obtenerUbicacion = async(req, res) => {
     const id = req.query.id;
+    const referencia = req.query.referencia;
+    const posicion = req.query.posicion;
 
     //Paginación 
     const desde = Number(req.query.desde) || 0; //Si no dan nada o no dan un numero es 0
@@ -16,6 +18,20 @@ const obtenerUbicacion = async(req, res) => {
                 return res.json({
                     ok: false,
                     msg: 'El id de la ubicacion debe ser válido'
+                });
+            }
+        }
+        else if(referencia && posicion){
+            ubicaciones = await Ubicacion.findOne({ 
+                where: {
+                    referencia: referencia,
+                    posicion: posicion
+                }
+            });
+            if(!ubicaciones){
+                return res.json({
+                    ok: false,
+                    msg: 'La referencia o la posicion de la ubicacion deben ser válidos'
                 });
             }
         }
@@ -50,13 +66,18 @@ const obtenerUbicacion = async(req, res) => {
 const crearUbicacion = async(req, res) => {
     try{
 
-        const { referencia } = req.body;
+        const { referencia, posicion } = req.body;
 
-        const exiteReferencia = await Ubicacion.findOne({ where: { referencia: referencia } });
-            if (exiteReferencia) {
-                return res.status(400).json({
+        const exiteReferencia = await Ubicacion.findOne({ 
+            where: { 
+                referencia: referencia,
+                posicion: posicion
+            } 
+        });
+        if (exiteReferencia) {
+            return res.status(400).json({
                 ok: false,
-                msg: 'Referencia ya existe'
+                msg: 'Esa referencia asignada a esa posicion ya exite'
             });
         }
 
@@ -83,11 +104,16 @@ const actualizarUbicacion = async(req,res) => {
         const { referencia } = req.body;
         console.log(referencia);
 
-        const exiteReferencia = await Ubicacion.findOne({ where: { referencia: referencia } });
-            if (exiteReferencia) {
-                return res.status(400).json({
+        const exiteReferencia = await Ubicacion.findOne({ 
+            where: { 
+                referencia: referencia,
+                posicion: posicion
+            } 
+        });
+        if (exiteReferencia) {
+            return res.status(400).json({
                 ok: false,
-                msg: 'Referencia ya existe'
+                msg: 'Esa referencia asignada a esa posicion ya exite'
             });
         }
 
