@@ -39,11 +39,10 @@ export class SignUpComponent {
     this.usuarioService.registro(this.sign_upForm.value)
       .subscribe( res =>{
         console.log(res);
-        this.tokenUsuario = res.token;
-        this.idUsuario = res.usuario.id;
 
-        localStorage.setItem('idUsuario', this.idUsuario);
-        localStorage.setItem('tokenUsuario', this.tokenUsuario);
+        localStorage.setItem('idUsuario', res.usuario.id);
+        localStorage.setItem('tokenUsuario', res.token);
+        localStorage.setItem('rol', res.usuario.rol);
         
         this.route.navigate(['/productos']);
       }) 

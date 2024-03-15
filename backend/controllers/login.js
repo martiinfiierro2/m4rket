@@ -74,7 +74,8 @@ const login = async(req, res = response) => {
             msg: 'login',
             token: token,
             idUsuario: usuarioExiste.id,
-            email: usuarioExiste.email
+            email: usuarioExiste.email,
+            rol: usuarioExiste.rol
         })
     }catch(error){
         return res.status(400).json({

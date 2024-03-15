@@ -2,19 +2,12 @@
     <div id="idSearch">
         <form>
             <input type="text" name="search" id="search" placeholder="Búsqueda">
-            <input type="submit" value="Buscar">
+            <input type="submit" value="Buscar" class="btnPrimario">
         </form>
     </div>
     <div id="botonesHeader">
-        <button (click)= "botonAddUbicacion()">Añadir ubicación</button>
+        <button (click)="newUbicacion()" class="btnPrimario">Añadir ubicación</button>
     </div>
-</div>
-
-<div id="addUbicacion" style="display: none">
-    <form (ngSubmit)="anyadirUbicacion()" [formGroup]="formUbi">
-        <input type="text" placeholder="Referencia" id="referencia" formControlName="referencia">
-        <input type="submit" value="Añadir">
-    </form>
 </div>
 
 <div id="listadoUbicaciones">
@@ -22,14 +15,17 @@
         <thead>
             <tr>
                 <th>Referencia</th>
+                <th>Posición</th>
                 <th>Acción</th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let ubicacion of ubicaciones">
                 <td> {{ ubicacion.referencia }}</td>
+                <td> {{ ubicacion.posicion }}</td>
                 <td>
                     <button (click)="ejecutarAccion(ubicacion.id)" class="btnIcon" id="btnBorrar"><mat-icon class="iconoAccion">delete</mat-icon></button>
+                    <button (click)="editUbi(ubicacion.id)" class="btnIcon" id="btnEdit"><mat-icon class="iconoAccion">edit</mat-icon></button>
                 </td>
             </tr>
         </tbody>

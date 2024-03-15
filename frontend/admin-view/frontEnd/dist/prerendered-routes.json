@@ -1,0 +1,19 @@
+{
+  "routes": [
+    "/",
+    "/dataset",
+    "/dataset-producto",
+    "/login",
+    "/productos",
+    "/productos/editProducto",
+    "/productos/newProducto",
+    "/promociones",
+    "/promociones/editPromocion",
+    "/promociones/newPromocion",
+    "/promociones/newTipoPromocion",
+    "/pruebaPaginacion",
+    "/recovery",
+    "/registro",
+    "/ubicaciones"
+  ]
+}

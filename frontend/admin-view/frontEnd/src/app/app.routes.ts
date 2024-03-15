@@ -18,8 +18,12 @@ import { DatasetProductoComponent } from './dataset/dataset-producto/dataset-pro
 import { PaginationComponent } from './pagination/pagination.component';
 import { EstadisticasComponent } from './pages/estadisticas/estadisticas.component';
 import { DatosComponent } from './pages/datos/datos.component';
+import { EditUbicacionComponent } from './ubicaciones/edit-ubicacion/edit-ubicacion.component';
+import { NewUbicacionComponent } from './ubicaciones/new-ubicacion/new-ubicacion.component';
 
 import { authGuard, authGuard2 } from "../app/guards/auth.guard";
+import path from 'path';
+import { UsuariosComponent } from './pages/usuarios/usuarios.component';
 
 
 export const routes: Routes = [
@@ -27,8 +31,6 @@ export const routes: Routes = [
   { path: '', component: LandingComponent},
   { path: 'dataset', component: DatasetComponent},
   { path: 'dataset-producto', component: DatasetProductoComponent},
-  
-  { path: 'pruebaPaginacion', component: PaginationComponent},
 
   { path: 'login', component: AuthLayoutComponent, canActivate: [authGuard2],
       children: [
@@ -69,6 +71,8 @@ export const routes: Routes = [
   { path: 'ubicaciones', component: AdminLayoutComponent, canActivate: [authGuard],
       children: [
         { path: '', component: UbicacionesComponent},
+        { path: 'editUbicacion',component: EditUbicacionComponent},
+        { path: 'newUbicacion',component: NewUbicacionComponent},
         { path: '*', redirectTo: ''}
       ]
 
@@ -79,12 +83,18 @@ export const routes: Routes = [
         { path: '*', redirectTo: ''}
       ]
   },
-  
   { path: 'datos', component: AdminLayoutComponent, canActivate: [authGuard],
     children: [
       { path: '', component: DatosComponent},
       { path: '*', redirectTo: ''}
     ]
+  },
+  { path: 'usuarios', component: AdminLayoutComponent,
+    children: [
+      { path: '', component: UsuariosComponent},
+      { path: '*', redirectTo: ''}
+    ]
+
   }
   
 

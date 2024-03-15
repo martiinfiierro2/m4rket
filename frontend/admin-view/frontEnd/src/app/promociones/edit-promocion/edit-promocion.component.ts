@@ -60,14 +60,10 @@ export class EditPromocionComponent {
   }
 
   editarPromo(){
-    this.promocionService.editPromocion(this.idPromo, this.promoForm.value)
-      .subscribe( res => {
+    this.promocionService.editPromocion(this.idPromo, this.promoForm.value).subscribe( res => {
         console.log(res);
         this.router.navigate(['/promociones']);
-      })
-    
-    
-    
+    });
   }
 
 

@@ -4,6 +4,7 @@ const { Ubicacion } = require('../models/ubicaciones');
 
 async function obtenerProductoUbicacion(req, res) {
     const id = req.query.id;
+    const idUbi = req.query.idUbi;
 
     //Paginación 
     const desde = Number(req.query.desde) || 0; //Si no dan nada o no dan un numero es 0
@@ -17,6 +18,15 @@ async function obtenerProductoUbicacion(req, res) {
                 return res.json({
                     ok: false,
                     msg: 'El id de la relación producto-ubicación debe ser válido'
+                });
+            }
+        }
+        else if(idUbi){
+            prodUbi = await Enubicacion.findAll({ where: { idUbi: idUbi } });
+            if (!prodUbi) {
+                return res.json({
+                    ok: false,
+                    msg: 'El id ubicacion de la relación producto-ubicación debe ser válido'
                 });
             }
         }

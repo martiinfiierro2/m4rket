@@ -1,11 +1,17 @@
 import { Component, ElementRef, ViewChild, AfterViewInit, Input } from '@angular/core';
 import { GestureController, Platform } from '@ionic/angular';
 import { ProductosService } from 'src/app/services/productos.service';
+import { EstadisticasService } from 'src/app/services/estadisticas.service';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { environment } from "../../environments/environment";
 import * as echarts from 'echarts';
 
-
+interface Stats {
+  nombre: string,
+  idProd: number,
+  qr: string | null,
+  fecha: Date
+}
 export interface Producto{
   id: string,
   nombre: string,
@@ -73,12 +79,15 @@ export class DrawerComponent  implements AfterViewInit {
   seleccionado: boolean = false;
   listaCompra: ListaCompra [] = [];
 
+
+
   //VARIABLES FOTO
   tokenUsuario = sessionStorage.getItem('tokenUsuario') || localStorage.getItem('tokenUsuario');
   urlFotoProducto = environment.base_url + '/uploads/fotoproducto/';
 
   constructor(private plt: Platform, private gestureCtrl: GestureController,
-    private productosService: ProductosService ) { }
+    private productosService: ProductosService,
+    private estadisticasService: EstadisticasService ) { }
 
   async ngAfterViewInit() {
   const drawer = this.drawer.nativeElement;
@@ -326,19 +335,43 @@ EliminarProductoSelect(){
   cantidadProducto: number = 1;
 
 
-  incrementar(producto: any){
-    producto.cantidad++;
-      console.log('Nueva cantidad = ' +  producto.cantidad)
-      this.actualizarCantidad(this.productoSelect.id, producto.cantidad, this.productoSelect.idLista) 
+  incrementar(productoDetalle: any) {
+    productoDetalle.cantidad++;
+    console.log('Nueva cantidad = ' +  productoDetalle.cantidad)
+    this.actualizarCantidad(productoDetalle.id, productoDetalle.cantidad, productoDetalle.idLista) 
+    let tipo = "anadido";
+    let fecha = new Date();
+    this.estadistica(productoDetalle.id, tipo, fecha);
+}
+
+  //Estadisticas
+  estadistica(id: any, tipo: any, fecha: any){
+    const post: Stats = {
+      nombre: tipo,
+      idProd: id,
+      qr: null,
+      fecha: fecha
+    };
+    console.log(post);
+    this.estadisticasService.postContador(post);
   }
 
-  decrementar(producto: any){
-    if (producto.cantidad > 1){
-      producto.cantidad--;
-    console.log('Nueva cantidad = ' +  producto.cantidad)
-    this.actualizarCantidad(producto.id, producto.cantidad, producto.idLista) 
+  decrementar(productoDetalle: any){
+    if (productoDetalle.cantidad > 1){
+      productoDetalle.cantidad--;
+      console.log('Nueva cantidad = ' +  productoDetalle.cantidad)
+      this.actualizarCantidad(productoDetalle.id, productoDetalle.cantidad, productoDetalle.idLista)
+      let tipo = "eliminado";
+      let fecha = new Date();
+      this.estadistica(productoDetalle.id, tipo, fecha);
     }else{
       console.log('Solo queda una');
+      productoDetalle.cantidad--;
+      console.log('Nueva cantidad = ' +  productoDetalle.cantidad)
+      this.actualizarCantidad(productoDetalle.id, productoDetalle.cantidad, productoDetalle.idLista)
+      let tipo = "eliminado";
+      let fecha = new Date();
+      this.estadistica(productoDetalle.id, tipo, fecha);
     }
   }
 
@@ -363,6 +396,9 @@ EliminarProductoSelect(){
     })
     this.compararListaBusqueda();
     producto.enListaCompra = true;
+    let tipo = "anadido";
+    let fecha = new Date();
+    this.estadistica(producto.id, tipo, fecha);
   }
 
 
