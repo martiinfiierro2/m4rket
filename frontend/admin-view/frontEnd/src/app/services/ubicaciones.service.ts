@@ -25,6 +25,11 @@ export class UbicacionesService {
     return this.http.get(urlCompleta, {headers: this.cabeceras});
   }
 
+  getUbicacionId(idUbi): Observable<any>{
+    let urlCompleta = this.url + '?id=' + idUbi;
+    return this.http.get(urlCompleta, {headers:this.cabeceras});
+  }
+
   deleteUbicacion(idUbi: string){
 
     let urlCompleta = this.url + '/' + idUbi;
@@ -33,7 +38,13 @@ export class UbicacionesService {
   }
 
   postUbicacion(dataForm: any){
+    console.log(dataForm);
     return this.http.post(this.url, dataForm, {headers: this.cabeceras});
+  }
+
+  putUbicacion(idUbi: any, dataFrom: any){
+    let urlCompleta = this.url + '/' + idUbi;
+    return this.http.put(urlCompleta, dataFrom, {headers: this.cabeceras});
   }
 
   postUbicacionProducto(datos: any){

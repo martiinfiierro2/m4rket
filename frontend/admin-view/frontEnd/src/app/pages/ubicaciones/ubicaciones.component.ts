@@ -6,7 +6,8 @@ import { MatIconModule } from '@angular/material/icon';
 
 export interface Ubicacion{
   id: number,
-  referencia: string
+  referencia: string,
+  posicion: number
 }
 
 
@@ -32,7 +33,8 @@ export class UbicacionesComponent {
 
   
   public formUbi =this.fb.group({
-    referencia: ['', Validators.required]
+    referencia: ['', Validators.required],
+    posicion: ['', Validators.required]
   })
 
   ngOnInit(): void {
@@ -45,17 +47,15 @@ export class UbicacionesComponent {
     this.idUbiSelected = ''+idUbicacion;
   }
 
-  botonAddUbicacion(){
-    if (document.getElementById('addUbicacion')!.style.display === 'none') {
-      document.getElementById('addUbicacion')!.style.display = 'flex';
-    }
-    else{
-      document.getElementById('addUbicacion')!.style.display = 'none';
-    }
+  newUbicacion(){
+    let url = 'ubicaciones/newUbicacion';
+    window.location.href = url;
   }
 
-
-  
+  editUbi(idUbi){
+    let url = 'ubicaciones/editUbicacion?id='+idUbi;
+    window.location.href = url;
+  }
 
 
   //MODAL
@@ -100,10 +100,11 @@ export class UbicacionesComponent {
   }
 
   anyadirUbicacion(){
+    console.log(this.formUbi.value);
     this.ubicacionesService.postUbicacion(this.formUbi.value)
       .subscribe( res => {
         console.log(res);
         window.location.reload();
-      })
+    })
   }
 }

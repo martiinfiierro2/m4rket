@@ -1,0 +1,11 @@
+<div id="editUbicacion">
+    <h2>Editar ubicación</h2>
+    <form (ngSubmit)="editarUbi()" *ngIf="ubicacionEditar" [formGroup]="ubiForm">
+        <label for="referencia">Referencia<input type="text" name="referencia" id="referencia" formControlName="referencia" [(ngModel)]="ubicacionEditar.referencia"></label>
+        <label for="posicion">Posición<input type="number" name="posicion" id="posicion" formControlName="posicion" [(ngModel)]="ubicacionEditar.posicion"></label>
+        <div id="buttons">
+            <input type="submit" value="Actualizar" class="btnPrimario">
+            <input type="button" value="Cancelar" (click)="atras()" class="btnSecundario">
+        </div>
+    </form>
+</div>

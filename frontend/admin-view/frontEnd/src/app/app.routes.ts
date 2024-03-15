@@ -18,6 +18,8 @@ import { DatasetProductoComponent } from './dataset/dataset-producto/dataset-pro
 import { PaginationComponent } from './pagination/pagination.component';
 import { EstadisticasComponent } from './pages/estadisticas/estadisticas.component';
 import { DatosComponent } from './pages/datos/datos.component';
+import { EditUbicacionComponent } from './ubicaciones/edit-ubicacion/edit-ubicacion.component';
+import { NewUbicacionComponent } from './ubicaciones/new-ubicacion/new-ubicacion.component';
 
 import { authGuard, authGuard2 } from "../app/guards/auth.guard";
 import path from 'path';
@@ -69,6 +71,8 @@ export const routes: Routes = [
   { path: 'ubicaciones', component: AdminLayoutComponent, canActivate: [authGuard],
       children: [
         { path: '', component: UbicacionesComponent},
+        { path: 'editUbicacion',component: EditUbicacionComponent},
+        { path: 'newUbicacion',component: NewUbicacionComponent},
         { path: '*', redirectTo: ''}
       ]
 
