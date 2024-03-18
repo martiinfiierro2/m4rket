@@ -487,7 +487,7 @@ decrementar(productoDetalle: any) {
       function (glb) {
         pointer = glb.scene;
         pointer.position.set(-8.1, 20.6, 22.6);
-        pointer.scale.set(0.4, 0.4, 0.4);
+        pointer.scale.set(0.75, 0.75, 0.75);
         //scene.add(pointer); // Para añadir el pointer que utilizo para saber pos
         //moveSphereWithKeyboard(pointer, renderer, scene);
         for (let i = 0; i <= 9; i++) {
