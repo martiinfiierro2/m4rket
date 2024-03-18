@@ -9,7 +9,11 @@ import * as glMatrix from 'gl-matrix';
 export class TMotorTAG {
 
     private raiz: TNodo;
-    private gestorRecursos: TGestorRecursos;
+    private gestorRecursos= new TGestorRecursos();
+
+    crearRaiz(nodoRaiz: TNodo){
+        this.raiz = nodoRaiz;
+    }
 
     crearNodo( padre: TNodo|null, trasl: glMatrix.vec3, rot: glMatrix.vec3, esc: glMatrix.vec3 ): TNodo{
 
@@ -17,10 +21,12 @@ export class TMotorTAG {
         
         nodoCreado = new TNodo();
         if (padre == null) {
-            padre = this.raiz;
+            this.crearRaiz(nodoCreado);
+        }
+        else{
+            padre.agregarHijo(nodoCreado);
         }
 
-        padre.agregarHijo(nodoCreado);
         nodoCreado.setTraslacion(trasl);
         nodoCreado.setRotacion(rot);
         nodoCreado.setEscalado(esc);

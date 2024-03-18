@@ -5,16 +5,23 @@ var TNodo_1 = require("./TNodo");
 var ECamara_1 = require("./ECamara");
 var ELuz_1 = require("./ELuz");
 var EModelo_1 = require("./EModelo");
+var TGestorRecursos_1 = require("./TGestorRecursos");
 var TMotorTAG = /** @class */ (function () {
     function TMotorTAG() {
+        this.gestorRecursos = new TGestorRecursos_1.TGestorRecursos();
     }
+    TMotorTAG.prototype.crearRaiz = function (nodoRaiz) {
+        this.raiz = nodoRaiz;
+    };
     TMotorTAG.prototype.crearNodo = function (padre, trasl, rot, esc) {
         var nodoCreado;
         nodoCreado = new TNodo_1.TNodo();
         if (padre == null) {
-            padre = this.raiz;
+            this.crearRaiz(nodoCreado);
         }
-        padre.agregarHijo(nodoCreado);
+        else {
+            padre.agregarHijo(nodoCreado);
+        }
         nodoCreado.setTraslacion(trasl);
         nodoCreado.setRotacion(rot);
         nodoCreado.setEscalado(esc);

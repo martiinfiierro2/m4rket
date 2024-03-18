@@ -22,7 +22,9 @@ var fs = require("fs-js");
 var TRecursoMalla = /** @class */ (function (_super) {
     __extends(TRecursoMalla, _super);
     function TRecursoMalla(nombre) {
-        return _super.call(this, nombre) || this;
+        var _this = _super.call(this, nombre) || this;
+        _this.mallas = [];
+        return _this;
     }
     TRecursoMalla.prototype.cargarFichero = function (nombreFichero) {
         //Formato JSON --> JSON
@@ -35,34 +37,36 @@ var TRecursoMalla = /** @class */ (function (_super) {
         //Guardar malla en el array 
         var fileContent = fs.readFileSync(nombreFichero, 'utf8');
         var lines = fileContent.split('\n');
+        var nuevaMalla = new Malla_1.Malla(); // Inicializamos una malla nueva fuera del bucle
         lines.forEach(function (line) {
-            var nuevaMalla = new Malla_1.Malla();
             var parts = line.trim().split(/\s+/);
-            var type = parts[0];
+            var type = parts[0]; // Cambiado a parts[0]
             switch (type) {
-                //vertices
+                case 'o':
+                    if (nuevaMalla.getVertices.length > 0) {
+                        _this.mallas.push(nuevaMalla);
+                        nuevaMalla = new Malla_1.Malla();
+                    }
+                    break;
                 case 'v':
                     var vertex = [parseFloat(parts[1]), parseFloat(parts[2]), parseFloat(parts[3])];
                     nuevaMalla.setVertices(vertex);
                     break;
-                //coordenada textura
                 case 'vt':
                     var textureCoordinate = [parseFloat(parts[1]), parseFloat(parts[2])];
                     nuevaMalla.setCordTex(textureCoordinate);
                     break;
-                //normales
                 case 'vn':
                     var normal = [parseFloat(parts[1]), parseFloat(parts[2]), parseFloat(parts[3])];
                     nuevaMalla.setNormales(normal);
                     break;
-                //caras
                 case 'f':
                     var vertexIndices = parts.slice(1).map(function (part) { return parseInt(part.split('/')[0]); });
                     nuevaMalla.setIndices(vertexIndices);
                     break;
             }
-            _this.mallas.push(nuevaMalla);
         });
+        this.mallas.push(nuevaMalla);
     };
     TRecursoMalla.prototype.draw = function () {
         for (var i = 0; i < this.mallas.length; i++) {

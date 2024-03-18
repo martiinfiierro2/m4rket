@@ -15,7 +15,6 @@ export class TNodo {
     private actualizarMatriz: Boolean = false; //para saber si hay alguna modificación en las transformaciones
 
 
-    
 
     // Método para agregar un hijo
     agregarHijo(nodoHijo: TNodo) {
