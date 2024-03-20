@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css'
 })
+
 export class SidebarComponent {
 
 
@@ -33,12 +34,13 @@ export class SidebarComponent {
   
 
   getUsuario(){ 
-    this.usuarioService.getUsuario(localStorage.getItem('idUsuario'))
+    this.usuarioService.getUsuario(localStorage['idUsuario'])
       .subscribe( res => {
         this.nombreUsuario = res.usuarios.nombre;
         document.getElementById('nombreUsuario')!.innerHTML = 'Hola, ' + this.nombreUsuario;
       })
   }
+  
 
   logOut(){
     let email;

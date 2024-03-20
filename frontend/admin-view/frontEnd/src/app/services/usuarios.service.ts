@@ -18,7 +18,7 @@ export class UsuariosService {
 
   
   cargarCabecera(){
-    this.token = localStorage.getItem('tokenUsuario') || '';
+    this.token = localStorage['tokenUsuario'];
     this.cabeceras = new HttpHeaders({
       'x-token': this.token
     }); 
@@ -44,7 +44,7 @@ export class UsuariosService {
 
     this.cargarCabecera();
 
-    let urlCompleta = environment.base_url + '/usuarios/?id=' + idUsu;
+    let urlCompleta = environment.base_url + '/usuarios?id=' + idUsu;
 
     return this.http.get(urlCompleta, { headers: this.cabeceras});
   }
@@ -54,8 +54,6 @@ export class UsuariosService {
 
     this.cargarCabecera();
   
-    console.log("Token llegado a validar token: ", this.token);
-
     if (this.token === '') {
       return  of(false);
     }

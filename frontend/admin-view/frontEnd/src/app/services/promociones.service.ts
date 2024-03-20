@@ -12,7 +12,7 @@ export class PromocionesService {
 
   private url: string = environment.base_url + '/promociones';
 
-  private token = localStorage.getItem('tokenUsuario');
+  private token = localStorage['tokenUsuario'];
   private cabeceras = new HttpHeaders({
     'x-token': this.token
   });;
