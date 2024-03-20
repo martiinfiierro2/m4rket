@@ -15,7 +15,7 @@ export class ProductosService {
 
   private url: string = environment.base_url  + '/productos';
 
-  private token = localStorage.getItem('tokenUsuario');
+  private token = localStorage['tokenUsuario'];
   private cabeceras = new HttpHeaders({
     'x-token': this.token
   });;

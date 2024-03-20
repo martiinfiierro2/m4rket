@@ -3,7 +3,8 @@ import { UsuariosService } from '../../services/usuarios.service';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import Swal from 'sweetalert2'
-import { error } from 'console';
+import { Console, error } from 'console';
+import { of } from 'rxjs';
 
 interface Usuarios{
   nombre: string,
@@ -46,7 +47,7 @@ export class UsuariosComponent {
 
   ngOnInit(){
     this.usuarioService.cargarCabecera();
-    this.getUsuarios();
+    this.getUsuariosAdmin();
   }
   
   validarPwd(pwd: string): boolean {
@@ -83,11 +84,18 @@ export class UsuariosComponent {
 
   
 
-  getUsuarios(){
+
+  getUsuariosAdmin(){
+    let usuariosTotales: Usuarios[] = [];
+
     this.usuarioService.getUsuarios()
-      .subscribe(res =>{
-        this.usuarios = res.usuarios;
-      })
+      .subscribe( res =>{
+        for (let usuario of res.usuarios){
+          if (usuario.rol == 'admin') {
+            this.usuarios.push(usuario);
+          }
+         }
+      })    
   }
 
   getBusquedaUsuarios(){
@@ -103,7 +111,7 @@ export class UsuariosComponent {
       if (this.validarPwd(this.usuarioForm.value.pwd)) {
         this.usuarioService.crearUsuario(this.usuarioForm.value)
           .subscribe(res =>{
-            this.getUsuarios();
+            this.getUsuariosAdmin();
           }, err =>{
             this.lanzarModelError("Error creando el usuario")
           });
@@ -122,7 +130,7 @@ export class UsuariosComponent {
   borrarUsu( idUsu: number){
     this.usuarioService.borrarUsuario(idUsu)
       .subscribe( res =>{
-        this.getUsuarios();
+        this.getUsuariosAdmin();
       })
   }
 
