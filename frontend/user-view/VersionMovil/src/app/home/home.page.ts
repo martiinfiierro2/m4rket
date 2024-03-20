@@ -3,6 +3,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { ProductosService } from "../services/productos.service";
 import { DrawerComponent } from '../components/drawer/drawer.component';
+import { MotorComponent } from '../components/motor/motor.component';
 import { environment } from '../environments/environment';
 import { getLocaleFirstDayOfWeek } from '@angular/common';
 import { EstadisticasService } from '../services/estadisticas.service';
@@ -97,6 +98,7 @@ export class HomePage {
     this.drawerComponent.getProducto(idProd);
 
   }
+  @ViewChild(MotorComponent) motorComponent!: MotorComponent;
 
   //variables para mostrar foto
   urlFotoProducto = environment.base_url + '/uploads/fotoproducto/';
@@ -107,7 +109,10 @@ export class HomePage {
     private estadisticasService: EstadisticasService, 
     private ubicacionesService: UbicacionesService) {}
     
-  
+  ngAfterViewInit(): void {
+    this.motorComponent.ngOnInit();
+  }
+
   //VERSION ANTIGUA
   ngOnInit(): void {
     this.getUsuarioLog();

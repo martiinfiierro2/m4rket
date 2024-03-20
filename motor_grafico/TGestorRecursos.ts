@@ -5,25 +5,23 @@ import { TRecursoTextura } from "./TRecursoTextura";
 
 export class TGestorRecursos{
 
-    private recursos: TRecurso[];
-
-    constructor(parameters) {
-        
-    }
+    private recursos: TRecurso[] = [];
 
     getRecurso( nombre:string ){
 
-        let res:TRecurso|undefined;
+        let res: TRecurso|undefined;
 
-        for (const recurso of this.recursos) {
-            if (recurso.getNombre() === nombre) {
-                res = recurso;
-                break;
+        if(this.recursos.length > 0){
+            for (const recurso of this.recursos) {
+                if (recurso.getNombre() === nombre) {
+                    res = recurso;
+                    break;
+                }
             }
         }
 
         //si no existe se crea
-        if (res == undefined) {
+        else if (res == undefined) {
             res = this.crearRecurso(nombre)
             res.cargarFichero(nombre)
             this.anyadirRecurso(res);
@@ -33,7 +31,8 @@ export class TGestorRecursos{
     }
 
     crearRecurso(nombre: string): TRecurso {
-        switch (nombre) {
+        return new TRecursoMalla(nombre);
+        /*switch (nombre) {
             case "malla":
                 return new TRecursoMalla(nombre);
             case "material":
@@ -41,8 +40,8 @@ export class TGestorRecursos{
             case "textura":
                 return new TRecursoTextura(nombre);
             default:
-                throw new Error(`Tipo de recurso no válido: ${nombre}`);
-        }
+                throw new Error(`Tipo de recurso no valido: ${nombre}`);
+        }*/
     }
 
     

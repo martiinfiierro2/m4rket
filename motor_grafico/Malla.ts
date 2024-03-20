@@ -1,9 +1,9 @@
 export class Malla {
 
-    private vertices: number[];
-    private normales: number[];
-    private cordTex: number[];
-    private indices: number[];
+    private vertices: number[][] = [];
+    private normales: number[][] = [];
+    private cordTex: number[][] = [];
+    private indices: number[][] = [];
     //private texturas: Textura[];
 
     dibujar(){
@@ -12,19 +12,24 @@ export class Malla {
 
 
     setVertices( vecVertices: number[] ){
-       this.vertices = vecVertices;
+        console.log(vecVertices);
+        this.vertices.push(vecVertices);
     }
 
     setNormales( vecNormales: number[]){
-        this.normales = vecNormales;
+        this.normales.push(vecNormales);
     }
 
     setCordTex( vecCordTex: number[] ){
-        this.cordTex = vecCordTex;
+        this.cordTex.push(vecCordTex);
     }
 
     setIndices( vecIndices: number[] ){
-        this.indices = vecIndices;
+        this.indices.push(vecIndices);
+    }
+
+    getVertices(){
+        return this.vertices;
     }
 
     

@@ -27,10 +27,6 @@
 
     <div class="mapa">
 
-
-      <div id="canvas"></div>
-      <ion-button (click)="stuff()">3D Load</ion-button>
-
       <div *ngFor="let productoDetalle of detallesProductos" class="producto-container">
         <div class="navegador-producto" (click)="llamarFuncionDrawer(productoDetalle.idProducto)">
           <!--(click)="getProductoSelect(productoDetalle.idProducto)"-->
@@ -59,6 +55,6 @@
     </div>
 
   </div>
-
+  <app-motor></app-motor>
   <app-drawer></app-drawer>
 </ion-content>
