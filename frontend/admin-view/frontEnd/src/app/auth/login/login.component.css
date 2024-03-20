@@ -38,6 +38,10 @@ form{
             font-size: small;
         }
 
+        #iconoCarga{
+            margin-right: 7px;
+        }
+
     #avisos{
         font-size: small;
         color: red;
