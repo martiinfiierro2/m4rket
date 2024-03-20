@@ -6,6 +6,7 @@ import { HomePage } from './home.page';
 
 import { HomePageRoutingModule } from './home-routing.module';
 import { SharedComponentsModule } from '../components/shared-components.module';
+import { MotorComponent } from '../components/motor/motor.component';
 
 
 @NgModule({
@@ -14,8 +15,11 @@ import { SharedComponentsModule } from '../components/shared-components.module';
     FormsModule,
     IonicModule,
     HomePageRoutingModule,
-    SharedComponentsModule
+    SharedComponentsModule,
   ],
-  declarations: [HomePage]
+  declarations: [
+    HomePage,
+    MotorComponent
+  ]
 })
 export class HomePageModule {}
