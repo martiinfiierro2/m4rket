@@ -16,19 +16,29 @@
           <p>10/14</p>
         </div>
       </div>
-      <div id="info-div" class="info-div hidden"></div>
 
-      <div class="boton-qr">
+      <!-- Cositas del div tarjetita -->
+      <!--<div class="boton-qr">
         <ion-icon name="qr-code-outline"></ion-icon>
-      </div>
+      </div>-->
     </div>
 
-  
+
 
     <div class="mapa">
 
+      <div id="canvas">
+        <div id="info-div" class="info-div hidden">
+          <div class="d-flex flex-column flex-md-row justify-content-center align-items-center gap-3 mt-5">
+            <div class="tpn_card" id="imagendelproducto">
+              <img src="https://img.freepik.com/free-photo/adorable-baby-anime-dragon-illustration_23-2151117668.jpg?t=st=1710619863~exp=1710623463~hmac=879c41cd460efdada3c5c185b7e7615c343a50a498f02b18050947f6b032ca8f&w=1800" class="img-left" />
+              <div class="text-right" id="textodelproducto">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <div id="canvas"></div>
       <ion-button (click)="stuff()">3D Load</ion-button>
 
       <div *ngFor="let productoDetalle of detallesProductos" class="producto-container">

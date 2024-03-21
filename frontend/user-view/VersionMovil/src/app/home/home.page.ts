@@ -87,6 +87,8 @@ export class HomePage {
   productoSelect: any;
   dispo: string = '';
   seleccionado: boolean = false;
+  productoInfo: any;
+
 
   //USO DEL DRAWER Y PASO DE INFORMACION
   @ViewChild(DrawerComponent) drawerComponent!: DrawerComponent;
@@ -104,67 +106,107 @@ export class HomePage {
 
 
   constructor(private productosService: ProductosService,
-    private estadisticasService: EstadisticasService, 
-    private ubicacionesService: UbicacionesService) {}
-    
-  
+    private estadisticasService: EstadisticasService,
+    private ubicacionesService: UbicacionesService) { }
+
+
   //VERSION ANTIGUA
   ngOnInit(): void {
     this.getUsuarioLog();
     this.getListaCompraUsu();
   }
 
-  
+
   //Funciones para sacar el valor de los productos a partit de la ubicacion del motor gráfico
-  getIdUbicacion(referencia: any, posicion: any){
-    this.ubicacionesService.getIdUbicacion(referencia, posicion).subscribe( res => {
+  getIdUbicacion(referencia: any, posicion: any) {
+    this.ubicacionesService.getIdUbicacion(referencia, posicion).subscribe(res => {
       this.getProdEnUbicacion(res.ubicaciones.id);
     })
   }
 
-  getProdEnUbicacion(idUbi: number){
-    this.ubicacionesService.getProdEnUbicacion(idUbi).subscribe( res => {
-      for(let i=0; i < res.prodUbi.length; i++){
+  getProdEnUbicacion(idUbi: number) {
+    this.ubicacionesService.getProdEnUbicacion(idUbi).subscribe(res => {
+      for (let i = 0; i < res.prodUbi.length; i++) {
         this.getProdId(res.prodUbi[i].idProd);
       }
     })
   }
-  getProdId(idProd: any){
-    this.productosService.getProductoId(idProd).subscribe( res =>  {
-      console.log(res);
-    });
+
+  mostrarInfoEnDiv() {
+    let infoDiv = document.getElementById('textodelproducto');
+
+    // PONER IMAGEN
+    /*
+    let addimg = document.getElementById('imagendelproducto');
+    let fotillo = environment.base_url + '/uploads/fotoproducto/' + this.productoInfo.productos.foto;
+
+    if (addimg !== null) {
+      // Aquí puedes acceder a productoInfo y mostrarlo en el div
+      addimg.innerHTML += `<img src="${fotillo}" alt="No hay foto">`;
+    } else {
+      console.error("addimg is null");
+    }
+    */
+   //DRAGONCITO
+   /*
+    if (addimg !== null) {
+      // Aquí puedes acceder a productoInfo y mostrarlo en el div
+      addimg.innerHTML += `<img src="https://img.freepik.com/free-photo/ado
+      rable-baby-anime-dragon-illustration_23-2151117668.jpg?t=st=1710619863~exp=1710623463~hm
+      ac=879c41cd460efdada3c5c185b7e7615c343a50a498f02b1
+      8050947f6b032ca8f&w=1800" style="flex: none;  margin-right: 10px;   max-width: 50%; "
+      />`;
+    } else {
+      console.error("addimg is null");
+    }
+*/
+    // Verificar si infoDiv no es nulo
+    if (infoDiv !== null) {
+      // Aquí puedes acceder a productoInfo y mostrarlo en el div
+      infoDiv.innerHTML += `<h5 style="color: green; font-weight: bold;">${this.productoInfo.productos.nombre} </h5> <p>${this.productoInfo.productos.precio} €</p>`;
+    } else {
+      console.error("infoDiv is null");
+    }
   }
 
+  getProdId(idProd: any) {
+    this.productosService.getProductoId(idProd).subscribe(res => {
+      this.productoInfo = res;
+      console.log(res.productos);
+      this.mostrarInfoEnDiv();
+    });
+  }
+  
   //FUNCIONES YA CREADAS DE LA ANTIGUA VERSION LISTA DE LA COMPRA
-incrementar(productoDetalle: any) {
+  incrementar(productoDetalle: any) {
     productoDetalle.cantidad++;
-    console.log('Nueva cantidad = ' +  productoDetalle.cantidad)
-    this.actualizarCantidad(productoDetalle.idProducto, productoDetalle.cantidad, productoDetalle.idLista) 
+    console.log('Nueva cantidad = ' + productoDetalle.cantidad)
+    this.actualizarCantidad(productoDetalle.idProducto, productoDetalle.cantidad, productoDetalle.idLista)
     let tipo = "anadido";
     let fecha = new Date();
     this.estadistica(productoDetalle.idProducto, tipo, fecha);
-}
+  }
 
-//Estadisticas
-estadistica(id: any, tipo: any, fecha: any){
-  const post: Stats = {
-    nombre: tipo,
-    idProd: id,
-    qr: null,
-    fecha: fecha
-  };
-  console.log(post);
-  this.estadisticasService.postContador(post);
-}
+  //Estadisticas
+  estadistica(id: any, tipo: any, fecha: any) {
+    const post: Stats = {
+      nombre: tipo,
+      idProd: id,
+      qr: null,
+      fecha: fecha
+    };
+    console.log(post);
+    this.estadisticasService.postContador(post);
+  }
 
-decrementar(productoDetalle: any) {
-  productoDetalle.cantidad--;
-  console.log('Nueva cantidad = ' +  productoDetalle.cantidad)
-  this.actualizarCantidad(productoDetalle.idProducto, productoDetalle.cantidad, productoDetalle.idLista)
-  let tipo = "eliminado";
-  let fecha = new Date();
-  this.estadistica(productoDetalle.idProducto, tipo, fecha);
-}
+  decrementar(productoDetalle: any) {
+    productoDetalle.cantidad--;
+    console.log('Nueva cantidad = ' + productoDetalle.cantidad)
+    this.actualizarCantidad(productoDetalle.idProducto, productoDetalle.cantidad, productoDetalle.idLista)
+    let tipo = "eliminado";
+    let fecha = new Date();
+    this.estadistica(productoDetalle.idProducto, tipo, fecha);
+  }
 
   eliminar(productoDetalle: any) {
     this.borrarProd(productoDetalle.idLista);
@@ -264,16 +306,16 @@ decrementar(productoDetalle: any) {
 
     console.log('Cuerpo de la solicitud:', body);
 
-  this.productosService.putListaCompra(idLista, body)
-    .subscribe(
-      (res) => {
-        console.log('Respuesta correcta:', res);
-      },
-      (error) => {
-        console.error('Error en la solicitud PUT: again', error);
-      }
-    );
-}
+    this.productosService.putListaCompra(idLista, body)
+      .subscribe(
+        (res) => {
+          console.log('Respuesta correcta:', res);
+        },
+        (error) => {
+          console.error('Error en la solicitud PUT: again', error);
+        }
+      );
+  }
 
 
   // ESTO ES SOLO MODELO 
@@ -708,11 +750,10 @@ decrementar(productoDetalle: any) {
                                         objectArray === B1 ? "B1" :
                                           objectArray === B2 ? "B2" : "B3";
                 const position = objectArray.indexOf(object);
-                // Establecer el contenido del div con la información
-                infoDiv.innerHTML = `Array: ${arrayName}<br>Position: ${position}`;
-                
+
                 //Busco la relacion con produtos
                 self.getIdUbicacion(arrayName, position);
+
               }
               break;
             }
