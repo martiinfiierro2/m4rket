@@ -37,8 +37,8 @@
                 <td> {{ promocion.fecha_ini }} </td>
                 <td> {{ promocion.fecha_fin }}</td>
                 <td>
-                    <button (click)="borrarPromo(promocion.id)" class="btnIcon" id="btnBorrar"><mat-icon class="iconoAccion">delete</mat-icon></button>
-                    <button (click)="irEditPromo(promocion.id)" class="btnIcon" id="btnEdit"><mat-icon class="iconoAccion">edit</mat-icon></button>
+                    <button (click)="borrarPromo(promocion.id)" class="btnIcon" id="btnBorrar"><span class="iconoAccion fa-solid fa-trash"></span></button>
+                    <button (click)="irEditPromo(promocion.id)" class="btnIcon" id="btnEdit"><span class="iconoAccion fa-solid fa-pen"></span></button>
                 </td>
             </tr>
         </tbody>

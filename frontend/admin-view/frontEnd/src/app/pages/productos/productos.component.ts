@@ -40,7 +40,8 @@ export interface Producto{
 
 export interface Ubicaciones{
   id: number,
-  referencia: string
+  referencia: string,
+  posicion: number
 }
 
 export interface Promociones{

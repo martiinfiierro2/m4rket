@@ -35,7 +35,7 @@
                     <div style="text-decoration: line-through; color: gray;">{{ producto.precio}}€</div>
                     <div>{{producto.Promocions[0].en_promocion.precio}}€</div>
                 </td>
-                <td *ngIf="producto.Ubicacions.length > 0"><span *ngFor="let ubicaciones of producto.Ubicacions"> {{ ubicaciones.referencia }} </span></td>
+                <td *ngIf="producto.Ubicacions.length > 0"><span *ngFor="let ubicaciones of producto.Ubicacions"> {{ ubicaciones.referencia }}-{{ ubicaciones.posicion }} </span></td>
                 <td *ngIf="producto.Ubicacions.length == 0"> --- </td>
                 <td *ngIf="producto.Promocions.length == 0">
                     <input list="promociones" placeholder="Selecciona promoción..." (change)="asignarPromocion(producto.id, producto.precio, $event, producto.id)">
@@ -52,9 +52,9 @@
                     <p *ngIf="cambioPromoPorFila[i] == false" class="error">Elija una promoción existente</p>
                 </td>
                 <td>
-                    <button (click)="borrarProd(producto.id)" class="btnIcon" id="btnBorrar"><mat-icon class="iconoAccion">delete</mat-icon></button>
-                    <button (click)="irEditarProducto(producto.id)" class="btnIcon" id="btnEdit"><mat-icon class="iconoAccion">edit</mat-icon></button>
-                    <button (click)="ubicarProducto(producto.id)" class="btnIcon" id="btnUbicar"><mat-icon class="iconoAccion">location_on</mat-icon></button>
+                    <button (click)="borrarProd(producto.id)" class="btnIcon" id="btnBorrar"><span class="iconoAccion fa-solid fa-trash"></span></button>
+                    <button (click)="irEditarProducto(producto.id)" class="btnIcon" id="btnEdit"><span class="iconoAccion fa-solid fa-pen"></span></button>
+                    <button (click)="ubicarProducto(producto.id)" class="btnIcon" id="btnUbicar"><span class="iconoAccion fa-solid fa-location-dot"></span></button>
                 </td>
             </tr>
         </tbody>
@@ -80,7 +80,7 @@
             <div>
                 <select name="selectPromociones" id="selectPromociones" placeholder="ubicación" [(ngModel)]="valorUbicacionProucto">
                     <option value="default" selected></option>
-                    <option *ngFor="let ubicacion of ubicaciones" value="{{ubicacion.id}}">{{ ubicacion.referencia }}</option>
+                    <option *ngFor="let ubicacion of ubicaciones" value="{{ubicacion.id}}">{{ ubicacion.referencia }} - {{ ubicacion.posicion }}</option>
                 </select>
             </div>
             <div>
