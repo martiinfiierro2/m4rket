@@ -12,11 +12,11 @@ export class TRecursoMalla extends TRecurso {
 
     cargarFichero(nombreFichero: string) {
         // Combinar el nombre del archivo con la ruta relativa
-        const ruta = './' + nombreFichero;
+        const rutas = './' + nombreFichero;
         
         const objLoader = new ObjectLoader();
         objLoader.load(
-            ruta,
+            rutas,
             (mesh: any) => {
                 const geometry = mesh.geometry;
                 const vertices = geometry.attributes.position.array;
