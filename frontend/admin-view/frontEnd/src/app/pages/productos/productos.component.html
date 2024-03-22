@@ -52,9 +52,9 @@
                     <p *ngIf="cambioPromoPorFila[i] == false" class="error">Elija una promoción existente</p>
                 </td>
                 <td>
-                    <button (click)="borrarProd(producto.id)" class="btnIcon" id="btnBorrar"><mat-icon class="iconoAccion">delete</mat-icon></button>
-                    <button (click)="irEditarProducto(producto.id)" class="btnIcon" id="btnEdit"><mat-icon class="iconoAccion">edit</mat-icon></button>
-                    <button (click)="ubicarProducto(producto.id)" class="btnIcon" id="btnUbicar"><mat-icon class="iconoAccion">location_on</mat-icon></button>
+                    <button (click)="borrarProd(producto.id)" class="btnIcon" id="btnBorrar"><span class="iconoAccion fa-solid fa-trash"></span></button>
+                    <button (click)="irEditarProducto(producto.id)" class="btnIcon" id="btnEdit"><span class="iconoAccion fa-solid fa-pen"></span></button>
+                    <button (click)="ubicarProducto(producto.id)" class="btnIcon" id="btnUbicar"><span class="iconoAccion fa-solid fa-location-dot"></span></button>
                 </td>
             </tr>
         </tbody>
