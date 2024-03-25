@@ -137,6 +137,7 @@ export class HomePage {
   getProdId(idProd: any) {
     this.productosService.getProductoId(idProd).subscribe(res => {
       this.productoInfo = res;
+      console.log(res.productos.nombre);
       console.log(res.productos.id);
       this.llamarFuncionDrawer(res.productos.id);
       //this.mostrarInfoEnDiv();
@@ -297,7 +298,6 @@ export class HomePage {
     this.container = document.getElementById('canvas');
     this.container.style.width = '100%';
     this.container.style.height = '100%';
-    console.log('inicio stuff');
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
       75,
@@ -720,8 +720,7 @@ export class HomePage {
 
                 //Busco la relacion con produtos
                 self.getIdUbicacion(arrayName, position);
-
-
+                console.log(arrayName, position);
               }
               break;
             }
