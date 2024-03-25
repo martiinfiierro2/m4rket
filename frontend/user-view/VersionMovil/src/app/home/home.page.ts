@@ -114,6 +114,7 @@ export class HomePage {
   ngOnInit(): void {
     this.getUsuarioLog();
     this.getListaCompraUsu();
+    this.stuff()
   }
 
 
@@ -132,50 +133,23 @@ export class HomePage {
     })
   }
 
-  mostrarInfoEnDiv() {
-    let infoDiv = document.getElementById('textodelproducto');
-
-    // PONER IMAGEN
-    /*
-    let addimg = document.getElementById('imagendelproducto');
-    let fotillo = environment.base_url + '/uploads/fotoproducto/' + this.productoInfo.productos.foto;
-
-    if (addimg !== null) {
-      // Aquí puedes acceder a productoInfo y mostrarlo en el div
-      addimg.innerHTML += `<img src="${fotillo}" alt="No hay foto">`;
-    } else {
-      console.error("addimg is null");
-    }
-    */
-   //DRAGONCITO
-   /*
-    if (addimg !== null) {
-      // Aquí puedes acceder a productoInfo y mostrarlo en el div
-      addimg.innerHTML += `<img src="https://img.freepik.com/free-photo/ado
-      rable-baby-anime-dragon-illustration_23-2151117668.jpg?t=st=1710619863~exp=1710623463~hm
-      ac=879c41cd460efdada3c5c185b7e7615c343a50a498f02b1
-      8050947f6b032ca8f&w=1800" style="flex: none;  margin-right: 10px;   max-width: 50%; "
-      />`;
-    } else {
-      console.error("addimg is null");
-    }
-*/
-    // Verificar si infoDiv no es nulo
-    if (infoDiv !== null) {
-      // Aquí puedes acceder a productoInfo y mostrarlo en el div
-      infoDiv.innerHTML += `<h5 style="color: green; font-weight: bold;">${this.productoInfo.productos.nombre} </h5> <p>${this.productoInfo.productos.precio} €</p>`;
-    } else {
-      console.error("infoDiv is null");
-    }
-  }
 
   getProdId(idProd: any) {
     this.productosService.getProductoId(idProd).subscribe(res => {
       this.productoInfo = res;
-      console.log(res.productos);
-      this.mostrarInfoEnDiv();
+      console.log(res.productos.id);
+      this.llamarFuncionDrawer(res.productos.id);
+      //this.mostrarInfoEnDiv();
     });
   }
+
+   toggleVisibility() {
+    var div = document.getElementById("info-div");
+    if(div!== null)
+    div.classList.add("hidden");
+  console.log("ToggleVisiblity");
+  }
+ 
   
   //FUNCIONES YA CREADAS DE LA ANTIGUA VERSION LISTA DE LA COMPRA
   incrementar(productoDetalle: any) {
@@ -242,9 +216,7 @@ export class HomePage {
           cantidad: item.cantidad,
           id: item.id
         }));
-
         // console.log(this.listaCompra);
-
 
         const detallesProductos: ProductoDetalle[] = [];
 
@@ -698,7 +670,6 @@ export class HomePage {
     */
     //Prueba de tocar objetos
 
-    let infoDiv = document.getElementById('info-div');
 
     const container: HTMLElement | null = document.getElementById('canvas');
     let intersectedObjectsMap: Map<THREE.Object3D, THREE.Object3D>;
@@ -721,8 +692,6 @@ export class HomePage {
         intersectedObjectsMap = new Map<THREE.Object3D, THREE.Object3D>();
         let objectFound = false;
 
-
-
         // Loop through all arrays (A1 to A6)
         const objectArrays: THREE.Object3D[][] = [A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, B1, B2, B3];
         for (const objectArray of objectArrays) {
@@ -731,9 +700,7 @@ export class HomePage {
             if (intersects.length > 0) {
               intersectedObjectsMap.set(object, intersects[0].object);
               objectFound = true;
-              if (infoDiv) {
-                infoDiv.classList.remove('hidden');
-
+              if (objectFound) {
                 // Obtener el nombre del array y la posición
                 const arrayName = objectArray === A1 ? "A1" :
                   objectArray === A2 ? "A2" :
@@ -754,6 +721,7 @@ export class HomePage {
                 //Busco la relacion con produtos
                 self.getIdUbicacion(arrayName, position);
 
+
               }
               break;
             }
@@ -765,4 +733,5 @@ export class HomePage {
     }
     animate();
   }
+
 }
