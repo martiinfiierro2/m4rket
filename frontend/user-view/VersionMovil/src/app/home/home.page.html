@@ -16,42 +16,20 @@
           <p>10/14</p>
         </div>
       </div>
-      <div id="info-div" class="info-div hidden"></div>
 
-      <div class="boton-qr">
+      <!-- Cositas del div tarjetita -->
+      <!--<div class="boton-qr">
         <ion-icon name="qr-code-outline"></ion-icon>
-      </div>
+      </div>-->
     </div>
 
-  
+
 
     <div class="mapa">
 
-      <div *ngFor="let productoDetalle of detallesProductos" class="producto-container">
-        <div class="navegador-producto" (click)="llamarFuncionDrawer(productoDetalle.idProducto)">
-          <!--(click)="getProductoSelect(productoDetalle.idProducto)"-->
-          <img [src]="urlFotoProducto + productoDetalle.foto + '?token=' +tokenUsuario" alt="Product Image" />
-          <div class="product-text">
-            <h3>{{productoDetalle.nombre}}</h3>
-            <p> {{ productoDetalle.precio }}€</p>
-          </div>
-        </div>
-
-        <div class="product-buttons">
-          <div class="add2">
-            <button (click)="decrementar(productoDetalle)">
-              <ion-icon class="add-button" name="remove-circle-outline"></ion-icon>
-            </button>
-            <span>{{ productoDetalle.cantidad}}</span>
-            <button (click)="incrementar(productoDetalle)">
-              <ion-icon class="add-button" name="add-circle-outline"></ion-icon>
-            </button>
-            <button (click)="eliminar(productoDetalle);">
-              <ion-icon class="add-button" name="trash-outline"></ion-icon>
-            </button>
-          </div>
-        </div>
+      <div id="canvas">
       </div>
+
     </div>
 
   </div>

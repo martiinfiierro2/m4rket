@@ -88,6 +88,8 @@ export class HomePage {
   productoSelect: any;
   dispo: string = '';
   seleccionado: boolean = false;
+  productoInfo: any;
+
 
   //USO DEL DRAWER Y PASO DE INFORMACION
   @ViewChild(DrawerComponent) drawerComponent!: DrawerComponent;
@@ -117,59 +119,73 @@ export class HomePage {
   ngOnInit(): void {
     this.getUsuarioLog();
     this.getListaCompraUsu();
+    this.stuff()
   }
 
-  
+
   //Funciones para sacar el valor de los productos a partit de la ubicacion del motor gráfico
-  getIdUbicacion(referencia: any, posicion: any){
-    this.ubicacionesService.getIdUbicacion(referencia, posicion).subscribe( res => {
+  getIdUbicacion(referencia: any, posicion: any) {
+    this.ubicacionesService.getIdUbicacion(referencia, posicion).subscribe(res => {
       this.getProdEnUbicacion(res.ubicaciones.id);
     })
   }
 
-  getProdEnUbicacion(idUbi: number){
-    this.ubicacionesService.getProdEnUbicacion(idUbi).subscribe( res => {
-      for(let i=0; i < res.prodUbi.length; i++){
+  getProdEnUbicacion(idUbi: number) {
+    this.ubicacionesService.getProdEnUbicacion(idUbi).subscribe(res => {
+      for (let i = 0; i < res.prodUbi.length; i++) {
         this.getProdId(res.prodUbi[i].idProd);
       }
     })
   }
-  getProdId(idProd: any){
-    this.productosService.getProductoId(idProd).subscribe( res =>  {
-      console.log(res);
+
+
+  getProdId(idProd: any) {
+    this.productosService.getProductoId(idProd).subscribe(res => {
+      this.productoInfo = res;
+      console.log(res.productos.id);
+      this.llamarFuncionDrawer(res.productos.id);
+      //this.mostrarInfoEnDiv();
     });
   }
 
+   toggleVisibility() {
+    var div = document.getElementById("info-div");
+    if(div!== null)
+    div.classList.add("hidden");
+  console.log("ToggleVisiblity");
+  }
+ 
+  
   //FUNCIONES YA CREADAS DE LA ANTIGUA VERSION LISTA DE LA COMPRA
-incrementar(productoDetalle: any) {
+  incrementar(productoDetalle: any) {
     productoDetalle.cantidad++;
-    console.log('Nueva cantidad = ' +  productoDetalle.cantidad)
-    this.actualizarCantidad(productoDetalle.idProducto, productoDetalle.cantidad, productoDetalle.idLista) 
+    console.log('Nueva cantidad = ' + productoDetalle.cantidad)
+    this.actualizarCantidad(productoDetalle.idProducto, productoDetalle.cantidad, productoDetalle.idLista)
     let tipo = "anadido";
     let fecha = new Date();
     this.estadistica(productoDetalle.idProducto, tipo, fecha);
-}
+  }
 
-//Estadisticas
-estadistica(id: any, tipo: any, fecha: any){
-  const post: Stats = {
-    nombre: tipo,
-    idProd: id,
-    qr: null,
-    fecha: fecha
-  };
-  console.log(post);
-  this.estadisticasService.postContador(post);
-}
+  //Estadisticas
+  estadistica(id: any, tipo: any, fecha: any) {
+    const post: Stats = {
+      nombre: tipo,
+      idProd: id,
+      qr: null,
+      fecha: fecha
+    };
+    console.log(post);
+    this.estadisticasService.postContador(post);
+  }
 
-decrementar(productoDetalle: any) {
-  productoDetalle.cantidad--;
-  console.log('Nueva cantidad = ' +  productoDetalle.cantidad)
-  this.actualizarCantidad(productoDetalle.idProducto, productoDetalle.cantidad, productoDetalle.idLista)
-  let tipo = "eliminado";
-  let fecha = new Date();
-  this.estadistica(productoDetalle.idProducto, tipo, fecha);
-}
+  decrementar(productoDetalle: any) {
+    productoDetalle.cantidad--;
+    console.log('Nueva cantidad = ' + productoDetalle.cantidad)
+    this.actualizarCantidad(productoDetalle.idProducto, productoDetalle.cantidad, productoDetalle.idLista)
+    let tipo = "eliminado";
+    let fecha = new Date();
+    this.estadistica(productoDetalle.idProducto, tipo, fecha);
+  }
 
   eliminar(productoDetalle: any) {
     this.borrarProd(productoDetalle.idLista);
@@ -205,9 +221,7 @@ decrementar(productoDetalle: any) {
           cantidad: item.cantidad,
           id: item.id
         }));
-
         // console.log(this.listaCompra);
-
 
         const detallesProductos: ProductoDetalle[] = [];
 
@@ -269,16 +283,16 @@ decrementar(productoDetalle: any) {
 
     console.log('Cuerpo de la solicitud:', body);
 
-  this.productosService.putListaCompra(idLista, body)
-    .subscribe(
-      (res) => {
-        console.log('Respuesta correcta:', res);
-      },
-      (error) => {
-        console.error('Error en la solicitud PUT: again', error);
-      }
-    );
-}
+    this.productosService.putListaCompra(idLista, body)
+      .subscribe(
+        (res) => {
+          console.log('Respuesta correcta:', res);
+        },
+        (error) => {
+          console.error('Error en la solicitud PUT: again', error);
+        }
+      );
+  }
 
 
   // ESTO ES SOLO MODELO 
@@ -492,7 +506,7 @@ decrementar(productoDetalle: any) {
       function (glb) {
         pointer = glb.scene;
         pointer.position.set(-8.1, 20.6, 22.6);
-        pointer.scale.set(0.4, 0.4, 0.4);
+        pointer.scale.set(0.75, 0.75, 0.75);
         //scene.add(pointer); // Para añadir el pointer que utilizo para saber pos
         //moveSphereWithKeyboard(pointer, renderer, scene);
         for (let i = 0; i <= 9; i++) {
@@ -661,7 +675,6 @@ decrementar(productoDetalle: any) {
     */
     //Prueba de tocar objetos
 
-    let infoDiv = document.getElementById('info-div');
 
     const container: HTMLElement | null = document.getElementById('canvas');
     let intersectedObjectsMap: Map<THREE.Object3D, THREE.Object3D>;
@@ -684,8 +697,6 @@ decrementar(productoDetalle: any) {
         intersectedObjectsMap = new Map<THREE.Object3D, THREE.Object3D>();
         let objectFound = false;
 
-
-
         // Loop through all arrays (A1 to A6)
         const objectArrays: THREE.Object3D[][] = [A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, B1, B2, B3];
         for (const objectArray of objectArrays) {
@@ -694,9 +705,7 @@ decrementar(productoDetalle: any) {
             if (intersects.length > 0) {
               intersectedObjectsMap.set(object, intersects[0].object);
               objectFound = true;
-              if (infoDiv) {
-                infoDiv.classList.remove('hidden');
-
+              if (objectFound) {
                 // Obtener el nombre del array y la posición
                 const arrayName = objectArray === A1 ? "A1" :
                   objectArray === A2 ? "A2" :
@@ -713,11 +722,11 @@ decrementar(productoDetalle: any) {
                                         objectArray === B1 ? "B1" :
                                           objectArray === B2 ? "B2" : "B3";
                 const position = objectArray.indexOf(object);
-                // Establecer el contenido del div con la información
-                infoDiv.innerHTML = `Array: ${arrayName}<br>Position: ${position}`;
-                
+
                 //Busco la relacion con produtos
                 self.getIdUbicacion(arrayName, position);
+
+
               }
               break;
             }
@@ -729,4 +738,5 @@ decrementar(productoDetalle: any) {
     }
     animate();
   }
+
 }

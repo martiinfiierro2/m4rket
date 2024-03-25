@@ -247,7 +247,78 @@
   // PopUp jiji
   .hidden {
     display: none;
+    background-color: white;
   }
+  .info-div {
+    position: absolute;
+    top: 30%;
+    left: 50%; 
+    width: 22em;
+    height: 35em;
+    transform: translate(-50%, -50%); 
+    z-index: 9999; 
+    background-color: red; //BORRAR EN DAVANT
+    /* Otras propiedades de estilo */
+  }
+  #canvas-container {
+    position: relative; /* Asegura que los elementos absolutos se posicionen relativamente a este contenedor */
+  }
+/* root */
+:root {
+  --bg-light: #F5F5FC;
+  --bg-dark: #35353C;
+  --bg-darker: #15151C;
+  --font-body: #55555C;
+  --shadow: #C5C5CC;
+}
 
+/* tpn card style */
+.tpn_card{
+  background: white;
+  padding: 10px;
+  border-radius:27px;
+  display: flex;
+  align-items: center;
+  width: 75%;
+  height: 6em;
 
-  
+}
+
+.tpn_card img{
+  border-radius:23px;
+  box-shadow: 1px 7px 13px var(--shadow);
+}
+
+.tpn_card p{
+  color: black;
+  font-weight:400;
+  margin-bottom:24px;
+}
+
+.tpn_card .tpn_btn{
+  padding:13px 27px !important;
+  line-height: normal;
+  background: var(--bg-dark);
+  border-radius:17px;
+  text-decoration:none;
+  color: black;
+  box-shadow: 1px 7px 13px var(--shadow);
+  transition: all .7s ease;
+}
+
+.tpn_card .tpn_btn:hover{
+  background: var(--bg-darker);
+  box-shadow: none;
+}
+
+.img-left {
+  flex: none; 
+  margin-right: 10px; 
+  max-width: 50%; 
+
+}
+.text-right {
+  flex: 1; /* Para que el texto ocupe el espacio restante */
+  color: black;
+}
+
