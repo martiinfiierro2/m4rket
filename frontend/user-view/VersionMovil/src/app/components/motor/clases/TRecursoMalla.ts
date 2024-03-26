@@ -2,6 +2,7 @@ import { TRecurso } from "./TRecurso";
 import { Malla } from "./Malla";
 import { ObjectLoader } from "three";
 
+
 export class TRecursoMalla extends TRecurso {
     
     private mallas: Malla[] = [];
@@ -12,11 +13,12 @@ export class TRecursoMalla extends TRecurso {
 
     cargarFichero(nombreFichero: string) {
         // Combinar el nombre del archivo con la ruta relativa
-        const rutas = './' + nombreFichero;
+        const rutas = nombreFichero;
         
+
         const objLoader = new ObjectLoader();
         objLoader.load(
-            rutas,
+            '../../assets/motor/conTextura.obj',
             (mesh: any) => {
                 const geometry = mesh.geometry;
                 const vertices = geometry.attributes.position.array;
