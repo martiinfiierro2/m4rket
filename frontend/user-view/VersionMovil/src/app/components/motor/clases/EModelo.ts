@@ -8,13 +8,30 @@ export class EModelo {
         this.recursoMalla = recurso;
     }
 
-    cargarModelo( fichero: any ){
-
+    cargarFichero( fichero: any ){
     }
 
-    dibujar(){//llama a recurso malla
-        if(this.recursoMalla != undefined){
+    async dibujar(): Promise<void>{
+        await new Promise<void>(resolve => {
+            if(this.recursoMalla) {
+                console.log(this.recursoMalla)
+                resolve();
+            }
+            else {
+                const intervalo = setInterval(() => {
+                    if(this.recursoMalla) {
+                        clearInterval(intervalo);
+                        resolve();
+                    }
+                }, 100)
+            }
+        })
+
+        if(this.recursoMalla) {
             this.recursoMalla.draw();
+        }
+        else {
+            console.log("Fallo dibujando la malla");
         }
     }
 }

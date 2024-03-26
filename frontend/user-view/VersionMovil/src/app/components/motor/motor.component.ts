@@ -13,21 +13,19 @@ export class MotorComponent  implements OnInit{
 
   constructor() { }
 
-  ngOnInit(): void {
+  ngOnInit(){
     this.crearEscena();
   }
 
-  crearEscena(){
-    const canvas = document.querySelector("#mercado") as HTMLCanvasElement;
-    console.log(canvas)
+  async crearEscena(){
     const motor = new TMotorTAG();
-    motor.iniciarCanva(canvas);
 
-    const personaje: TNodo = motor.crearNodo( null, glMatrix.vec3.fromValues(10,0,10), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(1,1,1));
-    const cuerpo: TNodo = motor.crearModelo( personaje, glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(1,1,1), 'conTextura.obj');
-    const sombrero: TNodo = motor.crearModelo( personaje, glMatrix.vec3.fromValues(0,10,0), glMatrix.vec3.fromValues(0,0,Math.PI/8), glMatrix.vec3.fromValues(1,1,1), undefined);
-    console.log('personaje: ' + personaje + ', cuerpo: ' + cuerpo + ', sombrero: ' + sombrero);
-    personaje.recorrer(glMatrix.mat4.identity(glMatrix.mat4.create()));//Matriz identidad
+    const canvas = document.querySelector("#mercado") as HTMLCanvasElement;
+    await motor.iniciarCanva(canvas);
+
+    const personaje: TNodo = await motor.crearNodo( null, glMatrix.vec3.fromValues(10,0,10), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(1,1,1));
+    const cuerpo: TNodo = await motor.crearModelo( personaje, glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(1,1,1), 'plano.obj');
+
+    personaje.recorrer(glMatrix.mat4.identity(glMatrix.mat4.create()));
   }
-
 }
