@@ -127,6 +127,7 @@ export class HomePage {
   getIdUbicacion(referencia: any, posicion: any) {
     this.ubicacionesService.getIdUbicacion(referencia, posicion).subscribe(res => {
       this.getProdEnUbicacion(res.ubicaciones.id);
+      console.log(res.ubicaciones.id);
     })
   }
 
@@ -138,22 +139,22 @@ export class HomePage {
     })
   }
 
-
   getProdId(idProd: any) {
     this.productosService.getProductoId(idProd).subscribe(res => {
       this.productoInfo = res;
-      console.log(res.productos.id);
       this.llamarFuncionDrawer(res.productos.id);
       //this.mostrarInfoEnDiv();
     });
   }
+  MostrarPointer(idProd: any) {
+    this.productosService.getProductoId(idProd).subscribe(res => {
+      this.productoInfo = res;
+      console.log(res.productos.Ubicacions[0].referencia);
+      console.log(res.productos.Ubicacions[0].posicion);
 
-   toggleVisibility() {
-    var div = document.getElementById("info-div");
-    if(div!== null)
-    div.classList.add("hidden");
-  console.log("ToggleVisiblity");
+    });
   }
+
  
   
   //FUNCIONES YA CREADAS DE LA ANTIGUA VERSION LISTA DE LA COMPRA
@@ -219,10 +220,14 @@ export class HomePage {
         ({
           idProd: item.idProd,
           cantidad: item.cantidad,
-          id: item.id
+          id: item.id,
+          
         }));
-        // console.log(this.listaCompra);
-
+         console.log(this.listaCompra);
+        /* 
+        for(let i=0; i<this.listaCompra.length; i++){
+          this.MostrarPointer(this.listaCompra[i].idProd);
+        }*/
         const detallesProductos: ProductoDetalle[] = [];
 
         this.listaCompra.forEach((productoCompra) => {
@@ -302,7 +307,6 @@ export class HomePage {
     this.container = document.getElementById('canvas');
     this.container.style.width = '100%';
     this.container.style.height = '100%';
-    console.log('inicio stuff');
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
       75,
@@ -337,7 +341,6 @@ export class HomePage {
       objToRender = 'market';
     }
 
-
     let object;
     renderer.setSize(window.innerWidth, window.innerHeight);
     this.container.appendChild(renderer.domElement);
@@ -354,8 +357,6 @@ export class HomePage {
         console.error(error);
       }
     );
-
-
 
     if (prefersDarkMode) {
       const topLight = new THREE.DirectionalLight(0xffffff, 2); // (color, intensity)
@@ -378,14 +379,12 @@ export class HomePage {
       const topLight3 = new THREE.DirectionalLight(0xffffff, 1.5); // (color, intensity)
       topLight3.position.set(-200, 200, 200) //top-left-ish
       topLight.castShadow = true;
-      const ambientLight = new THREE.AmbientLight(0xffffff, 30);
-      // (color, intensity)
+      const ambientLight = new THREE.AmbientLight(0xffffff, 30); // (color, intensity)
       scene.add(ambientLight);
       scene.add(topLight);
       scene.add(topLight2);
       scene.add(topLight3);
     }
-
     let pointerRotation = 0;
 
     function rotatePointers(pointers: THREE.Object3D[], pointerRotation: number) {
@@ -394,11 +393,9 @@ export class HomePage {
       }
     }
 
-
     function animate() {
       requestAnimationFrame(animate);
       controls.update();
-
 
       if (A1.length > 0) {
         pointerRotation += 0.025;
@@ -449,7 +446,7 @@ export class HomePage {
       }
       renderer.render(scene, camera);
     }
-    /*
+    /* OBTENER LA POSICION DE LA CAMARA 
         function obtenerPosicionCamara(camera: THREE.PerspectiveCamera) {
           const posicionVector = new THREE.Vector3();
           camera.getWorldPosition(posicionVector);
@@ -637,7 +634,7 @@ export class HomePage {
     );
 
 
-    /*
+    /* FUNCION DE MOVER EL OBJETO Y SABER SU POS
         // funcion de mover el objeto y saber su pos
         function moveSphereWithKeyboard(pointer: THREE.Object3D, renderer: THREE.WebGLRenderer, scene: THREE.Scene) {
           const moveSpeed = 0.1; // Ajusta la velocidad de movimiento
@@ -673,9 +670,9 @@ export class HomePage {
           });
         }
     */
-    //Prueba de tocar objetos
 
 
+        //Funcion de ver la info del producto al tocar
     const container: HTMLElement | null = document.getElementById('canvas');
     let intersectedObjectsMap: Map<THREE.Object3D, THREE.Object3D>;
     if (container) {
@@ -725,8 +722,6 @@ export class HomePage {
 
                 //Busco la relacion con produtos
                 self.getIdUbicacion(arrayName, position);
-
-
               }
               break;
             }
