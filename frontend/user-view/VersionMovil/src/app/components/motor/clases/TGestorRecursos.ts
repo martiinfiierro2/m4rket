@@ -7,8 +7,7 @@ export class TGestorRecursos{
 
     private recursos: TRecurso[] = [];
 
-    getRecurso( nombre:string ){
-
+    async getRecurso( nombre:string ){
         let res: TRecurso|undefined;
 
         if(this.recursos.length > 0){
@@ -22,15 +21,22 @@ export class TGestorRecursos{
 
         //si no existe se crea
         else if (res == undefined) {
-            res = this.crearRecurso(nombre)
-            res.cargarFichero(nombre)
-            this.anyadirRecurso(res);
+            res = this.crearRecurso(nombre);
+            if (res != undefined) {
+                try {
+                    await res.cargarFichero(nombre); // Esperar a que se cargue el archivo
+                    this.anyadirRecurso(res); // Esperar a que se añada el recurso
+                } catch (error) {
+                    console.error("Error al cargar el recurso:", error);
+                }
+            }
         }
 
         return res;
     }
 
     crearRecurso(nombre: string): TRecurso {
+        console.log("creando recurso")
         return new TRecursoMalla(nombre);
         /*switch (nombre) {
             case "malla":
@@ -43,9 +49,9 @@ export class TGestorRecursos{
                 throw new Error(`Tipo de recurso no valido: ${nombre}`);
         }*/
     }
-
     
-    anyadirRecurso( recurso:TRecurso){
+    async anyadirRecurso( recurso:TRecurso){
+        console.log("añadir")
         this.recursos.push(recurso);
     }
 

@@ -1,47 +1,36 @@
 import { TRecurso } from "./TRecurso";
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { TMotorTAG } from "./TMotorTAG";
-import { Injectable } from '@angular/core';
-
-@Injectable()
-
 export class TRecursoShader extends TRecurso{
     
     private id!: number;
     private vertexShader!: any;
     private fragmentShader!: any;
-    
-    @Input() program: any;
-    @Input() gl: any;
+    private program!: any;
 
     constructor(){
         super("Shaders")
     }
 
-    cargarFichero(nombre: string): void {
+    async cargarFichero(nombre: string): Promise<void> {
 
         //Formato GL/SL (texto)
     }
 
-    crearShaders(gl: any, vertexShaderSource: any, fragmentShaderSource: any){
-
-        this.vertexShader = this.createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
-        this.fragmentShader = this.createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
+    async crearShaders(gl: any, vertexShaderSource: any, fragmentShaderSource: any){
+        this.vertexShader = await this.createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
+        this.fragmentShader = await this.createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
 
         if (!this.vertexShader || !this.fragmentShader) {
             console.error('No se pudo crear uno o ambos shaders.');
             return;
         }
-        
-        this.program = this.createProgram(gl, this.vertexShader, this.fragmentShader);
-
+        this.program = await this.createProgram(gl, this.vertexShader, this.fragmentShader);
         if (!this.program) {
-            console.error('No se pudo crear el programa.');
+            console.error('No se pudo crear el programa WebGL.');
             return;
         }
     }
 
-    createShader(gl: WebGLRenderingContext, type: number, source: string): WebGLShader | null {
+    async createShader(gl: WebGLRenderingContext, type: number, source: string){
         const shader = gl.createShader(type);
         if (!shader) {
             console.error('No se pudo crear el shader.');
@@ -59,7 +48,7 @@ export class TRecursoShader extends TRecurso{
         return null;
     }
     
-    createProgram(gl: WebGLRenderingContext, vertexShader: WebGLShader, fragmentShader: WebGLShader): WebGLProgram | null {
+    async createProgram(gl: WebGLRenderingContext, vertexShader: WebGLShader, fragmentShader: WebGLShader){
         const program = gl.createProgram();
         if (!program) {
             console.error('No se pudo crear el programa.');

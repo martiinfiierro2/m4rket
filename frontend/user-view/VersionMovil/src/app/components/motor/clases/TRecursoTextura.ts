@@ -11,7 +11,7 @@ export class TRecursoTextura extends TRecurso {
     private imagenTextura!: Blob;
 
 
-    cargarFichero( nombre:string){
+    async cargarFichero( nombre:string): Promise<void>{
 
         //Formato imagen: JPG, PNG... --> JS
 
