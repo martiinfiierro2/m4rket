@@ -16,7 +16,7 @@ export class TRecursoMaterial extends TRecurso{
 
 
 
-    cargarFichero( nombre:string ){
+    async cargarFichero( nombre:string ): Promise<void>{
         
         //Formato MTL --> JSON
 

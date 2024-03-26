@@ -17,7 +17,7 @@ export class TNodo{
 
 
     // Método para agregar un hijo
-    agregarHijo(nodoHijo: TNodo) {
+    async agregarHijo(nodoHijo: TNodo) {
         this.hijos.push(nodoHijo);
         nodoHijo.padre = this;
     }
@@ -31,18 +31,24 @@ export class TNodo{
         }
     }
 
-    recorrer( matrizAcum: any ){
-        if ( this.actualizarMatriz ) {
+    recorrer(matrizAcum: any) {
+        console.log("comenzando a recorrer");
+    
+        if (this.actualizarMatriz) {
             glMatrix.mat4.multiply(this.matrizTransf, matrizAcum, this.matrizTransf);
             this.actualizarMatriz = false;
         }
-        if(this.getEntidad() != null){
+    
+        if (this.getEntidad() != null) {
             this.entidad.dibujar();
         }
+    
+        // Esperar a que todas las llamadas recursivas se completen
         for (let index = 0; index < this.hijos.length; index++) {
             this.hijos[index].recorrer(this.matrizTransf);
         }
     }
+    
 
     calcularMatriz(){
         let matTrasladada = glMatrix.mat4.create();
@@ -108,7 +114,7 @@ export class TNodo{
 
 
     //Métodos SET
-    setTraslacion (valoresTrasladar: glMatrix.vec3){
+    async setTraslacion (valoresTrasladar: glMatrix.vec3){
         this.traslacion[0] = valoresTrasladar[0];
         this.traslacion[1] = valoresTrasladar[1];
         this.traslacion[2] = valoresTrasladar[2];
@@ -117,7 +123,7 @@ export class TNodo{
         this.actualizarMatriz = true;
     }
 
-    setRotacion (valoresRotar: glMatrix.vec3){
+    async setRotacion (valoresRotar: glMatrix.vec3){
         this.rotacion[0] = valoresRotar[0];
         this.rotacion[1] = valoresRotar[1];
         this.rotacion[2] = valoresRotar[2];
@@ -128,7 +134,7 @@ export class TNodo{
         this.actualizarMatriz = true;
     }
 
-    setEscalado (valoresEscalar: glMatrix.vec3){
+    async setEscalado (valoresEscalar: glMatrix.vec3){
         this.escalado[0] = valoresEscalar[0];
         this.escalado[1] = valoresEscalar[1];
         this.escalado[2] = valoresEscalar[2];
@@ -137,12 +143,12 @@ export class TNodo{
         this.actualizarMatriz = true;
     }
 
-    setMatrizTransf(valorMatrizTransf: glMatrix.mat4){
+    async setMatrizTransf(valorMatrizTransf: glMatrix.mat4){
         this.matrizTransf = valorMatrizTransf;
         this.actualizarMatriz = true;
     }
 
-    setEntidad( entidadAnyadir: any ){
+    async setEntidad( entidadAnyadir: any ){
         this.entidad = entidadAnyadir;
     }
 
