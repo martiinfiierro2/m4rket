@@ -364,6 +364,8 @@ EliminarProductoSelect(){
       let tipo = "eliminado";
       let fecha = new Date();
       this.estadistica(productoDetalle.id, tipo, fecha);
+    }else if(productoDetalle.cantidad === 0){
+      this.eliminar(productoDetalle.id);
     }else{
       console.log('Solo queda una');
       productoDetalle.cantidad--;
