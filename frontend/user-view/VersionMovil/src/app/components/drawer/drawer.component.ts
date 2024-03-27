@@ -5,6 +5,7 @@ import { EstadisticasService } from 'src/app/services/estadisticas.service';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { environment } from "../../environments/environment";
 import * as echarts from 'echarts';
+import { HomePage } from "src/app/home/home.page"
 
 interface Stats {
   nombre: string,
@@ -185,6 +186,8 @@ export class DrawerComponent  implements AfterViewInit {
       this.isOpen = false;
       botonchatbot.style.display = 'flex';
     }
+
+
   }
 
   toggleDrawer(){
@@ -305,6 +308,7 @@ EliminarProductoSelect(){
   this.productoSelect = null;
   this.seleccionado = false;
   this.toggleDrawer2(2);
+
 }
 
 //FUNCIONES BUSCADOR

@@ -130,17 +130,12 @@ export class HomePage {
         .subscribe(res => {
           for (let j = 0; j < res.productos.Ubicacions.length; j++) {
             if (res.productos.Ubicacions[j].referencia == referencia && res.productos.Ubicacions[j].posicion == posicion) {
-              const existingProduct = this.ProductoUbiListaCompra.find(product => product.id === res.productos.id);
-              if (!existingProduct) {
                 this.llamarFuncionDrawer(res.productos.id);
-                this.ProductoUbiListaCompra.push(res.productos);
-              }
+              
             }
           }
         })
     }
-
-    console.log(this.ProductoUbiListaCompra);
   }
 
   // getTodasUbicacionesLista() {
@@ -172,7 +167,7 @@ export class HomePage {
       });
 
       // Ahora que los datos están disponibles, llamamos a stuff()
-      this.stuff();
+      this.CargarModelo();
     });
   }
 
@@ -326,9 +321,7 @@ export class HomePage {
   // ESTO ES SOLO MODELO 
   container: any;
 
-  stuff() {
-
-
+  CargarModelo() {
     this.container = document.getElementById('canvas');
     this.container.style.width = '100%';
     this.container.style.height = '100%';
