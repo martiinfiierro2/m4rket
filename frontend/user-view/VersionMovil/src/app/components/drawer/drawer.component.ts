@@ -239,7 +239,7 @@ export class DrawerComponent  implements AfterViewInit {
         this.productoSelect.cantidad = productoEncontrado.cantidad;
         this.productoSelect.idLista = productoEncontrado.id;
         this.productoSelect.enListaCompra = true;
-        console.log('Valores asignados:', this.productoSelect);
+        //console.log('Valores asignados:', this.productoSelect);
       } else {
         console.log('Producto no encontrado en listaCompra');
       }
@@ -364,8 +364,8 @@ EliminarProductoSelect(){
       let tipo = "eliminado";
       let fecha = new Date();
       this.estadistica(productoDetalle.id, tipo, fecha);
-    }else if(productoDetalle.cantidad === 0){
-      this.eliminar(productoDetalle.id);
+    }else if(productoDetalle.cantidad < 1){
+      this.eliminar(productoDetalle);
     }else{
       console.log('Solo queda una');
       productoDetalle.cantidad--;

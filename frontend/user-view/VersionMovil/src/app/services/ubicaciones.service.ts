@@ -27,12 +27,13 @@ export class UbicacionesService {
     getIdUbicacion(referencia: any, posicion: any): Observable<any> {
       this.cargarCabeceras();
       let urlCompleta = this.url + '?referencia=' + referencia + '&posicion=' + posicion;
+      console.log(urlCompleta)
       return this.http.get(urlCompleta, {headers: this.cabeceras});
     }
 
     getProdEnUbicacion(idUbi: any): Observable<any> {
       this.cargarCabeceras();
-      let urlCompleta = this.url2 + '?idUbi=' + idUbi;
+      let urlCompleta = this.url2 + '?id=' + idUbi;
       return this.http.get(urlCompleta, {headers: this.cabeceras});
     }
 }

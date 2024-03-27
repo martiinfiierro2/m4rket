@@ -8,6 +8,8 @@ import { getLocaleFirstDayOfWeek } from '@angular/common';
 import { EstadisticasService } from '../services/estadisticas.service';
 import { UbicacionesService } from '../services/ubicaciones.service';
 import { json } from 'express';
+import { forkJoin } from 'rxjs';
+
 
 //modelo todo
 import * as THREE from 'three'; // we need @types/three for this to work (next to three package)
@@ -82,6 +84,10 @@ export class HomePage {
 
   private idListaUsu: string = '';
   detallesProductos: ProductoDetalle[] = [];
+  ProductoUbiListaCompra: Producto[] = [];
+  ref: string[] = [];
+  pos: number[] = [];
+
 
   //PRODUCTO SELECCIONADO
   productoSelect: any;
@@ -114,44 +120,62 @@ export class HomePage {
   ngOnInit(): void {
     this.getUsuarioLog();
     this.getListaCompraUsu();
-    this.stuff()
   }
 
 
   //Funciones para sacar el valor de los productos a partit de la ubicacion del motor gráfico
   getIdUbicacion(referencia: any, posicion: any) {
-    this.ubicacionesService.getIdUbicacion(referencia, posicion).subscribe(res => {
-      this.getProdEnUbicacion(res.ubicaciones.id);
-      console.log(res.ubicaciones.id);
-    })
+    for (let index = 0; index < this.listaCompra.length; index++) {
+      this.productosService.getProductoId(this.listaCompra[index].idProd)
+        .subscribe(res => {
+          for (let j = 0; j < res.productos.Ubicacions.length; j++) {
+            if (res.productos.Ubicacions[j].referencia == referencia && res.productos.Ubicacions[j].posicion == posicion) {
+              const existingProduct = this.ProductoUbiListaCompra.find(product => product.id === res.productos.id);
+              if (!existingProduct) {
+                this.llamarFuncionDrawer(res.productos.id);
+                this.ProductoUbiListaCompra.push(res.productos);
+              }
+            }
+          }
+        })
+    }
+
+    console.log(this.ProductoUbiListaCompra);
   }
 
-  getProdEnUbicacion(idUbi: number) {
-    this.ubicacionesService.getProdEnUbicacion(idUbi).subscribe(res => {
-      for (let i = 0; i < res.prodUbi.length; i++) {
-        this.getProdId(res.prodUbi[i].idProd);
-      }
-    })
-  }
+  // getTodasUbicacionesLista() {
+  //   for (let i = 0; i < this.listaCompra.length; i++) {
+  //     this.productosService.getProductoId(this.listaCompra[i].idProd)
+  //       .subscribe( res =>{
+  //         for (let j = 0; j < res.productos.Ubicacions.length; j++) {
+  //             this.ref.push(res.productos.Ubicacions[j].referencia);
+  //             this.pos.push(res.productos.Ubicacions[j].posicion);
+  //         }
+  //       })
+  //   }
+  // }
 
-  getProdId(idProd: any) {
-    this.productosService.getProductoId(idProd).subscribe(res => {
-      this.productoInfo = res;
-      this.llamarFuncionDrawer(res.productos.id);
-      //this.mostrarInfoEnDiv();
+  getTodasUbicacionesLista() {
+    const self = this; // Guardar una referencia a this
+
+    const observables = [];
+    for (let i = 0; i < this.listaCompra.length; i++) {
+      observables.push(this.productosService.getProductoId(this.listaCompra[i].idProd));
+    }
+
+    forkJoin(observables).subscribe((respuestas: any[]) => {
+      respuestas.forEach(res => {
+        for (let j = 0; j < res.productos.Ubicacions.length; j++) {
+          this.ref.push(res.productos.Ubicacions[j].referencia);
+          this.pos.push(res.productos.Ubicacions[j].posicion);
+        }
+      });
+
+      // Ahora que los datos están disponibles, llamamos a stuff()
+      this.stuff();
     });
   }
-  MostrarPointer(idProd: any) {
-    this.productosService.getProductoId(idProd).subscribe(res => {
-      this.productoInfo = res;
-      console.log(res.productos.Ubicacions[0].referencia);
-      console.log(res.productos.Ubicacions[0].posicion);
 
-    });
-  }
-
- 
-  
   //FUNCIONES YA CREADAS DE LA ANTIGUA VERSION LISTA DE LA COMPRA
   incrementar(productoDetalle: any) {
     productoDetalle.cantidad++;
@@ -181,6 +205,10 @@ export class HomePage {
     let tipo = "eliminado";
     let fecha = new Date();
     this.estadistica(productoDetalle.idProducto, tipo, fecha);
+
+    // if(productoDetalle.cantidad === 0){
+    //   this.eliminar(productoDetalle);
+    // }
   }
 
   eliminar(productoDetalle: any) {
@@ -197,6 +225,8 @@ export class HomePage {
       console.error('El valor de idUsuario en localStorage es nulo.');
     }
   }
+
+
   /*
   getProducto(idProd: string){
     this.productosService.getProductoId(idProd).subscribe( result => {
@@ -215,14 +245,12 @@ export class HomePage {
         ({
           idProd: item.idProd,
           cantidad: item.cantidad,
-          id: item.id,
-          
+          id: item.id
         }));
-         console.log(this.listaCompra);
-        /* 
-        for(let i=0; i<this.listaCompra.length; i++){
-          this.MostrarPointer(this.listaCompra[i].idProd);
-        }*/
+        console.log(this.listaCompra);
+
+        this.getTodasUbicacionesLista();
+
         const detallesProductos: ProductoDetalle[] = [];
 
         this.listaCompra.forEach((productoCompra) => {
@@ -299,6 +327,8 @@ export class HomePage {
   container: any;
 
   stuff() {
+
+
     this.container = document.getElementById('canvas');
     this.container.style.width = '100%';
     this.container.style.height = '100%';
@@ -490,8 +520,14 @@ export class HomePage {
     let B2: THREE.Object3D[] = []; // Estanterías grandes
     let B3: THREE.Object3D[] = [];  // Estantería Frío
 
+console.log(this.ref);
+console.log(this.pos);
+
+    const self = this; // Guardar una referencia a this
+
     renderer.setSize(window.innerWidth, window.innerHeight);
     this.container.appendChild(renderer.domElement);
+
 
     loader.load(
       `assets/${pointerrender}/pointer.glb`,
@@ -504,14 +540,22 @@ export class HomePage {
         for (let i = 0; i <= 9; i++) {
           A1[i] = pointer.clone();
           A1[i].position.x = i === 0 ? -8.1 : (i % 2) ? A1[i - 1].position.x + 4 : A1[i - 1].position.x + 3;
-          scene.add(A1[i]);
+          for (let j = 0; j < self.pos.length; j++) {
+            if (self.ref[j] == ('A1') && self.pos[j] == i) {
+              scene.add(A1[i]);
+            }
+          }
         }
 
         for (let i = 0; i <= 9; i++) {
           A2[i] = pointer.clone();
           A2[i].position.z = 26.4;
           A2[i].position.x = i === 0 ? -8.1 : (i % 2) ? A2[i - 1].position.x + 4 : A2[i - 1].position.x + 3;
-          scene.add(A2[i]);
+          for (let j = 0; j < self.pos.length; j++) {
+            if (self.ref[j] == ('A2') && self.pos[j] === i) {
+              scene.add(A2[i]);
+            }
+          }
         }
 
         for (let i = 0; i <= 5; i++) {
@@ -519,7 +563,11 @@ export class HomePage {
           pointerClone.position.z = 12.1;
           pointerClone.position.x = i === 0 ? -15 : (i % 2 === 0 ? A3[i - 1].position.x + 3.5 : A3[i - 1].position.x + 4);
           A3[i] = pointerClone;
-          scene.add(pointerClone);
+          for (let j = 0; j < self.pos.length; j++) {
+            if (self.ref[j] == ('A3') && self.pos[j] == i) {
+              scene.add(A3[i]);
+            }
+          }
         }
 
         for (let i = 0; i <= 5; i++) {
@@ -527,15 +575,23 @@ export class HomePage {
           pointerClone.position.x = i === 0 ? -15 : (i % 2 === 0 ? A4[i - 1].position.x + 3.5 : A4[i - 1].position.x + 4);
           pointerClone.position.z = 9.7;
           A4[i] = pointerClone;
-          scene.add(pointerClone);
-        }
+          for (let j = 0; j < self.pos.length; j++) {
+            if (self.ref[j] == ('A4') && self.pos[j] == i) {
+              scene.add(A4[i]);
+            }
+          }       
+         }
 
         for (let i = 0; i <= 5; i++) {
           const pointerClone = pointer.clone();
           pointerClone.position.x = i === 0 ? -15 : (i % 2 === 0 ? A5[i - 1].position.x + 3.5 : A5[i - 1].position.x + 4);
           pointerClone.position.z = 1.3;
           A5[i] = pointerClone;
-          scene.add(pointerClone);
+          for (let j = 0; j < self.pos.length; j++) {
+            if (self.ref[j] == ('A5') && self.pos[j] == i) {
+              scene.add(A5[i]);
+            }
+          }   
         }
 
         for (let i = 0; i <= 5; i++) {
@@ -543,7 +599,11 @@ export class HomePage {
           pointerClone.position.x = i === 0 ? -15 : (i % 2 === 0 ? A6[i - 1].position.x + 3.5 : A6[i - 1].position.x + 4);
           pointerClone.position.z = -0.5;
           A6[i] = pointerClone;
-          scene.add(pointerClone);
+          for (let j = 0; j < self.pos.length; j++) {
+            if (self.ref[j] == ('A6') && self.pos[j] == i) {
+              scene.add(A6[i]);
+            }
+          }   
         }
 
         for (let i = 0; i <= 5; i++) {
@@ -551,7 +611,11 @@ export class HomePage {
           pointerClone.position.x = i === 0 ? -15 : (i % 2 === 0 ? A7[i - 1].position.x + 3.5 : A7[i - 1].position.x + 4);
           pointerClone.position.z = -9.1;
           A7[i] = pointerClone;
-          scene.add(pointerClone);
+          for (let j = 0; j < self.pos.length; j++) {
+            if (self.ref[j] == ('A7') && self.pos[j] == i) {
+              scene.add(A7[i]);
+            }
+          }   
         }
 
         for (let i = 0; i <= 5; i++) {
@@ -559,7 +623,11 @@ export class HomePage {
           pointerClone.position.x = i === 0 ? -15 : (i % 2 === 0 ? A8[i - 1].position.x + 3.5 : A8[i - 1].position.x + 4);
           pointerClone.position.z = -11.1;
           A8[i] = pointerClone;
-          scene.add(pointerClone);
+          for (let j = 0; j < self.pos.length; j++) {
+            if (self.ref[j] == ('A8') && self.pos[j] == i) {
+              scene.add(A8[i]);
+            }
+          }   
         }
 
         for (let i = 0; i <= 3; i++) {
@@ -567,21 +635,33 @@ export class HomePage {
           pointerClone.position.x = i === 0 ? 12.4 : (i % 2 === 0 ? A9[i - 1].position.x + 3.6 : A9[i - 1].position.x + 3.4);
           pointerClone.position.z = 6.6;
           A9[i] = pointerClone;
-          scene.add(pointerClone);
+          for (let j = 0; j < self.pos.length; j++) {
+            if (self.ref[j] == ('A9') && self.pos[j] == i) {
+              scene.add(A9[i]);
+            }
+          }   
         }
         for (let i = 0; i <= 3; i++) {
           const pointerClone = pointer.clone();
           pointerClone.position.x = i === 0 ? 12.4 : (i % 2 === 0 ? A10[i - 1].position.x + 3.6 : A10[i - 1].position.x + 3.4);
           pointerClone.position.z = 5.2;
           A10[i] = pointerClone;
-          scene.add(pointerClone);
+          for (let j = 0; j < self.pos.length; j++) {
+            if (self.ref[j] == ('A10') && self.pos[j] == i) {
+              scene.add(A10[i]);
+            }
+          }   
         }
         for (let i = 0; i <= 3; i++) {
           const pointerClone = pointer.clone();
           pointerClone.position.x = i === 0 ? 12.4 : (i % 2 === 0 ? A11[i - 1].position.x + 3.6 : A11[i - 1].position.x + 3.4);
           pointerClone.position.z = -5.4;
           A11[i] = pointerClone;
-          scene.add(pointerClone);
+          for (let j = 0; j < self.pos.length; j++) {
+            if (self.ref[j] == ('A11') && self.pos[j] == i) {
+              scene.add(A11[i]);
+            }
+          }   
         }
 
         for (let i = 0; i <= 3; i++) {
@@ -589,7 +669,11 @@ export class HomePage {
           pointerClone.position.x = i === 0 ? 12.4 : (i % 2 === 0 ? A12[i - 1].position.x + 3.6 : A12[i - 1].position.x + 3.4);
           pointerClone.position.z = -6.8;
           A12[i] = pointerClone;
-          scene.add(pointerClone);
+          for (let j = 0; j < self.pos.length; j++) {
+            if (self.ref[j] == ('A12') && self.pos[j] == i) {
+              scene.add(A12[i]);
+            }
+          }   
         }
 
 
@@ -600,7 +684,11 @@ export class HomePage {
           pointerClone.position.x = 29.4;
           pointerClone.position.y = 24.5;
           B1[i] = pointerClone;
-          scene.add(pointerClone);
+          for (let j = 0; j < self.pos.length; j++) {
+            if (self.ref[j] == ('B1') && self.pos[j] == i) {
+              scene.add(B1[i]);
+            }
+          }   
         }
 
         for (let i = 0; i <= 5; i++) {
@@ -609,7 +697,11 @@ export class HomePage {
           pointerClone.position.z = -22.5;
           pointerClone.position.y = 24.5;
           B2[i] = pointerClone;
-          scene.add(pointerClone);
+          for (let j = 0; j < self.pos.length; j++) {
+            if (self.ref[j] == ('B2') && self.pos[j] == i) {
+              scene.add(B2[i]);
+            }
+          }   
         }
 
         for (let i = 0; i <= 2; i++) {
@@ -618,7 +710,11 @@ export class HomePage {
           pointerClone.position.z = -22.8;
           pointerClone.position.y = 22.5;
           B3[i] = pointerClone;
-          scene.add(pointerClone);
+          for (let j = 0; j < self.pos.length; j++) {
+            if (self.ref[j] == ('B3') && self.pos[j] == i) {
+              scene.add(B3[i]);
+            }
+          }   
         }
       },
       function (xhr) {
@@ -667,7 +763,7 @@ export class HomePage {
     */
 
 
-        //Funcion de ver la info del producto al tocar
+    //Funcion de ver la info del producto al tocar
     const container: HTMLElement | null = document.getElementById('canvas');
     let intersectedObjectsMap: Map<THREE.Object3D, THREE.Object3D>;
     if (container) {
@@ -717,6 +813,8 @@ export class HomePage {
 
                 //Busco la relacion con produtos
                 self.getIdUbicacion(arrayName, position);
+                console.log(arrayName, position);
+
               }
               break;
             }
