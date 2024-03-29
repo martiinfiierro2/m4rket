@@ -807,7 +807,6 @@ console.log(this.pos);
                 //Busco la relacion con produtos
                 self.getIdUbicacion(arrayName, position);
                 console.log(arrayName, position);
-
               }
               break;
             }
