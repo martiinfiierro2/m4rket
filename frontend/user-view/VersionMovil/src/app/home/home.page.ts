@@ -316,8 +316,9 @@ export class HomePage {
 
 
   RecargarModelo(){
-    this.modeloService.clearScene(this.scene);
-    this.getTodasUbicacionesLista();
+    window.location.reload();
+    //this.modeloService.clearScene(this.scene);
+    //this.getTodasUbicacionesLista();
   }
 
 
