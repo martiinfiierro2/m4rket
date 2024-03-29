@@ -2,6 +2,8 @@ import { Component, ElementRef, ViewChild, AfterViewInit, Input } from '@angular
 import { GestureController, Platform } from '@ionic/angular';
 import { ProductosService } from 'src/app/services/productos.service';
 import { EstadisticasService } from 'src/app/services/estadisticas.service';
+import { ModeloService } from 'src/app/services/modelo.service';
+
 import { trigger, transition, style, animate } from '@angular/animations';
 import { environment } from "../../environments/environment";
 import * as echarts from 'echarts';
@@ -80,6 +82,8 @@ export class DrawerComponent  implements AfterViewInit {
   seleccionado: boolean = false;
   listaCompra: ListaCompra [] = [];
 
+  //MODELO
+  modeloService = new ModeloService();
 
 
   //VARIABLES FOTO
