@@ -366,6 +366,18 @@ export class HomePage {
     let B2: THREE.Object3D[] = []; // Estanterías grandes
     let B3: THREE.Object3D[] = [];  // Estantería Frío
 
+    
+
+
+    const width = 1;
+    const height = 1;
+    const depth = 0.1; // Profundidad del objeto 3D
+    const borderRadius = 0.1; // Radio de los bordes redondeados
+    const texturePath = '../../assets/images/1.jpg'; // Ruta de la textura
+
+    // Crear el plano 3D
+    const plano3D = this.modeloService.crearPlano3D(width, height, depth, borderRadius, texturePath);
+    //this.modeloService.FixRotationEnElMismoEje(plano3D,this.scene,camera);
     //Pruebas
     console.log(this.ref);
     console.log(this.pos);
@@ -375,7 +387,7 @@ export class HomePage {
     this.container.appendChild(renderer.domElement);
 
     //cargarPointers
-    this.modeloService.cargarPointers(this.scene, pointerrender, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, B1, B2, B3, self);
+    this.modeloService.cargarPointers(this.scene, pointerrender, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, B1, B2, B3, self, camera, plano3D);
 
 
     const container: HTMLElement | null = document.getElementById('canvas');
@@ -444,7 +456,7 @@ export class HomePage {
       this.scene,
       camera,
       renderer,
-      A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, B1, B2, B3);
+      A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, B1, B2, B3, plano3D );
   }
 
 
