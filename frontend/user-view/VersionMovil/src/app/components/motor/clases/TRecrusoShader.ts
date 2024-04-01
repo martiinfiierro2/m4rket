@@ -28,6 +28,7 @@ export class TRecursoShader extends TRecurso{
             console.error('No se pudo crear el programa WebGL.');
             return;
         }
+        return this.program;
     }
 
     async createShader(gl: WebGLRenderingContext, type: number, source: string){

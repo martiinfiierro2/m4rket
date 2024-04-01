@@ -1,7 +1,5 @@
 import { TRecurso } from "./TRecurso";
 import { TRecursoMalla } from "./TRecursoMalla";
-import { TRecursoMaterial } from "./TRecursoMaterial";
-import { TRecursoTextura } from "./TRecursoTextura";
 
 export class TGestorRecursos{
 
