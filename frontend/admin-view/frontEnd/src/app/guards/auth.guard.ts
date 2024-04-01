@@ -17,6 +17,7 @@ export const authGuard: CanActivateFn = (route, state) => {
             tap( resp =>{
               console.log(resp);
               if (!resp) {
+                console.log("Hay token pero inválido");
                 router.navigateByUrl('/login');
               }
             })
@@ -27,16 +28,13 @@ export const authGuard: CanActivateFn = (route, state) => {
 export const authGuard2: CanActivateFn = (route, state) => {
 
   const router = inject(Router);
-  const usuService = inject(UsuariosService);
 
-  console.log("Entro al guard del login");
-  //return true;
 
   if (localStorage['tokenUsuario']) {
+    router.navigateByUrl('/productos');
     return of(false);
   }
   else{
     return of(true);
-
   }
 };
