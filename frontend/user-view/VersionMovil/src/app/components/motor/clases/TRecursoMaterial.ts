@@ -14,8 +14,6 @@ export class TRecursoMaterial extends TRecurso{
    private mapaKd!: Blob;
    private mapaKs!: Blob;
 
-
-
     async cargarFichero( nombre:string ): Promise<void>{
         
         //Formato MTL --> JSON

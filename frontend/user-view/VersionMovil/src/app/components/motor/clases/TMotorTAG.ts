@@ -3,8 +3,6 @@ import { ECamara } from "./ECamara";
 import { ELuz } from "./ELuz";
 import { EModelo } from "./EModelo";
 import { TRecursoShader } from './TRecrusoShader';
-import { Malla } from './Malla'
-
 import { TGestorRecursos } from "./TGestorRecursos";
 import * as glMatrix from 'gl-matrix';
 
@@ -13,6 +11,7 @@ export class TMotorTAG {
     private raiz!: TNodo;
     private gestorRecursos = new TGestorRecursos();
     private shader = new TRecursoShader();
+    private program!: any;
     
     async iniciarCanva(canvas: any){
         let gl = canvas.getContext("webgl");
@@ -38,8 +37,9 @@ export class TMotorTAG {
             return;
         }
         else{
-            await this.shader.crearShaders(gl, vertexShaderSource, fragmentShaderSource);
+            this.program = await this.shader.crearShaders(gl, vertexShaderSource, fragmentShaderSource);
         }
+        return { program: this.program, gl: gl };
     }
 
     sendShader(){
@@ -126,5 +126,4 @@ export class TMotorTAG {
 
         return nodoCreado;
     }
-
 }

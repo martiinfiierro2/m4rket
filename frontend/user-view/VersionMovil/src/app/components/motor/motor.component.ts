@@ -21,7 +21,7 @@ export class MotorComponent  implements OnInit{
     const motor = new TMotorTAG();
 
     const canvas = document.querySelector("#mercado") as HTMLCanvasElement;
-    await motor.iniciarCanva(canvas);
+    let program, gl = await motor.iniciarCanva(canvas);
 
     const personaje: TNodo = await motor.crearNodo( null, glMatrix.vec3.fromValues(10,0,10), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(1,1,1));
     const cuerpo: TNodo = await motor.crearModelo( personaje, glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(1,1,1), 'plano.obj');

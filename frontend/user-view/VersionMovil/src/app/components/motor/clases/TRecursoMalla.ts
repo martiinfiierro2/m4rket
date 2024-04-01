@@ -1,7 +1,5 @@
 import { TRecurso } from "./TRecurso";
 import { Malla } from './Malla';
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
-import * as THREE from 'three';
 
 
 export class TRecursoMalla extends TRecurso {
@@ -45,7 +43,7 @@ export class TRecursoMalla extends TRecurso {
 =======
     override cargarFichero(filename: string): Promise<void> {
         return new Promise((resolve, reject) => {
-            fetch(`../../assets/motor${filename}`)
+            fetch(`../../assets/motor/${filename}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
