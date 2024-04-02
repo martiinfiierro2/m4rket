@@ -33,7 +33,9 @@ export class ModeloService {
       ambientLightIntensity
     ); // (color, intensity)
 
-    scene.add(ambientLight);
+    if(prefersDarkMode){
+      scene.add(ambientLight);
+    }
     scene.add(topLight);
     scene.add(topLight2);
     scene.add(topLight3);
@@ -365,89 +367,7 @@ export class ModeloService {
     controls.maxPolarAngle = Math.PI / 3;
   }
 
-  // animate(
-  //   controls: any,
-  //   scene: THREE.Scene,
-  //   camera: THREE.PerspectiveCamera,
-  //   renderer: THREE.WebGLRenderer,
-  //   A1: THREE.Object3D[],
-  //   A2: THREE.Object3D[],
-  //   A3: THREE.Object3D[],
-  //   A4: THREE.Object3D[],
-  //   A5: THREE.Object3D[],
-  //   A6: THREE.Object3D[],
-  //   A7: THREE.Object3D[],
-  //   A8: THREE.Object3D[],
-  //   A9: THREE.Object3D[],
-  //   A10: THREE.Object3D[],
-  //   A11: THREE.Object3D[],
-  //   A12: THREE.Object3D[],
-  //   B1: THREE.Object3D[],
-  //   B2: THREE.Object3D[],
-  //   B3: THREE.Object3D[],
-  //   square: THREE.Mesh,
-  //   plano3D: THREE.Object3D
-  // ) {
-  //   function rotatePointers(pointers: THREE.Object3D[]) {
-  //     for (let i = 0; i < pointers.length; i++) {
-  //       pointers[i].rotation.y += 0.025;
-  //     }
-  //   }
 
-  //   function animate() {
-  //     requestAnimationFrame(animate);
-  //     controls.update();
-
-  //     if (A1.length > 0) {
-  //       rotatePointers(A1);
-  //     }
-  //     if (A2.length > 0) {
-  //       rotatePointers(A2);
-  //     }
-  //     if (A3.length > 0) {
-  //       rotatePointers(A3);
-  //     }
-  //     if (A4.length > 0) {
-  //       rotatePointers(A4);
-  //     }
-  //     if (A5.length > 0) {
-  //       rotatePointers(A5);
-  //     }
-  //     if (A6.length > 0) {
-  //       rotatePointers(A6);
-  //     }
-  //     if (A7.length > 0) {
-  //       rotatePointers(A7);
-  //     }
-  //     if (A8.length > 0) {
-  //       rotatePointers(A8);
-  //     }
-  //     if (A9.length > 0) {
-  //       rotatePointers(A9);
-  //     }
-  //     if (A10.length > 0) {
-  //       rotatePointers(A10);
-  //     }
-  //     if (A11.length > 0) {
-  //       rotatePointers(A11);
-  //     }
-  //     if (A12.length > 0) {
-  //       rotatePointers(A12);
-  //     }
-  //     if (B1.length > 0) {
-  //       rotatePointers(B1);
-  //     }
-  //     if (B2.length > 0) {
-  //       rotatePointers(B2);
-  //     }
-  //     if (B3.length > 0) {
-  //       rotatePointers(B3);
-  //     }
-
-  //     renderer.render(scene, camera);
-  //   }
-  //  animate();
-  // }
 
   animate(
     controls: any,
@@ -505,7 +425,7 @@ export class ModeloService {
     // Definir la velocidad de rotación y de movimiento vertical
     const rotationSpeed = 0.005; // Puedes ajustar este valor según sea necesario
     const verticalSpeed = 0.005; // Puedes ajustar este valor según sea necesario
-    const bounceScale = 0.5; // Factor de escala para reducir la amplitud del rebote
+    const bounceScale = 0.2; // Factor de escala para reducir la amplitud del rebote
 
     for (let i = 0; i < pointers.length; i++) {
       // Calcula el centro del objeto
@@ -620,13 +540,74 @@ export class ModeloService {
     scene.remove(...scene.children);
   }
 
-  crearFormaPlanoConBordesRedondeados(
+  // crearFormaPlanoConBordesRedondeados(
+  //   width: number,
+  //   height: number,
+  //   borderRadius: number
+  // ) {
+  //   // Crear la forma del cuadrado con los bordes redondeados
+  //   const shape = new THREE.Shape();
+  //   shape.moveTo(0, borderRadius);
+  //   shape.lineTo(0, height - borderRadius);
+  //   shape.quadraticCurveTo(0, height, borderRadius, height);
+  //   shape.lineTo(width - borderRadius, height);
+  //   shape.quadraticCurveTo(width, height, width, height - borderRadius);
+  //   shape.lineTo(width, borderRadius);
+  //   shape.quadraticCurveTo(width, 0, width - borderRadius, 0);
+  //   shape.lineTo(borderRadius, 0);
+  //   shape.quadraticCurveTo(0, 0, 0, borderRadius);
+
+  //   return shape;
+  // }
+
+  // crearPlano3D(
+  //   width: number,
+  //   height: number,
+  //   depth: number,
+  //   borderRadius: number,
+  //   texturePath: string
+  // ) {
+  //   // Crear la forma del plano con bordes redondeados
+  //   const formaPlano = this.crearFormaPlanoConBordesRedondeados(
+  //     width,
+  //     height,
+  //     borderRadius
+  //   );
+
+  //   // Crear la geometría extruida a partir de la forma
+  //   const extrudeSettings = {
+  //     depth: depth, // Profundidad del objeto 3D
+  //     bevelEnabled: false, // Desactivar biselado para mantener la forma plana
+  //   };
+  //   const geometriaExtruida = new THREE.ExtrudeGeometry(
+  //     formaPlano,
+  //     extrudeSettings
+  //   );
+  //   // Crear el material con textura
+  //   const textureLoader = new THREE.TextureLoader();
+  //   const texture = textureLoader.load(texturePath);
+  //   const material = new THREE.MeshBasicMaterial({
+  //     map: texture,
+  //     side: THREE.DoubleSide,
+  //   });
+
+  //   // Crear el objeto 3D a partir de la geometría y el material
+  //   const plano3D = new THREE.Mesh(geometriaExtruida, material);
+
+  //   return plano3D;
+  // }
+
+
+  
+  crearFormaPlanoConBordesRedondeadosYFlecha(
     width: number,
     height: number,
-    borderRadius: number
+    borderRadius: number,
+    arrowHeight: number = height / 5
   ) {
-    // Crear la forma del cuadrado con los bordes redondeados
     const shape = new THREE.Shape();
+  
+    // Top rectangle with rounded corners
     shape.moveTo(0, borderRadius);
     shape.lineTo(0, height - borderRadius);
     shape.quadraticCurveTo(0, height, borderRadius, height);
@@ -636,22 +617,30 @@ export class ModeloService {
     shape.quadraticCurveTo(width, 0, width - borderRadius, 0);
     shape.lineTo(borderRadius, 0);
     shape.quadraticCurveTo(0, 0, 0, borderRadius);
-
+  
+    // Arrow shape (pointing downwards)
+    shape.moveTo(width / 2 - arrowHeight / 2, 0);
+    shape.lineTo(width / 2 + arrowHeight / 2, 0);
+    shape.lineTo(width / 2, -arrowHeight);
+    shape.lineTo(width / 2 - arrowHeight / 2, 0);
+  
     return shape;
   }
-
+  
   crearPlano3D(
     width: number,
     height: number,
     depth: number,
     borderRadius: number,
-    texturePath: string
+    texturePath: string,
+    arrowHeight: number = height / 5
   ) {
     // Crear la forma del plano con bordes redondeados
-    const formaPlano = this.crearFormaPlanoConBordesRedondeados(
+    const formaPlano = this.crearFormaPlanoConBordesRedondeadosYFlecha(
       width,
       height,
-      borderRadius
+      borderRadius,
+      arrowHeight
     );
 
     // Crear la geometría extruida a partir de la forma

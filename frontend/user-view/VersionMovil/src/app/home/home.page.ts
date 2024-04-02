@@ -176,7 +176,7 @@ export class HomePage {
     this.estadistica(productoDetalle.idProducto, tipo, fecha);
   }
 
-  //Estadisticas
+  // Estadisticas
   estadistica(id: any, tipo: any, fecha: any) {
     const post: Stats = {
       nombre: tipo,
@@ -386,7 +386,7 @@ export class HomePage {
     const height = 1;
     const depth = 0.1; // Profundidad del objeto 3D
     const borderRadius = 0.1; // Radio de los bordes redondeados
-    const texturePath = '../../assets/images/1.jpg'; // Ruta de la textura
+    const texturePath = '../../assets/images/4.jpg'; // Ruta de la textura
 
     // Crear el plano 3D
     const plano3D = this.modeloService.crearPlano3D(
