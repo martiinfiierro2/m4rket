@@ -326,16 +326,16 @@ export class HomePage {
   scene = new THREE.Scene();
 
   RecargarModelo() {
-    window.location.reload();
-    //this.modeloService.clearScene(this.scene);
-    //this.getTodasUbicacionesLista();
+    this.modeloService.clearScene(this.scene, this.container);
+    this.getTodasUbicacionesLista();
+
   }
 
   CargarModelo() {
     this.container = document.getElementById('canvas');
     this.container.style.width = '100%';
     this.container.style.height = '100%';
-    const camera = new THREE.PerspectiveCamera(
+    let camera = new THREE.PerspectiveCamera(
       75,
       window.innerWidth / window.innerHeight,
       0.1,
@@ -386,7 +386,7 @@ export class HomePage {
     const height = 1;
     const depth = 0.1; // Profundidad del objeto 3D
     const borderRadius = 0.1; // Radio de los bordes redondeados
-    const texturePath = '../../assets/images/4.jpg'; // Ruta de la textura
+    const texturePath = '../../assets/images/6.jpg'; // Ruta de la textura
 
     // Crear el plano 3D
     const plano3D = this.modeloService.crearPlano3D(
@@ -429,21 +429,21 @@ export class HomePage {
       plano3D
     );
 
-    const container: HTMLElement | null = document.getElementById('canvas');
+    //const container: HTMLElement | null = document.getElementById('canvas');
     let intersectedObjectsMap: Map<THREE.Object3D, THREE.Object3D>;
 
-    if (container) {
-      container.addEventListener('touchstart', onTouchStart, false);
+    if (this.container) {
+      this.container.addEventListener('touchstart', onTouchStart, false);
       const self = this;
       function onTouchStart(event: TouchEvent) {
         if (event.touches.length !== 1) {
           return;
         }
         const touch = event.touches[0];
-        const rect = container!.getBoundingClientRect();
+        const rect = self.container!.getBoundingClientRect();
         const mouse = new THREE.Vector2(
-          ((touch.clientX - rect.left) / container!.clientWidth) * 2 - 1,
-          -((touch.clientY - rect.top) / container!.clientHeight) * 2 + 1
+          ((touch.clientX - rect.left) / self.container!.clientWidth) * 2 - 1,
+          -((touch.clientY - rect.top) / self.container!.clientHeight) * 2 + 1
         );
 
         const raycaster = new THREE.Raycaster();

@@ -33,7 +33,7 @@ export class ModeloService {
       ambientLightIntensity
     ); // (color, intensity)
 
-    if(prefersDarkMode){
+    if (prefersDarkMode) {
       scene.add(ambientLight);
     }
     scene.add(topLight);
@@ -367,8 +367,6 @@ export class ModeloService {
     controls.maxPolarAngle = Math.PI / 3;
   }
 
-
-
   animate(
     controls: any,
     scene: THREE.Scene,
@@ -536,69 +534,13 @@ export class ModeloService {
     render();
   }
 
-  clearScene(scene: THREE.Scene) {
-    scene.remove(...scene.children);
-  }
+  clearScene(scene: THREE.Scene, container:any) {
+    while (scene.children.length > 0) {
+      scene.remove(scene.children[0]);
+    }
+    
+}
 
-  // crearFormaPlanoConBordesRedondeados(
-  //   width: number,
-  //   height: number,
-  //   borderRadius: number
-  // ) {
-  //   // Crear la forma del cuadrado con los bordes redondeados
-  //   const shape = new THREE.Shape();
-  //   shape.moveTo(0, borderRadius);
-  //   shape.lineTo(0, height - borderRadius);
-  //   shape.quadraticCurveTo(0, height, borderRadius, height);
-  //   shape.lineTo(width - borderRadius, height);
-  //   shape.quadraticCurveTo(width, height, width, height - borderRadius);
-  //   shape.lineTo(width, borderRadius);
-  //   shape.quadraticCurveTo(width, 0, width - borderRadius, 0);
-  //   shape.lineTo(borderRadius, 0);
-  //   shape.quadraticCurveTo(0, 0, 0, borderRadius);
-
-  //   return shape;
-  // }
-
-  // crearPlano3D(
-  //   width: number,
-  //   height: number,
-  //   depth: number,
-  //   borderRadius: number,
-  //   texturePath: string
-  // ) {
-  //   // Crear la forma del plano con bordes redondeados
-  //   const formaPlano = this.crearFormaPlanoConBordesRedondeados(
-  //     width,
-  //     height,
-  //     borderRadius
-  //   );
-
-  //   // Crear la geometría extruida a partir de la forma
-  //   const extrudeSettings = {
-  //     depth: depth, // Profundidad del objeto 3D
-  //     bevelEnabled: false, // Desactivar biselado para mantener la forma plana
-  //   };
-  //   const geometriaExtruida = new THREE.ExtrudeGeometry(
-  //     formaPlano,
-  //     extrudeSettings
-  //   );
-  //   // Crear el material con textura
-  //   const textureLoader = new THREE.TextureLoader();
-  //   const texture = textureLoader.load(texturePath);
-  //   const material = new THREE.MeshBasicMaterial({
-  //     map: texture,
-  //     side: THREE.DoubleSide,
-  //   });
-
-  //   // Crear el objeto 3D a partir de la geometría y el material
-  //   const plano3D = new THREE.Mesh(geometriaExtruida, material);
-
-  //   return plano3D;
-  // }
-
-
-  
   crearFormaPlanoConBordesRedondeadosYFlecha(
     width: number,
     height: number,
@@ -606,7 +548,7 @@ export class ModeloService {
     arrowHeight: number = height / 5
   ) {
     const shape = new THREE.Shape();
-  
+
     // Top rectangle with rounded corners
     shape.moveTo(0, borderRadius);
     shape.lineTo(0, height - borderRadius);
@@ -617,16 +559,16 @@ export class ModeloService {
     shape.quadraticCurveTo(width, 0, width - borderRadius, 0);
     shape.lineTo(borderRadius, 0);
     shape.quadraticCurveTo(0, 0, 0, borderRadius);
-  
+
     // Arrow shape (pointing downwards)
     shape.moveTo(width / 2 - arrowHeight / 2, 0);
     shape.lineTo(width / 2 + arrowHeight / 2, 0);
     shape.lineTo(width / 2, -arrowHeight);
     shape.lineTo(width / 2 - arrowHeight / 2, 0);
-  
+
     return shape;
   }
-  
+
   crearPlano3D(
     width: number,
     height: number,
@@ -665,4 +607,7 @@ export class ModeloService {
 
     return plano3D;
   }
+
+
+  
 }
