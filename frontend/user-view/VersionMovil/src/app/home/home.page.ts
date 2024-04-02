@@ -1,7 +1,5 @@
-
-
 import { Component, ViewChild } from '@angular/core';
-import { ProductosService } from "../services/productos.service";
+import { ProductosService } from '../services/productos.service';
 import { DrawerComponent } from '../components/drawer/drawer.component';
 import { environment } from '../environments/environment';
 import { getLocaleFirstDayOfWeek } from '@angular/common';
@@ -9,7 +7,6 @@ import { EstadisticasService } from '../services/estadisticas.service';
 import { UbicacionesService } from '../services/ubicaciones.service';
 import { json } from 'express';
 import { forkJoin } from 'rxjs';
-
 
 //modelo todo
 import * as THREE from 'three'; // we need @types/three for this to work (next to three package)
@@ -19,63 +16,63 @@ import { DomElementSchemaRegistry } from '@angular/compiler';
 import { ModeloService } from '../services/modelo.service';
 
 export interface Producto {
-  id: string,
-  nombre: string,
-  marca: string,
-  categoria: string,
-  stock: number,
-  valor_energetico: Float32Array,
-  grasas: Float32Array,
-  grasas_saturadas: Float32Array,
-  hidratos_carbono: Float32Array,
-  azucares: Float32Array,
-  fibra: Float32Array,
-  proteina: Float32Array,
-  sal: Float32Array,
-  precio_kg: Float32Array,
-  ingerdientes: string,
-  foto: string,
-  precio: Float32Array,
+  id: string;
+  nombre: string;
+  marca: string;
+  categoria: string;
+  stock: number;
+  valor_energetico: Float32Array;
+  grasas: Float32Array;
+  grasas_saturadas: Float32Array;
+  hidratos_carbono: Float32Array;
+  azucares: Float32Array;
+  fibra: Float32Array;
+  proteina: Float32Array;
+  sal: Float32Array;
+  precio_kg: Float32Array;
+  ingerdientes: string;
+  foto: string;
+  precio: Float32Array;
   //Ubicacions: Ubicaciones[]
   //Promocions: Promociones[]
 
-  cantidad: number,
+  cantidad: number;
 }
 
 export interface ListaCompra {
-  id: string,
-  idUsu: string,
-  idProd: string,
-  fecha: string | null,
-  cantidad: number,
+  id: string;
+  idUsu: string;
+  idProd: string;
+  fecha: string | null;
+  cantidad: number;
 }
 interface ProductoDetalle {
-  nombre: string,
-  precio: number,
-  foto: string,
-  cantidad: number,
-  idProducto: string,
-  idLista: string,
-  contador: boolean,
+  nombre: string;
+  precio: number;
+  foto: string;
+  cantidad: number;
+  idProducto: string;
+  idLista: string;
+  contador: boolean;
 }
 
 interface Stats {
-  nombre: string,
-  idProd: number,
-  qr: string | null,
-  fecha: Date
+  nombre: string;
+  idProd: number;
+  qr: string | null;
+  fecha: Date;
 }
 
 export interface Ubicacion {
-  id: number,
-  referencia: string,
-  posicion: number,
+  id: number;
+  referencia: string;
+  posicion: number;
 }
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss']
+  styleUrls: ['home.page.scss'],
 })
 export class HomePage {
   //VERSION ANTIGUA
@@ -90,14 +87,12 @@ export class HomePage {
   ref: string[] = [];
   pos: number[] = [];
 
-
   //PRODUCTO SELECCIONADO
   productoSelect: any;
   dispo: string = '';
   seleccionado: boolean = false;
   productoInfo: any;
   modeloService = new ModeloService();
-
 
   //USO DEL DRAWER Y PASO DE INFORMACION
   @ViewChild(DrawerComponent) drawerComponent!: DrawerComponent;
@@ -106,18 +101,19 @@ export class HomePage {
     // Llama a la función del componente Drawer
     //this.drawerComponent.getProducto(producto);
     this.drawerComponent.getProducto(idProd);
-
   }
 
   //variables para mostrar foto
   urlFotoProducto = environment.base_url + '/uploads/fotoproducto/';
-  tokenUsuario = sessionStorage.getItem('tokenUsuario') || localStorage.getItem('tokenUsuario');
+  tokenUsuario =
+    sessionStorage.getItem('tokenUsuario') ||
+    localStorage.getItem('tokenUsuario');
 
-
-  constructor(private productosService: ProductosService,
+  constructor(
+    private productosService: ProductosService,
     private estadisticasService: EstadisticasService,
-    private ubicacionesService: UbicacionesService) { }
-
+    private ubicacionesService: UbicacionesService
+  ) {}
 
   //VERSION ANTIGUA
   ngOnInit(): void {
@@ -125,33 +121,36 @@ export class HomePage {
     this.getListaCompraUsu();
   }
 
-
   //Funciones para sacar el valor de los productos a partit de la ubicacion del motor gráfico
   getIdUbicacion(referencia: any, posicion: any) {
     for (let index = 0; index < this.listaCompra.length; index++) {
-      this.productosService.getProductoId(this.listaCompra[index].idProd)
-        .subscribe(res => {
+      this.productosService
+        .getProductoId(this.listaCompra[index].idProd)
+        .subscribe((res) => {
           for (let j = 0; j < res.productos.Ubicacions.length; j++) {
-            if (res.productos.Ubicacions[j].referencia == referencia && res.productos.Ubicacions[j].posicion == posicion) {
+            if (
+              res.productos.Ubicacions[j].referencia == referencia &&
+              res.productos.Ubicacions[j].posicion == posicion
+            ) {
               this.llamarFuncionDrawer(res.productos.id);
-
             }
           }
-        })
+        });
     }
   }
-
 
   getTodasUbicacionesLista() {
     const self = this; // Guardar una referencia a this
 
     const observables = [];
     for (let i = 0; i < this.listaCompra.length; i++) {
-      observables.push(this.productosService.getProductoId(this.listaCompra[i].idProd));
+      observables.push(
+        this.productosService.getProductoId(this.listaCompra[i].idProd)
+      );
     }
 
     forkJoin(observables).subscribe((respuestas: any[]) => {
-      respuestas.forEach(res => {
+      respuestas.forEach((res) => {
         for (let j = 0; j < res.productos.Ubicacions.length; j++) {
           this.ref.push(res.productos.Ubicacions[j].referencia);
           this.pos.push(res.productos.Ubicacions[j].posicion);
@@ -163,12 +162,16 @@ export class HomePage {
     });
   }
 
-  //FUNCIONES YA CREADAS DE LA ANTIGUA VERSION LISTA DE LA COMPRA
+  // FUNCIONES YA CREADAS DE LA ANTIGUA VERSION LISTA DE LA COMPRA
   incrementar(productoDetalle: any) {
     productoDetalle.cantidad++;
-    console.log('Nueva cantidad = ' + productoDetalle.cantidad)
-    this.actualizarCantidad(productoDetalle.idProducto, productoDetalle.cantidad, productoDetalle.idLista)
-    let tipo = "anadido";
+    console.log('Nueva cantidad = ' + productoDetalle.cantidad);
+    this.actualizarCantidad(
+      productoDetalle.idProducto,
+      productoDetalle.cantidad,
+      productoDetalle.idLista
+    );
+    let tipo = 'anadido';
     let fecha = new Date();
     this.estadistica(productoDetalle.idProducto, tipo, fecha);
   }
@@ -179,7 +182,7 @@ export class HomePage {
       nombre: tipo,
       idProd: id,
       qr: null,
-      fecha: fecha
+      fecha: fecha,
     };
     console.log(post);
     this.estadisticasService.postContador(post);
@@ -187,9 +190,13 @@ export class HomePage {
 
   decrementar(productoDetalle: any) {
     productoDetalle.cantidad--;
-    console.log('Nueva cantidad = ' + productoDetalle.cantidad)
-    this.actualizarCantidad(productoDetalle.idProducto, productoDetalle.cantidad, productoDetalle.idLista)
-    let tipo = "eliminado";
+    console.log('Nueva cantidad = ' + productoDetalle.cantidad);
+    this.actualizarCantidad(
+      productoDetalle.idProducto,
+      productoDetalle.cantidad,
+      productoDetalle.idLista
+    );
+    let tipo = 'eliminado';
     let fecha = new Date();
     this.estadistica(productoDetalle.idProducto, tipo, fecha);
 
@@ -213,7 +220,6 @@ export class HomePage {
     }
   }
 
-
   /*
   getProducto(idProd: string){
     this.productosService.getProductoId(idProd).subscribe( result => {
@@ -224,15 +230,13 @@ export class HomePage {
   */
   //Funciones CRUD LISTA COMPRA
 
-
   getListaCompraUsu() {
     this.productosService.getListaCompra(this.idUsu).subscribe((result) => {
       if (result.listacompra) {
-        this.listaCompra = result.listacompra.map((item: ListaCompra) =>
-        ({
+        this.listaCompra = result.listacompra.map((item: ListaCompra) => ({
           idProd: item.idProd,
           cantidad: item.cantidad,
-          id: item.id
+          id: item.id,
         }));
         console.log(this.listaCompra);
 
@@ -241,7 +245,12 @@ export class HomePage {
         const detallesProductos: ProductoDetalle[] = [];
 
         this.listaCompra.forEach((productoCompra) => {
-          this.getDetalleProducto(productoCompra.idProd, detallesProductos, productoCompra.cantidad, productoCompra.id);
+          this.getDetalleProducto(
+            productoCompra.idProd,
+            detallesProductos,
+            productoCompra.cantidad,
+            productoCompra.id
+          );
         });
       } else {
         console.error('Error en la búsqueda dentro de lssta compra.');
@@ -249,7 +258,12 @@ export class HomePage {
     });
   }
 
-  getDetalleProducto(idProd: string, detallesProductos: ProductoDetalle[], cantidadProd: number, idLista: string) {
+  getDetalleProducto(
+    idProd: string,
+    detallesProductos: ProductoDetalle[],
+    cantidadProd: number,
+    idLista: string
+  ) {
     const quantity = cantidadProd;
     const idP = idProd;
     const idL = idLista;
@@ -278,7 +292,6 @@ export class HomePage {
     });
   }
   //Borrar de la lista de la compra
-
   borrarProd(idLista: string) {
     this.productosService.deleteListaCompra(idLista).subscribe((result) => {
       this.getListaCompraUsu();
@@ -293,44 +306,47 @@ export class HomePage {
       idUsu: this.idUsu,
       idProd: idProd,
       fecha: fechaActual,
-      cantidad: nuevaCantidad
+      cantidad: nuevaCantidad,
     };
 
     console.log('Cuerpo de la solicitud:', body);
 
-    this.productosService.putListaCompra(idLista, body)
-      .subscribe(
-        (res) => {
-          console.log('Respuesta correcta:', res);
-        },
-        (error) => {
-          console.error('Error en la solicitud PUT: again', error);
-        }
-      );
+    this.productosService.putListaCompra(idLista, body).subscribe(
+      (res) => {
+        console.log('Respuesta correcta:', res);
+      },
+      (error) => {
+        console.error('Error en la solicitud PUT: again', error);
+      }
+    );
   }
 
-
-  // ESTO ES SOLO MODELO 
+  // ESTO ES SOLO MODELO
   container: any;
   scene = new THREE.Scene();
 
-
-  RecargarModelo(){
+  RecargarModelo() {
     window.location.reload();
     //this.modeloService.clearScene(this.scene);
     //this.getTodasUbicacionesLista();
   }
 
-
   CargarModelo() {
     this.container = document.getElementById('canvas');
     this.container.style.width = '100%';
     this.container.style.height = '100%';
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(
+      75,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000
+    );
     const renderer = new THREE.WebGLRenderer({ alpha: true });
     camera.position.set(-40.36, 28.89, 54.87);
     const controls = new OrbitControls(camera, renderer.domElement);
-    const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const prefersDarkMode = window.matchMedia(
+      '(prefers-color-scheme: dark)'
+    ).matches;
     let objToRender;
     if (prefersDarkMode) {
       objToRender = 'marketoscuro';
@@ -358,16 +374,13 @@ export class HomePage {
     let A6: THREE.Object3D[] = []; // Pasillo 2.2
     let A7: THREE.Object3D[] = []; // Pasillo 3.1
     let A8: THREE.Object3D[] = []; // Pasillo 3.2
-    let A9: THREE.Object3D[] = [];  // Pasillos pegados 1.1
-    let A10: THREE.Object3D[] = [];  // Pasillos pegados 1.2
+    let A9: THREE.Object3D[] = []; // Pasillos pegados 1.1
+    let A10: THREE.Object3D[] = []; // Pasillos pegados 1.2
     let A11: THREE.Object3D[] = []; //Pasillos pegados 2.1
-    let A12: THREE.Object3D[] = [];  // Pasillos pegados 2.2
+    let A12: THREE.Object3D[] = []; // Pasillos pegados 2.2
     let B1: THREE.Object3D[] = []; // Estanterías finas altas
     let B2: THREE.Object3D[] = []; // Estanterías grandes
-    let B3: THREE.Object3D[] = [];  // Estantería Frío
-
-    
-
+    let B3: THREE.Object3D[] = []; // Estantería Frío
 
     const width = 1;
     const height = 1;
@@ -376,7 +389,13 @@ export class HomePage {
     const texturePath = '../../assets/images/1.jpg'; // Ruta de la textura
 
     // Crear el plano 3D
-    const plano3D = this.modeloService.crearPlano3D(width, height, depth, borderRadius, texturePath);
+    const plano3D = this.modeloService.crearPlano3D(
+      width,
+      height,
+      depth,
+      borderRadius,
+      texturePath
+    );
     //this.modeloService.FixRotationEnElMismoEje(plano3D,this.scene,camera);
     //Pruebas
     console.log(this.ref);
@@ -387,8 +406,28 @@ export class HomePage {
     this.container.appendChild(renderer.domElement);
 
     //cargarPointers
-    this.modeloService.cargarPointers(this.scene, pointerrender, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, B1, B2, B3, self, camera, plano3D);
-
+    this.modeloService.cargarPointers(
+      this.scene,
+      pointerrender,
+      A1,
+      A2,
+      A3,
+      A4,
+      A5,
+      A6,
+      A7,
+      A8,
+      A9,
+      A10,
+      A11,
+      A12,
+      B1,
+      B2,
+      B3,
+      self,
+      camera,
+      plano3D
+    );
 
     const container: HTMLElement | null = document.getElementById('canvas');
     let intersectedObjectsMap: Map<THREE.Object3D, THREE.Object3D>;
@@ -413,7 +452,23 @@ export class HomePage {
         let objectFound = false;
 
         // Loop through all arrays (A1 to A6)
-        const objectArrays: THREE.Object3D[][] = [A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, B1, B2, B3];
+        const objectArrays: THREE.Object3D[][] = [
+          A1,
+          A2,
+          A3,
+          A4,
+          A5,
+          A6,
+          A7,
+          A8,
+          A9,
+          A10,
+          A11,
+          A12,
+          B1,
+          B2,
+          B3,
+        ];
         for (const objectArray of objectArrays) {
           for (const object of objectArray) {
             const intersects = raycaster.intersectObject(object, true);
@@ -422,20 +477,36 @@ export class HomePage {
               objectFound = true;
               if (objectFound) {
                 // Obtener el nombre del array y la posición
-                const arrayName = objectArray === A1 ? "A1" :
-                  objectArray === A2 ? "A2" :
-                    objectArray === A3 ? "A3" :
-                      objectArray === A4 ? "A4" :
-                        objectArray === A5 ? "A5" :
-                          objectArray === A6 ? "A6" :
-                            objectArray === A7 ? "A7" :
-                              objectArray === A8 ? "A8" :
-                                objectArray === A9 ? "A9" :
-                                  objectArray === A10 ? "A10" :
-                                    objectArray === A11 ? "A11" :
-                                      objectArray === A12 ? "A12" :
-                                        objectArray === B1 ? "B1" :
-                                          objectArray === B2 ? "B2" : "B3";
+                const arrayName =
+                  objectArray === A1
+                    ? 'A1'
+                    : objectArray === A2
+                    ? 'A2'
+                    : objectArray === A3
+                    ? 'A3'
+                    : objectArray === A4
+                    ? 'A4'
+                    : objectArray === A5
+                    ? 'A5'
+                    : objectArray === A6
+                    ? 'A6'
+                    : objectArray === A7
+                    ? 'A7'
+                    : objectArray === A8
+                    ? 'A8'
+                    : objectArray === A9
+                    ? 'A9'
+                    : objectArray === A10
+                    ? 'A10'
+                    : objectArray === A11
+                    ? 'A11'
+                    : objectArray === A12
+                    ? 'A12'
+                    : objectArray === B1
+                    ? 'B1'
+                    : objectArray === B2
+                    ? 'B2'
+                    : 'B3';
                 const position = objectArray.indexOf(object);
 
                 //Busco la relacion con produtos
@@ -456,9 +527,22 @@ export class HomePage {
       this.scene,
       camera,
       renderer,
-      A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, B1, B2, B3, plano3D );
+      A1,
+      A2,
+      A3,
+      A4,
+      A5,
+      A6,
+      A7,
+      A8,
+      A9,
+      A10,
+      A11,
+      A12,
+      B1,
+      B2,
+      B3,
+      plano3D
+    );
   }
-
-
-
 }
