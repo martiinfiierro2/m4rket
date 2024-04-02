@@ -1,7 +1,7 @@
 <div id="header">
     <div id="divSearch">
         <form id="busqueda" (ngSubmit)="getBusquedaProducto()">
-            <input type="text" name="search" id="search" placeholder="Búsqueda" [(ngModel)]="valueBusquedaInput" ngModel>
+            <input type="text" name="search" id="search" placeholder="Búsqueda" class="barraBusqueda" [(ngModel)]="valueBusquedaInput" ngModel>
             <input type="submit" value="Buscar" class="btnPrimario">
         </form>
         <button (click)="getProductos(); valueBusquedaInput=''" class="btnSecundario">Cancelar</button>
