@@ -238,78 +238,17 @@
   font-size: 20px;
 }
 
-// PopUp jiji
-.hidden {
-  display: none;
-  background-color: white;
-}
-.info-div {
-  position: absolute;
-  top: 30%;
-  left: 50%;
-  width: 22em;
-  height: 35em;
-  transform: translate(-50%, -50%);
-  z-index: 9999;
-  background-color: red; //BORRAR EN DAVANT
-  /* Otras propiedades de estilo */
-}
-#canvas-container {
-  position: relative; /* Asegura que los elementos absolutos se posicionen relativamente a este contenedor */
-}
-/* root */
-:root {
-  --bg-light: #f5f5fc;
-  --bg-dark: #35353c;
-  --bg-darker: #15151c;
-  --font-body: #55555c;
-  --shadow: #c5c5cc;
-}
 
-/* tpn card style */
-.tpn_card {
-  background: white;
-  padding: 10px;
-  border-radius: 27px;
+#loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.9); /* Fondo semi-transparente */
   display: flex;
+  justify-content: center;
   align-items: center;
-  width: 75%;
-  height: 6em;
-}
-
-.tpn_card img {
-  border-radius: 23px;
-  box-shadow: 1px 7px 13px var(--shadow);
-}
-
-.tpn_card p {
-  color: black;
-  font-weight: 400;
-  margin-bottom: 24px;
-}
-
-.tpn_card .tpn_btn {
-  padding: 13px 27px !important;
-  line-height: normal;
-  background: var(--bg-dark);
-  border-radius: 17px;
-  text-decoration: none;
-  color: black;
-  box-shadow: 1px 7px 13px var(--shadow);
-  transition: all 0.7s ease;
-}
-
-.tpn_card .tpn_btn:hover {
-  background: var(--bg-darker);
-  box-shadow: none;
-}
-
-.img-left {
-  flex: none;
-  margin-right: 10px;
-  max-width: 50%;
-}
-.text-right {
-  flex: 1; /* Para que el texto ocupe el espacio restante */
-  color: black;
+  z-index: 9999; /* Asegura que esté encima de todo */
+  display: none;
 }

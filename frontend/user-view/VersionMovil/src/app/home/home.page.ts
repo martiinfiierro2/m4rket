@@ -326,8 +326,8 @@ export class HomePage {
   scene = new THREE.Scene();
 
   RecargarModelo() {
-    this.modeloService.clearScene(this.scene, this.container);
-    this.getTodasUbicacionesLista();
+    this.modeloService.clearScene(this.scene);
+    //this.getTodasUbicacionesLista();
 
   }
 

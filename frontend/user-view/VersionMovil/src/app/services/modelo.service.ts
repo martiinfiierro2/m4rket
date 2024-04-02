@@ -534,13 +534,12 @@ export class ModeloService {
     render();
   }
 
-  clearScene(scene: THREE.Scene, container:any) {
-    while (scene.children.length > 0) {
-      scene.remove(scene.children[0]);
-    }
-    
-}
 
+
+
+  clearScene(scene: THREE.Scene) {
+      window.location.reload(); // El argumento true indica que se recargará desde el servidor
+  }
   crearFormaPlanoConBordesRedondeadosYFlecha(
     width: number,
     height: number,
@@ -607,7 +606,4 @@ export class ModeloService {
 
     return plano3D;
   }
-
-
-  
 }
