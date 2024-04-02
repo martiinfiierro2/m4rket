@@ -3,6 +3,7 @@ import { UbicacionesService } from '../../services/ubicaciones.service';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { PaginationComponent } from '../../pagination/pagination.component';
 
 export interface Ubicacion{
   id: number,
@@ -14,7 +15,7 @@ export interface Ubicacion{
 @Component({
   selector: 'app-ubicaciones',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, MatIconModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, PaginationComponent],
   templateUrl: './ubicaciones.component.html',
   styleUrl: './ubicaciones.component.css'
 })
@@ -26,6 +27,14 @@ export class UbicacionesComponent {
   idUbiSelected: string = '';
 
   modals = document.getElementsByClassName('modal') as HTMLCollectionOf<HTMLElement>;
+
+
+  //Variables de paginación
+  public totalregistros=98;
+  public posicionactual=0;
+  public registrosporpagina=12;
+
+  private paginaUsada = 0;
 
 
   constructor ( private ubicacionesService: UbicacionesService,
@@ -83,11 +92,25 @@ export class UbicacionesComponent {
 
 
 
+  //PAGINACIÓN
+  cambiarPagina( pagina:number ){
+    pagina = (pagina < 0 ? 0 : pagina);
+    this.posicionactual = ((pagina - 1) * this.registrosporpagina >=0 ? (pagina - 1) * this.registrosporpagina : 0);
+    this.paginaUsada = pagina;
+
+    this.getUbicaciones();
+  }
+
+
+
   //CRUD
   getUbicaciones(){
-    this.ubicacionesService.getAllUbicaciones()
+    this.ubicacionesService.getAllUbicaciones(this.posicionactual)
       .subscribe( res => {
         this.ubicaciones = res.ubicaciones;
+
+        //Paginación
+        this.totalregistros = res.page.total;
       })
   }
 

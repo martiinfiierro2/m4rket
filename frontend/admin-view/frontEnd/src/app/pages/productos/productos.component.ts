@@ -66,7 +66,7 @@ export interface en_Promocion{
     standalone: true,
     templateUrl: './productos.component.html',
     styleUrl: './productos.component.css',
-    imports: [CommonModule, FormsModule, MatIconModule, MatAutocompleteModule, MatFormFieldModule, MatInputModule, PaginationComponent, ReactiveFormsModule]
+    imports: [CommonModule, FormsModule, PaginationComponent, ReactiveFormsModule]
 })
 
 export class ProductosComponent {
@@ -365,7 +365,7 @@ export class ProductosComponent {
   }
 
   getPromociones(){
-    this.promocionesService.getAllPromociones().subscribe((result) =>{
+    this.promocionesService.getAllPromociones(0).subscribe((result) =>{
         this.promociones = result.promociones;
     });
   }
@@ -399,7 +399,7 @@ export class ProductosComponent {
   }
 
   getUbicaciones(){
-    this.ubicacionService.getAllUbicaciones()
+    this.ubicacionService.getAllUbicaciones(0)
       .subscribe( res => {
         this.ubicaciones = res.ubicaciones;
       })

@@ -19,9 +19,11 @@ export class PromocionesService {
 
 
   //CRUD
-  getAllPromociones(): Observable<any>{
+  getAllPromociones( desde: number): Observable<any>{
+
+    let urlCompleta = this.url + '?desde=' + desde;
     
-    return this.http.get(this.url, {headers: this.cabeceras});
+    return this.http.get(urlCompleta, {headers: this.cabeceras});
   }
 
   getPromocionId(idProd: string): Observable<any>{

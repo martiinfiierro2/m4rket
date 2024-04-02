@@ -18,9 +18,9 @@ export class UbicacionesService {
   });;
 
   //CRUD
-  getAllUbicaciones(): Observable<any>{
+  getAllUbicaciones( desde: number): Observable<any>{
 
-    let urlCompleta = this.url + '?desde=0';
+    let urlCompleta = this.url + '?desde=' + desde;
 
     return this.http.get(urlCompleta, {headers: this.cabeceras});
   }
