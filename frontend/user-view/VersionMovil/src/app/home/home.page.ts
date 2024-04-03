@@ -328,7 +328,6 @@ export class HomePage {
   RecargarModelo() {
     this.modeloService.clearScene(this.scene);
     //this.getTodasUbicacionesLista();
-
   }
 
   CargarModelo() {
@@ -386,7 +385,7 @@ export class HomePage {
     const height = 1;
     const depth = 0.1; // Profundidad del objeto 3D
     const borderRadius = 0.1; // Radio de los bordes redondeados
-    const texturePath = '../../assets/images/6.jpg'; // Ruta de la textura
+    const texturePath = '../../assets/images/3.jpg'; // Ruta de la textura
 
     // Crear el plano 3D
     const plano3D = this.modeloService.crearPlano3D(
@@ -429,9 +428,9 @@ export class HomePage {
       plano3D
     );
 
-    //const container: HTMLElement | null = document.getElementById('canvas');
-    let intersectedObjectsMap: Map<THREE.Object3D, THREE.Object3D>;
 
+
+    let intersectedObjectsMap: Map<THREE.Object3D, THREE.Object3D>;
     if (this.container) {
       this.container.addEventListener('touchstart', onTouchStart, false);
       const self = this;
@@ -518,9 +517,9 @@ export class HomePage {
           }
         }
       }
-    } else {
-      console.error("No se pudo encontrar el contenedor con el ID 'canvas'");
-    }
+    } 
+
+
 
     this.modeloService.animate(
       controls,

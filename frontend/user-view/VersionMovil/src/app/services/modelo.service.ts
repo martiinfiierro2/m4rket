@@ -534,21 +534,19 @@ export class ModeloService {
     render();
   }
 
-
-
-
   clearScene(scene: THREE.Scene) {
-      window.location.reload(); // El argumento true indica que se recargará desde el servidor
+    window.location.reload(); // El argumento true indica que se recargará desde el servidor
   }
-  crearFormaPlanoConBordesRedondeadosYFlecha(
+  crearFormaPlanoConIndicador(
     width: number,
     height: number,
+    indicatorHeight: number,
     borderRadius: number,
-    arrowHeight: number = height / 5
+    indicatorWidth: number = width / 5 // Ancho del indicador (por defecto es 1/5 del ancho del plano)
   ) {
     const shape = new THREE.Shape();
-
-    // Top rectangle with rounded corners
+  
+    // Rectángulo superior con bordes redondeados
     shape.moveTo(0, borderRadius);
     shape.lineTo(0, height - borderRadius);
     shape.quadraticCurveTo(0, height, borderRadius, height);
@@ -558,15 +556,33 @@ export class ModeloService {
     shape.quadraticCurveTo(width, 0, width - borderRadius, 0);
     shape.lineTo(borderRadius, 0);
     shape.quadraticCurveTo(0, 0, 0, borderRadius);
-
-    // Arrow shape (pointing downwards)
-    shape.moveTo(width / 2 - arrowHeight / 2, 0);
-    shape.lineTo(width / 2 + arrowHeight / 2, 0);
-    shape.lineTo(width / 2, -arrowHeight);
-    shape.lineTo(width / 2 - arrowHeight / 2, 0);
-
+  
+    // Indicador apuntando hacia abajo
+    const indicatorHalfWidth = indicatorWidth / 2;
+    const indicatorPosition = width / 2;
+  
+    // Punto de inicio del indicador
+    const startX = indicatorPosition - indicatorHalfWidth;
+    const startY = 0;
+  
+    // Punto medio del indicador
+    const midX = indicatorPosition;
+    const midY = -indicatorHeight;
+  
+    // Punto final del indicador
+    const endX = indicatorPosition + indicatorHalfWidth;
+    const endY = 0;
+  
+    shape.moveTo(startX, startY);
+    shape.lineTo(midX, midY);
+    shape.lineTo(endX, endY);
+    shape.lineTo(startX, startY); // Agregamos otro punto para cerrar la forma del indicador
+  
     return shape;
   }
+  
+  
+  
 
   crearPlano3D(
     width: number,
@@ -577,7 +593,7 @@ export class ModeloService {
     arrowHeight: number = height / 5
   ) {
     // Crear la forma del plano con bordes redondeados
-    const formaPlano = this.crearFormaPlanoConBordesRedondeadosYFlecha(
+    const formaPlano = this.crearFormaPlanoConIndicador(
       width,
       height,
       borderRadius,
@@ -593,17 +609,22 @@ export class ModeloService {
       formaPlano,
       extrudeSettings
     );
-    // Crear el material con textura
-    const textureLoader = new THREE.TextureLoader();
-    const texture = textureLoader.load(texturePath);
-    const material = new THREE.MeshBasicMaterial({
-      map: texture,
-      side: THREE.DoubleSide,
-    });
+    // Crear el material con textura para las caras grandes del plano
+  const textureLoader = new THREE.TextureLoader();
+  const texture = textureLoader.load(texturePath);
+  const materialTextura = new THREE.MeshBasicMaterial({
+    map: texture,
+    side: THREE.DoubleSide, // Se aplica la textura en ambas caras
+  });
 
-    // Crear el objeto 3D a partir de la geometría y el material
-    const plano3D = new THREE.Mesh(geometriaExtruida, material);
+  // Crear el material blanco para la flecha y los bordes
+  const materialBlanco = new THREE.MeshBasicMaterial({ color: 0xffffff });
 
-    return plano3D;
+  // Crear el plano 3D a partir de la geometría y los materiales
+  const plano3D = new THREE.Mesh(geometriaExtruida, [materialTextura, materialBlanco]);
+
+  return plano3D;
   }
+
+
 }
