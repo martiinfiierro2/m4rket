@@ -24,6 +24,7 @@ import { NewUbicacionComponent } from './ubicaciones/new-ubicacion/new-ubicacion
 import { authGuard, authGuard2 } from "../app/guards/auth.guard";
 import path from 'path';
 import { UsuariosComponent } from './pages/usuarios/usuarios.component';
+import { DetailProductoComponent } from './productos/detail-producto/detail-producto.component';
 
 
 export const routes: Routes = [
@@ -56,6 +57,7 @@ export const routes: Routes = [
         { path: '', component: ProductosComponent},
         { path: 'newProducto',component: NewProductoComponent},
         { path: 'editProducto',component: EditPorductoComponent},
+        { path: 'detailProducto', component: DetailProductoComponent},
         { path: '*', redirectTo: ''}
       ]
   },

@@ -1,0 +1,37 @@
+<div class="parent">
+    <div class="div1">  
+        <img [src]="urlFotoProducto + productoMostrar.foto + '?token=' +tokenUsuario" alt="Imagen del producto">
+    </div>
+    <div class="div2"> 
+        <span class="tituloDiv"> Nombre </span>
+        <span class="infoDiv"> {{ productoMostrar.nombre }} </span>
+    </div>
+    <div class="div3"> 
+        <span class="tituloDiv"> Marca </span>
+        <span class="infoDiv"> {{ productoMostrar.marca }} </span>
+         
+    </div>
+    <div class="div4"> 
+        <span class="tituloDiv"> Stock </span>
+        <span class="infoDiv"> {{ productoMostrar.stock }} </span>
+    </div>
+    <div class="div5">
+        <span class="tituloDiv"> Ubicaciones </span>
+        <span *ngFor="let ubicaciones of productoMostrar.Ubicacions" class="infoDiv"> {{ ubicaciones.referencia }} - {{ ubicaciones.posicion }}</span> 
+    </div>
+    <div class="div6">
+        <span class="tituloDiv"> Promociones </span>
+        <span *ngFor="let promociones of productoMostrar.Promocions" class="infoDiv"> {{ promociones.nombre }} </span>
+    </div>
+    <div class="div7"> 
+        <span class="tituloDiv"> Precios </span>
+        <span class="infoDiv"> {{ productoMostrar.precio }}€ <br> {{ productoMostrar.precio_kg }}€/kg </span>
+    </div>
+    <div class="div8">
+        <span class="tituloDiv"> Ingredientes</span> 
+        <span class="infoDiv" id="infoDivIngredientes"> {{ productoMostrar.ingredientes }} </span>
+    </div>
+    <div class="div9"> 
+        <span class="tituloDiv"> Valores nutricionles </span>
+    </div>
+</div>

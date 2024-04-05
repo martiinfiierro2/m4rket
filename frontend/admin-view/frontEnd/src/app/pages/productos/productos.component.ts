@@ -35,7 +35,8 @@ export interface Producto{
   foto: string,
   precio: Float32Array,
   Ubicacions: Ubicaciones[],
-  Promocions: Promociones[]
+  Promocions: Promociones[],
+  seleccionado: Boolean
 }
 
 export interface Ubicaciones{
@@ -115,6 +116,8 @@ export class ProductosComponent {
   fechaFinUbicacionProducto!: Date;
 
   valueBusquedaInput = '';
+
+  fondoDestacado = false;
 
   //Variables paginación
   public totalregistros=98;
@@ -250,6 +253,24 @@ export class ProductosComponent {
     this.mostrarModal('ubicacion');
   }
 
+  irMostrarProducto(idProd){
+    let url = 'productos/detailProducto?id='+idProd;
+    window.location.href = url;
+  }
+
+  destacarFondo( estado: Boolean, idProd){
+
+    for (let producto of this.productos){
+      if (producto.id == idProd) {
+        if (estado) {
+          producto.seleccionado = true;
+        }
+        else{
+          producto.seleccionado = false;
+        }
+      }    
+    }
+  }
 
 
 
@@ -344,6 +365,10 @@ export class ProductosComponent {
       .subscribe((result) =>{
         this.productos = result.productos;
         console.log(this.productos);
+
+        for ( let producto of this.productos){
+          producto.seleccionado = false;
+        }
         
         //Paginacion
         this.totalregistros = result.page.total;

@@ -25,18 +25,18 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let producto of productos; let i = index">
-                <td><img [src]="urlFotoProducto + producto.foto + '?token=' +tokenUsuario" alt="Imagen del producto"></td>
-                <td> {{ producto.nombre }} </td>
-                <td> {{ producto.marca }} </td>
-                <td><div id="divStock" [ngStyle]="colorStock(producto.stock)"> {{ producto.stock }} </div></td>
-                <td *ngIf="producto.Promocions.length == 0 || producto.Promocions[0].en_promocion.precio == producto.precio"> {{ producto.precio }} €</td>
-                <td *ngIf="producto.Promocions.length > 0 && producto.Promocions[0].en_promocion.precio != producto.precio">
+            <tr *ngFor="let producto of productos; let i = index" [style.background-color]="producto.seleccionado ? '#e2e2e2' : 'transparent'">
+                <td (click)="irMostrarProducto(producto.id)" class="enlace" (mouseenter)="destacarFondo(true, producto.id)" (mouseleave)="destacarFondo(false, producto.id)"><img [src]="urlFotoProducto + producto.foto + '?token=' +tokenUsuario" alt="Imagen del producto"></td>
+                <td (click)="irMostrarProducto(producto.id)" class="enlace" (mouseenter)="destacarFondo(true, producto.id)" (mouseleave)="destacarFondo(false, producto.id)"> {{ producto.nombre }} </td>
+                <td (click)="irMostrarProducto(producto.id)" class="enlace" (mouseenter)="destacarFondo(true, producto.id)" (mouseleave)="destacarFondo(false, producto.id)"> {{ producto.marca }} </td>
+                <td (click)="irMostrarProducto(producto.id)" class="enlace" (mouseenter)="destacarFondo(true, producto.id)" (mouseleave)="destacarFondo(false, producto.id)"><div id="divStock" [ngStyle]="colorStock(producto.stock)"> {{ producto.stock }} </div></td>
+                <td *ngIf="producto.Promocions.length == 0 || producto.Promocions[0].en_promocion.precio == producto.precio" (click)="irMostrarProducto(producto.id)" class="enlace" (mouseenter)="destacarFondo(true, producto.id)" (mouseleave)="destacarFondo(false, producto.id)"> {{ producto.precio }} €</td>
+                <td *ngIf="producto.Promocions.length > 0 && producto.Promocions[0].en_promocion.precio != producto.precio" (click)="irMostrarProducto(producto.id)" class="enlace" (mouseenter)="destacarFondo(true, producto.id)" (mouseleave)="destacarFondo(false, producto.id)">
                     <div style="text-decoration: line-through; color: gray;">{{ producto.precio}}€</div>
                     <div>{{producto.Promocions[0].en_promocion.precio}}€</div>
                 </td>
-                <td *ngIf="producto.Ubicacions.length > 0"><span *ngFor="let ubicaciones of producto.Ubicacions"> {{ ubicaciones.referencia }}-{{ ubicaciones.posicion }} </span></td>
-                <td *ngIf="producto.Ubicacions.length == 0"> --- </td>
+                <td *ngIf="producto.Ubicacions.length > 0" (click)="irMostrarProducto(producto.id)" class="enlace" (mouseenter)="destacarFondo(true, producto.id)" (mouseleave)="destacarFondo(false, producto.id)"><span *ngFor="let ubicaciones of producto.Ubicacions"> {{ ubicaciones.referencia }}-{{ ubicaciones.posicion }} </span></td>
+                <td *ngIf="producto.Ubicacions.length == 0" (click)="irMostrarProducto(producto.id)" class="enlace" (mouseenter)="destacarFondo(true, producto.id)" (mouseleave)="destacarFondo(false, producto.id)"> --- </td>
                 <td *ngIf="producto.Promocions.length == 0">
                     <input list="promociones" placeholder="Selecciona promoción..." (change)="asignarPromocion(producto.id, producto.precio, $event, producto.id)">
                     <datalist id="promociones">
