@@ -149,7 +149,7 @@ export class HomePage {
       observables.push(
         this.productosService.getProductoId(this.listaCompra[i].idProd)
       );
-      console.log(this.listaCompra[i])
+      console.log(this.listaCompra[i]);
     }
 
     forkJoin(observables).subscribe((respuestas: any[]) => {
@@ -312,21 +312,22 @@ export class HomePage {
     );
   }
 
-
-  getProductosIMG(){
-    let tokenUsuario = sessionStorage.getItem('tokenUsuario') || localStorage.getItem('tokenUsuario');
+  getProductosIMG() {
+    let tokenUsuario =
+      sessionStorage.getItem('tokenUsuario') ||
+      localStorage.getItem('tokenUsuario');
     let urlFotoProducto = environment.base_url + '/uploads/fotoproducto/';
 
     for (let index = 0; index < this.listaCompra.length; index++) {
       this.productosService
         .getProductoId(this.listaCompra[index].idProd)
         .subscribe((res) => {
-          console.log(urlFotoProducto + res.productos.foto + '?token=' + tokenUsuario);
-//               <img [src]="urlFotoProducto + productoSelect.foto + '?token=' +tokenUsuario" alt="Product Image" />
-
+          console.log(
+            urlFotoProducto + res.productos.foto + '?token=' + tokenUsuario
+          );
+          //               <img [src]="urlFotoProducto + productoSelect.foto + '?token=' +tokenUsuario" alt="Product Image" />
         });
     }
-
   }
 
   //! MODELO
@@ -396,7 +397,8 @@ export class HomePage {
     const height = 1;
     const depth = 0.1; // Profundidad del objeto 3D
     const borderRadius = 0.1; // Radio de los bordes redondeados
-    const texturePath = 'https://m4rket.ovh/api/uploads/fotoproducto/0213d90e-a8f8-4c76-83b3-231418fde291.png?token=[TOKEN_RETIRADO_PARA_PUBLICACION]';
+    const texturePath =
+      'https://m4rket.ovh/api/uploads/fotoproducto/0213d90e-a8f8-4c76-83b3-231418fde291.png?token=[TOKEN_RETIRADO_PARA_PUBLICACION]';
 
     // Crear el plano 3D
     const plano3D = this.modeloService.crearPlano3D(
@@ -430,7 +432,7 @@ export class HomePage {
       this.A9,
       this.A10,
       this.A11,
-      this. A12,
+      this.A12,
       this.B1,
       this.B2,
       this.B3,
@@ -454,12 +456,12 @@ export class HomePage {
           ((touch.clientX - rect.left) / self.container!.clientWidth) * 2 - 1,
           -((touch.clientY - rect.top) / self.container!.clientHeight) * 2 + 1
         );
-    
+
         const raycaster = new THREE.Raycaster();
         raycaster.setFromCamera(mouse, self.camera);
         let intersectedObjectsMap = new Map<THREE.Object3D, THREE.Object3D>();
         let objectFound = false;
-    
+
         // Loop through all arrays (A1 to A6)
         const objectArrays: THREE.Object3D[][] = [
           self.A1,
@@ -505,7 +507,7 @@ export class HomePage {
                   self.B3
                 );
                 const position = objectArray.indexOf(object);
-    
+
                 //Busco la relacion con produtos
                 self.getIdUbicacion(arrayName, position);
                 console.log(arrayName, position);
@@ -540,5 +542,4 @@ export class HomePage {
       plano3D
     );
   }
-  
 }

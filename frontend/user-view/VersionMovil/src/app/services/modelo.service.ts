@@ -538,7 +538,7 @@ export class ModeloService {
     //window.location.reload();
     while (scene.children.length > 0) {
       scene.remove(scene.children[0]);
-  }
+    }
   }
   crearFormaPlanoConIndicador(
     width: number,
