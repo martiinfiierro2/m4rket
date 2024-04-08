@@ -13,10 +13,7 @@ import { EstadisticasService } from '../services/estadisticas.service';
 import { UbicacionesService } from '../services/ubicaciones.service';
 
 export class ModeloService {
-
-  constructor() {
-
-  }
+  constructor() {}
 
   // Luces
   setupLights(scene: THREE.Scene, prefersDarkMode: boolean) {
@@ -424,21 +421,21 @@ export class ModeloService {
   }
   rotatePointers(pointers: THREE.Object3D[]) {
     // Definir la velocidad de rotación y de movimiento vertical
-    const rotationSpeed = 0.005; // Puedes ajustar este valor según sea necesario
-    const verticalSpeed = 0.005; // Puedes ajustar este valor según sea necesario
-    const bounceScale = 0.2; // Factor de escala para reducir la amplitud del rebote
+    let rotationSpeed = 0.005; // Puedes ajustar este valor según sea necesario
+    let verticalSpeed = 0.005; // Puedes ajustar este valor según sea necesario
+    let bounceScale = 0.2; // Factor de escala para reducir la amplitud del rebote
 
     for (let i = 0; i < pointers.length; i++) {
       // Calcula el centro del objeto
-      const boundingBox = new THREE.Box3().setFromObject(pointers[i]);
-      const center = new THREE.Vector3();
+      let boundingBox = new THREE.Box3().setFromObject(pointers[i]);
+      let center = new THREE.Vector3();
       boundingBox.getCenter(center);
 
       // Aplica la rotación en torno al centro del objeto con la velocidad reducida
       pointers[i].rotateY(rotationSpeed);
 
       // Ajusta la posición vertical para que el objeto permanezca en el mismo lugar y tenga un efecto de rebote
-      const currentPosition = pointers[i].position.clone();
+      let currentPosition = pointers[i].position.clone();
       pointers[i].position.sub(center);
       pointers[i].position.applyAxisAngle(
         new THREE.Vector3(0, 1, 0),
@@ -447,7 +444,7 @@ export class ModeloService {
       pointers[i].position.add(center);
 
       // Calcula el desplazamiento vertical con un efecto de rebote y escala la amplitud del rebote
-      const bounce = Math.sin(Date.now() * verticalSpeed) * 0.02 * bounceScale;
+      let bounce = Math.sin(Date.now() * verticalSpeed) * 0.02 * bounceScale;
       pointers[i].position.y = currentPosition.y + bounce;
     }
   }
@@ -538,11 +535,10 @@ export class ModeloService {
   }
 
   clearScene(scene: THREE.Scene) {
-    //window.location.reload(); 
-    scene.traverse(function(objeto) {
-      scene.remove(objeto);
-  });
-
+    //window.location.reload();
+    while (scene.children.length > 0) {
+      scene.remove(scene.children[0]);
+  }
   }
   crearFormaPlanoConIndicador(
     width: number,
@@ -552,7 +548,7 @@ export class ModeloService {
     indicatorWidth: number = width / 5 // Ancho del indicador (por defecto es 1/5 del ancho del plano)
   ) {
     const shape = new THREE.Shape();
-  
+
     // Rectángulo superior con bordes redondeados
     shape.moveTo(0, borderRadius);
     shape.lineTo(0, height - borderRadius);
@@ -563,33 +559,30 @@ export class ModeloService {
     shape.quadraticCurveTo(width, 0, width - borderRadius, 0);
     shape.lineTo(borderRadius, 0);
     shape.quadraticCurveTo(0, 0, 0, borderRadius);
-  
+
     // Indicador apuntando hacia abajo
     const indicatorHalfWidth = indicatorWidth / 2;
     const indicatorPosition = width / 2;
-  
+
     // Punto de inicio del indicador
     const startX = indicatorPosition - indicatorHalfWidth;
     const startY = 0;
-  
+
     // Punto medio del indicador
     const midX = indicatorPosition;
     const midY = -indicatorHeight;
-  
+
     // Punto final del indicador
     const endX = indicatorPosition + indicatorHalfWidth;
     const endY = 0;
-  
+
     shape.moveTo(startX, startY);
     shape.lineTo(midX, midY);
     shape.lineTo(endX, endY);
     shape.lineTo(startX, startY); // Agregamos otro punto para cerrar la forma del indicador
-  
+
     return shape;
   }
-  
-  
-  
 
   crearPlano3D(
     width: number,
@@ -618,25 +611,27 @@ export class ModeloService {
     );
 
     // Crear el material con textura para las caras grandes del plano
-  const textureLoader = new THREE.TextureLoader();
-  const texture = textureLoader.load(texturePath);
-  const materialTextura = new THREE.MeshBasicMaterial({
-    map: texture,
-    side: THREE.DoubleSide, // Se aplica la textura en ambas caras
-  });
+    const textureLoader = new THREE.TextureLoader();
+    const texture = textureLoader.load(texturePath);
+    const materialTextura = new THREE.MeshBasicMaterial({
+      map: texture,
+      side: THREE.DoubleSide, // Se aplica la textura en ambas caras
+    });
 
-  // Crear el material blanco para la flecha y los bordes
-  const materialBlanco = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    // Crear el material blanco para la flecha y los bordes
+    const materialBlanco = new THREE.MeshBasicMaterial({ color: 0xffffff });
 
-  // Crear el plano 3D a partir de la geometría y los materiales
-  const plano3D = new THREE.Mesh(geometriaExtruida, [materialTextura, materialBlanco]);
+    // Crear el plano 3D a partir de la geometría y los materiales
+    const plano3D = new THREE.Mesh(geometriaExtruida, [
+      materialTextura,
+      materialBlanco,
+    ]);
 
-  return plano3D;
+    return plano3D;
   }
 
-
-
-   obtenerNombreArray(objectArray: THREE.Object3D[],
+  obtenerNombreArray(
+    objectArray: THREE.Object3D[],
     A1: THREE.Object3D[],
     A2: THREE.Object3D[],
     A3: THREE.Object3D[],
@@ -651,7 +646,8 @@ export class ModeloService {
     A12: THREE.Object3D[],
     B1: THREE.Object3D[],
     B2: THREE.Object3D[],
-    B3: THREE.Object3D[]): string {
+    B3: THREE.Object3D[]
+  ): string {
     const index = [
       A1,
       A2,
@@ -676,6 +672,4 @@ export class ModeloService {
       return 'B3'; // En caso de que no se encuentre en la lista, devolvemos un valor predeterminado
     }
   }
-
-
 }

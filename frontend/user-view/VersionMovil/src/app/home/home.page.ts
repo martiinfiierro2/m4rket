@@ -149,6 +149,7 @@ export class HomePage {
       observables.push(
         this.productosService.getProductoId(this.listaCompra[i].idProd)
       );
+      console.log(this.listaCompra[i])
     }
 
     forkJoin(observables).subscribe((respuestas: any[]) => {
@@ -230,6 +231,7 @@ export class HomePage {
         }));
 
         console.log(this.listaCompra);
+        this.getProductosIMG();
 
         this.getTodasUbicacionesLista();
         const detallesProductos: ProductoDetalle[] = [];
@@ -310,6 +312,23 @@ export class HomePage {
     );
   }
 
+
+  getProductosIMG(){
+    let tokenUsuario = sessionStorage.getItem('tokenUsuario') || localStorage.getItem('tokenUsuario');
+    let urlFotoProducto = environment.base_url + '/uploads/fotoproducto/';
+
+    for (let index = 0; index < this.listaCompra.length; index++) {
+      this.productosService
+        .getProductoId(this.listaCompra[index].idProd)
+        .subscribe((res) => {
+          console.log(urlFotoProducto + res.productos.foto + '?token=' + tokenUsuario);
+//               <img [src]="urlFotoProducto + productoSelect.foto + '?token=' +tokenUsuario" alt="Product Image" />
+
+        });
+    }
+
+  }
+
   //! MODELO
   container: any;
   //scene = new THREE.Scene();
@@ -339,7 +358,7 @@ export class HomePage {
     this.modeloService.clearScene(this.scene);
     this.ref.splice(0, this.ref.length); // Elimina todos los elementos de this.ref
     this.pos.splice(0, this.pos.length); // Elimina todos los elementos de this.pos
-    this.getTodasUbicacionesLista();
+    this.getListaCompraUsu();
   }
 
   CargarModelo() {
@@ -377,7 +396,7 @@ export class HomePage {
     const height = 1;
     const depth = 0.1; // Profundidad del objeto 3D
     const borderRadius = 0.1; // Radio de los bordes redondeados
-    const texturePath = '../../assets/images/6.jpg'; // Ruta de la textura
+    const texturePath = 'https://m4rket.ovh/api/uploads/fotoproducto/0213d90e-a8f8-4c76-83b3-231418fde291.png?token=[TOKEN_RETIRADO_PARA_PUBLICACION]';
 
     // Crear el plano 3D
     const plano3D = this.modeloService.crearPlano3D(
@@ -521,6 +540,5 @@ export class HomePage {
       plano3D
     );
   }
-
   
 }
