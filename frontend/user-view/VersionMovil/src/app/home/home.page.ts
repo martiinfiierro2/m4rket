@@ -86,6 +86,10 @@ export class HomePage {
   ProductoUbiListaCompra: Producto[] = [];
   ref: string[] = [];
   pos: number[] = [];
+  idsauxiliares: number[] = [];
+  fotosdecarrito: string[] = [];
+  imagenescarrito: Producto[] = [];
+
 
   //PRODUCTO SELECCIONADO
   productoSelect: any;
@@ -142,7 +146,6 @@ export class HomePage {
   }
 
   getTodasUbicacionesLista() {
-    const self = this; // Guardar una referencia a this
 
     const observables = [];
     for (let i = 0; i < this.listaCompra.length; i++) {
@@ -157,6 +160,7 @@ export class HomePage {
         for (let j = 0; j < res.productos.Ubicacions.length; j++) {
           this.ref.push(res.productos.Ubicacions[j].referencia);
           this.pos.push(res.productos.Ubicacions[j].posicion);
+          this.idsauxiliares.push(res.productos.id);
         }
       });
 
@@ -322,9 +326,12 @@ export class HomePage {
       this.productosService
         .getProductoId(this.listaCompra[index].idProd)
         .subscribe((res) => {
-          console.log(
-            urlFotoProducto + res.productos.foto + '?token=' + tokenUsuario
-          );
+          this.fotosdecarrito.push(urlFotoProducto + res.productos.foto + '?token=' + tokenUsuario)
+          this.imagenescarrito.push(res.productos);
+          //console.log(
+           // urlFotoProducto + res.productos.foto + '?token=' + tokenUsuario
+         // );
+          console.log(res.productos.Ubicacions[0].referencia);
           //               <img [src]="urlFotoProducto + productoSelect.foto + '?token=' +tokenUsuario" alt="Product Image" />
         });
     }
@@ -359,6 +366,7 @@ export class HomePage {
     this.modeloService.clearScene(this.scene);
     this.ref.splice(0, this.ref.length); // Elimina todos los elementos de this.ref
     this.pos.splice(0, this.pos.length); // Elimina todos los elementos de this.pos
+    this.pos.splice(0, this.idsauxiliares.length); // Elimina todos los elementos de this.pos
     this.getListaCompraUsu();
   }
 
@@ -393,25 +401,10 @@ export class HomePage {
     let pointer: THREE.Object3D;
     let pointerrender = 'pointer';
 
-    const width = 1;
-    const height = 1;
-    const depth = 0.1; // Profundidad del objeto 3D
-    const borderRadius = 0.1; // Radio de los bordes redondeados
-    const texturePath =
-      'https://m4rket.ovh/api/uploads/fotoproducto/0213d90e-a8f8-4c76-83b3-231418fde291.png?token=[TOKEN_RETIRADO_PARA_PUBLICACION]';
 
-    // Crear el plano 3D
-    const plano3D = this.modeloService.crearPlano3D(
-      width,
-      height,
-      depth,
-      borderRadius,
-      texturePath
-    );
-    //this.modeloService.FixRotationEnElMismoEje(plano3D,this.scene,camera);
-    //Pruebas
-    console.log(this.ref);
-    console.log(this.pos);
+    const texturePath =this.fotosdecarrito[0];
+
+
     const self = this;
 
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -438,10 +431,9 @@ export class HomePage {
       this.B3,
       self,
       this.camera,
-      plano3D
+      this.imagenescarrito
     );
 
-    let intersectedObjectsMap: Map<THREE.Object3D, THREE.Object3D>;
     if (this.container) {
       this.container.addEventListener('touchstart', onTouchStart, false);
       const self = this;
@@ -538,8 +530,7 @@ export class HomePage {
       this.A12,
       this.B1,
       this.B2,
-      this.B3,
-      plano3D
+      this.B3
     );
   }
 }
