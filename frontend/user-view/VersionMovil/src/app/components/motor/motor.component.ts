@@ -2,30 +2,35 @@ import { AfterViewInit, Component, OnInit, Input, Output} from '@angular/core';
 import * as glMatrix from 'gl-matrix';
 import { TMotorTAG } from './clases/TMotorTAG';
 import { TNodo } from './clases/TNodo';
-import { mat4 } from 'three/examples/jsm/nodes/shadernode/ShaderNode';
 
+export let motor: TMotorTAG;
 @Component({
   selector: 'app-motor',
   templateUrl: './motor.component.html',
   styleUrls: ['./motor.component.scss'],
 })
-export class MotorComponent  implements OnInit{
 
+export class MotorComponent implements OnInit{
   constructor() { }
 
-  ngOnInit(){
-    this.crearEscena();
+  ngOnInit(): void {
+      
   }
 
   async crearEscena(){
-    const motor = new TMotorTAG();
+    motor = new TMotorTAG();
 
-    const canvas = document.querySelector("#mercado") as HTMLCanvasElement;
-    let program, gl = await motor.iniciarCanva(canvas);
+    //Creamos recursos
+    await motor.gestorRecursos.getRecurso("R.jpg", "textura");
 
+    //Iniciamos GL y Programa
+    await motor.iniciarGL();
+    await motor.iniciarPrograma();
+ 
     const personaje: TNodo = await motor.crearNodo( null, glMatrix.vec3.fromValues(10,0,10), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(1,1,1));
-    const cuerpo: TNodo = await motor.crearModelo( personaje, glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(1,1,1), 'plano.obj');
-
+    const cara: TNodo = await motor.crearModelo( personaje, glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(1,1,1), 'cubo2.obj', 'malla');
+    const nariz: TNodo = await motor.crearModelo( personaje, glMatrix.vec3.fromValues(10,10,0), glMatrix.vec3.fromValues(1,0,0), glMatrix.vec3.fromValues(3,3,3), 'plano.obj', 'malla');
+    
     personaje.recorrer(glMatrix.mat4.identity(glMatrix.mat4.create()));
   }
 }

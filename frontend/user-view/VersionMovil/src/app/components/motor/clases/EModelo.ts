@@ -12,9 +12,9 @@ export class EModelo {
     }
 
     async dibujar(): Promise<void>{
+        console.log(this.recursoMalla)
         await new Promise<void>(resolve => {
             if(this.recursoMalla) {
-                console.log(this.recursoMalla)
                 resolve();
             }
             else {

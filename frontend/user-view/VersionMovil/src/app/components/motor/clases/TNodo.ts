@@ -32,8 +32,6 @@ export class TNodo{
     }
 
     recorrer(matrizAcum: any) {
-        console.log("comenzando a recorrer");
-    
         if (this.actualizarMatriz) {
             glMatrix.mat4.multiply(this.matrizTransf, matrizAcum, this.matrizTransf);
             this.actualizarMatriz = false;
@@ -99,6 +97,7 @@ export class TNodo{
         glMatrix.mat4.rotateX(this.matrizTransf, this.matrizTransf, this.rotacion[0]);
         glMatrix.mat4.rotateY(this.matrizTransf, this.matrizTransf, this.rotacion[1]);
         glMatrix.mat4.rotateZ(this.matrizTransf, this.matrizTransf, this.rotacion[2]);
+        console.log(this.rotacion);
         this.actualizarMatriz = true;
     }
 

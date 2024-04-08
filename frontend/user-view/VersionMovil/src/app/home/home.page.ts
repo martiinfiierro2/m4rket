@@ -112,14 +112,14 @@ export class HomePage {
     private ubicacionesService: UbicacionesService) {}
     
   ngAfterViewInit(): void {
-    this.motorComponent.ngOnInit();
+    this.motorComponent.crearEscena();
   }
 
   //VERSION ANTIGUA
   ngOnInit(): void {
     this.getUsuarioLog();
     this.getListaCompraUsu();
-    this.stuff()
+    //this.stuff()
   }
 
 

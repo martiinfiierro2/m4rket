@@ -2,48 +2,104 @@ import { TNodo } from './TNodo';
 import { ECamara } from "./ECamara";
 import { ELuz } from "./ELuz";
 import { EModelo } from "./EModelo";
-import { TRecursoShader } from './TRecrusoShader';
 import { TGestorRecursos } from "./TGestorRecursos";
+import { TRecursoShader } from './TRecrusoShader';
 import * as glMatrix from 'gl-matrix';
 
 export class TMotorTAG {
 
+    constructor(){
+        this.gestorRecursos = new TGestorRecursos(); 
+    }
+
     private raiz!: TNodo;
-    private gestorRecursos = new TGestorRecursos();
-    private shader = new TRecursoShader();
-    private program!: any;
-    
-    async iniciarCanva(canvas: any){
-        let gl = canvas.getContext("webgl");
+    public gestorRecursos!: TGestorRecursos;
+    public gl!: WebGL2RenderingContext;
+    public program!: WebGLProgram;
+
+    async iniciarGL(){
+        const canvas = document.querySelector("#mercado") as HTMLCanvasElement;
+        let gl = canvas.getContext("webgl") as WebGL2RenderingContext | null;
         if (!gl) {
-            console.error('No se pudo obtener el contexto WebGL.');
+            console.error('No se pudo obtener el contexto Webthis.gl!.');
             return;
         }
-        const vertexShaderSource = `
-            attribute vec2 position;
-            void main() {
-                gl_Position = vec4(position, 0.0, 1.0);
-            }`
-        ;
+        this.gl = gl;
+    }
 
-        const fragmentShaderSource = `
-            precision mediump float;
-            void main() {
-                gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); // Red color
-            }`
-        ;
+    async iniciarPrograma(){
+        const auxVertex= await this.gestorRecursos.getRecurso("vertexShader.glsl", "shader");
+        let vertexShaderSource: any, fragmentShaderSource: any;
+
+        if (auxVertex instanceof TRecursoShader) {
+            vertexShaderSource = auxVertex.valor;
+        }
+
+        const auxFragment = await this.gestorRecursos.getRecurso("fragmentShader.glsl", "shader");
+
+        if (auxFragment instanceof TRecursoShader) {
+            fragmentShaderSource = auxFragment.valor;
+        }
+
         if (!vertexShaderSource || !fragmentShaderSource) {
             console.error('No se pudo obtener el código fuente de los shaders.');
             return;
         }
         else{
-            this.program = await this.shader.crearShaders(gl, vertexShaderSource, fragmentShaderSource);
+            await this.crearShaders(vertexShaderSource, fragmentShaderSource);
         }
-        return { program: this.program, gl: gl };
     }
 
-    sendShader(){
-        return this.shader;
+    async crearShaders(vertexShaderSource: string, fragmentShaderSource: string){
+        const vertexShader = await this.createShader(this.gl!.VERTEX_SHADER, vertexShaderSource);
+        const fragmentShader = await this.createShader(this.gl!.FRAGMENT_SHADER, fragmentShaderSource);
+
+        if (!vertexShader || !fragmentShader) {
+            console.error('No se pudo crear uno o ambos shaders.');
+            return;
+        }
+        await this.createProgram(vertexShader, fragmentShader);
+        if (!this.program) {
+            console.error('No se pudo crear el programa Webthis.gl!.');
+            return;
+        }
+        return this.program;
+    }
+
+    async createShader(type: number, source: string){
+        const shader = this.gl!.createShader(type);
+        if (!shader) {
+            console.error('No se pudo crear el shader.');
+            return null;
+        }
+        this.gl!.shaderSource(shader, source);
+        this.gl!.compileShader(shader);
+        if (!this.gl!.getShaderParameter(shader, this.gl!.COMPILE_STATUS)) {
+            console.error('Error de compilación del shader:', this.gl!.getShaderInfoLog(shader));
+            return null;
+        }
+    
+        return shader;
+    }
+    
+    async createProgram(vertexShader: WebGLShader, fragmentShader: WebGLShader) {
+        const program = this.gl!.createProgram();
+        if (!program) {
+            console.error('No se pudo crear el programa.');
+            return null;
+        }
+        this.gl!.attachShader(program, vertexShader);
+        this.gl!.attachShader(program, fragmentShader);
+        this.gl!.linkProgram(program);
+        const success = this.gl!.getProgramParameter(program, this.gl!.LINK_STATUS);
+        if (!success) {
+            console.error('Error al enlazar el programa de shader.');
+            const info = this.gl!.getProgramInfoLog(program);
+            console.error(info);
+            return null;
+        }
+        this.program = program;
+        return program;
     }
 
     async crearRaiz(nodoRaiz: TNodo){
@@ -107,7 +163,7 @@ export class TMotorTAG {
         return nodoCreado;
     }
 
-    async crearModelo( padre: TNodo|null, trasl: glMatrix.vec3, rot: glMatrix.vec3, esc: glMatrix.vec3, nombreFichero: string | undefined){
+    async crearModelo( padre: TNodo|null, trasl: glMatrix.vec3, rot: glMatrix.vec3, esc: glMatrix.vec3, nombreFichero: string | undefined, tipo: string){
         let nodoCreado: any, recursoMalla: any, entidadModelo: any;
 
         nodoCreado = new TNodo();
@@ -116,7 +172,7 @@ export class TMotorTAG {
         }
         await padre.agregarHijo(nodoCreado);
         if(nombreFichero != undefined){
-            recursoMalla = await this.gestorRecursos.getRecurso(nombreFichero);
+            recursoMalla = await this.gestorRecursos.getRecurso(nombreFichero, tipo);
         }
         entidadModelo = new EModelo(recursoMalla);
         await nodoCreado.setEntidad(entidadModelo);
