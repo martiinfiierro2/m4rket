@@ -124,22 +124,29 @@ export class ModeloService {
         pointer = glb.scene;
         pointer.position.set(-8.1, 20.6, 22.6);
         pointer.scale.set(0.75, 0.75, 0.75);
-
         //! A1
         for (let i = 0; i <= 9; i++) {
           for (let k = 0; k < self.idsauxiliares.length; k++) {
+            for(let h = 0; h <imagenescarrito.length; h++){
+
+            
             if (
-              self.idsauxiliares.includes(imagenescarrito[k].id) &&
+              self.idsauxiliares[k] == imagenescarrito[h].id &&
               self.ref[k] == 'A1' &&
               self.pos[k] == i
             ) {
+              console.log(imagenescarrito[h].nombre);	
+              console.log(self.ref[k])
+              console.log(self.pos[k])
+
               texturePath =
                 urlFotoProducto +
-                imagenescarrito[k].foto +
+                imagenescarrito[h].foto +
                 '?token=' +
                 tokenUsuario;
             }
           }
+        }
           A1[i] = this.crearPlano3D(
             width,
             height,
@@ -166,18 +173,26 @@ export class ModeloService {
         //! A2
         for (let i = 0; i <= 9; i++) {
           for (let k = 0; k < self.idsauxiliares.length; k++) {
+            for(let h = 0; h <imagenescarrito.length; h++){
+
+            
             if (
-              self.idsauxiliares.includes(imagenescarrito[k].id) &&
+              self.idsauxiliares[k] == imagenescarrito[h].id &&
               self.ref[k] == 'A2' &&
               self.pos[k] == i
             ) {
+              console.log(imagenescarrito[h].nombre);	
+              console.log(self.ref[k])
+              console.log(self.pos[k])
+
               texturePath =
                 urlFotoProducto +
-                imagenescarrito[k].foto +
+                imagenescarrito[h].foto +
                 '?token=' +
                 tokenUsuario;
             }
           }
+        }
           A2[i] = this.crearPlano3D(
             width,
             height,
@@ -205,18 +220,26 @@ export class ModeloService {
         //! A3
         for (let i = 0; i <= 5; i++) {
           for (let k = 0; k < self.idsauxiliares.length; k++) {
+            for(let h = 0; h <imagenescarrito.length; h++){
+
+            
             if (
-              self.idsauxiliares.includes(imagenescarrito[k].id) &&
+              self.idsauxiliares[k] == imagenescarrito[h].id &&
               self.ref[k] == 'A3' &&
               self.pos[k] == i
             ) {
+              console.log(imagenescarrito[h].nombre);	
+              console.log(self.ref[k])
+              console.log(self.pos[k])
+
               texturePath =
                 urlFotoProducto +
-                imagenescarrito[k].foto +
+                imagenescarrito[h].foto +
                 '?token=' +
                 tokenUsuario;
             }
           }
+        }
           A3[i] = this.crearPlano3D(
             width,
             height,
@@ -245,18 +268,26 @@ export class ModeloService {
         //! A4
         for (let i = 0; i <= 5; i++) {
           for (let k = 0; k < self.idsauxiliares.length; k++) {
+            for(let h = 0; h <imagenescarrito.length; h++){
+
+            
             if (
-              self.idsauxiliares.includes(imagenescarrito[k].id) &&
+              self.idsauxiliares[k] == imagenescarrito[h].id &&
               self.ref[k] == 'A4' &&
               self.pos[k] == i
             ) {
+              console.log(imagenescarrito[h].nombre);	
+              console.log(self.ref[k])
+              console.log(self.pos[k])
+
               texturePath =
                 urlFotoProducto +
-                imagenescarrito[k].foto +
+                imagenescarrito[h].foto +
                 '?token=' +
                 tokenUsuario;
             }
           }
+        }
           A4[i] = this.crearPlano3D(
             width,
             height,
@@ -283,18 +314,26 @@ export class ModeloService {
         //! A5
         for (let i = 0; i <= 5; i++) {
           for (let k = 0; k < self.idsauxiliares.length; k++) {
+            for(let h = 0; h <imagenescarrito.length; h++){
+
+            
             if (
-              self.idsauxiliares.includes(imagenescarrito[k].id) &&
+              self.idsauxiliares[k] == imagenescarrito[h].id &&
               self.ref[k] == 'A5' &&
               self.pos[k] == i
             ) {
+              console.log(imagenescarrito[h].nombre);	
+              console.log(self.ref[k])
+              console.log(self.pos[k])
+
               texturePath =
                 urlFotoProducto +
-                imagenescarrito[k].foto +
+                imagenescarrito[h].foto +
                 '?token=' +
                 tokenUsuario;
             }
           }
+        }
           A5[i] = this.crearPlano3D(
             width,
             height,
@@ -322,18 +361,26 @@ export class ModeloService {
         //! A6
         for (let i = 0; i <= 5; i++) {
           for (let k = 0; k < self.idsauxiliares.length; k++) {
+            for(let h = 0; h <imagenescarrito.length; h++){
+
+            
             if (
-              self.idsauxiliares.includes(imagenescarrito[k].id) &&
+              self.idsauxiliares[k] == imagenescarrito[h].id &&
               self.ref[k] == 'A6' &&
               self.pos[k] == i
             ) {
+              console.log(imagenescarrito[h].nombre);	
+              console.log(self.ref[k])
+              console.log(self.pos[k])
+
               texturePath =
                 urlFotoProducto +
-                imagenescarrito[k].foto +
+                imagenescarrito[h].foto +
                 '?token=' +
                 tokenUsuario;
             }
           }
+        }
           A6[i] = this.crearPlano3D(
             width,
             height,
@@ -362,18 +409,26 @@ export class ModeloService {
 
         for (let i = 0; i <= 5; i++) {
           for (let k = 0; k < self.idsauxiliares.length; k++) {
+            for(let h = 0; h <imagenescarrito.length; h++){
+
+            
             if (
-              self.idsauxiliares.includes(imagenescarrito[k].id) &&
+              self.idsauxiliares[k] == imagenescarrito[h].id &&
               self.ref[k] == 'A7' &&
               self.pos[k] == i
             ) {
+              console.log(imagenescarrito[h].nombre);	
+              console.log(self.ref[k])
+              console.log(self.pos[k])
+
               texturePath =
                 urlFotoProducto +
-                imagenescarrito[k].foto +
+                imagenescarrito[h].foto +
                 '?token=' +
                 tokenUsuario;
             }
           }
+        }
           A7[i] = this.crearPlano3D(
             width,
             height,
@@ -401,18 +456,26 @@ export class ModeloService {
         //! A8
         for (let i = 0; i <= 5; i++) {
           for (let k = 0; k < self.idsauxiliares.length; k++) {
+            for(let h = 0; h <imagenescarrito.length; h++){
+
+            
             if (
-              self.idsauxiliares.includes(imagenescarrito[k].id) &&
+              self.idsauxiliares[k] == imagenescarrito[h].id &&
               self.ref[k] == 'A8' &&
               self.pos[k] == i
             ) {
+              console.log(imagenescarrito[h].nombre);	
+              console.log(self.ref[k])
+              console.log(self.pos[k])
+
               texturePath =
                 urlFotoProducto +
-                imagenescarrito[k].foto +
+                imagenescarrito[h].foto +
                 '?token=' +
                 tokenUsuario;
             }
           }
+        }
           A8[i] = this.crearPlano3D(
             width,
             height,
@@ -441,18 +504,26 @@ export class ModeloService {
 
         for (let i = 0; i <= 3; i++) {
           for (let k = 0; k < self.idsauxiliares.length; k++) {
+            for(let h = 0; h <imagenescarrito.length; h++){
+
+            
             if (
-              self.idsauxiliares.includes(imagenescarrito[k].id) &&
+              self.idsauxiliares[k] == imagenescarrito[h].id &&
               self.ref[k] == 'A9' &&
               self.pos[k] == i
             ) {
+              console.log(imagenescarrito[h].nombre);	
+              console.log(self.ref[k])
+              console.log(self.pos[k])
+
               texturePath =
                 urlFotoProducto +
-                imagenescarrito[k].foto +
+                imagenescarrito[h].foto +
                 '?token=' +
                 tokenUsuario;
             }
           }
+        }
           A9[i] = this.crearPlano3D(
             width,
             height,
@@ -481,18 +552,26 @@ export class ModeloService {
 
         for (let i = 0; i <= 3; i++) {
           for (let k = 0; k < self.idsauxiliares.length; k++) {
+            for(let h = 0; h <imagenescarrito.length; h++){
+
+            
             if (
-              self.idsauxiliares.includes(imagenescarrito[k].id) &&
+              self.idsauxiliares[k] == imagenescarrito[h].id &&
               self.ref[k] == 'A10' &&
               self.pos[k] == i
             ) {
+              console.log(imagenescarrito[h].nombre);	
+              console.log(self.ref[k])
+              console.log(self.pos[k])
+
               texturePath =
                 urlFotoProducto +
-                imagenescarrito[k].foto +
+                imagenescarrito[h].foto +
                 '?token=' +
                 tokenUsuario;
             }
           }
+        }
           A10[i] = this.crearPlano3D(
             width,
             height,
@@ -520,18 +599,26 @@ export class ModeloService {
         //! A11
         for (let i = 0; i <= 3; i++) {
           for (let k = 0; k < self.idsauxiliares.length; k++) {
+            for(let h = 0; h <imagenescarrito.length; h++){
+
+            
             if (
-              self.idsauxiliares.includes(imagenescarrito[k].id) &&
+              self.idsauxiliares[k] == imagenescarrito[h].id &&
               self.ref[k] == 'A11' &&
               self.pos[k] == i
             ) {
+              console.log(imagenescarrito[h].nombre);	
+              console.log(self.ref[k])
+              console.log(self.pos[k])
+
               texturePath =
                 urlFotoProducto +
-                imagenescarrito[k].foto +
+                imagenescarrito[h].foto +
                 '?token=' +
                 tokenUsuario;
             }
           }
+        }
           A11[i] = this.crearPlano3D(
             width,
             height,
@@ -560,18 +647,26 @@ export class ModeloService {
 
         for (let i = 0; i <= 3; i++) {
           for (let k = 0; k < self.idsauxiliares.length; k++) {
+            for(let h = 0; h <imagenescarrito.length; h++){
+
+            
             if (
-              self.idsauxiliares.includes(imagenescarrito[k].id) &&
+              self.idsauxiliares[k] == imagenescarrito[h].id &&
               self.ref[k] == 'A12' &&
               self.pos[k] == i
             ) {
+              console.log(imagenescarrito[h].nombre);	
+              console.log(self.ref[k])
+              console.log(self.pos[k])
+
               texturePath =
                 urlFotoProducto +
-                imagenescarrito[k].foto +
+                imagenescarrito[h].foto +
                 '?token=' +
                 tokenUsuario;
             }
           }
+        }
           A12[i] = this.crearPlano3D(
             width,
             height,
@@ -595,21 +690,29 @@ export class ModeloService {
             }
           }
         }
-
+//! B1
         for (let i = 0; i <= 3; i++) {
           for (let k = 0; k < self.idsauxiliares.length; k++) {
+            for(let h = 0; h <imagenescarrito.length; h++){
+
+            
             if (
-              self.idsauxiliares.includes(imagenescarrito[k].id) &&
+              self.idsauxiliares[k] == imagenescarrito[h].id &&
               self.ref[k] == 'B1' &&
               self.pos[k] == i
             ) {
+              console.log(imagenescarrito[h].nombre);	
+              console.log(self.ref[k])
+              console.log(self.pos[k])
+
               texturePath =
                 urlFotoProducto +
-                imagenescarrito[k].foto +
+                imagenescarrito[h].foto +
                 '?token=' +
                 tokenUsuario;
             }
           }
+        }
           B1[i] = this.crearPlano3D(
             width,
             height,
@@ -630,21 +733,29 @@ export class ModeloService {
             }
           }
         }
-
+//! B2
         for (let i = 0; i <= 5; i++) {
           for (let k = 0; k < self.idsauxiliares.length; k++) {
+            for(let h = 0; h <imagenescarrito.length; h++){
+
+            
             if (
-              self.idsauxiliares.includes(imagenescarrito[k].id) &&
+              self.idsauxiliares[k] == imagenescarrito[h].id &&
               self.ref[k] == 'B2' &&
               self.pos[k] == i
             ) {
+              console.log(imagenescarrito[h].nombre);	
+              console.log(self.ref[k])
+              console.log(self.pos[k])
+
               texturePath =
                 urlFotoProducto +
-                imagenescarrito[k].foto +
+                imagenescarrito[h].foto +
                 '?token=' +
                 tokenUsuario;
             }
           }
+        }
           B2[i] = this.crearPlano3D(
             width,
             height,
@@ -669,21 +780,29 @@ export class ModeloService {
             }
           }
         }
-
+//! B3
         for (let i = 0; i <= 2; i++) {
           for (let k = 0; k < self.idsauxiliares.length; k++) {
+            for(let h = 0; h <imagenescarrito.length; h++){
+
+            
             if (
-              self.idsauxiliares.includes(imagenescarrito[k].id) &&
+              self.idsauxiliares[k] == imagenescarrito[h].id &&
               self.ref[k] == 'B3' &&
               self.pos[k] == i
             ) {
+              console.log(imagenescarrito[h].nombre);	
+              console.log(self.ref[k])
+              console.log(self.pos[k])
+
               texturePath =
                 urlFotoProducto +
-                imagenescarrito[k].foto +
+                imagenescarrito[h].foto +
                 '?token=' +
                 tokenUsuario;
             }
           }
+        }
           B3[i] = this.crearPlano3D(
             width,
             height,

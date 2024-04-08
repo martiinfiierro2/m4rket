@@ -366,7 +366,8 @@ export class HomePage {
     this.modeloService.clearScene(this.scene);
     this.ref.splice(0, this.ref.length); // Elimina todos los elementos de this.ref
     this.pos.splice(0, this.pos.length); // Elimina todos los elementos de this.pos
-    this.pos.splice(0, this.idsauxiliares.length); // Elimina todos los elementos de this.pos
+    this.idsauxiliares.splice(0, this.idsauxiliares.length); // Elimina todos los elementos de this.pos
+    this.imagenescarrito.splice(0, this.imagenescarrito.length); // Elimina todos los elementos de this.pos
     this.getListaCompraUsu();
   }
 
@@ -398,11 +399,9 @@ export class HomePage {
     this.modeloService.configurarControles(controls);
 
     //Pointers //Indicadores
-    let pointer: THREE.Object3D;
     let pointerrender = 'pointer';
 
 
-    const texturePath =this.fotosdecarrito[0];
 
 
     const self = this;
