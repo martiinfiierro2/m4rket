@@ -93,7 +93,6 @@ export class HomePage {
   seleccionado: boolean = false;
   productoInfo: any;
   modeloService = new ModeloService();
-
   //USO DEL DRAWER Y PASO DE INFORMACION
   @ViewChild(DrawerComponent) drawerComponent!: DrawerComponent;
 
@@ -102,6 +101,7 @@ export class HomePage {
     //this.drawerComponent.getProducto(producto);
     this.drawerComponent.getProducto(idProd);
   }
+  scene: THREE.Scene;
 
   //variables para mostrar foto
   urlFotoProducto = environment.base_url + '/uploads/fotoproducto/';
@@ -113,7 +113,9 @@ export class HomePage {
     private productosService: ProductosService,
     private estadisticasService: EstadisticasService,
     private ubicacionesService: UbicacionesService
-  ) {}
+  ) {
+    this.scene = new THREE.Scene();
+  }
 
   //VERSION ANTIGUA
   ngOnInit(): void {
@@ -157,7 +159,7 @@ export class HomePage {
         }
       });
 
-      // Ahora que los datos están disponibles, llamamos a stuff()
+      // Ahora que los datos están disponibles, llamamos a CargarModelo()
       this.CargarModelo();
     });
   }
@@ -199,10 +201,6 @@ export class HomePage {
     let tipo = 'eliminado';
     let fecha = new Date();
     this.estadistica(productoDetalle.idProducto, tipo, fecha);
-
-    // if(productoDetalle.cantidad === 0){
-    //   this.eliminar(productoDetalle);
-    // }
   }
 
   eliminar(productoDetalle: any) {
@@ -220,14 +218,6 @@ export class HomePage {
     }
   }
 
-  /*
-  getProducto(idProd: string){
-    this.productosService.getProductoId(idProd).subscribe( result => {
-      this.productoSelect = result.productos;
-      console.log(this.productoSelect.nombre);
-    });
-  }
-  */
   //Funciones CRUD LISTA COMPRA
 
   getListaCompraUsu() {
@@ -238,12 +228,11 @@ export class HomePage {
           cantidad: item.cantidad,
           id: item.id,
         }));
+
         console.log(this.listaCompra);
 
         this.getTodasUbicacionesLista();
-
         const detallesProductos: ProductoDetalle[] = [];
-
         this.listaCompra.forEach((productoCompra) => {
           this.getDetalleProducto(
             productoCompra.idProd,
@@ -321,28 +310,46 @@ export class HomePage {
     );
   }
 
-  // ESTO ES SOLO MODELO
+  //! MODELO
   container: any;
-  scene = new THREE.Scene();
+  //scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera(
+    75,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
+  );
 
+  A1: THREE.Object3D[] = []; // Frutas 1
+  A2: THREE.Object3D[] = []; // Frutas 2
+  A3: THREE.Object3D[] = []; // Pasillo1.1
+  A4: THREE.Object3D[] = []; // Pasillo1.2
+  A5: THREE.Object3D[] = []; // Pasillo 2.1
+  A6: THREE.Object3D[] = []; // Pasillo 2.2
+  A7: THREE.Object3D[] = []; // Pasillo 3.1
+  A8: THREE.Object3D[] = []; // Pasillo 3.2
+  A9: THREE.Object3D[] = []; // Pasillos pegados 1.1
+  A10: THREE.Object3D[] = []; // Pasillos pegados 1.2
+  A11: THREE.Object3D[] = []; //Pasillos pegados 2.1
+  A12: THREE.Object3D[] = []; // Pasillos pegados 2.2
+  B1: THREE.Object3D[] = []; // Estanterías finas altas
+  B2: THREE.Object3D[] = []; // Estanterías grandes
+  B3: THREE.Object3D[] = []; // Estantería Frío
   RecargarModelo() {
     this.modeloService.clearScene(this.scene);
-    //this.getTodasUbicacionesLista();
+    this.ref.splice(0, this.ref.length); // Elimina todos los elementos de this.ref
+    this.pos.splice(0, this.pos.length); // Elimina todos los elementos de this.pos
+    this.getTodasUbicacionesLista();
   }
 
   CargarModelo() {
     this.container = document.getElementById('canvas');
     this.container.style.width = '100%';
     this.container.style.height = '100%';
-    let camera = new THREE.PerspectiveCamera(
-      75,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000
-    );
+
     const renderer = new THREE.WebGLRenderer({ alpha: true });
-    camera.position.set(-40.36, 28.89, 54.87);
-    const controls = new OrbitControls(camera, renderer.domElement);
+    this.camera.position.set(-40.36, 28.89, 54.87);
+    const controls = new OrbitControls(this.camera, renderer.domElement);
     const prefersDarkMode = window.matchMedia(
       '(prefers-color-scheme: dark)'
     ).matches;
@@ -365,27 +372,12 @@ export class HomePage {
     //Pointers //Indicadores
     let pointer: THREE.Object3D;
     let pointerrender = 'pointer';
-    let A1: THREE.Object3D[] = []; // Frutas 1
-    let A2: THREE.Object3D[] = []; // Frutas 2
-    let A3: THREE.Object3D[] = []; // Pasillo1.1
-    let A4: THREE.Object3D[] = []; // Pasillo1.2
-    let A5: THREE.Object3D[] = []; // Pasillo 2.1
-    let A6: THREE.Object3D[] = []; // Pasillo 2.2
-    let A7: THREE.Object3D[] = []; // Pasillo 3.1
-    let A8: THREE.Object3D[] = []; // Pasillo 3.2
-    let A9: THREE.Object3D[] = []; // Pasillos pegados 1.1
-    let A10: THREE.Object3D[] = []; // Pasillos pegados 1.2
-    let A11: THREE.Object3D[] = []; //Pasillos pegados 2.1
-    let A12: THREE.Object3D[] = []; // Pasillos pegados 2.2
-    let B1: THREE.Object3D[] = []; // Estanterías finas altas
-    let B2: THREE.Object3D[] = []; // Estanterías grandes
-    let B3: THREE.Object3D[] = []; // Estantería Frío
 
     const width = 1;
     const height = 1;
     const depth = 0.1; // Profundidad del objeto 3D
     const borderRadius = 0.1; // Radio de los bordes redondeados
-    const texturePath = '../../assets/images/3.jpg'; // Ruta de la textura
+    const texturePath = '../../assets/images/6.jpg'; // Ruta de la textura
 
     // Crear el plano 3D
     const plano3D = this.modeloService.crearPlano3D(
@@ -408,32 +400,31 @@ export class HomePage {
     this.modeloService.cargarPointers(
       this.scene,
       pointerrender,
-      A1,
-      A2,
-      A3,
-      A4,
-      A5,
-      A6,
-      A7,
-      A8,
-      A9,
-      A10,
-      A11,
-      A12,
-      B1,
-      B2,
-      B3,
+      this.A1,
+      this.A2,
+      this.A3,
+      this.A4,
+      this.A5,
+      this.A6,
+      this.A7,
+      this.A8,
+      this.A9,
+      this.A10,
+      this.A11,
+      this. A12,
+      this.B1,
+      this.B2,
+      this.B3,
       self,
-      camera,
+      this.camera,
       plano3D
     );
-
-
 
     let intersectedObjectsMap: Map<THREE.Object3D, THREE.Object3D>;
     if (this.container) {
       this.container.addEventListener('touchstart', onTouchStart, false);
       const self = this;
+
       function onTouchStart(event: TouchEvent) {
         if (event.touches.length !== 1) {
           return;
@@ -444,29 +435,29 @@ export class HomePage {
           ((touch.clientX - rect.left) / self.container!.clientWidth) * 2 - 1,
           -((touch.clientY - rect.top) / self.container!.clientHeight) * 2 + 1
         );
-
+    
         const raycaster = new THREE.Raycaster();
-        raycaster.setFromCamera(mouse, camera);
-        intersectedObjectsMap = new Map<THREE.Object3D, THREE.Object3D>();
+        raycaster.setFromCamera(mouse, self.camera);
+        let intersectedObjectsMap = new Map<THREE.Object3D, THREE.Object3D>();
         let objectFound = false;
-
+    
         // Loop through all arrays (A1 to A6)
         const objectArrays: THREE.Object3D[][] = [
-          A1,
-          A2,
-          A3,
-          A4,
-          A5,
-          A6,
-          A7,
-          A8,
-          A9,
-          A10,
-          A11,
-          A12,
-          B1,
-          B2,
-          B3,
+          self.A1,
+          self.A2,
+          self.A3,
+          self.A4,
+          self.A5,
+          self.A6,
+          self.A7,
+          self.A8,
+          self.A9,
+          self.A10,
+          self.A11,
+          self.A12,
+          self.B1,
+          self.B2,
+          self.B3,
         ];
         for (const objectArray of objectArrays) {
           for (const object of objectArray) {
@@ -476,38 +467,26 @@ export class HomePage {
               objectFound = true;
               if (objectFound) {
                 // Obtener el nombre del array y la posición
-                const arrayName =
-                  objectArray === A1
-                    ? 'A1'
-                    : objectArray === A2
-                    ? 'A2'
-                    : objectArray === A3
-                    ? 'A3'
-                    : objectArray === A4
-                    ? 'A4'
-                    : objectArray === A5
-                    ? 'A5'
-                    : objectArray === A6
-                    ? 'A6'
-                    : objectArray === A7
-                    ? 'A7'
-                    : objectArray === A8
-                    ? 'A8'
-                    : objectArray === A9
-                    ? 'A9'
-                    : objectArray === A10
-                    ? 'A10'
-                    : objectArray === A11
-                    ? 'A11'
-                    : objectArray === A12
-                    ? 'A12'
-                    : objectArray === B1
-                    ? 'B1'
-                    : objectArray === B2
-                    ? 'B2'
-                    : 'B3';
+                const arrayName = self.modeloService.obtenerNombreArray(
+                  objectArray,
+                  self.A1,
+                  self.A2,
+                  self.A3,
+                  self.A4,
+                  self.A5,
+                  self.A6,
+                  self.A7,
+                  self.A8,
+                  self.A9,
+                  self.A10,
+                  self.A11,
+                  self.A12,
+                  self.B1,
+                  self.B2,
+                  self.B3
+                );
                 const position = objectArray.indexOf(object);
-
+    
                 //Busco la relacion con produtos
                 self.getIdUbicacion(arrayName, position);
                 console.log(arrayName, position);
@@ -517,31 +496,31 @@ export class HomePage {
           }
         }
       }
-    } 
-
-
+    }
 
     this.modeloService.animate(
       controls,
       this.scene,
-      camera,
+      this.camera,
       renderer,
-      A1,
-      A2,
-      A3,
-      A4,
-      A5,
-      A6,
-      A7,
-      A8,
-      A9,
-      A10,
-      A11,
-      A12,
-      B1,
-      B2,
-      B3,
+      this.A1,
+      this.A2,
+      this.A3,
+      this.A4,
+      this.A5,
+      this.A6,
+      this.A7,
+      this.A8,
+      this.A9,
+      this.A10,
+      this.A11,
+      this.A12,
+      this.B1,
+      this.B2,
+      this.B3,
       plano3D
     );
   }
+
+  
 }

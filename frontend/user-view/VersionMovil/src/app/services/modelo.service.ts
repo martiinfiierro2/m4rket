@@ -13,7 +13,10 @@ import { EstadisticasService } from '../services/estadisticas.service';
 import { UbicacionesService } from '../services/ubicaciones.service';
 
 export class ModeloService {
-  constructor() {}
+
+  constructor() {
+
+  }
 
   // Luces
   setupLights(scene: THREE.Scene, prefersDarkMode: boolean) {
@@ -535,7 +538,11 @@ export class ModeloService {
   }
 
   clearScene(scene: THREE.Scene) {
-    window.location.reload(); // El argumento true indica que se recargará desde el servidor
+    //window.location.reload(); 
+    scene.traverse(function(objeto) {
+      scene.remove(objeto);
+  });
+
   }
   crearFormaPlanoConIndicador(
     width: number,
@@ -609,6 +616,7 @@ export class ModeloService {
       formaPlano,
       extrudeSettings
     );
+
     // Crear el material con textura para las caras grandes del plano
   const textureLoader = new THREE.TextureLoader();
   const texture = textureLoader.load(texturePath);
@@ -624,6 +632,49 @@ export class ModeloService {
   const plano3D = new THREE.Mesh(geometriaExtruida, [materialTextura, materialBlanco]);
 
   return plano3D;
+  }
+
+
+
+   obtenerNombreArray(objectArray: THREE.Object3D[],
+    A1: THREE.Object3D[],
+    A2: THREE.Object3D[],
+    A3: THREE.Object3D[],
+    A4: THREE.Object3D[],
+    A5: THREE.Object3D[],
+    A6: THREE.Object3D[],
+    A7: THREE.Object3D[],
+    A8: THREE.Object3D[],
+    A9: THREE.Object3D[],
+    A10: THREE.Object3D[],
+    A11: THREE.Object3D[],
+    A12: THREE.Object3D[],
+    B1: THREE.Object3D[],
+    B2: THREE.Object3D[],
+    B3: THREE.Object3D[]): string {
+    const index = [
+      A1,
+      A2,
+      A3,
+      A4,
+      A5,
+      A6,
+      A7,
+      A8,
+      A9,
+      A10,
+      A11,
+      A12,
+      B1,
+      B2,
+      B3,
+    ].findIndex((arr) => arr === objectArray);
+
+    if (index !== -1) {
+      return `A${index + 1}`;
+    } else {
+      return 'B3'; // En caso de que no se encuentre en la lista, devolvemos un valor predeterminado
+    }
   }
 
 
