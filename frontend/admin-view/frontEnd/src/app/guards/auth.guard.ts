@@ -18,6 +18,8 @@ export const authGuard: CanActivateFn = (route, state) => {
               console.log(resp);
               if (!resp) {
                 console.log("Hay token pero inválido");
+                localStorage.removeItem('tokenUsuario');
+                localStorage.removeItem('idUsuario');
                 router.navigateByUrl('/login');
               }
             })

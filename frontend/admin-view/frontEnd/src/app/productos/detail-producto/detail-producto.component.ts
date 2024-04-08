@@ -42,4 +42,17 @@ export class DetailProductoComponent {
 
   }
 
+
+  //cambio de color según el stock
+  colorStock(disponibilidad: number): any{
+    if (disponibilidad < 50) {
+      return { 'color': 'red' };
+    } else if (disponibilidad >= 50 && disponibilidad <= 100) {
+      return { 'color': 'yellow'  };
+    } else {
+      return { 'color': 'green'  };
+    }
+  }
+  
+
 }
