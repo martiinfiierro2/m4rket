@@ -1,35 +1,26 @@
 <ion-content scrollY="false">
-
   <div class="contenedor">
-
     <div class="botones-accion">
       <div class="listado-info">
-        <div class="boton-desplegar">
+        <!--<div class="boton-desplegar">
+          
           <button class="button"> &nbsp; ▼</button>
           <div class="dropdown-content">
             <p id="top">Ocultar productos comprados</p>
             <p id="middle">Actualizar lista</p>
             <p id="bottom">Eliminar lista actual</p>
           </div>
+          
         </div>
-        <div class="contador-productos">
-          <p>10/14</p>
-        </div>
-        <ion-button (click)='RecargarModelo()'>Default</ion-button>
+        -->
+        <div class="contador-productos" id="contador-p"></div>
       </div>
+      <ion-button (click)="RecargarModelo()">Recargar_Modelo</ion-button>
     </div>
-
-    <div id="loader">
-      <img src="spinner.gif" alt="Loading..."> <!-- Agrega una imagen de carga -->
-  </div>
 
     <div class="mapa">
-
-      <div id="canvas">
-      </div>
-
+      <div id="canvas"></div>
     </div>
-
   </div>
 
   <app-drawer></app-drawer>

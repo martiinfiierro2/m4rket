@@ -236,7 +236,7 @@ export class HomePage {
 
         console.log(this.listaCompra);
         this.getProductosIMG();
-
+        this.productosService.AddValorNumero(this.listaCompra.length);
         this.getTodasUbicacionesLista();
         const detallesProductos: ProductoDetalle[] = [];
         this.listaCompra.forEach((productoCompra) => {
@@ -363,11 +363,16 @@ export class HomePage {
   B2: THREE.Object3D[] = []; // Estanterías grandes
   B3: THREE.Object3D[] = []; // Estantería Frío
   RecargarModelo() {
+    //! No funciona hay que arreglar los touch al limpiar la escena y las animaciones
+    /*
     this.modeloService.clearScene(this.scene);
     this.ref.splice(0, this.ref.length); // Elimina todos los elementos de this.ref
     this.pos.splice(0, this.pos.length); // Elimina todos los elementos de this.pos
     this.idsauxiliares.splice(0, this.idsauxiliares.length); // Elimina todos los elementos de this.pos
     this.imagenescarrito.splice(0, this.imagenescarrito.length); // Elimina todos los elementos de this.pos
+    
+    */
+    window.location.reload();
     this.getListaCompraUsu();
   }
 
