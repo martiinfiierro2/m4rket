@@ -1,24 +1,12 @@
 <div id="header">
     <div id="divSearch">
-        <form>
-            <input type="text" name="search" id="search" class="barraBusqueda" placeholder="Búsqueda">
-            <input type="submit" value="Buscar" class="btnPrimario">
-        </form>
+        <input type="text" name="search" id="search" class="barraBusqueda" placeholder="Búsqueda">
     </div>
     <div id="botonesHeader">
         <button (click)="irNuevaPromo()" class="btnPrimario">Añadir promoción</button>
         <button (click)="irNuevoTipoPromo()" class="btnSecundario">Añadir tipo promoción</button>
     </div>
 </div>
-
-<div id="addPromo">
-    <form>
-    </form>
-</div>
-<div id="addUbi">
-
-</div>
-
 <div id="listadoPromociones" *ngIf="promociones">
     <table class="table">
         <thead>
@@ -43,10 +31,12 @@
             </tr>
         </tbody>
     </table>
+
+    <!-- Paginación -->
+    <div class="d-flex justify-content-center">
+        <app-pagination (cambiarPagina)="cambiarPagina( $event )" [texto]="true" [totalRegistros]="totalregistros" [registroActual]="posicionactual+1" [registrosPorPagina]="registrosporpagina">
+        </app-pagination>
+    </div>
+    
 </div>
 
-<!-- Paginación -->
-<div class="d-flex justify-content-center">
-    <app-pagination (cambiarPagina)="cambiarPagina( $event )" [texto]="true" [totalRegistros]="totalregistros" [registroActual]="posicionactual+1" [registrosPorPagina]="registrosporpagina">
-    </app-pagination>
-</div>

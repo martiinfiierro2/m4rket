@@ -1,9 +1,6 @@
 <div id="header">
-    <div id="idSearch">
-        <form>
-            <input type="text" name="search" id="search" class="barraBusqueda" placeholder="Búsqueda">
-            <input type="submit" value="Buscar" class="btnPrimario">
-        </form>
+    <div id="divSearch">
+        <input type="text" name="search" id="search" class="barraBusqueda" placeholder="Búsqueda">
     </div>
     <div id="botonesHeader">
         <button (click)="newUbicacion()" class="btnPrimario">Añadir ubicación</button>
@@ -30,13 +27,16 @@
             </tr>
         </tbody>
     </table>
+
+    <!-- Paginación -->
+    <div class="d-flex justify-content-center">
+        <app-pagination (cambiarPagina)="cambiarPagina( $event )" [texto]="true" [totalRegistros]="totalregistros" [registroActual]="posicionactual+1" [registrosPorPagina]="registrosporpagina">
+        </app-pagination>
+    </div>
+
 </div>
 
-<!-- Paginación -->
-<div class="d-flex justify-content-center">
-    <app-pagination (cambiarPagina)="cambiarPagina( $event )" [texto]="true" [totalRegistros]="totalregistros" [registroActual]="posicionactual+1" [registrosPorPagina]="registrosporpagina">
-    </app-pagination>
-</div>
+
 
 
 <!-- Modal -->

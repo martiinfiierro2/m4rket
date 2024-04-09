@@ -7,6 +7,7 @@
     "/estadisticas",
     "/login",
     "/productos",
+    "/productos/detailProducto",
     "/productos/editProducto",
     "/productos/newProducto",
     "/promociones",

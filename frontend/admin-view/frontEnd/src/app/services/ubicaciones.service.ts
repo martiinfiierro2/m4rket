@@ -25,6 +25,12 @@ export class UbicacionesService {
     return this.http.get(urlCompleta, {headers: this.cabeceras});
   }
 
+  getUbicacionCompletas(): Observable<any>{
+    
+    return this.http.get( environment.base_url + '/todasUbicaciones', {headers: this.cabeceras});
+  }
+
+
   getUbicacionId(idUbi): Observable<any>{
     let urlCompleta = this.url + '?id=' + idUbi;
     return this.http.get(urlCompleta, {headers:this.cabeceras});

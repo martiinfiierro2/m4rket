@@ -1,10 +1,6 @@
 <div id="header">
     <div id="divSearch">
-        <form id="busqueda" (ngSubmit)="getBusquedaUsuarios()">
-            <input type="text" name="search" id="search" placeholder="Búsqueda" [(ngModel)]="valueBusquedaInput" ngModel>
-            <input type="submit" value="Buscar" class="btnPrimario">
-        </form>
-        <button (click)="getUsuariosAdmin(); valueBusquedaInput=''" class="btnSecundario">Cancelar</button>
+        <input type="text" name="search" id="search" placeholder="Búsqueda" [(ngModel)]="valueBusquedaInput" class="barraBusqueda">
     </div>
     <div id="botonesHeader">
         <button (click)="creacionUsuario = true" class="btnPrimario">Registar usuario</button>

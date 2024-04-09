@@ -357,6 +357,15 @@ export class ProductosComponent {
     this.productos.forEach(() => this.cambioPromoPorFila.push(true));
   }
 
+  iniciarBusqueda(){
+    if (this.valueBusquedaInput == '') {
+      this.getProductos();
+    }
+    else{
+      this.getBusquedaProducto();
+    }
+  }
+
   
 
   //FUNCIONES CRUD
@@ -424,7 +433,7 @@ export class ProductosComponent {
   }
 
   getUbicaciones(){
-    this.ubicacionService.getAllUbicaciones(0)
+    this.ubicacionService.getUbicacionCompletas()
       .subscribe( res => {
         this.ubicaciones = res.ubicaciones;
       })

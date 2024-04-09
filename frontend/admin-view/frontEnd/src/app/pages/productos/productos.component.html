@@ -1,10 +1,6 @@
 <div id="header">
     <div id="divSearch">
-        <form id="busqueda" (ngSubmit)="getBusquedaProducto()">
-            <input type="text" name="search" id="search" placeholder="Búsqueda" class="barraBusqueda" [(ngModel)]="valueBusquedaInput" ngModel>
-            <input type="submit" value="Buscar" class="btnPrimario">
-        </form>
-        <button (click)="getProductos(); valueBusquedaInput=''" class="btnSecundario">Cancelar</button>
+        <input type="text" name="search" id="search" placeholder="Búsqueda" class="barraBusqueda" [(ngModel)]="valueBusquedaInput" (ngModelChange)="iniciarBusqueda()">
     </div>
     <div id="botonesHeader">
         <button (click)="irNuevoProducto()" class="btnPrimario" >Añadir producto</button>
@@ -59,13 +55,17 @@
             </tr>
         </tbody>
     </table>
+
+
+    <!-- Paginación -->
+    <div class="d-flex justify-content-center">
+        <app-pagination (cambiarPagina)="cambiarPagina( $event )" [texto]="true" [totalRegistros]="totalregistros" [registroActual]="posicionactual+1" [registrosPorPagina]="registrosporpagina">
+        </app-pagination>
+    </div>  
+
 </div>
 
-<!-- Paginación -->
-<div class="d-flex justify-content-center">
-    <app-pagination (cambiarPagina)="cambiarPagina( $event )" [texto]="true" [totalRegistros]="totalregistros" [registroActual]="posicionactual+1" [registrosPorPagina]="registrosporpagina">
-    </app-pagination>
-</div>
+
 
 
 <!-- Modal Ubicación -->
@@ -78,9 +78,8 @@
             <img [src]="urlFotoProducto + producto_ubicacion.foto + '?token=' +tokenUsuario" alt="Imagen del producto">
             <p>{{ producto_ubicacion.nombre }}</p>
             <p>{{ producto_ubicacion.marca }}</p> 
-            <div>
-                <select name="selectPromociones" id="selectPromociones" placeholder="ubicación" [(ngModel)]="valorUbicacionProucto">
-                    <option value="default" selected></option>
+            <div id="select-scroll">
+                <select name="selectPromociones" id="selectPromociones" placeholder="ubicación" [(ngModel)]="valorUbicacionProucto" size="3">
                     <option *ngFor="let ubicacion of ubicaciones" value="{{ubicacion.id}}">{{ ubicacion.referencia }} - {{ ubicacion.posicion }}</option>
                 </select>
             </div>
