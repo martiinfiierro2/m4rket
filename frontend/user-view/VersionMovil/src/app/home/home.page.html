@@ -1,37 +1,26 @@
 <ion-content scrollY="false">
-
   <div class="contenedor">
-
     <div class="botones-accion">
       <div class="listado-info">
-        <div class="boton-desplegar">
+        <!--<div class="boton-desplegar">
+          
           <button class="button"> &nbsp; ▼</button>
           <div class="dropdown-content">
             <p id="top">Ocultar productos comprados</p>
             <p id="middle">Actualizar lista</p>
             <p id="bottom">Eliminar lista actual</p>
           </div>
+          
         </div>
-        <div class="contador-productos">
-          <p>10/14</p>
-        </div>
+        -->
+        <div class="contador-productos" id="contador-p"></div>
       </div>
-
-      <!-- Cositas del div tarjetita -->
-      <!--<div class="boton-qr">
-        <ion-icon name="qr-code-outline"></ion-icon>
-      </div>-->
+      <ion-button (click)="RecargarModelo()">Recargar_Modelo</ion-button>
     </div>
-
-
 
     <div class="mapa">
-
-      <div id="canvas">
-      </div>
-
+      <div id="canvas"></div>
     </div>
-
   </div>
   <app-motor></app-motor>
   <app-drawer></app-drawer>

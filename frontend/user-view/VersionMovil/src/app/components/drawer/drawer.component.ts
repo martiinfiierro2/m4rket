@@ -2,9 +2,12 @@ import { Component, ElementRef, ViewChild, AfterViewInit, Input } from '@angular
 import { GestureController, Platform } from '@ionic/angular';
 import { ProductosService } from 'src/app/services/productos.service';
 import { EstadisticasService } from 'src/app/services/estadisticas.service';
+import { ModeloService } from 'src/app/services/modelo.service';
+
 import { trigger, transition, style, animate } from '@angular/animations';
 import { environment } from "../../environments/environment";
 import * as echarts from 'echarts';
+import { HomePage } from "src/app/home/home.page"
 
 interface Stats {
   nombre: string,
@@ -79,6 +82,8 @@ export class DrawerComponent  implements AfterViewInit {
   seleccionado: boolean = false;
   listaCompra: ListaCompra [] = [];
 
+  //MODELO
+  modeloService = new ModeloService();
 
 
   //VARIABLES FOTO
@@ -185,6 +190,8 @@ export class DrawerComponent  implements AfterViewInit {
       this.isOpen = false;
       botonchatbot.style.display = 'flex';
     }
+
+
   }
 
   toggleDrawer(){
@@ -239,7 +246,7 @@ export class DrawerComponent  implements AfterViewInit {
         this.productoSelect.cantidad = productoEncontrado.cantidad;
         this.productoSelect.idLista = productoEncontrado.id;
         this.productoSelect.enListaCompra = true;
-        console.log('Valores asignados:', this.productoSelect);
+        //console.log('Valores asignados:', this.productoSelect);
       } else {
         console.log('Producto no encontrado en listaCompra');
       }
@@ -305,6 +312,7 @@ EliminarProductoSelect(){
   this.productoSelect = null;
   this.seleccionado = false;
   this.toggleDrawer2(2);
+
 }
 
 //FUNCIONES BUSCADOR
@@ -364,8 +372,8 @@ EliminarProductoSelect(){
       let tipo = "eliminado";
       let fecha = new Date();
       this.estadistica(productoDetalle.id, tipo, fecha);
-    }else if(productoDetalle.cantidad === 0){
-      this.eliminar(productoDetalle.id);
+    }else if(productoDetalle.cantidad < 1){
+      this.eliminar(productoDetalle);
     }else{
       console.log('Solo queda una');
       productoDetalle.cantidad--;

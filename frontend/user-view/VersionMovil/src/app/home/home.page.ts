@@ -1,7 +1,5 @@
-
-
 import { Component, ViewChild } from '@angular/core';
-import { ProductosService } from "../services/productos.service";
+import { ProductosService } from '../services/productos.service';
 import { DrawerComponent } from '../components/drawer/drawer.component';
 import { MotorComponent } from '../components/motor/motor.component';
 import { environment } from '../environments/environment';
@@ -9,70 +7,73 @@ import { getLocaleFirstDayOfWeek } from '@angular/common';
 import { EstadisticasService } from '../services/estadisticas.service';
 import { UbicacionesService } from '../services/ubicaciones.service';
 import { json } from 'express';
+import { forkJoin } from 'rxjs';
 
 //modelo todo
 import * as THREE from 'three'; // we need @types/three for this to work (next to three package)
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DomElementSchemaRegistry } from '@angular/compiler';
+import { ModeloService } from '../services/modelo.service';
+
 export interface Producto {
-  id: string,
-  nombre: string,
-  marca: string,
-  categoria: string,
-  stock: number,
-  valor_energetico: Float32Array,
-  grasas: Float32Array,
-  grasas_saturadas: Float32Array,
-  hidratos_carbono: Float32Array,
-  azucares: Float32Array,
-  fibra: Float32Array,
-  proteina: Float32Array,
-  sal: Float32Array,
-  precio_kg: Float32Array,
-  ingerdientes: string,
-  foto: string,
-  precio: Float32Array,
+  id: string;
+  nombre: string;
+  marca: string;
+  categoria: string;
+  stock: number;
+  valor_energetico: Float32Array;
+  grasas: Float32Array;
+  grasas_saturadas: Float32Array;
+  hidratos_carbono: Float32Array;
+  azucares: Float32Array;
+  fibra: Float32Array;
+  proteina: Float32Array;
+  sal: Float32Array;
+  precio_kg: Float32Array;
+  ingerdientes: string;
+  foto: string;
+  precio: Float32Array;
   //Ubicacions: Ubicaciones[]
   //Promocions: Promociones[]
 
-  cantidad: number,
+  cantidad: number;
 }
 
 export interface ListaCompra {
-  id: string,
-  idUsu: string,
-  idProd: string,
-  fecha: string | null,
-  cantidad: number,
+  id: string;
+  idUsu: string;
+  idProd: string;
+  fecha: string | null;
+  cantidad: number;
 }
 interface ProductoDetalle {
-  nombre: string,
-  precio: number,
-  foto: string,
-  cantidad: number,
-  idProducto: string,
-  idLista: string,
-  contador: boolean,
+  nombre: string;
+  precio: number;
+  foto: string;
+  cantidad: number;
+  idProducto: string;
+  idLista: string;
+  contador: boolean;
 }
 
 interface Stats {
-  nombre: string,
-  idProd: number,
-  qr: string | null,
-  fecha: Date
+  nombre: string;
+  idProd: number;
+  qr: string | null;
+  fecha: Date;
 }
 
 export interface Ubicacion {
-  id: number,
-  referencia: string,
-  posicion: number,
+  id: number;
+  referencia: string;
+  posicion: number;
 }
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss']
+  styleUrls: ['home.page.scss'],
 })
 export class HomePage {
   //VERSION ANTIGUA
@@ -83,14 +84,20 @@ export class HomePage {
 
   private idListaUsu: string = '';
   detallesProductos: ProductoDetalle[] = [];
+  ProductoUbiListaCompra: Producto[] = [];
+  ref: string[] = [];
+  pos: number[] = [];
+  idsauxiliares: number[] = [];
+  fotosdecarrito: string[] = [];
+  imagenescarrito: Producto[] = [];
+
 
   //PRODUCTO SELECCIONADO
   productoSelect: any;
   dispo: string = '';
   seleccionado: boolean = false;
   productoInfo: any;
-
-
+  modeloService = new ModeloService();
   //USO DEL DRAWER Y PASO DE INFORMACION
   @ViewChild(DrawerComponent) drawerComponent!: DrawerComponent;
 
@@ -98,18 +105,20 @@ export class HomePage {
     // Llama a la función del componente Drawer
     //this.drawerComponent.getProducto(producto);
     this.drawerComponent.getProducto(idProd);
-
   }
   @ViewChild(MotorComponent) motorComponent!: MotorComponent;
+  scene: THREE.Scene;
 
   //variables para mostrar foto
   urlFotoProducto = environment.base_url + '/uploads/fotoproducto/';
-  tokenUsuario = sessionStorage.getItem('tokenUsuario') || localStorage.getItem('tokenUsuario');
+  tokenUsuario =
+    sessionStorage.getItem('tokenUsuario') ||
+    localStorage.getItem('tokenUsuario');
 
 
   constructor(private productosService: ProductosService,
     private estadisticasService: EstadisticasService, 
-    private ubicacionesService: UbicacionesService) {}
+    private ubicacionesService: UbicacionesService) {this.scene = new THREE.Scene();}
     
   ngAfterViewInit(): void {
     this.motorComponent.ngOnInit();
@@ -119,61 +128,71 @@ export class HomePage {
   ngOnInit(): void {
     this.getUsuarioLog();
     this.getListaCompraUsu();
-    this.stuff()
   }
-
 
   //Funciones para sacar el valor de los productos a partit de la ubicacion del motor gráfico
   getIdUbicacion(referencia: any, posicion: any) {
-    this.ubicacionesService.getIdUbicacion(referencia, posicion).subscribe(res => {
-      this.getProdEnUbicacion(res.ubicaciones.id);
-      console.log(res.ubicaciones.id);
-    })
+    for (let index = 0; index < this.listaCompra.length; index++) {
+      this.productosService
+        .getProductoId(this.listaCompra[index].idProd)
+        .subscribe((res) => {
+          for (let j = 0; j < res.productos.Ubicacions.length; j++) {
+            if (
+              res.productos.Ubicacions[j].referencia == referencia &&
+              res.productos.Ubicacions[j].posicion == posicion
+            ) {
+              this.llamarFuncionDrawer(res.productos.id);
+            }
+          }
+        });
+    }
   }
 
-  getProdEnUbicacion(idUbi: number) {
-    this.ubicacionesService.getProdEnUbicacion(idUbi).subscribe(res => {
-      for (let i = 0; i < res.prodUbi.length; i++) {
-        this.getProdId(res.prodUbi[i].idProd);
-      }
-    })
-  }
+  getTodasUbicacionesLista() {
 
-  getProdId(idProd: any) {
-    this.productosService.getProductoId(idProd).subscribe(res => {
-      this.productoInfo = res;
-      this.llamarFuncionDrawer(res.productos.id);
-      //this.mostrarInfoEnDiv();
+    const observables = [];
+    for (let i = 0; i < this.listaCompra.length; i++) {
+      observables.push(
+        this.productosService.getProductoId(this.listaCompra[i].idProd)
+      );
+      console.log(this.listaCompra[i]);
+    }
+
+    forkJoin(observables).subscribe((respuestas: any[]) => {
+      respuestas.forEach((res) => {
+        for (let j = 0; j < res.productos.Ubicacions.length; j++) {
+          this.ref.push(res.productos.Ubicacions[j].referencia);
+          this.pos.push(res.productos.Ubicacions[j].posicion);
+          this.idsauxiliares.push(res.productos.id);
+        }
+      });
+
+      // Ahora que los datos están disponibles, llamamos a CargarModelo()
+      this.CargarModelo();
     });
   }
-  MostrarPointer(idProd: any) {
-    this.productosService.getProductoId(idProd).subscribe(res => {
-      this.productoInfo = res;
-      console.log(res.productos.Ubicacions[0].referencia);
-      console.log(res.productos.Ubicacions[0].posicion);
 
-    });
-  }
-
- 
-  
-  //FUNCIONES YA CREADAS DE LA ANTIGUA VERSION LISTA DE LA COMPRA
+  // FUNCIONES YA CREADAS DE LA ANTIGUA VERSION LISTA DE LA COMPRA
   incrementar(productoDetalle: any) {
     productoDetalle.cantidad++;
-    console.log('Nueva cantidad = ' + productoDetalle.cantidad)
-    this.actualizarCantidad(productoDetalle.idProducto, productoDetalle.cantidad, productoDetalle.idLista)
-    let tipo = "anadido";
+    console.log('Nueva cantidad = ' + productoDetalle.cantidad);
+    this.actualizarCantidad(
+      productoDetalle.idProducto,
+      productoDetalle.cantidad,
+      productoDetalle.idLista
+    );
+    let tipo = 'anadido';
     let fecha = new Date();
     this.estadistica(productoDetalle.idProducto, tipo, fecha);
   }
 
-  //Estadisticas
+  // Estadisticas
   estadistica(id: any, tipo: any, fecha: any) {
     const post: Stats = {
       nombre: tipo,
       idProd: id,
       qr: null,
-      fecha: fecha
+      fecha: fecha,
     };
     console.log(post);
     this.estadisticasService.postContador(post);
@@ -181,9 +200,13 @@ export class HomePage {
 
   decrementar(productoDetalle: any) {
     productoDetalle.cantidad--;
-    console.log('Nueva cantidad = ' + productoDetalle.cantidad)
-    this.actualizarCantidad(productoDetalle.idProducto, productoDetalle.cantidad, productoDetalle.idLista)
-    let tipo = "eliminado";
+    console.log('Nueva cantidad = ' + productoDetalle.cantidad);
+    this.actualizarCantidad(
+      productoDetalle.idProducto,
+      productoDetalle.cantidad,
+      productoDetalle.idLista
+    );
+    let tipo = 'eliminado';
     let fecha = new Date();
     this.estadistica(productoDetalle.idProducto, tipo, fecha);
   }
@@ -202,36 +225,30 @@ export class HomePage {
       console.error('El valor de idUsuario en localStorage es nulo.');
     }
   }
-  /*
-  getProducto(idProd: string){
-    this.productosService.getProductoId(idProd).subscribe( result => {
-      this.productoSelect = result.productos;
-      console.log(this.productoSelect.nombre);
-    });
-  }
-  */
-  //Funciones CRUD LISTA COMPRA
 
+  //Funciones CRUD LISTA COMPRA
 
   getListaCompraUsu() {
     this.productosService.getListaCompra(this.idUsu).subscribe((result) => {
       if (result.listacompra) {
-        this.listaCompra = result.listacompra.map((item: ListaCompra) =>
-        ({
+        this.listaCompra = result.listacompra.map((item: ListaCompra) => ({
           idProd: item.idProd,
           cantidad: item.cantidad,
           id: item.id,
-          
         }));
-         console.log(this.listaCompra);
-        /* 
-        for(let i=0; i<this.listaCompra.length; i++){
-          this.MostrarPointer(this.listaCompra[i].idProd);
-        }*/
-        const detallesProductos: ProductoDetalle[] = [];
 
+        console.log(this.listaCompra);
+        this.getProductosIMG();
+        this.productosService.AddValorNumero(this.listaCompra.length);
+        this.getTodasUbicacionesLista();
+        const detallesProductos: ProductoDetalle[] = [];
         this.listaCompra.forEach((productoCompra) => {
-          this.getDetalleProducto(productoCompra.idProd, detallesProductos, productoCompra.cantidad, productoCompra.id);
+          this.getDetalleProducto(
+            productoCompra.idProd,
+            detallesProductos,
+            productoCompra.cantidad,
+            productoCompra.id
+          );
         });
       } else {
         console.error('Error en la búsqueda dentro de lssta compra.');
@@ -239,7 +256,12 @@ export class HomePage {
     });
   }
 
-  getDetalleProducto(idProd: string, detallesProductos: ProductoDetalle[], cantidadProd: number, idLista: string) {
+  getDetalleProducto(
+    idProd: string,
+    detallesProductos: ProductoDetalle[],
+    cantidadProd: number,
+    idLista: string
+  ) {
     const quantity = cantidadProd;
     const idP = idProd;
     const idL = idLista;
@@ -268,7 +290,6 @@ export class HomePage {
     });
   }
   //Borrar de la lista de la compra
-
   borrarProd(idLista: string) {
     this.productosService.deleteListaCompra(idLista).subscribe((result) => {
       this.getListaCompraUsu();
@@ -283,419 +304,181 @@ export class HomePage {
       idUsu: this.idUsu,
       idProd: idProd,
       fecha: fechaActual,
-      cantidad: nuevaCantidad
+      cantidad: nuevaCantidad,
     };
 
     console.log('Cuerpo de la solicitud:', body);
 
-    this.productosService.putListaCompra(idLista, body)
-      .subscribe(
-        (res) => {
-          console.log('Respuesta correcta:', res);
-        },
-        (error) => {
-          console.error('Error en la solicitud PUT: again', error);
-        }
-      );
+    this.productosService.putListaCompra(idLista, body).subscribe(
+      (res) => {
+        console.log('Respuesta correcta:', res);
+      },
+      (error) => {
+        console.error('Error en la solicitud PUT: again', error);
+      }
+    );
   }
 
+  getProductosIMG() {
+    let tokenUsuario =
+      sessionStorage.getItem('tokenUsuario') ||
+      localStorage.getItem('tokenUsuario');
+    let urlFotoProducto = environment.base_url + '/uploads/fotoproducto/';
 
-  // ESTO ES SOLO MODELO 
+    for (let index = 0; index < this.listaCompra.length; index++) {
+      this.productosService
+        .getProductoId(this.listaCompra[index].idProd)
+        .subscribe((res) => {
+          this.fotosdecarrito.push(urlFotoProducto + res.productos.foto + '?token=' + tokenUsuario)
+          this.imagenescarrito.push(res.productos);
+          //console.log(
+           // urlFotoProducto + res.productos.foto + '?token=' + tokenUsuario
+         // );
+          console.log(res.productos.Ubicacions[0].referencia);
+          //               <img [src]="urlFotoProducto + productoSelect.foto + '?token=' +tokenUsuario" alt="Product Image" />
+        });
+    }
+  }
+
+  //! MODELO
   container: any;
+  //scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera(
+    75,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
+  );
 
-  stuff() {
+  A1: THREE.Object3D[] = []; // Frutas 1
+  A2: THREE.Object3D[] = []; // Frutas 2
+  A3: THREE.Object3D[] = []; // Pasillo1.1
+  A4: THREE.Object3D[] = []; // Pasillo1.2
+  A5: THREE.Object3D[] = []; // Pasillo 2.1
+  A6: THREE.Object3D[] = []; // Pasillo 2.2
+  A7: THREE.Object3D[] = []; // Pasillo 3.1
+  A8: THREE.Object3D[] = []; // Pasillo 3.2
+  A9: THREE.Object3D[] = []; // Pasillos pegados 1.1
+  A10: THREE.Object3D[] = []; // Pasillos pegados 1.2
+  A11: THREE.Object3D[] = []; //Pasillos pegados 2.1
+  A12: THREE.Object3D[] = []; // Pasillos pegados 2.2
+  B1: THREE.Object3D[] = []; // Estanterías finas altas
+  B2: THREE.Object3D[] = []; // Estanterías grandes
+  B3: THREE.Object3D[] = []; // Estantería Frío
+  RecargarModelo() {
+    //! No funciona hay que arreglar los touch al limpiar la escena y las animaciones
+    /*
+    this.modeloService.clearScene(this.scene);
+    this.ref.splice(0, this.ref.length); // Elimina todos los elementos de this.ref
+    this.pos.splice(0, this.pos.length); // Elimina todos los elementos de this.pos
+    this.idsauxiliares.splice(0, this.idsauxiliares.length); // Elimina todos los elementos de this.pos
+    this.imagenescarrito.splice(0, this.imagenescarrito.length); // Elimina todos los elementos de this.pos
+    
+    */
+    window.location.reload();
+    this.getListaCompraUsu();
+  }
+
+  CargarModelo() {
     this.container = document.getElementById('canvas');
     this.container.style.width = '100%';
     this.container.style.height = '100%';
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(
-      75,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000
-    );
-    const raycaster = new THREE.Raycaster();
+
     const renderer = new THREE.WebGLRenderer({ alpha: true });
-    const loader = new GLTFLoader();
-    camera.position.set(-40.36, 28.89, 54.87);
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.mouseButtons = {
-      LEFT: THREE.MOUSE.ROTATE,
-      MIDDLE: THREE.MOUSE.DOLLY,
-      //RIGHT: THREE.MOUSE.PAN //Esto hay que comentarlo
-    }
-
-    controls.touches = {
-      ONE: THREE.TOUCH.ROTATE,
-      TWO: THREE.TOUCH.DOLLY_PAN
-    }
-
-    controls.minPolarAngle = Math.PI / 3;
-    controls.maxPolarAngle = Math.PI / 3;
-    const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    this.camera.position.set(-40.36, 28.89, 54.87);
+    const controls = new OrbitControls(this.camera, renderer.domElement);
+    const prefersDarkMode = window.matchMedia(
+      '(prefers-color-scheme: dark)'
+    ).matches;
     let objToRender;
-
     if (prefersDarkMode) {
       objToRender = 'marketoscuro';
     } else {
       objToRender = 'market';
     }
 
-    let object;
     renderer.setSize(window.innerWidth, window.innerHeight);
     this.container.appendChild(renderer.domElement);
-    loader.load(
-      `assets/${objToRender}/market.glb`,
-      function (glb) {
-        object = glb.scene;
-        object.position.set(0, 18, -13);
-        scene.add(object);
-      },
-      function (xhr) {
-      },
-      function (error) {
-        console.error(error);
-      }
-    );
-
-    if (prefersDarkMode) {
-      const topLight = new THREE.DirectionalLight(0xffffff, 2); // (color, intensity)
-      topLight.position.set(200, 200, 200) //top-left-ish
-      const topLight2 = new THREE.DirectionalLight(0xffffff, 2); // (color, intensity)
-      topLight2.position.set(200, 200, -200) //top-left-ish
-      const topLight3 = new THREE.DirectionalLight(0xffffff, 2); // (color, intensity)
-      topLight3.position.set(-200, 200, 200) //top-left-ish
-      topLight.castShadow = true;
-      const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-      scene.add(ambientLight);
-      scene.add(topLight);
-      scene.add(topLight2);
-      scene.add(topLight3);
-    } else {
-      const topLight = new THREE.DirectionalLight(0xffffff, 1.5); // (color, intensity)
-      topLight.position.set(200, 200, 200) //top-left-ish
-      const topLight2 = new THREE.DirectionalLight(0xffffff, 1.5); // (color, intensity)
-      topLight2.position.set(200, 200, -200) //top-left-ish
-      const topLight3 = new THREE.DirectionalLight(0xffffff, 1.5); // (color, intensity)
-      topLight3.position.set(-200, 200, 200) //top-left-ish
-      topLight.castShadow = true;
-      const ambientLight = new THREE.AmbientLight(0xffffff, 30); // (color, intensity)
-      scene.add(ambientLight);
-      scene.add(topLight);
-      scene.add(topLight2);
-      scene.add(topLight3);
-    }
-    let pointerRotation = 0;
-
-    function rotatePointers(pointers: THREE.Object3D[], pointerRotation: number) {
-      for (let i = 0; i < pointers.length; i++) {
-        pointers[i].rotation.y = pointerRotation;
-      }
-    }
-
-    function animate() {
-      requestAnimationFrame(animate);
-      controls.update();
-
-      if (A1.length > 0) {
-        pointerRotation += 0.025;
-        pointer.rotation.y = pointerRotation;
-        rotatePointers(A1, pointerRotation);
-      }
-      if (A2.length > 0) {
-        rotatePointers(A2, pointerRotation);
-      }
-      if (A3.length > 0) {
-        rotatePointers(A3, pointerRotation);
-      }
-      if (A4.length > 0) {
-        rotatePointers(A4, pointerRotation);
-      }
-      if (A5.length > 0) {
-        rotatePointers(A5, pointerRotation);
-      }
-      if (A6.length > 0) {
-        rotatePointers(A6, pointerRotation);
-      }
-      if (A7.length > 0) {
-        rotatePointers(A7, pointerRotation);
-      }
-      if (A8.length > 0) {
-        rotatePointers(A8, pointerRotation);
-      }
-      if (A9.length > 0) {
-        rotatePointers(A9, pointerRotation);
-      }
-      if (A10.length > 0) {
-        rotatePointers(A10, pointerRotation);
-      }
-      if (A11.length > 0) {
-        rotatePointers(A11, pointerRotation);
-      }
-      if (A12.length > 0) {
-        rotatePointers(A12, pointerRotation);
-      }
-      if (B1.length > 0) {
-        rotatePointers(B1, pointerRotation);
-      }
-      if (B2.length > 0) {
-        rotatePointers(B2, pointerRotation);
-      }
-      if (B3.length > 0) {
-        rotatePointers(B3, pointerRotation);
-      }
-      renderer.render(scene, camera);
-    }
-    /* OBTENER LA POSICION DE LA CAMARA 
-        function obtenerPosicionCamara(camera: THREE.PerspectiveCamera) {
-          const posicionVector = new THREE.Vector3();
-          camera.getWorldPosition(posicionVector);
-          return posicionVector;
-        }
-        */
-
-    // Función para actualizar la posición de la cámara en la consola
-    /*
-    function actualizarPosicion() {
-      const posicion = obtenerPosicionCamara(camera);
-
-      // Muestra la posición en la consola
-      console.log(
-        "Posición de la cámara:",
-        posicion.x.toFixed(2),
-        posicion.y.toFixed(2),
-        posicion.z.toFixed(2)
-      );
-    }
-    */
-
-    // Actualiza la posición de la cámara cada vez que se mueve
-    // controls.addEventListener("change", actualizarPosicion);
-
-    // Muestra la posición inicial de la cámara (opcional)
-    //actualizarPosicion();
-
+    //MODELO SUPERMERCADO
+    this.modeloService.cargarMercado(this.scene, objToRender);
+    //LUCES
+    this.modeloService.setupLights(this.scene, prefersDarkMode);
+    //CONTROLES
+    this.modeloService.configurarControles(controls);
 
     //Pointers //Indicadores
-    let pointer: THREE.Object3D;
     let pointerrender = 'pointer';
-    let A1: THREE.Object3D[] = []; // Frutas 1
-    let A2: THREE.Object3D[] = []; // Frutas 2
-    let A3: THREE.Object3D[] = []; // Pasillo1.1
-    let A4: THREE.Object3D[] = []; // Pasillo1.2
-    let A5: THREE.Object3D[] = []; // Pasillo 2.1
-    let A6: THREE.Object3D[] = []; // Pasillo 2.2
-    let A7: THREE.Object3D[] = []; // Pasillo 3.1
-    let A8: THREE.Object3D[] = []; // Pasillo 3.2
-    let A9: THREE.Object3D[] = [];  // Pasillos pegados 1.1
-    let A10: THREE.Object3D[] = [];  // Pasillos pegados 1.2
-    let A11: THREE.Object3D[] = []; //Pasillos pegados 2.1
-    let A12: THREE.Object3D[] = [];  // Pasillos pegados 2.2
-    let B1: THREE.Object3D[] = []; // Estanterías finas altas
-    let B2: THREE.Object3D[] = []; // Estanterías grandes
-    let B3: THREE.Object3D[] = [];  // Estantería Frío
+
+
+
+
+    const self = this;
 
     renderer.setSize(window.innerWidth, window.innerHeight);
     this.container.appendChild(renderer.domElement);
 
-    loader.load(
-      `assets/${pointerrender}/pointer.glb`,
-      function (glb) {
-        pointer = glb.scene;
-        pointer.position.set(-8.1, 20.6, 22.6);
-        pointer.scale.set(0.75, 0.75, 0.75);
-        //scene.add(pointer); // Para añadir el pointer que utilizo para saber pos
-        //moveSphereWithKeyboard(pointer, renderer, scene);
-        for (let i = 0; i <= 9; i++) {
-          A1[i] = pointer.clone();
-          A1[i].position.x = i === 0 ? -8.1 : (i % 2) ? A1[i - 1].position.x + 4 : A1[i - 1].position.x + 3;
-          scene.add(A1[i]);
-        }
-
-        for (let i = 0; i <= 9; i++) {
-          A2[i] = pointer.clone();
-          A2[i].position.z = 26.4;
-          A2[i].position.x = i === 0 ? -8.1 : (i % 2) ? A2[i - 1].position.x + 4 : A2[i - 1].position.x + 3;
-          scene.add(A2[i]);
-        }
-
-        for (let i = 0; i <= 5; i++) {
-          const pointerClone = pointer.clone();
-          pointerClone.position.z = 12.1;
-          pointerClone.position.x = i === 0 ? -15 : (i % 2 === 0 ? A3[i - 1].position.x + 3.5 : A3[i - 1].position.x + 4);
-          A3[i] = pointerClone;
-          scene.add(pointerClone);
-        }
-
-        for (let i = 0; i <= 5; i++) {
-          const pointerClone = pointer.clone();
-          pointerClone.position.x = i === 0 ? -15 : (i % 2 === 0 ? A4[i - 1].position.x + 3.5 : A4[i - 1].position.x + 4);
-          pointerClone.position.z = 9.7;
-          A4[i] = pointerClone;
-          scene.add(pointerClone);
-        }
-
-        for (let i = 0; i <= 5; i++) {
-          const pointerClone = pointer.clone();
-          pointerClone.position.x = i === 0 ? -15 : (i % 2 === 0 ? A5[i - 1].position.x + 3.5 : A5[i - 1].position.x + 4);
-          pointerClone.position.z = 1.3;
-          A5[i] = pointerClone;
-          scene.add(pointerClone);
-        }
-
-        for (let i = 0; i <= 5; i++) {
-          const pointerClone = pointer.clone();
-          pointerClone.position.x = i === 0 ? -15 : (i % 2 === 0 ? A6[i - 1].position.x + 3.5 : A6[i - 1].position.x + 4);
-          pointerClone.position.z = -0.5;
-          A6[i] = pointerClone;
-          scene.add(pointerClone);
-        }
-
-        for (let i = 0; i <= 5; i++) {
-          const pointerClone = pointer.clone();
-          pointerClone.position.x = i === 0 ? -15 : (i % 2 === 0 ? A7[i - 1].position.x + 3.5 : A7[i - 1].position.x + 4);
-          pointerClone.position.z = -9.1;
-          A7[i] = pointerClone;
-          scene.add(pointerClone);
-        }
-
-        for (let i = 0; i <= 5; i++) {
-          const pointerClone = pointer.clone();
-          pointerClone.position.x = i === 0 ? -15 : (i % 2 === 0 ? A8[i - 1].position.x + 3.5 : A8[i - 1].position.x + 4);
-          pointerClone.position.z = -11.1;
-          A8[i] = pointerClone;
-          scene.add(pointerClone);
-        }
-
-        for (let i = 0; i <= 3; i++) {
-          const pointerClone = pointer.clone();
-          pointerClone.position.x = i === 0 ? 12.4 : (i % 2 === 0 ? A9[i - 1].position.x + 3.6 : A9[i - 1].position.x + 3.4);
-          pointerClone.position.z = 6.6;
-          A9[i] = pointerClone;
-          scene.add(pointerClone);
-        }
-        for (let i = 0; i <= 3; i++) {
-          const pointerClone = pointer.clone();
-          pointerClone.position.x = i === 0 ? 12.4 : (i % 2 === 0 ? A10[i - 1].position.x + 3.6 : A10[i - 1].position.x + 3.4);
-          pointerClone.position.z = 5.2;
-          A10[i] = pointerClone;
-          scene.add(pointerClone);
-        }
-        for (let i = 0; i <= 3; i++) {
-          const pointerClone = pointer.clone();
-          pointerClone.position.x = i === 0 ? 12.4 : (i % 2 === 0 ? A11[i - 1].position.x + 3.6 : A11[i - 1].position.x + 3.4);
-          pointerClone.position.z = -5.4;
-          A11[i] = pointerClone;
-          scene.add(pointerClone);
-        }
-
-        for (let i = 0; i <= 3; i++) {
-          const pointerClone = pointer.clone();
-          pointerClone.position.x = i === 0 ? 12.4 : (i % 2 === 0 ? A12[i - 1].position.x + 3.6 : A12[i - 1].position.x + 3.4);
-          pointerClone.position.z = -6.8;
-          A12[i] = pointerClone;
-          scene.add(pointerClone);
-        }
-
-
-        for (let i = 0; i <= 3; i++) {
-          const pointerClone = pointer.clone();
-
-          pointerClone.position.z = i === 0 ? 4.5 : B1[i - 1].position.z - 3.1;
-          pointerClone.position.x = 29.4;
-          pointerClone.position.y = 24.5;
-          B1[i] = pointerClone;
-          scene.add(pointerClone);
-        }
-
-        for (let i = 0; i <= 5; i++) {
-          const pointerClone = pointer.clone();
-          pointerClone.position.x = i === 0 ? 29.1 : (i % 2 === 0 ? B2[i - 1].position.x - 3.6 : B2[i - 1].position.x - 3.7);
-          pointerClone.position.z = -22.5;
-          pointerClone.position.y = 24.5;
-          B2[i] = pointerClone;
-          scene.add(pointerClone);
-        }
-
-        for (let i = 0; i <= 2; i++) {
-          const pointerClone = pointer.clone();
-          pointerClone.position.x = i === 0 ? -9.2 : (B3[i - 1].position.x + 6.5);
-          pointerClone.position.z = -22.8;
-          pointerClone.position.y = 22.5;
-          B3[i] = pointerClone;
-          scene.add(pointerClone);
-        }
-      },
-      function (xhr) {
-      },
-      function (error) {
-        console.error(error);
-      }
+    //cargarPointers
+    this.modeloService.cargarPointers(
+      this.scene,
+      pointerrender,
+      this.A1,
+      this.A2,
+      this.A3,
+      this.A4,
+      this.A5,
+      this.A6,
+      this.A7,
+      this.A8,
+      this.A9,
+      this.A10,
+      this.A11,
+      this.A12,
+      this.B1,
+      this.B2,
+      this.B3,
+      self,
+      this.camera,
+      this.imagenescarrito
     );
 
-
-    /* FUNCION DE MOVER EL OBJETO Y SABER SU POS
-        // funcion de mover el objeto y saber su pos
-        function moveSphereWithKeyboard(pointer: THREE.Object3D, renderer: THREE.WebGLRenderer, scene: THREE.Scene) {
-          const moveSpeed = 0.1; // Ajusta la velocidad de movimiento
-    
-          document.addEventListener('keydown', (event) => {
-            const key = event.key;
-    
-            switch (key) {
-              case 'ArrowUp':
-                pointer.position.y += moveSpeed;
-                break;
-              case 'ArrowDown':
-                pointer.position.y -= moveSpeed;
-                break;
-              case 'ArrowLeft':
-                pointer.position.x -= moveSpeed;
-                break;
-              case 'ArrowRight':
-                pointer.position.x += moveSpeed;
-                break;
-              case 'o': // Mover hacia adelante en Z
-                pointer.position.z += moveSpeed;
-                break;
-              case 'l': // Mover hacia atrás en Z
-                pointer.position.z -= moveSpeed;
-                break;
-            }
-            const position = pointer.position;
-            console.log(`Posición X: ${position.x.toFixed(2)}`);
-            console.log(`Posición Y: ${position.y.toFixed(2)}`);
-            console.log(`Posición Z: ${position.z.toFixed(2)}`);
-            renderer.render(scene, camera);
-          });
-        }
-    */
-
-
-        //Funcion de ver la info del producto al tocar
-    const container: HTMLElement | null = document.getElementById('canvas');
-    let intersectedObjectsMap: Map<THREE.Object3D, THREE.Object3D>;
-    if (container) {
-      container.addEventListener('touchstart', onTouchStart, false);
+    if (this.container) {
+      this.container.addEventListener('touchstart', onTouchStart, false);
       const self = this;
+
       function onTouchStart(event: TouchEvent) {
         if (event.touches.length !== 1) {
           return;
         }
         const touch = event.touches[0];
-        const rect = container!.getBoundingClientRect();
+        const rect = self.container!.getBoundingClientRect();
         const mouse = new THREE.Vector2(
-          ((touch.clientX - rect.left) / container!.clientWidth) * 2 - 1,
-          -((touch.clientY - rect.top) / container!.clientHeight) * 2 + 1
+          ((touch.clientX - rect.left) / self.container!.clientWidth) * 2 - 1,
+          -((touch.clientY - rect.top) / self.container!.clientHeight) * 2 + 1
         );
 
         const raycaster = new THREE.Raycaster();
-        raycaster.setFromCamera(mouse, camera);
-        intersectedObjectsMap = new Map<THREE.Object3D, THREE.Object3D>();
+        raycaster.setFromCamera(mouse, self.camera);
+        let intersectedObjectsMap = new Map<THREE.Object3D, THREE.Object3D>();
         let objectFound = false;
 
         // Loop through all arrays (A1 to A6)
-        const objectArrays: THREE.Object3D[][] = [A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, B1, B2, B3];
+        const objectArrays: THREE.Object3D[][] = [
+          self.A1,
+          self.A2,
+          self.A3,
+          self.A4,
+          self.A5,
+          self.A6,
+          self.A7,
+          self.A8,
+          self.A9,
+          self.A10,
+          self.A11,
+          self.A12,
+          self.B1,
+          self.B2,
+          self.B3,
+        ];
         for (const objectArray of objectArrays) {
           for (const object of objectArray) {
             const intersects = raycaster.intersectObject(object, true);
@@ -704,34 +487,57 @@ export class HomePage {
               objectFound = true;
               if (objectFound) {
                 // Obtener el nombre del array y la posición
-                const arrayName = objectArray === A1 ? "A1" :
-                  objectArray === A2 ? "A2" :
-                    objectArray === A3 ? "A3" :
-                      objectArray === A4 ? "A4" :
-                        objectArray === A5 ? "A5" :
-                          objectArray === A6 ? "A6" :
-                            objectArray === A7 ? "A7" :
-                              objectArray === A8 ? "A8" :
-                                objectArray === A9 ? "A9" :
-                                  objectArray === A10 ? "A10" :
-                                    objectArray === A11 ? "A11" :
-                                      objectArray === A12 ? "A12" :
-                                        objectArray === B1 ? "B1" :
-                                          objectArray === B2 ? "B2" : "B3";
+                const arrayName = self.modeloService.obtenerNombreArray(
+                  objectArray,
+                  self.A1,
+                  self.A2,
+                  self.A3,
+                  self.A4,
+                  self.A5,
+                  self.A6,
+                  self.A7,
+                  self.A8,
+                  self.A9,
+                  self.A10,
+                  self.A11,
+                  self.A12,
+                  self.B1,
+                  self.B2,
+                  self.B3
+                );
                 const position = objectArray.indexOf(object);
 
                 //Busco la relacion con produtos
                 self.getIdUbicacion(arrayName, position);
+                console.log(arrayName, position);
               }
               break;
             }
           }
         }
       }
-    } else {
-      console.error("No se pudo encontrar el contenedor con el ID 'canvas'");
     }
-    animate();
-  }
 
+    this.modeloService.animate(
+      controls,
+      this.scene,
+      this.camera,
+      renderer,
+      this.A1,
+      this.A2,
+      this.A3,
+      this.A4,
+      this.A5,
+      this.A6,
+      this.A7,
+      this.A8,
+      this.A9,
+      this.A10,
+      this.A11,
+      this.A12,
+      this.B1,
+      this.B2,
+      this.B3
+    );
+  }
 }
