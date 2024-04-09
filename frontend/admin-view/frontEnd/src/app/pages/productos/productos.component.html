@@ -1,10 +1,6 @@
 <div id="header">
     <div id="divSearch">
-        <form id="busqueda" (ngSubmit)="getBusquedaProducto()">
-            <input type="text" name="search" id="search" placeholder="Búsqueda" [(ngModel)]="valueBusquedaInput" ngModel>
-            <input type="submit" value="Buscar" class="btnPrimario">
-        </form>
-        <button (click)="getProductos(); valueBusquedaInput=''" class="btnSecundario">Cancelar</button>
+        <input type="text" name="search" id="search" placeholder="Búsqueda" class="barraBusqueda" [(ngModel)]="valueBusquedaInput" (ngModelChange)="iniciarBusqueda()">
     </div>
     <div id="botonesHeader">
         <button (click)="irNuevoProducto()" class="btnPrimario" >Añadir producto</button>
@@ -25,18 +21,18 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let producto of productos; let i = index">
-                <td><img [src]="urlFotoProducto + producto.foto + '?token=' +tokenUsuario" alt="Imagen del producto"></td>
-                <td> {{ producto.nombre }} </td>
-                <td> {{ producto.marca }} </td>
-                <td><div id="divStock" [ngStyle]="colorStock(producto.stock)"> {{ producto.stock }} </div></td>
-                <td *ngIf="producto.Promocions.length == 0 || producto.Promocions[0].en_promocion.precio == producto.precio"> {{ producto.precio }} €</td>
-                <td *ngIf="producto.Promocions.length > 0 && producto.Promocions[0].en_promocion.precio != producto.precio">
+            <tr *ngFor="let producto of productos; let i = index" [style.background-color]="producto.seleccionado ? '#e2e2e2' : 'transparent'">
+                <td (click)="irMostrarProducto(producto.id)" class="enlace" (mouseenter)="destacarFondo(true, producto.id)" (mouseleave)="destacarFondo(false, producto.id)"><img [src]="urlFotoProducto + producto.foto + '?token=' +tokenUsuario" alt="Imagen del producto"></td>
+                <td (click)="irMostrarProducto(producto.id)" class="enlace" (mouseenter)="destacarFondo(true, producto.id)" (mouseleave)="destacarFondo(false, producto.id)"> {{ producto.nombre }} </td>
+                <td (click)="irMostrarProducto(producto.id)" class="enlace" (mouseenter)="destacarFondo(true, producto.id)" (mouseleave)="destacarFondo(false, producto.id)"> {{ producto.marca }} </td>
+                <td (click)="irMostrarProducto(producto.id)" class="enlace" (mouseenter)="destacarFondo(true, producto.id)" (mouseleave)="destacarFondo(false, producto.id)"><div id="divStock" [ngStyle]="colorStock(producto.stock)"> {{ producto.stock }} </div></td>
+                <td *ngIf="producto.Promocions.length == 0 || producto.Promocions[0].en_promocion.precio == producto.precio" (click)="irMostrarProducto(producto.id)" class="enlace" (mouseenter)="destacarFondo(true, producto.id)" (mouseleave)="destacarFondo(false, producto.id)"> {{ producto.precio }} €</td>
+                <td *ngIf="producto.Promocions.length > 0 && producto.Promocions[0].en_promocion.precio != producto.precio" (click)="irMostrarProducto(producto.id)" class="enlace" (mouseenter)="destacarFondo(true, producto.id)" (mouseleave)="destacarFondo(false, producto.id)">
                     <div style="text-decoration: line-through; color: gray;">{{ producto.precio}}€</div>
                     <div>{{producto.Promocions[0].en_promocion.precio}}€</div>
                 </td>
-                <td *ngIf="producto.Ubicacions.length > 0"><span *ngFor="let ubicaciones of producto.Ubicacions"> {{ ubicaciones.referencia }} </span></td>
-                <td *ngIf="producto.Ubicacions.length == 0"> --- </td>
+                <td *ngIf="producto.Ubicacions.length > 0" (click)="irMostrarProducto(producto.id)" class="enlace" (mouseenter)="destacarFondo(true, producto.id)" (mouseleave)="destacarFondo(false, producto.id)"><span *ngFor="let ubicaciones of producto.Ubicacions"> {{ ubicaciones.referencia }}-{{ ubicaciones.posicion }} </span></td>
+                <td *ngIf="producto.Ubicacions.length == 0" (click)="irMostrarProducto(producto.id)" class="enlace" (mouseenter)="destacarFondo(true, producto.id)" (mouseleave)="destacarFondo(false, producto.id)"> --- </td>
                 <td *ngIf="producto.Promocions.length == 0">
                     <input list="promociones" placeholder="Selecciona promoción..." (change)="asignarPromocion(producto.id, producto.precio, $event, producto.id)">
                     <datalist id="promociones">
@@ -52,19 +48,24 @@
                     <p *ngIf="cambioPromoPorFila[i] == false" class="error">Elija una promoción existente</p>
                 </td>
                 <td>
-                    <button (click)="borrarProd(producto.id)" class="btnIcon" id="btnBorrar"><mat-icon class="iconoAccion">delete</mat-icon></button>
-                    <button (click)="irEditarProducto(producto.id)" class="btnIcon" id="btnEdit"><mat-icon class="iconoAccion">edit</mat-icon></button>
-                    <button (click)="ubicarProducto(producto.id)" class="btnIcon" id="btnUbicar"><mat-icon class="iconoAccion">location_on</mat-icon></button>
+                    <button (click)="borrarProd(producto.id)" class="btnIcon" id="btnBorrar"><span class="iconoAccion fa-solid fa-trash"></span></button>
+                    <button (click)="irEditarProducto(producto.id)" class="btnIcon" id="btnEdit"><span class="iconoAccion fa-solid fa-pen"></span></button>
+                    <button (click)="ubicarProducto(producto.id)" class="btnIcon" id="btnUbicar"><span class="iconoAccion fa-solid fa-location-dot"></span></button>
                 </td>
             </tr>
         </tbody>
     </table>
+
+
+    <!-- Paginación -->
+    <div class="d-flex justify-content-center">
+        <app-pagination (cambiarPagina)="cambiarPagina( $event )" [texto]="true" [totalRegistros]="totalregistros" [registroActual]="posicionactual+1" [registrosPorPagina]="registrosporpagina">
+        </app-pagination>
+    </div>  
+
 </div>
-<!-- Paginación -->
-<div class="d-flex justify-content-center">
-    <app-pagination (cambiarPagina)="cambiarPagina( $event )" [texto]="true" [totalRegistros]="totalregistros" [registroActual]="posicionactual+1" [registrosPorPagina]="registrosporpagina">
-    </app-pagination>
-</div>
+
+
 
 
 <!-- Modal Ubicación -->
@@ -77,10 +78,9 @@
             <img [src]="urlFotoProducto + producto_ubicacion.foto + '?token=' +tokenUsuario" alt="Imagen del producto">
             <p>{{ producto_ubicacion.nombre }}</p>
             <p>{{ producto_ubicacion.marca }}</p> 
-            <div>
-                <select name="selectPromociones" id="selectPromociones" placeholder="ubicación" [(ngModel)]="valorUbicacionProucto">
-                    <option value="default" selected></option>
-                    <option *ngFor="let ubicacion of ubicaciones" value="{{ubicacion.id}}">{{ ubicacion.referencia }}</option>
+            <div id="select-scroll">
+                <select name="selectPromociones" id="selectPromociones" placeholder="ubicación" [(ngModel)]="valorUbicacionProucto" size="3">
+                    <option *ngFor="let ubicacion of ubicaciones" value="{{ubicacion.id}}">{{ ubicacion.referencia }} - {{ ubicacion.posicion }}</option>
                 </select>
             </div>
             <div>

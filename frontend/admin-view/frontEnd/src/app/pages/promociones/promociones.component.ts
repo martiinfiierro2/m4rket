@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PromocionesService } from '../../services/promociones.service';
-import { MatIconModule } from '@angular/material/icon';
+import { PaginationComponent } from '../../pagination/pagination.component';
 
 
 export interface Promocion{
@@ -23,7 +23,7 @@ export interface Promocion{
 @Component({
   selector: 'app-promociones',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule],
+  imports: [CommonModule, FormsModule, PaginationComponent],
   templateUrl: './promociones.component.html',
   styleUrl: './promociones.component.css'
 })
@@ -36,11 +36,17 @@ export class PromocionesComponent {
 
   modals = document.getElementsByClassName('modal') as HTMLCollectionOf<HTMLElement>;
 
+  //Variables paginación
+  public totalregistros=98;
+  public posicionactual=0;
+  public registrosporpagina=4;
+
+  private paginaUsada = 0;
 
 
-  constructor ( private promocionesService: PromocionesService, private route: Router){
+  constructor ( private promocionesService: PromocionesService, 
+                private route: Router){}
 
-  }
 
   ngOnInit(): void {
     this.getPromociones();
@@ -97,13 +103,26 @@ export class PromocionesComponent {
     let url = 'promociones/editPromocion?id='+idPromo;
     window.location.href = url;
   }
+
+
+  cambiarPagina( pagina:number ){
+    pagina = (pagina < 0 ? 0 : pagina);
+    this.posicionactual = ((pagina - 1) * this.registrosporpagina >=0 ? (pagina - 1) * this.registrosporpagina : 0);
+    this.paginaUsada = pagina;
+
+    this.getPromociones();
+  }
+
   
 
   //CRUD
   getPromociones(){
-    this.promocionesService.getAllPromociones().subscribe(res =>{
-      this.promociones = res.promociones;
-      console.log(res);
+    this.promocionesService.getAllPromociones(this.posicionactual)
+      .subscribe(res =>{
+        this.promociones = res.promociones;
+
+        //Paginacion
+        this.totalregistros = res.page.total;
     })
 
     

@@ -35,12 +35,14 @@ export interface Producto{
   foto: string,
   precio: Float32Array,
   Ubicacions: Ubicaciones[],
-  Promocions: Promociones[]
+  Promocions: Promociones[],
+  seleccionado: Boolean
 }
 
 export interface Ubicaciones{
   id: number,
-  referencia: string
+  referencia: string,
+  posicion: number
 }
 
 export interface Promociones{
@@ -65,7 +67,7 @@ export interface en_Promocion{
     standalone: true,
     templateUrl: './productos.component.html',
     styleUrl: './productos.component.css',
-    imports: [CommonModule, FormsModule, MatIconModule, MatAutocompleteModule, MatFormFieldModule, MatInputModule, PaginationComponent, ReactiveFormsModule]
+    imports: [CommonModule, FormsModule, PaginationComponent, ReactiveFormsModule]
 })
 
 export class ProductosComponent {
@@ -114,6 +116,8 @@ export class ProductosComponent {
   fechaFinUbicacionProducto!: Date;
 
   valueBusquedaInput = '';
+
+  fondoDestacado = false;
 
   //Variables paginación
   public totalregistros=98;
@@ -249,6 +253,24 @@ export class ProductosComponent {
     this.mostrarModal('ubicacion');
   }
 
+  irMostrarProducto(idProd){
+    let url = 'productos/detailProducto?id='+idProd;
+    window.location.href = url;
+  }
+
+  destacarFondo( estado: Boolean, idProd){
+
+    for (let producto of this.productos){
+      if (producto.id == idProd) {
+        if (estado) {
+          producto.seleccionado = true;
+        }
+        else{
+          producto.seleccionado = false;
+        }
+      }    
+    }
+  }
 
 
 
@@ -335,6 +357,15 @@ export class ProductosComponent {
     this.productos.forEach(() => this.cambioPromoPorFila.push(true));
   }
 
+  iniciarBusqueda(){
+    if (this.valueBusquedaInput == '') {
+      this.getProductos();
+    }
+    else{
+      this.getBusquedaProducto();
+    }
+  }
+
   
 
   //FUNCIONES CRUD
@@ -343,6 +374,10 @@ export class ProductosComponent {
       .subscribe((result) =>{
         this.productos = result.productos;
         console.log(this.productos);
+
+        for ( let producto of this.productos){
+          producto.seleccionado = false;
+        }
         
         //Paginacion
         this.totalregistros = result.page.total;
@@ -364,7 +399,7 @@ export class ProductosComponent {
   }
 
   getPromociones(){
-    this.promocionesService.getAllPromociones().subscribe((result) =>{
+    this.promocionesService.getAllPromociones(0).subscribe((result) =>{
         this.promociones = result.promociones;
     });
   }
@@ -398,7 +433,7 @@ export class ProductosComponent {
   }
 
   getUbicaciones(){
-    this.ubicacionService.getAllUbicaciones()
+    this.ubicacionService.getUbicacionCompletas()
       .subscribe( res => {
         this.ubicaciones = res.ubicaciones;
       })

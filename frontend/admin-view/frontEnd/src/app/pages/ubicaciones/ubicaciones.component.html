@@ -1,9 +1,6 @@
 <div id="header">
-    <div id="idSearch">
-        <form>
-            <input type="text" name="search" id="search" placeholder="Búsqueda">
-            <input type="submit" value="Buscar" class="btnPrimario">
-        </form>
+    <div id="divSearch">
+        <input type="text" name="search" id="search" class="barraBusqueda" placeholder="Búsqueda">
     </div>
     <div id="botonesHeader">
         <button (click)="newUbicacion()" class="btnPrimario">Añadir ubicación</button>
@@ -24,13 +21,22 @@
                 <td> {{ ubicacion.referencia }}</td>
                 <td> {{ ubicacion.posicion }}</td>
                 <td>
-                    <button (click)="ejecutarAccion(ubicacion.id)" class="btnIcon" id="btnBorrar"><mat-icon class="iconoAccion">delete</mat-icon></button>
-                    <button (click)="editUbi(ubicacion.id)" class="btnIcon" id="btnEdit"><mat-icon class="iconoAccion">edit</mat-icon></button>
+                    <button (click)="ejecutarAccion(ubicacion.id)" class="btnIcon" id="btnBorrar"><span class="iconoAccion fa-solid fa-trash"></span></button>
+                    <button (click)="editUbi(ubicacion.id)" class="btnIcon" id="btnEdit"><span class="iconoAccion fa-solid fa-pen"></span></button>
                 </td>
             </tr>
         </tbody>
     </table>
+
+    <!-- Paginación -->
+    <div class="d-flex justify-content-center">
+        <app-pagination (cambiarPagina)="cambiarPagina( $event )" [texto]="true" [totalRegistros]="totalregistros" [registroActual]="posicionactual+1" [registrosPorPagina]="registrosporpagina">
+        </app-pagination>
+    </div>
+
 </div>
+
+
 
 
 <!-- Modal -->

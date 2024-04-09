@@ -10,33 +10,44 @@ body{
     box-sizing: border-box;
 }
 
+.barraBusqueda{
+    border-color: #F5F5F5;
+    border-radius: .4em;
+    padding-left: .4em;
+}
+
+.barraBusqueda:hover, .barraBusqueda:active{
+    border-color: #51877A;
+}
+
 .btnPrimario{
     background-color: #51877A;
     border: none;
     border: 1px solid #51877A;
     color: white;
-    border-radius: 4%;
+    border-radius: .4em;
     padding: 4px 10px;
+    transition: transform 0.2s;
 }
 
     .btnPrimario:hover{
         cursor: pointer;
-        font-size: .9em;
-        color: rgb(219, 219, 219);
+        transform: scale(1.1);
     }
 
 .btnSecundario{
     background-color: white;
     border: 1px solid #51877A;
-    border-radius: 4%;
+    border-radius: .4em;
     color: #51877A;
     padding: 4px 10px;
+    transition: transform 0.2s;
 }
 
     .btnSecundario:hover{
         cursor: pointer;
-        font-size: .9em;
-        color: #62867e;
+        transform: scale(1.1);
     }
+    
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

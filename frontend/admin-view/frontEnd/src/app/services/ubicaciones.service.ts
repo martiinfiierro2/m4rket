@@ -12,18 +12,24 @@ export class UbicacionesService {
 
   private url: string = environment.base_url + '/ubicaciones';
 
-  private token = localStorage.getItem('tokenUsuario');
+  private token = localStorage['tokenUsuario'];
   private cabeceras = new HttpHeaders({
     'x-token': this.token
   });;
 
   //CRUD
-  getAllUbicaciones(): Observable<any>{
+  getAllUbicaciones( desde: number): Observable<any>{
 
-    let urlCompleta = this.url + '?desde=0';
+    let urlCompleta = this.url + '?desde=' + desde;
 
     return this.http.get(urlCompleta, {headers: this.cabeceras});
   }
+
+  getUbicacionCompletas(): Observable<any>{
+    
+    return this.http.get( environment.base_url + '/todasUbicaciones', {headers: this.cabeceras});
+  }
+
 
   getUbicacionId(idUbi): Observable<any>{
     let urlCompleta = this.url + '?id=' + idUbi;

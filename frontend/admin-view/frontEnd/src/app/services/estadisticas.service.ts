@@ -13,7 +13,7 @@ export class EstadisticasService {
   private url: string = environment.base_url + '/contadores';
   private url2: string = environment.base_url + '/tiempos';
 
-  private token = localStorage.getItem('tokenUsuario');
+  private token = localStorage['tokenUsuario'];
   private cabeceras = new HttpHeaders({
     'x-token': this.token
   });;

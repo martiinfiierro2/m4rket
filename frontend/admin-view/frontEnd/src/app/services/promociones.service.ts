@@ -12,16 +12,18 @@ export class PromocionesService {
 
   private url: string = environment.base_url + '/promociones';
 
-  private token = localStorage.getItem('tokenUsuario');
+  private token = localStorage['tokenUsuario'];
   private cabeceras = new HttpHeaders({
     'x-token': this.token
   });;
 
 
   //CRUD
-  getAllPromociones(): Observable<any>{
+  getAllPromociones( desde: number): Observable<any>{
+
+    let urlCompleta = this.url + '?desde=' + desde;
     
-    return this.http.get(this.url, {headers: this.cabeceras});
+    return this.http.get(urlCompleta, {headers: this.cabeceras});
   }
 
   getPromocionId(idProd: string): Observable<any>{

@@ -1,0 +1,66 @@
+    .parent {
+        display: grid;
+        padding: 2em;
+        grid-template-columns: repeat(4, 1fr) 0;
+        grid-template-rows: repeat(5, 1fr);
+        grid-column-gap: 20px;
+        grid-row-gap: 20px;
+        height: 85%;
+    }
+        
+        .div1 { 
+            grid-area: 1 / 1 / 3 / 2;
+        }
+        .div2 { 
+            grid-area: 1 / 2 / 2 / 4;
+        }
+        .div3 { 
+            grid-area: 2 / 2 / 3 / 3;
+        }
+        .div4 { 
+            grid-area: 2 / 3 / 3 / 4;
+        }
+        .div5 { 
+            grid-area: 3 / 1 / 4 / 2; 
+        }
+        .div6 { 
+            grid-area: 3 / 2 / 4 / 3; 
+        }
+        .div7 { 
+            grid-area: 3 / 3 / 4 / 4; 
+        }
+        .div8 { 
+            grid-area: 1 / 4 / 4 / 5; 
+        }
+        .div9 { 
+            grid-area: 4 / 1 / 6 / 5; 
+        }
+    
+    .tarjetas{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-radius: 1em;
+        background-color: white;
+    }
+    
+    .tituloDiv{
+        color: gray;
+        font-size: 1.1em;
+    }
+
+    .infoDiv{
+        font-size: 1.5em;
+    }
+
+        #infoDivIngredientes{
+            font-size: .9em;
+            padding: 1em 2em;
+            text-align: justify;
+        }
+
+        img{
+            max-width: 250px;
+            max-height: 250px;
+        }

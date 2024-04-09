@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { ProductosService } from '../services/productos.service';
 import { DrawerComponent } from '../components/drawer/drawer.component';
+import { MotorComponent } from '../components/motor/motor.component';
 import { environment } from '../environments/environment';
 import { getLocaleFirstDayOfWeek } from '@angular/common';
 import { EstadisticasService } from '../services/estadisticas.service';
@@ -105,6 +106,7 @@ export class HomePage {
     //this.drawerComponent.getProducto(producto);
     this.drawerComponent.getProducto(idProd);
   }
+  @ViewChild(MotorComponent) motorComponent!: MotorComponent;
   scene: THREE.Scene;
 
   //variables para mostrar foto
@@ -113,12 +115,13 @@ export class HomePage {
     sessionStorage.getItem('tokenUsuario') ||
     localStorage.getItem('tokenUsuario');
 
-  constructor(
-    private productosService: ProductosService,
-    private estadisticasService: EstadisticasService,
-    private ubicacionesService: UbicacionesService
-  ) {
-    this.scene = new THREE.Scene();
+
+  constructor(private productosService: ProductosService,
+    private estadisticasService: EstadisticasService, 
+    private ubicacionesService: UbicacionesService) {this.scene = new THREE.Scene();}
+    
+  ngAfterViewInit(): void {
+    this.motorComponent.ngOnInit();
   }
 
   //VERSION ANTIGUA

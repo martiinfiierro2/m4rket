@@ -8,6 +8,7 @@ export abstract class TRecurso {
     }
 
     abstract cargarFichero(nombre: string): void;
+    
     abstract draw(): void;
 
 

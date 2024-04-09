@@ -3,7 +3,7 @@ import { UsuariosService } from "../../services/usuarios.service";
 import { FormBuilder, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common'
-import { Router } from '@angular/router';
+import { Router, withDisabledInitialNavigation } from '@angular/router';
 import Swal from 'sweetalert2'
 
 declare const gapi: any;
@@ -25,6 +25,7 @@ interface Usuario {
 export class LoginComponent {
 
   public formSubmint = false;
+  public esperando = false;
 
   public loginForm = this.fb.group({
     email: [localStorage.getItem('email') || '', [Validators.required, Validators.email]],
@@ -46,10 +47,12 @@ export class LoginComponent {
 
     this.formSubmint = true;
     
+    
     if (!this.loginForm.valid) {
       console.warn('errores en el formulario');
     }
     else{
+      this.esperando = true;
       this.usuarioService.login( this.loginForm.value)
       .subscribe( res =>{
 
@@ -68,6 +71,7 @@ export class LoginComponent {
         }
   
         this.route.navigateByUrl('/productos');
+        this.esperando = false;
 
       },(error) =>{
         Swal.fire({
@@ -76,6 +80,7 @@ export class LoginComponent {
           icon: 'error',
           confirmButtonText: 'Ok'
         })
+        this.esperando = false;
       })
     }   
   }

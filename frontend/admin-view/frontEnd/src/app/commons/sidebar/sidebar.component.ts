@@ -11,11 +11,14 @@ import { CommonModule } from '@angular/common';
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css'
 })
+
 export class SidebarComponent {
 
 
   private nombreUsuario: string = '';
   superAdmin: Boolean = false;
+  private usuario;
+  clase = 'linea';
 
 
   constructor( private usuarioService: UsuariosService,
@@ -23,22 +26,18 @@ export class SidebarComponent {
 
   ngOnInit(){
     this.getUsuario();
-    this.paginaActual();
-
-    if (localStorage.getItem('rol') == 'superAdmin') {
-      this.superAdmin = true;
-    }
-  
   }
   
 
   getUsuario(){ 
-    this.usuarioService.getUsuario(localStorage.getItem('idUsuario'))
+    this.usuarioService.getUsuario(localStorage['idUsuario'])
       .subscribe( res => {
-        this.nombreUsuario = res.usuarios.nombre;
-        document.getElementById('nombreUsuario')!.innerHTML = 'Hola, ' + this.nombreUsuario;
+        this.usuario = res.usuarios;        
+        document.getElementById('nombreUsuario')!.innerHTML = 'Hola, ' + this.usuario.nombre;
+        this.paginaActual();
       })
   }
+  
 
   logOut(){
     let email;
@@ -55,6 +54,10 @@ export class SidebarComponent {
   }
 
   paginaActual(){
+
+    if (this.usuario.rol == 'superAdmin') {
+      this.superAdmin = true;
+    }
    
     if (window.location.pathname.includes('/productos')) {
       document.getElementById('lineaProductos')?.classList.add('actual');
@@ -68,7 +71,10 @@ export class SidebarComponent {
     if (window.location.pathname.includes('/estadisticas')) {
       document.getElementById('lineaEstadisticas')?.classList.add('actual');
     }
-
+    if (window.location.pathname.includes('/usuarios')) {
+      this.clase = this.clase + ' actual';
+    }
+  
   }
 
 }

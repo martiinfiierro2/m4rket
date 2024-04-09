@@ -2,19 +2,19 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding-left: 24px;
-    padding-right: 1em;
-    margin-bottom: 2em;
-    margin-top: 2em;
+    align-items: center;
+    margin: 3em 1em 2em 1em;
+    padding: 0 1.5em;
+    border-radius: 1em;
   } 
-    #idSearch > form > input[type="submit"]{
-      margin-left: .5em;
-    }
-  
-    #botonesHeader > button{
-      margin: .2em;
-    }
-  
+   
+#listadoUbicaciones{
+  margin: 0em 1em;
+  padding: 1.5em;
+  border-radius: 1em;
+  background-color: white;
+}
+
   .table{
       width: 100%; /* Ancho total de la tabla */
       border-collapse: collapse;

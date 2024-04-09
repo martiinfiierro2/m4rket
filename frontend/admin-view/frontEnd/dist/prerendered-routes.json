@@ -3,17 +3,22 @@
     "/",
     "/dataset",
     "/dataset-producto",
+    "/datos",
+    "/estadisticas",
     "/login",
     "/productos",
+    "/productos/detailProducto",
     "/productos/editProducto",
     "/productos/newProducto",
     "/promociones",
     "/promociones/editPromocion",
     "/promociones/newPromocion",
     "/promociones/newTipoPromocion",
-    "/pruebaPaginacion",
     "/recovery",
     "/registro",
-    "/ubicaciones"
+    "/ubicaciones",
+    "/ubicaciones/editUbicacion",
+    "/ubicaciones/newUbicacion",
+    "/usuarios"
   ]
 }

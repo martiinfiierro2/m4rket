@@ -15,7 +15,7 @@ export class ProductosService {
 
   private url: string = environment.base_url  + '/productos';
 
-  private token = localStorage.getItem('tokenUsuario');
+  private token = localStorage['tokenUsuario'];
   private cabeceras = new HttpHeaders({
     'x-token': this.token
   });;
@@ -39,9 +39,6 @@ export class ProductosService {
     return this.http.get(urlCompleta, {headers: this.cabeceras});
   }
 
-  getProductosPaginacion(desde: number): Observable<any>{
-    return this.http.get( this.url + '?desde=' + desde, {headers: this.cabeceras});
-  }
 
   getProductosDatasetPaginacion(desde: number): Observable<any>{
     return this.http.get( environment.base_url + '/dataset/productos?desde=' + desde);
@@ -71,10 +68,7 @@ export class ProductosService {
   }
 
   getBusquedaProducto(busqueda: string): Observable<any>{
-    let urlCompleta = this.url + '/' + busqueda;
-
-    console.log("Url completa: ", urlCompleta);
-    
+    let urlCompleta = this.url + '/' + busqueda;    
 
     return this.http.get(urlCompleta, {headers: this.cabeceras});
   }
