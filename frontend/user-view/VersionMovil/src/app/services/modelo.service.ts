@@ -1116,7 +1116,7 @@ export class ModeloService {
     });
 
     // Crear el material blanco para la flecha y los bordes
-    const materialBlanco = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    const materialBlanco = new THREE.MeshBasicMaterial({ color: 0x000000 });
 
     // Crear el plano 3D a partir de la geometría y los materiales
     const plano3D = new THREE.Mesh(geometriaExtruida, [
