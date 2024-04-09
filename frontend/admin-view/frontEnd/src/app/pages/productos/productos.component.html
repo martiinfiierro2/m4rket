@@ -31,7 +31,9 @@
                     <div style="text-decoration: line-through; color: gray;">{{ producto.precio}}€</div>
                     <div>{{producto.Promocions[0].en_promocion.precio}}€</div>
                 </td>
-                <td *ngIf="producto.Ubicacions.length > 0" (click)="irMostrarProducto(producto.id)" class="enlace" (mouseenter)="destacarFondo(true, producto.id)" (mouseleave)="destacarFondo(false, producto.id)"><span *ngFor="let ubicaciones of producto.Ubicacions"> {{ ubicaciones.referencia }}-{{ ubicaciones.posicion }} </span></td>
+                <td *ngIf="producto.Ubicacions.length > 0" id="listadoUbicaciones">
+                    <span *ngFor="let ubicaciones of producto.Ubicacions"> {{ ubicaciones.referencia }}-{{ ubicaciones.posicion }} <i class="fa-solid fa-x" (click)="eliminarUbicacionProducto(ubicaciones.en_ubicacion.id)"></i><br></span>
+                </td>
                 <td *ngIf="producto.Ubicacions.length == 0" (click)="irMostrarProducto(producto.id)" class="enlace" (mouseenter)="destacarFondo(true, producto.id)" (mouseleave)="destacarFondo(false, producto.id)"> --- </td>
                 <td *ngIf="producto.Promocions.length == 0">
                     <input list="promociones" placeholder="Selecciona promoción..." (change)="asignarPromocion(producto.id, producto.precio, $event, producto.id)">

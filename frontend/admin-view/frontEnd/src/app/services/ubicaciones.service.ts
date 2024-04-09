@@ -17,6 +17,8 @@ export class UbicacionesService {
     'x-token': this.token
   });;
 
+
+
   //CRUD
   getAllUbicaciones( desde: number): Observable<any>{
 
@@ -58,6 +60,11 @@ export class UbicacionesService {
     let urlCompleta = environment.base_url + '/enubicacion';
 
     return this.http.post(urlCompleta, datos, {headers: this.cabeceras});
+  }
+
+  deleteEnUbicacion( idUbi: number){
+
+    return this.http.delete(environment.base_url + '/enubicacion/' + idUbi, {headers: this.cabeceras});
   }
 
 }

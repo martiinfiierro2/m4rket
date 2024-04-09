@@ -42,7 +42,16 @@ export interface Producto{
 export interface Ubicaciones{
   id: number,
   referencia: string,
-  posicion: number
+  posicion: number,
+  en_ubicacion: En_ubicacion
+}
+
+export interface En_ubicacion{
+  id: number,
+  idProd: number,
+  idUbi: number,
+  fecha_ini: Date,
+  fecha_fin: Date
 }
 
 export interface Promociones{
@@ -364,6 +373,14 @@ export class ProductosComponent {
     else{
       this.getBusquedaProducto();
     }
+  }
+
+  eliminarUbicacionProducto(idUbicacion: number){
+    this.ubicacionService.deleteEnUbicacion(idUbicacion)
+      .subscribe( res =>{
+        console.log(res);
+        this.getProductos();
+      })
   }
 
   
