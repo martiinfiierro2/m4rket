@@ -1007,6 +1007,7 @@ export class ModeloService {
       scene.remove(scene.children[0]);
     }
   }
+  
   crearFormaPlanoConIndicador(
     width: number,
     height: number,

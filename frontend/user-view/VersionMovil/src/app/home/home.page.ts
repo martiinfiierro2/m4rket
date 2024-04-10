@@ -98,6 +98,9 @@ export class HomePage {
   seleccionado: boolean = false;
   productoInfo: any;
   modeloService = new ModeloService();
+  totalProductos: number = 0;
+  totalComprados: number = 0;
+  
   //USO DEL DRAWER Y PASO DE INFORMACION
   @ViewChild(DrawerComponent) drawerComponent!: DrawerComponent;
 
@@ -233,13 +236,20 @@ export class HomePage {
           idProd: item.idProd,
           cantidad: item.cantidad,
           id: item.id,
+          comprado: item.comprado
         }));
 
         console.log(this.listaCompra);
         this.getProductosIMG();
-        this.productosService.AddValorNumero(this.listaCompra.length);
         this.getTodasUbicacionesLista();
         const detallesProductos: ProductoDetalle[] = [];
+
+        this.totalProductos = this.listaCompra.length;
+
+        // Contador de productos marcados como comprados
+        this.totalComprados = this.listaCompra.reduce((total, item) => {
+          return total + (item.comprado ? 1 : 0);
+        }, 0);
         this.listaCompra.forEach((productoCompra) => {
           this.getDetalleProducto(
             productoCompra.idProd,
@@ -364,16 +374,17 @@ export class HomePage {
   B2: THREE.Object3D[] = []; // Estanterías grandes
   B3: THREE.Object3D[] = []; // Estantería Frío
   RecargarModelo() {
+
     //! No funciona hay que arreglar los touch al limpiar la escena y las animaciones
-    /*
+    
     this.modeloService.clearScene(this.scene);
     this.ref.splice(0, this.ref.length); // Elimina todos los elementos de this.ref
     this.pos.splice(0, this.pos.length); // Elimina todos los elementos de this.pos
     this.idsauxiliares.splice(0, this.idsauxiliares.length); // Elimina todos los elementos de this.pos
     this.imagenescarrito.splice(0, this.imagenescarrito.length); // Elimina todos los elementos de this.pos
     
-    */
-    window.location.reload();
+    
+    //window.location.reload();
     this.getListaCompraUsu();
   }
 

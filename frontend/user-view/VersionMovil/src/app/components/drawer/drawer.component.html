@@ -14,6 +14,17 @@
   </div> 
 </div>
 
+<div class="lista" #lista>
+  <div class="lista-header">
+    <button class="cerrar-lista" (click)="cerrarChatbot()">
+      X
+    </button>
+  </div>
+  <div class="contenido-lista">
+
+  </div>>
+</div>
+
 <div class="drawer" #drawer>
   <div class="botonchatbot" #botonchatbot (click)="abrirChatbot()">
     <ion-icon name="chatbubbles-outline"></ion-icon>
@@ -43,7 +54,7 @@
             </div>
           
             <div class="product-buttons">
-              <button *ngIf="!producto.enListaCompra" (click)="getProducto(producto.id)" (click)="anadirProducto(producto)"class="add" >Añadir
+              <button *ngIf="!producto.enListaCompra" (click)="anadirProducto(producto)"class="add" >Añadir
                 <ion-icon class="add-button" name="add-circle-outline"></ion-icon>
               </button>
               <div *ngIf="producto.enListaCompra" class="add2">
@@ -73,7 +84,11 @@
           <button (click)="EliminarProductoSelect()" class="cerrar-tarjeta">X</button>  
         </div>
         <div class="contenido-scroll">
-            <button *ngIf="productoSelect.enListaCompra" class="marcarcomprado">Marcar como comprado</button>
+            <div *ngIf="productoSelect.enListaCompra">
+              <button *ngIf="!productoSelect.comprado" class="marcarcomprado" (click)="marcarComprado(productoSelect)">Marcar como comprado</button>
+              <button *ngIf="productoSelect.comprado" class="marcarcomprado" (click)="eliminarComprado(productoSelect)">Comprado</button>
+            </div>
+            
             <button  *ngIf="!productoSelect.enListaCompra" class="marcarcomprado" (click)="anadirProducto(productoSelect)">Añadir a la lista</button>
             <div class="acciones">
               <div class="dispo-precio">
@@ -130,4 +145,3 @@
     </div>
   </div>
 </div>
-
