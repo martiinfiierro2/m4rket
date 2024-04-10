@@ -76,7 +76,7 @@ export class DrawerComponent  implements AfterViewInit {
   @ViewChild('chatbot', {read: ElementRef}) chatbot!: ElementRef;
   @ViewChild('lista', {read: ElementRef}) lista!: ElementRef;
   @ViewChild('profile', {read: ElementRef}) profile!: ElementRef;
-
+  @ViewChild('recarga', {read: HomePage}) recarga!: HomePage;
   isOpen = true;
   openHeight = 0;
   isMiddle = true;
@@ -200,7 +200,9 @@ export class DrawerComponent  implements AfterViewInit {
 
 
   }
-
+  Recarguita() {
+    this.recarga.RecargarModelo();
+  }
   toggleDrawer(){
     const drawer = this.drawer.nativeElement;
     const botonchatbot = this.botonchatbot.nativeElement;
@@ -490,7 +492,10 @@ EliminarProductoSelect(){
       //this.getProductos(); //Recarga la lista de producto
       this.EliminarProductoSelect();
       this.getListaCompraUsu();
+      
     });
+   
+
   }
 
 

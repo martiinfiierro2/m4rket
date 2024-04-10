@@ -503,7 +503,7 @@ export class HomePage {
     );
   }
 
-  async RecargarModelo() {
+  async RecargarModelo()  {
     try {
         await this.getListaCompraUsu(); // Espera a que getListaCompraUsu() se complete
         // Ahora puedes continuar con las siguientes operaciones
@@ -610,6 +610,7 @@ async getTodasUbicacionesLista() {
 
           this.getProductosIMG();
           this.getTodasUbicacionesLista();
+          console.log('caqui');
           resolve();
         } else {
           console.error('Error en la búsqueda dentro de lssta compra.');
