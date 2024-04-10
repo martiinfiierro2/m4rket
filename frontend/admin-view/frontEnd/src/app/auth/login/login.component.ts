@@ -38,10 +38,6 @@ export class LoginComponent {
                private route: Router){}
 
 
-  ngOnInit(): void {
-  
-  }  
-
 
   login(){
 

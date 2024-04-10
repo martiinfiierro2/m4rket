@@ -22,7 +22,6 @@ import { EditUbicacionComponent } from './ubicaciones/edit-ubicacion/edit-ubicac
 import { NewUbicacionComponent } from './ubicaciones/new-ubicacion/new-ubicacion.component';
 
 import { authGuard, authGuard2 } from "../app/guards/auth.guard";
-import path from 'path';
 import { UsuariosComponent } from './pages/usuarios/usuarios.component';
 import { DetailProductoComponent } from './productos/detail-producto/detail-producto.component';
 
@@ -38,18 +37,6 @@ export const routes: Routes = [
         { path: '', component: LoginComponent},
         { path: '**', redirectTo: ''}
       ]
-  },
-  { path: 'registro', component: AuthLayoutComponent, canActivate: [authGuard2],
-      children: [
-        { path: '', component: SignUpComponent},
-        { path: '**', redirectTo: ''}
-      ]
-  },
-  { path: 'recovery', component: AuthLayoutComponent, canActivate: [authGuard2],
-    children: [
-      { path: '', component: RecoveryComponent},
-      { path: '**', redirectTo: ''}
-    ]
   },
 
   { path: 'productos', component: AdminLayoutComponent, canActivate: [authGuard],

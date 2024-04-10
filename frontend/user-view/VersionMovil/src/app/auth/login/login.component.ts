@@ -4,7 +4,7 @@ import { FormBuilder, Validators, ReactiveFormsModule, FormsModule } from '@angu
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common'
 import { Router } from '@angular/router';
-
+import Swal from 'sweetalert2'
 
 
 interface Usuario {
@@ -29,6 +29,8 @@ export class LoginComponent {
 
   public avisoError = false;
 
+  public esperando: boolean = false;
+
 
   public loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -36,13 +38,13 @@ export class LoginComponent {
     check:  [Validators.required]
   });
 
+  
+
   constructor( private fb: FormBuilder,
                private usuarioService: UsuariosService,
                private route: Router){}
 
-  ngOnInit(): void {
-  
-  }
+ 
 
   login(){
 
@@ -52,32 +54,37 @@ export class LoginComponent {
       console.warn('errores en el formulario');
     }
     else{
+
+      this.esperando = true;
+
       this.usuarioService.login( this.loginForm.value)
       .subscribe( res =>{
 
         console.log('Respuesta al suscribirse', res);
-        this.tokenUsuario = res.token;
-        this.idUsuario = res.idUsuario;
+    
         
         //Recordar sesion
         if (this.loginForm.value.check) {
-          console.log("he entrado al local");
-          localStorage.setItem('tokenUsuario', this.tokenUsuario);
-          localStorage.setItem('idUsuario', this.idUsuario);
-          this.route.navigate(['/home']);
-          console.log(this.idUsuario);
-          
+          localStorage.setItem('tokenUsuario', res.token);
+          localStorage.setItem('idUsuario', res.idUsuario);
+          localStorage.setItem('email', res.email);    
         }
         else{
-          console.log("he entrado al session");
-          sessionStorage.setItem('tokenUsuario', this.tokenUsuario);
-          sessionStorage.setItem('idUsuario', this.idUsuario);
-          this.route.navigate(['/home']);
-          console.log(this.idUsuario);
+          localStorage.setItem('tokenUsuario', this.tokenUsuario);
+          localStorage.setItem('idUsuario', this.idUsuario);
         }
-      },error =>{
-        this.avisoError = true;
+
+        this.route.navigateByUrl('/home');
+
+      },(error) =>{
+        Swal.fire({
+          title: 'Error!',
+          text: error.error.msg,
+          icon: 'error',
+          confirmButtonText: 'Ok'
+        })
       })
+      this.esperando = false;
     }   
   }
   

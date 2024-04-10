@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { environment } from '../environments/environment';
+import { catchError, map, tap } from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root',
@@ -38,5 +39,34 @@ export class UsuariosService {
     let urlCompleta = this.url + '/usuarios/?id=' + idUsu;
 
     return this.http.get(urlCompleta, { headers: this.cabeceras });
+  }
+
+  validarToken(){
+    const urlCompleta = environment.base_url + '/token';  
+
+    this.cargarCabeceras();
+  
+    if (this.token === '') {
+      return  of(false);
+    }
+    else{
+      return this.http.get(urlCompleta, { headers: this.cabeceras})
+            .pipe(
+              tap( res =>{
+                  console.log("Actualizo token con: ", res);
+                  if ('token' in res) {
+                    let tokenBueno = '' + res.token;
+                    localStorage.setItem("tokenUsuario", tokenBueno);
+                  }
+              }),
+              map( resp =>{
+                return true;
+              }),
+              catchError( err => {
+                console.warn(err);
+                return of(false);
+              })
+            );
+    }  
   }
 }
