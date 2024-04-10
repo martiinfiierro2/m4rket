@@ -45,6 +45,7 @@ export interface ListaCompra {
   idProd: string;
   fecha: string | null;
   cantidad: number;
+  comprado: boolean;
 }
 interface ProductoDetalle {
   nombre: string;
