@@ -33,7 +33,7 @@ export class LoginComponent {
 
 
   public loginForm = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
+    email: [localStorage.getItem('email') || '', [Validators.required, Validators.email]],
     pwd: ['', Validators.required],
     check:  [Validators.required]
   });
