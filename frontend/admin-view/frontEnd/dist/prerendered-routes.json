@@ -14,8 +14,6 @@
     "/promociones/editPromocion",
     "/promociones/newPromocion",
     "/promociones/newTipoPromocion",
-    "/recovery",
-    "/registro",
     "/ubicaciones",
     "/ubicaciones/editUbicacion",
     "/ubicaciones/newUbicacion",
