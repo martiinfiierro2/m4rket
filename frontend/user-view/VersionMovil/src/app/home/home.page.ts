@@ -610,7 +610,6 @@ async getTodasUbicacionesLista() {
 
           this.getProductosIMG();
           this.getTodasUbicacionesLista();
-          console.log('caqui');
           resolve();
         } else {
           console.error('Error en la búsqueda dentro de lssta compra.');
