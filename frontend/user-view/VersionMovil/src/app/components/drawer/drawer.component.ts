@@ -244,12 +244,14 @@ export class DrawerComponent  implements AfterViewInit {
       //console.log(this.productoSelect.nombre);
       this.getDetalle(idProd);
       if(this.productoSelect && this.productoSelect.grasas){
-        console.log('He entrado al if');
-        this.actualizarGraficoPie();
+        // Move actualizarGraficoPie() to a callback
+        setTimeout(() => {
+          this.actualizarGraficoPie();
+        }, 100); // Adjust timeout as needed
       }
     });
-  } 
-
+  }
+  
 
 
   getDetalle(idProd: string){
@@ -270,6 +272,7 @@ export class DrawerComponent  implements AfterViewInit {
       
       var valoresNutricionales = document.getElementById('valores-nutricionales');
       var myChart = echarts.init(valoresNutricionales);
+      console.log(this.productoSelect.grasas);
     
       var option = {
           tooltip: {
