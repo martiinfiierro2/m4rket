@@ -4,7 +4,17 @@
     </div>
     <div id="botonesHeader">
         <button (click)="creacionUsuario = true" class="btnPrimario">Registar usuario</button>
+        <div id="desplegableFiltros" class="btnSecundario">
+            <span (click)="desplegarFiltros()">Filtros búsqueda</span>
+            <div id="contenido-desplegableFiltros" *ngIf="mostrarDesplegableFiltros">
+                <label *ngFor="let opcion of opciones">
+                    <input type="checkbox" [value]="opcion.value" (change)="seleccionarOpcion(opcion)">
+                    {{ opcion.label }}
+                </label>
+            </div>
+        </div>
     </div>
+   
 </div>
 
 <div id="formularioRegistro" *ngIf="creacionUsuario">
@@ -48,5 +58,11 @@
             </tr>
         </tbody>
     </table>
+
+    <!-- Paginación -->
+    <div class="d-flex justify-content-center">
+        <app-pagination (cambiarPagina)="cambiarPagina( $event )" [texto]="true" [totalRegistros]="totalregistros" [registroActual]="posicionactual+1" [registrosPorPagina]="registrosporpagina">
+        </app-pagination>
+    </div>  
 
 </div>
