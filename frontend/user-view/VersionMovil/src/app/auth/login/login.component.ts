@@ -5,7 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common'
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2'
-
+import { IonInput, IonIcon, IonButton } from "@ionic/angular/standalone";
 
 interface Usuario {
   email: String,
@@ -17,7 +17,7 @@ interface Usuario {
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, HttpClientModule, CommonModule, FormsModule],
+  imports: [IonButton, IonIcon, IonInput, ReactiveFormsModule, HttpClientModule, CommonModule, FormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })

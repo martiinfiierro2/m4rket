@@ -1,19 +1,52 @@
+body{
+    background-image: url("../../../assets/images/Fondoinit.png");
+    //background-position: top;
+    background-repeat: no-repeat; 
+    background-size: contain;
+    background-color: #cccccc;
+    background-position-y: -130%;
+}
+
+//BIENVENIDA
+.encabezado {
+    margin-top: 18%;
+}
+.encabezado h1{
+    font-weight: bold;
+    font-size:50px;
+    margin-left: 25px;
+    margin-bottom: 0px;
+}
+
+.encabezado h2{
+    font-size: 30px;
+    width: 50%;
+    margin-left: 25px;
+    margin-top: 0px;
+}
+
+.tarjeta{
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 4px 16px;
+    width: 100%;
+    border-radius: 30px 30px 0px 0px;   
+    height: 70vh;
+    background: #FAFAF9;
+    position:absolute;
+    bottom:0px;
+
+    @media (prefers-color-scheme: dark) {
+        background: #282828; // Cambia el color de fondo en modo oscuro
+      }
+    }
 form{
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 22em;
-    height: 20em;
-    background-color: white;
-    border-radius: 3%;
-    border: 1px solid black;
+}
 
-    box-shadow: 0 0 5px 2px #3b3b3b;
-
-    @media (prefers-color-scheme: dark) {
-        background-color: #282828; // Cambia el color de fondo en modo oscuro
-      }
+form h2{
+    margin-top: 70px;
 }
 
     form > label{
@@ -42,5 +75,62 @@ form{
         font-size: small;
         color: red;
     }
+a{
+    color: #51878a;
+    @media (prefers-color-scheme: dark) {
+        color: #96b7af; // Cambia el color de fondo en modo oscuro
+      }
+}
 
-    
+p{
+    margin: 0;
+}
+
+.recuerdame:checked{
+    accent-color: #51877a;
+    @media (prefers-color-scheme: dark) {
+        accent-color: #96b7af; 
+      }
+}
+
+button{
+    width: 70%;
+    height: 50px;
+    border-radius: 15px;
+    background-color: #51877a;
+    font-size: 25px;
+    color: white;
+    font-weight: 500;
+
+    position:absolute;
+    bottom:40%;
+
+    @media (prefers-color-scheme: dark) {
+        background-color: #96b7af; 
+      }
+}
+
+.formulario{
+    width: 70%;
+}
+
+.formulario input{
+    height: 50px;
+    border-radius: 15px;
+    border: none;
+    outline-color: #51877a;
+    @media (prefers-color-scheme: dark) {
+        outline-color: #96b7af; 
+      }
+}
+
+
+.formulario input::placeholder{
+    padding: 10px;
+}
+
+.registro{
+    position:absolute;
+    bottom:13%;
+    text-align: center;
+}
