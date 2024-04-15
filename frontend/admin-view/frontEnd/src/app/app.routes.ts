@@ -32,7 +32,7 @@ export const routes: Routes = [
   { path: 'dataset', component: DatasetComponent},
   { path: 'dataset-producto', component: DatasetProductoComponent},
 
-  { path: 'login', component: AuthLayoutComponent, canActivate: [authGuard2],
+  { path: 'login', component: LoginComponent, canActivate: [authGuard2],
       children: [
         { path: '', component: LoginComponent},
         { path: '**', redirectTo: ''}
