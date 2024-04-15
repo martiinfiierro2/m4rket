@@ -114,10 +114,8 @@ export class UsuariosComponent {
 
           for (let usuario of res.usuarios){
             if (this.opcionesSeleccionadas.includes(usuario.rol)) {
-              console.log("Encaja, pos = " + cont);
               if (this.posicionactual < cont && cont <= hasta) {
                 this.usuarios.push(usuario); 
-                console.log("HAGO PUSH AL USUARIO");
                 cont++;
               }
             }
@@ -131,7 +129,6 @@ export class UsuariosComponent {
           for(let usuario of res.usuarios){
             if (this.posicionactual < cont && cont <= hasta) {
               this.usuarios.push(usuario); 
-              console.log("HAGO PUSH AL USUARIO");
             }
             cont++;
           }
