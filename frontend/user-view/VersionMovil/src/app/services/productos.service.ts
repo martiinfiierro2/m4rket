@@ -85,6 +85,4 @@ export class ProductosService {
 
     return this.http.get(urlCompleta, { headers: this.cabeceras });
   }
-
-
 }

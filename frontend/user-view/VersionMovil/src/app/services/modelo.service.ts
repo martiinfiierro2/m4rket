@@ -36,7 +36,6 @@ export interface Producto {
   cantidad: number;
 }
 
-
 export class ModeloService {
   constructor() {}
 
@@ -305,10 +304,10 @@ export class ModeloService {
     const depth = 0.1; // Profundidad del objeto 3D
     const borderRadius = 0.1; // Radio de los bordes redondeados
     let tokenUsuario =
-  sessionStorage.getItem('tokenUsuario') ||
-  localStorage.getItem('tokenUsuario');
-let urlFotoProducto = environment.base_url + '/uploads/fotoproducto/';
-    let texturePath ='../../assets/images/4.jpg'
+      sessionStorage.getItem('tokenUsuario') ||
+      localStorage.getItem('tokenUsuario');
+    let urlFotoProducto = environment.base_url + '/uploads/fotoproducto/';
+    let texturePath = '../../assets/images/4.jpg';
     let plano3D = this.crearPlano3D(
       width,
       height,

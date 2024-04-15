@@ -503,80 +503,90 @@ export class HomePage {
     );
   }
 
-  async RecargarModelo()  {
-    try {
-        await this.getListaCompraUsu(); // Espera a que getListaCompraUsu() se complete
-        // Ahora puedes continuar con las siguientes operaciones
-        await this.getProductosIMG();
-        await this.getTodasUbicacionesLista();
-        // Luego de que todas las operaciones asincrónicas se completen, puedes llamar a cargarPointers
-        await this.modeloService.cargarPointers(
-            this.scene,
-            'pointer',
-            this.A1c,
-            this.A2c,
-            this.A3c,
-            this.A4c,
-            this.A5c,
-            this.A6c,
-            this.A7c,
-            this.A8c,
-            this.A9c,
-            this.A10c,
-            this.A11c,
-            this.A12c,
-            this.B1c,
-            this.B2c,
-            this.B3c,
-            self,
-            this.camera,
-            this.imagenescarrito,
-            false,
-            this.idsauxiliares,
-            this.ref,
-            this.pos
-        );
-    } catch (error) {
-        console.error('Error al recargar el modelo:', error);
-    }
-}
 
+   async RecargarModelo() {
+    try {
+      await this.getListaCompraUsu(); // Espera a que getListaCompraUsu() se complete
+      // Ahora puedes continuar con las siguientes operaciones
+      await this.getProductosIMG();
+      await this.getTodasUbicacionesLista();
+      // Luego de que todas las operaciones asincrónicas se completen, puedes llamar a cargarPointers
+      await this.modeloService.cargarPointers(
+        this.scene,
+        'pointer',
+        this.A1c,
+        this.A2c,
+        this.A3c,
+        this.A4c,
+        this.A5c,
+        this.A6c,
+        this.A7c,
+        this.A8c,
+        this.A9c,
+        this.A10c,
+        this.A11c,
+        this.A12c,
+        this.B1c,
+        this.B2c,
+        this.B3c,
+        self,
+        this.camera,
+        this.imagenescarrito,
+        false,
+        this.idsauxiliares,
+        this.ref,
+        this.pos
+      );
+    } catch (error) {
+      console.error('Error al recargar el modelo:', error);
+    }
+  }
 
   async getProductosIMG() {
     try {
-        this.imagenescarrito.splice(0, this.imagenescarrito.length);
-        let tokenUsuario =
-            sessionStorage.getItem('tokenUsuario') ||
-            localStorage.getItem('tokenUsuario');
-        let urlFotoProducto = environment.base_url + '/uploads/fotoproducto/';
+      this.imagenescarrito.splice(0, this.imagenescarrito.length);
+      let tokenUsuario =
+        sessionStorage.getItem('tokenUsuario') ||
+        localStorage.getItem('tokenUsuario');
+      let urlFotoProducto = environment.base_url + '/uploads/fotoproducto/';
 
-        await Promise.all(this.listaCompra.map(async (item) => {
-            const res: any = await this.productosService.getProductoId(item.idProd).toPromise();
-            this.fotosdecarrito.push(urlFotoProducto + res.productos.foto + '?token=' + tokenUsuario);
-            this.imagenescarrito.push(res.productos);
-        }));
+      await Promise.all(
+        this.listaCompra.map(async (item) => {
+          const res: any = await this.productosService
+            .getProductoId(item.idProd)
+            .toPromise();
+          this.fotosdecarrito.push(
+            urlFotoProducto + res.productos.foto + '?token=' + tokenUsuario
+          );
+          this.imagenescarrito.push(res.productos);
+        })
+      );
     } catch (error) {
-        console.error('Error al obtener imágenes de productos:', error);
+      console.error('Error al obtener imágenes de productos:', error);
     }
-}
-async getTodasUbicacionesLista() {
-  try {
+  }
+  async getTodasUbicacionesLista() {
+    try {
       this.ref.splice(0, this.ref.length);
       this.pos.splice(0, this.pos.length);
       this.idsauxiliares.splice(0, this.idsauxiliares.length);
 
-      await Promise.all(this.listaCompra.map(async (item) => {
-          const res: any = await this.productosService.getProductoId(item.idProd).toPromise();
+      await Promise.all(
+        this.listaCompra.map(async (item) => {
+          const res: any = await this.productosService
+            .getProductoId(item.idProd)
+            .toPromise();
           res.productos.Ubicacions.forEach((ubicacion: any) => {
-              this.ref.push(ubicacion.referencia);
-              this.pos.push(ubicacion.posicion);
-              this.idsauxiliares.push(res.productos.id);
+            this.ref.push(ubicacion.referencia);
+            this.pos.push(ubicacion.posicion);
+            this.idsauxiliares.push(res.productos.id);
           });
-      }));
-  } catch (error) {
+        })
+      );
+    } catch (error) {
       console.error('Error al obtener ubicaciones de productos:', error);
+    }
   }
-}
 
   getListaCompraUsu() {
     return new Promise<void>((resolve, reject) => {

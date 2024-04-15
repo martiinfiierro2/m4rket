@@ -201,7 +201,10 @@ export class DrawerComponent  implements AfterViewInit {
 
   }
   Recarguita() {
-    this.recarga.RecargarModelo();
+    const buttonElement = document.getElementById('Recargar');
+    if (buttonElement){
+    buttonElement.dispatchEvent(new Event('click'));
+    }
   }
   toggleDrawer(){
     const drawer = this.drawer.nativeElement;
@@ -403,10 +406,11 @@ EliminarProductoSelect(){
     //this.EliminarProductoSelect();
     this.getProducto(producto.id);
     this.getListaCompraUsu();
+    this.Recarguita();
   }
 
   anadirProducto(producto: any){
-    
+
     const fechaActual = new Date().toISOString().split('T')[0];
     const body = {
       idUsu: this.idUsu,
@@ -428,6 +432,7 @@ EliminarProductoSelect(){
     let tipo = "anadido";
     let fecha = new Date();
     this.estadistica(producto.id, tipo, fecha);
+    this.Recarguita();
 
   }
 

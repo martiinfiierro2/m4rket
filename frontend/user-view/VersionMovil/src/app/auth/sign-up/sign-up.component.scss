@@ -10,7 +10,9 @@ form{
     border: 1px solid black;
 
     box-shadow: -5px -5px 2px rgb(69, 69, 69);
-
+    @media (prefers-color-scheme: dark) {
+        background-color: #282828; // Cambia el color de fondo en modo oscuro
+      }
 }
 
     form > label{
