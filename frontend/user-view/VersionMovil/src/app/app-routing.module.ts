@@ -27,7 +27,7 @@ const routes: Routes = [
       { path: '**', redirectTo: '/login' },
     ],
   },
-  {path: 'registro', component: AuthLayoutComponent, canActivate: [authGuard2],
+  {path: 'registro', component: SignUpComponent, canActivate: [authGuard2],
     children: [
       { path: '', component: SignUpComponent},
       { path: '**', redirectTo: '/registro'}

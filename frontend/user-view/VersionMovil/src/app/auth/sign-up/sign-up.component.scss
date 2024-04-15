@@ -1,33 +1,106 @@
+body{
+    background-image: url("../../../assets/images/fondo2.jpg");
+    //background-position: top;
+    background-repeat: no-repeat; 
+    background-size: contain;
+    background-color: #cccccc;
+    //background-position-y: 
+}
+
+.tarjeta{
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 4px 16px;
+    width: 100%;
+    border-radius: 30px 30px 0px 0px;   
+    height: 70vh;
+    background: #FAFAF9;
+    position:absolute;
+    bottom:0px;
+
+    @media (prefers-color-scheme: dark) {
+        background: #282828; // Cambia el color de fondo en modo oscuro
+      }
+    }
 form{
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 24em;
-    height: 25em;
-    background-color: white;
-    border-radius: 3%;
-    border: 1px solid black;
+}
 
-    box-shadow: -5px -5px 2px rgb(69, 69, 69);
-    @media (prefers-color-scheme: dark) {
-        background-color: #282828; // Cambia el color de fondo en modo oscuro
-      }
+
+
+form h2{
+    margin-top: 70px;
 }
 
     form > label{
         margin: 0.2em;
         display: inline-flex;
         flex-direction: column;
+        position: static;
     }
         input[type='submit']{
-            margin-top: 0.5em;
+            margin-top: .5em;
         }
 
         form > p{
             font-size: small;
-        } 
-        
-        input[type='select']{
-            width: 2em;
         }
+
+    #avisos{
+        font-size: small;
+        color: red;
+    }
+a{
+    color: #51878a;
+    @media (prefers-color-scheme: dark) {
+        color: #96b7af; // Cambia el color de fondo en modo oscuro
+      }
+}
+
+p{
+    margin: 0;
+}
+
+.recuerdame:checked{
+    accent-color: #51877a;
+    @media (prefers-color-scheme: dark) {
+        accent-color: #96b7af; 
+      }
+}
+
+.botonEnviar{
+    width: 70%;
+    height: 50px;
+    border-radius: 15px;
+    background-color: #51877a;
+    font-size: 25px;
+    color: white;
+    font-weight: 500;
+
+    @media (prefers-color-scheme: dark) {
+        background-color: #96b7af; 
+      }
+}
+
+.formulario{
+    width: 70%;
+}
+
+.formulario input{
+    height: 50px;
+    border-radius: 15px;
+    border: none;
+    padding: 10px;
+    outline-color: #51877a;
+    @media (prefers-color-scheme: dark) {
+        outline-color: #96b7af; 
+      }
+}
+
+
+.registro{
+    margin-top: 20px;
+    text-align: center;
+    bottom:13%;
+}
