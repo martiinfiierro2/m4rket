@@ -236,7 +236,7 @@ export class DrawerComponent implements AfterViewInit {
   //PRODUCTO SELECCIONADO
   getProducto(idProd: string) {
     this.seleccionado = true;
-    this.toggleDrawer2(2);
+    this.toggleDrawer2(1);
     this.productosService.getProductoId(idProd).subscribe((result) => {
       this.productoSelect = result.productos;
       //console.log(this.productoSelect.nombre);

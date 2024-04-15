@@ -609,6 +609,7 @@ export class HomePage {
           this.getProductosIMG();
           this.getTodasUbicacionesLista();
           resolve();
+          
         } else {
           console.error('Error en la búsqueda dentro de lssta compra.');
         }
