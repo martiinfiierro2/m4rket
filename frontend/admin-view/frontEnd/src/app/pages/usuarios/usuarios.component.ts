@@ -3,8 +3,9 @@ import { UsuariosService } from '../../services/usuarios.service';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import Swal from 'sweetalert2'
-import { Console, error } from 'console';
-import { of } from 'rxjs';
+import { PaginationComponent } from "../../pagination/pagination.component";
+
+
 
 interface Usuarios{
   nombre: string,
@@ -17,11 +18,11 @@ interface Usuarios{
 
 
 @Component({
-  selector: 'app-usuarios',
-  standalone: true,
-  imports: [FormsModule, CommonModule, ReactiveFormsModule],
-  templateUrl: './usuarios.component.html',
-  styleUrl: './usuarios.component.css'
+    selector: 'app-usuarios',
+    standalone: true,
+    templateUrl: './usuarios.component.html',
+    styleUrl: './usuarios.component.css',
+    imports: [FormsModule, CommonModule, ReactiveFormsModule, PaginationComponent]
 })
 
 
@@ -34,6 +35,14 @@ export class UsuariosComponent {
   usuarios: Usuarios[] = [];
   valueBusquedaInput = '';
   creacionUsuario = false;
+  mostrarDesplegableFiltros = false;
+
+  //Variables paginación
+  public totalregistros=98;
+  public posicionactual =0;
+  public registrosporpagina =10;
+
+  private paginaUsada = 0;
 
 
   public usuarioForm = this.fb.group({
@@ -47,7 +56,7 @@ export class UsuariosComponent {
 
   ngOnInit(){
     this.usuarioService.cargarCabecera();
-    this.getUsuariosAdmin();
+    this.getAllUsuarios();
   }
   
   validarPwd(pwd: string): boolean {
@@ -84,22 +93,50 @@ export class UsuariosComponent {
 
   
 
+  getAllUsuarios(){
+    this.usuarios = [];
 
-  getUsuariosAdmin(){
-    let usuariosTotales: Usuarios[] = [];
+    
+    let numUsuarios = 0;
+    let cont = 1;
 
-    this.usuarioService.getUsuarios()
+    this.usuarioService.getAllUsuarios()
       .subscribe( res =>{
-        for (let usuario of res.usuarios){
-          if (usuario.rol == 'admin') {
-            this.usuarios.push(usuario);
+        if (this.opcionesSeleccionadas.length > 0) {
+          for (let usuario of res.usuarios){
+            if (this.opcionesSeleccionadas.includes(usuario.rol)) {
+              numUsuarios++;
+            }
           }
-         }
-      })    
-  }
+          this.totalregistros = numUsuarios;
 
-  getBusquedaUsuarios(){
+          let hasta = this.posicionactual + this.registrosporpagina;
 
+          for (let usuario of res.usuarios){
+            if (this.opcionesSeleccionadas.includes(usuario.rol)) {
+              if (this.posicionactual < cont && cont <= hasta) {
+                this.usuarios.push(usuario); 
+                cont++;
+              }
+            }
+            
+          }
+        }
+        else{
+          this.totalregistros = res.usuarios.length;
+          let hasta = this.posicionactual + this.registrosporpagina;
+        
+          for(let usuario of res.usuarios){
+            if (this.posicionactual < cont && cont <= hasta) {
+              this.usuarios.push(usuario); 
+            }
+            cont++;
+          }
+        }
+      }) 
+
+      
+      
   }
 
   crearUsuario(){
@@ -111,7 +148,8 @@ export class UsuariosComponent {
       if (this.validarPwd(this.usuarioForm.value.pwd)) {
         this.usuarioService.crearUsuario(this.usuarioForm.value)
           .subscribe(res =>{
-            this.getUsuariosAdmin();
+            this.cerrarFormulario();
+            this.getAllUsuarios();
           }, err =>{
             this.lanzarModelError("Error creando el usuario")
           });
@@ -130,7 +168,7 @@ export class UsuariosComponent {
   borrarUsu( idUsu: number){
     this.usuarioService.borrarUsuario(idUsu)
       .subscribe( res =>{
-        this.getUsuariosAdmin();
+        this.getAllUsuarios();
       })
   }
 
@@ -147,4 +185,42 @@ export class UsuariosComponent {
     });
   }
 
+  //FILTROS DE BÚSQUEDA
+
+  opciones = [
+    { label: 'Usuarios', value: 'usuario', checked: false },
+    { label: 'Admins', value: 'admin', checked: false },
+    { label: 'SuperAdmins', value: 'superAdmin', checked: false }
+  ];
+
+  opcionesSeleccionadas: string[] = [];
+
+  desplegarFiltros(){
+    if (this.mostrarDesplegableFiltros) {
+      this.mostrarDesplegableFiltros = false;
+    }
+    else{
+      this.mostrarDesplegableFiltros = true;
+    }
+  }
+
+  seleccionarOpcion(opcion){
+    opcion.checked = !opcion.checked;
+    this.actualizarSeleccionadas();
+  }
+
+  actualizarSeleccionadas(){
+    this.opcionesSeleccionadas = this.opciones.filter(option => option.checked).map(option => option.value);
+    this.posicionactual = 0;
+    this.getAllUsuarios();
+    
+  }
+
+  cambiarPagina( pagina:number ){
+    pagina = (pagina < 0 ? 0 : pagina);
+    this.posicionactual = ((pagina - 1) * this.registrosporpagina >=0 ? (pagina - 1) * this.registrosporpagina : 0);
+    this.paginaUsada = pagina;
+
+    this.getAllUsuarios();
+  }
 }

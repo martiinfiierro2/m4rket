@@ -49,6 +49,13 @@ export class UsuariosService {
     return this.http.get(urlCompleta, { headers: this.cabeceras});
   }
 
+  getAllUsuarios(): Observable<any>{
+    this .cargarCabecera();
+
+    return  this.http.get(environment.base_url + '/usuarios', { headers: this.cabeceras});
+
+  }
+
   validarToken(){
     const urlCompleta = environment.base_url + '/token';  
 
