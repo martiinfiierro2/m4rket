@@ -85,9 +85,4 @@ export class ProductosService {
 
     return this.http.get(urlCompleta, { headers: this.cabeceras });
   }
-
-  AddValorNumero(i: number) {
-    let a = document.getElementById('contador-p');
-    if (a) a.innerHTML = '<p>' + 0 + '/' + i + '</p>';
-  }
 }

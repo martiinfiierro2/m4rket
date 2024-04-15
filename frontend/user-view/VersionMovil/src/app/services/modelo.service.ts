@@ -35,10 +35,6 @@ export interface Producto {
 
   cantidad: number;
 }
-let tokenUsuario =
-  sessionStorage.getItem('tokenUsuario') ||
-  localStorage.getItem('tokenUsuario');
-let urlFotoProducto = environment.base_url + '/uploads/fotoproducto/';
 
 export class ModeloService {
   constructor() {}
@@ -69,6 +65,214 @@ export class ModeloService {
     scene.add(topLight3);
   }
 
+  cargarCasters(
+    scene: THREE.Scene,
+    pointerrender: string,
+    A1c: THREE.Object3D[],
+    A2c: THREE.Object3D[],
+    A3c: THREE.Object3D[],
+    A4c: THREE.Object3D[],
+    A5c: THREE.Object3D[],
+    A6c: THREE.Object3D[],
+    A7c: THREE.Object3D[],
+    A8c: THREE.Object3D[],
+    A9c: THREE.Object3D[],
+    A10c: THREE.Object3D[],
+    A11c: THREE.Object3D[],
+    A12c: THREE.Object3D[],
+    B1c: THREE.Object3D[],
+    B2c: THREE.Object3D[],
+    B3c: THREE.Object3D[],
+    self: any,
+    camera: THREE.PerspectiveCamera,
+    imagenescarrito: Producto[]
+  ) {
+    const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+    const cubeMaterial = new THREE.MeshBasicMaterial({ visible: false });
+    const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+    cube.position.set(-8.1, 22, 22.6);
+    cube.scale.set(2.75, 2.75, 2.75);
+    //!A1c
+    for (let i = 0; i <= 9; i++) {
+      A1c[i] = cube.clone();
+      A1c[i].position.x =
+        i === 0
+          ? -8
+          : i % 2
+          ? A1c[i - 1].position.x + 4
+          : A1c[i - 1].position.x + 3;
+      scene.add(A1c[i]);
+    }
+    //!A2c
+    for (let i = 0; i <= 9; i++) {
+      A2c[i] = cube.clone();
+      A2c[i].position.set(0, 22, 26.4);
+      A2c[i].position.x =
+        i === 0
+          ? -8
+          : i % 2
+          ? A2c[i - 1].position.x + 4
+          : A2c[i - 1].position.x + 3;
+      scene.add(A2c[i]);
+    }
+
+    //!A3c
+    for (let i = 0; i <= 5; i++) {
+      A3c[i] = cube.clone();
+
+      A3c[i].position.z = 12.1;
+      A3c[i].position.x =
+        i === 0
+          ? -14.6
+          : i % 2 === 0
+          ? A3c[i - 1].position.x + 3.5
+          : A3c[i - 1].position.x + 4;
+      scene.add(A3c[i]);
+    }
+    //!A4c
+    for (let i = 0; i <= 5; i++) {
+      A4c[i] = cube.clone();
+      A4c[i].position.z = 9.5;
+      A4c[i].position.x =
+        i === 0
+          ? -14.6
+          : i % 2 === 0
+          ? A4c[i - 1].position.x + 3.5
+          : A4c[i - 1].position.x + 4;
+      scene.add(A4c[i]);
+    }
+
+    //!A5c
+    for (let i = 0; i <= 5; i++) {
+      A5c[i] = cube.clone();
+      A5c[i].position.x =
+        i === 0
+          ? -14.6
+          : i % 2 === 0
+          ? A5c[i - 1].position.x + 3.5
+          : A5c[i - 1].position.x + 4;
+      A5c[i].position.z = 1.5;
+      scene.add(A5c[i]);
+    }
+    //!A6c
+    for (let i = 0; i <= 5; i++) {
+      A6c[i] = cube.clone();
+      A6c[i].position.x =
+        i === 0
+          ? -14.6
+          : i % 2 === 0
+          ? A6c[i - 1].position.x + 3.5
+          : A6c[i - 1].position.x + 4;
+      A6c[i].position.z = -1.3;
+      scene.add(A6c[i]);
+    }
+
+    //!A7c
+    for (let i = 0; i <= 5; i++) {
+      A7c[i] = cube.clone();
+      A7c[i].position.x =
+        i === 0
+          ? -14.6
+          : i % 2 === 0
+          ? A7c[i - 1].position.x + 3.5
+          : A7c[i - 1].position.x + 4;
+      A7c[i].position.z = -8.8;
+      scene.add(A7c[i]);
+    }
+
+    //!A8c
+    for (let i = 0; i <= 5; i++) {
+      A8c[i] = cube.clone();
+      A8c[i].position.x =
+        i === 0
+          ? -14.6
+          : i % 2 === 0
+          ? A8c[i - 1].position.x + 3.5
+          : A8c[i - 1].position.x + 4;
+      A8c[i].position.z = -11.4;
+      scene.add(A8c[i]);
+    }
+    //!A9c
+    for (let i = 0; i <= 3; i++) {
+      A9c[i] = cube.clone();
+      A9c[i].position.x =
+        i === 0
+          ? 12
+          : i % 2 === 0
+          ? A9c[i - 1].position.x + 3.6
+          : A9c[i - 1].position.x + 3.4;
+      A9c[i].position.z = 6.6;
+      scene.add(A9c[i]);
+    }
+    //!A10c
+    for (let i = 0; i <= 3; i++) {
+      A10c[i] = cube.clone();
+      A10c[i].position.x =
+        i === 0
+          ? 12
+          : i % 2 === 0
+          ? A10c[i - 1].position.x + 3.6
+          : A10c[i - 1].position.x + 3.4;
+      A10c[i].position.z = 4;
+      scene.add(A10c[i]);
+    }
+    //!A11c
+    for (let i = 0; i <= 3; i++) {
+      A11c[i] = cube.clone();
+      A11c[i].position.x =
+        i === 0
+          ? 12
+          : i % 2 === 0
+          ? A11c[i - 1].position.x + 3.6
+          : A11c[i - 1].position.x + 3.4;
+      A11c[i].position.z = -4.6;
+      scene.add(A11c[i]);
+    }
+    //!A12c
+    for (let i = 0; i <= 3; i++) {
+      A12c[i] = cube.clone();
+      A12c[i].position.x =
+        i === 0
+          ? 12
+          : i % 2 === 0
+          ? A12c[i - 1].position.x + 3.6
+          : A12c[i - 1].position.x + 3.4;
+      A12c[i].position.z = -7.2;
+      scene.add(A12c[i]);
+    }
+
+    //!B1c
+    for (let i = 0; i <= 3; i++) {
+      B1c[i] = cube.clone();
+      B1c[i].position.z = i === 0 ? 4.5 : B1c[i - 1].position.z - 3.1;
+      B1c[i].position.x = 29.4;
+      B1c[i].position.y = 26;
+      scene.add(B1c[i]);
+    }
+
+    //!B2c
+    for (let i = 0; i <= 5; i++) {
+      B2c[i] = cube.clone();
+      B2c[i].position.x =
+        i === 0
+          ? 29
+          : i % 2 === 0
+          ? B2c[i - 1].position.x - 3.6
+          : B2c[i - 1].position.x - 3.7;
+      B2c[i].position.z = -22.5;
+      B2c[i].position.y = 26;
+      scene.add(B2c[i]);
+    }
+    //!B3c
+    for (let i = 0; i <= 5; i++) {
+      B3c[i] = cube.clone();
+      B3c[i].position.x = i === 0 ? -8.5 : B3c[i - 1].position.x + 6.5;
+      B3c[i].position.z = -22.8;
+      B3c[i].position.y = 24.2;
+      scene.add(B3c[i]);
+    }
+  }
+
   cargarPointers(
     scene: THREE.Scene,
     pointerrender: string,
@@ -89,14 +293,21 @@ export class ModeloService {
     B3: THREE.Object3D[],
     self: any,
     camera: THREE.PerspectiveCamera,
-    imagenescarrito: Producto[]
+    imagenescarrito: Producto[],
+    primeravez: boolean,
+    idsaux: number[],
+    ref2: string[],
+    pos2: number[]
   ) {
     const width = 1;
     const height = 1;
     const depth = 0.1; // Profundidad del objeto 3D
     const borderRadius = 0.1; // Radio de los bordes redondeados
-    let texturePath =
-      urlFotoProducto + imagenescarrito[0].foto + '?token=' + tokenUsuario;
+    let tokenUsuario =
+      sessionStorage.getItem('tokenUsuario') ||
+      localStorage.getItem('tokenUsuario');
+    let urlFotoProducto = environment.base_url + '/uploads/fotoproducto/';
+    let texturePath = '../../assets/images/4.jpg';
     let plano3D = this.crearPlano3D(
       width,
       height,
@@ -104,38 +315,81 @@ export class ModeloService {
       borderRadius,
       texturePath
     );
-
+    console.log('AQUIIIIII');
+    console.log(idsaux);
+    console.log(ref2);
+    console.log(pos2);
     const loader = new GLTFLoader();
     loader.load(
       `assets/${pointerrender}/pointer.glb`,
       (glb) => {
-        let pointer = glb.scene;
-        pointer.position.set(-8.1, 20.6, 22.6);
-        pointer.scale.set(0.75, 0.75, 0.75);
-
         plano3D.position.set(-8.1, 21.3, 22.6);
         plano3D.scale.set(2.5, 2.5, 2.5);
         console.log(imagenescarrito);
+        const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+        const cubeMaterial = new THREE.MeshBasicMaterial({ visible: false });
+        const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+        cube.position.set(-8.1, 21.3, 22.6);
+        if (primeravez == false) {
+          for (let i = 0; i < A1.length; i++) {
+            scene.remove(A1[i]);
+          }
+          for (let i = 0; i < A2.length; i++) {
+            scene.remove(A2[i]);
+          }
+          for (let i = 0; i < A3.length; i++) {
+            scene.remove(A3[i]);
+          }
+          for (let i = 0; i < A4.length; i++) {
+            scene.remove(A4[i]);
+          }
+          for (let i = 0; i < A5.length; i++) {
+            scene.remove(A5[i]);
+          }
+          for (let i = 0; i < A6.length; i++) {
+            scene.remove(A6[i]);
+          }
+          for (let i = 0; i < A7.length; i++) {
+            scene.remove(A7[i]);
+          }
+          for (let i = 0; i < A8.length; i++) {
+            scene.remove(A8[i]);
+          }
+          for (let i = 0; i < A9.length; i++) {
+            scene.remove(A9[i]);
+          }
+          for (let i = 0; i < A10.length; i++) {
+            scene.remove(A10[i]);
+          }
+          for (let i = 0; i < A11.length; i++) {
+            scene.remove(A11[i]);
+          }
+          for (let i = 0; i < A12.length; i++) {
+            scene.remove(A12[i]);
+          }
+          for (let i = 0; i < B1.length; i++) {
+            scene.remove(B1[i]);
+          }
+          for (let i = 0; i < B2.length; i++) {
+            scene.remove(B2[i]);
+          }
+          for (let i = 0; i < B3.length; i++) {
+            scene.remove(B3[i]);
+          }
+        }
 
-        //scene.add(square);
-
-        //scene.add(plano3D);
-
-        pointer = glb.scene;
-        pointer.position.set(-8.1, 20.6, 22.6);
-        pointer.scale.set(0.75, 0.75, 0.75);
         //! A1
         for (let i = 0; i <= 9; i++) {
-          for (let k = 0; k < self.idsauxiliares.length; k++) {
+          for (let k = 0; k < idsaux.length; k++) {
             for (let h = 0; h < imagenescarrito.length; h++) {
               if (
-                self.idsauxiliares[k] == imagenescarrito[h].id &&
-                self.ref[k] == 'A1' &&
-                self.pos[k] == i
+                idsaux[k].toString().toString() == imagenescarrito[h].id &&
+                ref2[k] == 'A1' &&
+                pos2[k] == i
               ) {
                 console.log(imagenescarrito[h].nombre);
-                console.log(self.ref[k]);
-                console.log(self.pos[k]);
+                console.log(ref2[k]);
+                console.log(pos2[k]);
 
                 texturePath =
                   urlFotoProducto +
@@ -161,8 +415,8 @@ export class ModeloService {
               : i % 2
               ? A1[i - 1].position.x + 4
               : A1[i - 1].position.x + 3;
-          for (let j = 0; j < self.pos.length; j++) {
-            if (self.ref[j] == 'A1' && self.pos[j] == i) {
+          for (let j = 0; j < pos2.length; j++) {
+            if (ref2[j] == 'A1' && pos2[j] == i) {
               scene.add(A1[i]);
             }
           }
@@ -170,16 +424,16 @@ export class ModeloService {
 
         //! A2
         for (let i = 0; i <= 9; i++) {
-          for (let k = 0; k < self.idsauxiliares.length; k++) {
+          for (let k = 0; k < idsaux.length; k++) {
             for (let h = 0; h < imagenescarrito.length; h++) {
               if (
-                self.idsauxiliares[k] == imagenescarrito[h].id &&
-                self.ref[k] == 'A2' &&
-                self.pos[k] == i
+                idsaux[k].toString().toString() == imagenescarrito[h].id &&
+                ref2[k] == 'A2' &&
+                pos2[k] == i
               ) {
                 console.log(imagenescarrito[h].nombre);
-                console.log(self.ref[k]);
-                console.log(self.pos[k]);
+                console.log(ref2[k]);
+                console.log(pos2[k]);
 
                 texturePath =
                   urlFotoProducto +
@@ -207,24 +461,24 @@ export class ModeloService {
               : i % 2
               ? A2[i - 1].position.x + 4
               : A2[i - 1].position.x + 3;
-          for (let j = 0; j < self.pos.length; j++) {
-            if (self.ref[j] == 'A2' && self.pos[j] === i) {
+          for (let j = 0; j < pos2.length; j++) {
+            if (ref2[j] == 'A2' && pos2[j] === i) {
               scene.add(A2[i]);
             }
           }
         }
         //! A3
         for (let i = 0; i <= 5; i++) {
-          for (let k = 0; k < self.idsauxiliares.length; k++) {
+          for (let k = 0; k < idsaux.length; k++) {
             for (let h = 0; h < imagenescarrito.length; h++) {
               if (
-                self.idsauxiliares[k] == imagenescarrito[h].id &&
-                self.ref[k] == 'A3' &&
-                self.pos[k] == i
+                idsaux[k].toString().toString() == imagenescarrito[h].id &&
+                ref2[k] == 'A3' &&
+                pos2[k] == i
               ) {
                 console.log(imagenescarrito[h].nombre);
-                console.log(self.ref[k]);
-                console.log(self.pos[k]);
+                console.log(ref2[k]);
+                console.log(pos2[k]);
 
                 texturePath =
                   urlFotoProducto +
@@ -252,8 +506,8 @@ export class ModeloService {
               : i % 2 === 0
               ? A3[i - 1].position.x + 3.5
               : A3[i - 1].position.x + 4;
-          for (let j = 0; j < self.pos.length; j++) {
-            if (self.ref[j] == 'A3' && self.pos[j] == i) {
+          for (let j = 0; j < pos2.length; j++) {
+            if (ref2[j] == 'A3' && pos2[j] == i) {
               scene.add(A3[i]);
             }
           }
@@ -261,16 +515,16 @@ export class ModeloService {
 
         //! A4
         for (let i = 0; i <= 5; i++) {
-          for (let k = 0; k < self.idsauxiliares.length; k++) {
+          for (let k = 0; k < idsaux.length; k++) {
             for (let h = 0; h < imagenescarrito.length; h++) {
               if (
-                self.idsauxiliares[k] == imagenescarrito[h].id &&
-                self.ref[k] == 'A4' &&
-                self.pos[k] == i
+                idsaux[k].toString().toString() == imagenescarrito[h].id &&
+                ref2[k] == 'A4' &&
+                pos2[k] == i
               ) {
                 console.log(imagenescarrito[h].nombre);
-                console.log(self.ref[k]);
-                console.log(self.pos[k]);
+                console.log(ref2[k]);
+                console.log(pos2[k]);
 
                 texturePath =
                   urlFotoProducto +
@@ -297,24 +551,24 @@ export class ModeloService {
               ? A4[i - 1].position.x + 3.5
               : A4[i - 1].position.x + 4;
           A4[i].position.z = 9.7;
-          for (let j = 0; j < self.pos.length; j++) {
-            if (self.ref[j] == 'A4' && self.pos[j] == i) {
+          for (let j = 0; j < pos2.length; j++) {
+            if (ref2[j] == 'A4' && pos2[j] == i) {
               scene.add(A4[i]);
             }
           }
         }
         //! A5
         for (let i = 0; i <= 5; i++) {
-          for (let k = 0; k < self.idsauxiliares.length; k++) {
+          for (let k = 0; k < idsaux.length; k++) {
             for (let h = 0; h < imagenescarrito.length; h++) {
               if (
-                self.idsauxiliares[k] == imagenescarrito[h].id &&
-                self.ref[k] == 'A5' &&
-                self.pos[k] == i
+                idsaux[k].toString().toString() == imagenescarrito[h].id &&
+                ref2[k] == 'A5' &&
+                pos2[k] == i
               ) {
                 console.log(imagenescarrito[h].nombre);
-                console.log(self.ref[k]);
-                console.log(self.pos[k]);
+                console.log(ref2[k]);
+                console.log(pos2[k]);
 
                 texturePath =
                   urlFotoProducto +
@@ -341,8 +595,8 @@ export class ModeloService {
               ? A5[i - 1].position.x + 3.5
               : A5[i - 1].position.x + 4;
           A5[i].position.z = 1.3;
-          for (let j = 0; j < self.pos.length; j++) {
-            if (self.ref[j] == 'A5' && self.pos[j] == i) {
+          for (let j = 0; j < pos2.length; j++) {
+            if (ref2[j] == 'A5' && pos2[j] == i) {
               scene.add(A5[i]);
             }
           }
@@ -350,16 +604,16 @@ export class ModeloService {
 
         //! A6
         for (let i = 0; i <= 5; i++) {
-          for (let k = 0; k < self.idsauxiliares.length; k++) {
+          for (let k = 0; k < idsaux.length; k++) {
             for (let h = 0; h < imagenescarrito.length; h++) {
               if (
-                self.idsauxiliares[k] == imagenescarrito[h].id &&
-                self.ref[k] == 'A6' &&
-                self.pos[k] == i
+                idsaux[k].toString().toString() == imagenescarrito[h].id &&
+                ref2[k] == 'A6' &&
+                pos2[k] == i
               ) {
                 console.log(imagenescarrito[h].nombre);
-                console.log(self.ref[k]);
-                console.log(self.pos[k]);
+                console.log(ref2[k]);
+                console.log(pos2[k]);
 
                 texturePath =
                   urlFotoProducto +
@@ -386,8 +640,8 @@ export class ModeloService {
               ? A6[i - 1].position.x + 3.5
               : A6[i - 1].position.x + 4;
           A6[i].position.z = -0.5;
-          for (let j = 0; j < self.pos.length; j++) {
-            if (self.ref[j] == 'A6' && self.pos[j] == i) {
+          for (let j = 0; j < pos2.length; j++) {
+            if (ref2[j] == 'A6' && pos2[j] == i) {
               scene.add(A6[i]);
             }
           }
@@ -396,16 +650,16 @@ export class ModeloService {
         //! A7
 
         for (let i = 0; i <= 5; i++) {
-          for (let k = 0; k < self.idsauxiliares.length; k++) {
+          for (let k = 0; k < idsaux.length; k++) {
             for (let h = 0; h < imagenescarrito.length; h++) {
               if (
-                self.idsauxiliares[k] == imagenescarrito[h].id &&
-                self.ref[k] == 'A7' &&
-                self.pos[k] == i
+                idsaux[k].toString().toString() == imagenescarrito[h].id &&
+                ref2[k] == 'A7' &&
+                pos2[k] == i
               ) {
                 console.log(imagenescarrito[h].nombre);
-                console.log(self.ref[k]);
-                console.log(self.pos[k]);
+                console.log(ref2[k]);
+                console.log(pos2[k]);
 
                 texturePath =
                   urlFotoProducto +
@@ -432,8 +686,8 @@ export class ModeloService {
               ? A7[i - 1].position.x + 3.5
               : A7[i - 1].position.x + 4;
           A7[i].position.z = -9.1;
-          for (let j = 0; j < self.pos.length; j++) {
-            if (self.ref[j] == 'A7' && self.pos[j] == i) {
+          for (let j = 0; j < pos2.length; j++) {
+            if (ref2[j] == 'A7' && pos2[j] == i) {
               scene.add(A7[i]);
             }
           }
@@ -441,16 +695,16 @@ export class ModeloService {
 
         //! A8
         for (let i = 0; i <= 5; i++) {
-          for (let k = 0; k < self.idsauxiliares.length; k++) {
+          for (let k = 0; k < idsaux.length; k++) {
             for (let h = 0; h < imagenescarrito.length; h++) {
               if (
-                self.idsauxiliares[k] == imagenescarrito[h].id &&
-                self.ref[k] == 'A8' &&
-                self.pos[k] == i
+                idsaux[k].toString().toString() == imagenescarrito[h].id &&
+                ref2[k] == 'A8' &&
+                pos2[k] == i
               ) {
                 console.log(imagenescarrito[h].nombre);
-                console.log(self.ref[k]);
-                console.log(self.pos[k]);
+                console.log(ref2[k]);
+                console.log(pos2[k]);
 
                 texturePath =
                   urlFotoProducto +
@@ -477,8 +731,8 @@ export class ModeloService {
               ? A8[i - 1].position.x + 3.5
               : A8[i - 1].position.x + 4;
           A8[i].position.z = -11.1;
-          for (let j = 0; j < self.pos.length; j++) {
-            if (self.ref[j] == 'A8' && self.pos[j] == i) {
+          for (let j = 0; j < pos2.length; j++) {
+            if (ref2[j] == 'A8' && pos2[j] == i) {
               scene.add(A8[i]);
             }
           }
@@ -487,16 +741,16 @@ export class ModeloService {
         //! A9
 
         for (let i = 0; i <= 3; i++) {
-          for (let k = 0; k < self.idsauxiliares.length; k++) {
+          for (let k = 0; k < idsaux.length; k++) {
             for (let h = 0; h < imagenescarrito.length; h++) {
               if (
-                self.idsauxiliares[k] == imagenescarrito[h].id &&
-                self.ref[k] == 'A9' &&
-                self.pos[k] == i
+                idsaux[k].toString() == imagenescarrito[h].id &&
+                ref2[k] == 'A9' &&
+                pos2[k] == i
               ) {
                 console.log(imagenescarrito[h].nombre);
-                console.log(self.ref[k]);
-                console.log(self.pos[k]);
+                console.log(ref2[k]);
+                console.log(pos2[k]);
 
                 texturePath =
                   urlFotoProducto +
@@ -523,8 +777,8 @@ export class ModeloService {
               ? A9[i - 1].position.x + 3.6
               : A9[i - 1].position.x + 3.4;
           A9[i].position.z = 6.6;
-          for (let j = 0; j < self.pos.length; j++) {
-            if (self.ref[j] == 'A9' && self.pos[j] == i) {
+          for (let j = 0; j < pos2.length; j++) {
+            if (ref2[j] == 'A9' && pos2[j] == i) {
               scene.add(A9[i]);
             }
           }
@@ -533,16 +787,16 @@ export class ModeloService {
         // ! A10
 
         for (let i = 0; i <= 3; i++) {
-          for (let k = 0; k < self.idsauxiliares.length; k++) {
+          for (let k = 0; k < idsaux.length; k++) {
             for (let h = 0; h < imagenescarrito.length; h++) {
               if (
-                self.idsauxiliares[k] == imagenescarrito[h].id &&
-                self.ref[k] == 'A10' &&
-                self.pos[k] == i
+                idsaux[k].toString() == imagenescarrito[h].id &&
+                ref2[k] == 'A10' &&
+                pos2[k] == i
               ) {
                 console.log(imagenescarrito[h].nombre);
-                console.log(self.ref[k]);
-                console.log(self.pos[k]);
+                console.log(ref2[k]);
+                console.log(pos2[k]);
 
                 texturePath =
                   urlFotoProducto +
@@ -569,8 +823,8 @@ export class ModeloService {
               ? A10[i - 1].position.x + 3.6
               : A10[i - 1].position.x + 3.4;
           A10[i].position.z = 5.2;
-          for (let j = 0; j < self.pos.length; j++) {
-            if (self.ref[j] == 'A10' && self.pos[j] == i) {
+          for (let j = 0; j < pos2.length; j++) {
+            if (ref2[j] == 'A10' && pos2[j] == i) {
               scene.add(A10[i]);
             }
           }
@@ -578,16 +832,16 @@ export class ModeloService {
 
         //! A11
         for (let i = 0; i <= 3; i++) {
-          for (let k = 0; k < self.idsauxiliares.length; k++) {
+          for (let k = 0; k < idsaux.length; k++) {
             for (let h = 0; h < imagenescarrito.length; h++) {
               if (
-                self.idsauxiliares[k] == imagenescarrito[h].id &&
-                self.ref[k] == 'A11' &&
-                self.pos[k] == i
+                idsaux[k].toString() == imagenescarrito[h].id &&
+                ref2[k] == 'A11' &&
+                pos2[k] == i
               ) {
                 console.log(imagenescarrito[h].nombre);
-                console.log(self.ref[k]);
-                console.log(self.pos[k]);
+                console.log(ref2[k]);
+                console.log(pos2[k]);
 
                 texturePath =
                   urlFotoProducto +
@@ -614,8 +868,8 @@ export class ModeloService {
               ? A11[i - 1].position.x + 3.6
               : A11[i - 1].position.x + 3.4;
           A11[i].position.z = -5.4;
-          for (let j = 0; j < self.pos.length; j++) {
-            if (self.ref[j] == 'A11' && self.pos[j] == i) {
+          for (let j = 0; j < pos2.length; j++) {
+            if (ref2[j] == 'A11' && pos2[j] == i) {
               scene.add(A11[i]);
             }
           }
@@ -624,16 +878,16 @@ export class ModeloService {
         //! A12
 
         for (let i = 0; i <= 3; i++) {
-          for (let k = 0; k < self.idsauxiliares.length; k++) {
+          for (let k = 0; k < idsaux.length; k++) {
             for (let h = 0; h < imagenescarrito.length; h++) {
               if (
-                self.idsauxiliares[k] == imagenescarrito[h].id &&
-                self.ref[k] == 'A12' &&
-                self.pos[k] == i
+                idsaux[k].toString() == imagenescarrito[h].id &&
+                ref2[k] == 'A12' &&
+                pos2[k] == i
               ) {
                 console.log(imagenescarrito[h].nombre);
-                console.log(self.ref[k]);
-                console.log(self.pos[k]);
+                console.log(ref2[k]);
+                console.log(pos2[k]);
 
                 texturePath =
                   urlFotoProducto +
@@ -660,24 +914,24 @@ export class ModeloService {
               ? A12[i - 1].position.x + 3.6
               : A12[i - 1].position.x + 3.4;
           A12[i].position.z = -6.8;
-          for (let j = 0; j < self.pos.length; j++) {
-            if (self.ref[j] == 'A12' && self.pos[j] == i) {
+          for (let j = 0; j < pos2.length; j++) {
+            if (ref2[j] == 'A12' && pos2[j] == i) {
               scene.add(A12[i]);
             }
           }
         }
         //! B1
         for (let i = 0; i <= 3; i++) {
-          for (let k = 0; k < self.idsauxiliares.length; k++) {
+          for (let k = 0; k < idsaux.length; k++) {
             for (let h = 0; h < imagenescarrito.length; h++) {
               if (
-                self.idsauxiliares[k] == imagenescarrito[h].id &&
-                self.ref[k] == 'B1' &&
-                self.pos[k] == i
+                idsaux[k].toString() == imagenescarrito[h].id &&
+                ref2[k] == 'B1' &&
+                pos2[k] == i
               ) {
                 console.log(imagenescarrito[h].nombre);
-                console.log(self.ref[k]);
-                console.log(self.pos[k]);
+                console.log(ref2[k]);
+                console.log(pos2[k]);
 
                 texturePath =
                   urlFotoProducto +
@@ -701,24 +955,24 @@ export class ModeloService {
           B1[i].position.z = i === 0 ? 4.2 : B1[i - 1].position.z - 3.1;
           B1[i].position.x = 29.4;
           B1[i].position.y = 25.7;
-          for (let j = 0; j < self.pos.length; j++) {
-            if (self.ref[j] == 'B1' && self.pos[j] == i) {
+          for (let j = 0; j < pos2.length; j++) {
+            if (ref2[j] == 'B1' && pos2[j] == i) {
               scene.add(B1[i]);
             }
           }
         }
         //! B2
         for (let i = 0; i <= 5; i++) {
-          for (let k = 0; k < self.idsauxiliares.length; k++) {
+          for (let k = 0; k < idsaux.length; k++) {
             for (let h = 0; h < imagenescarrito.length; h++) {
               if (
-                self.idsauxiliares[k] == imagenescarrito[h].id &&
-                self.ref[k] == 'B2' &&
-                self.pos[k] == i
+                idsaux[k].toString() == imagenescarrito[h].id &&
+                ref2[k] == 'B2' &&
+                pos2[k] == i
               ) {
                 console.log(imagenescarrito[h].nombre);
-                console.log(self.ref[k]);
-                console.log(self.pos[k]);
+                console.log(ref2[k]);
+                console.log(pos2[k]);
 
                 texturePath =
                   urlFotoProducto +
@@ -746,24 +1000,24 @@ export class ModeloService {
               : B2[i - 1].position.x - 3.7;
           B2[i].position.z = -22.5;
           B2[i].position.y = 25;
-          for (let j = 0; j < self.pos.length; j++) {
-            if (self.ref[j] == 'B2' && self.pos[j] == i) {
+          for (let j = 0; j < pos2.length; j++) {
+            if (ref2[j] == 'B2' && pos2[j] == i) {
               scene.add(B2[i]);
             }
           }
         }
         //! B3
         for (let i = 0; i <= 2; i++) {
-          for (let k = 0; k < self.idsauxiliares.length; k++) {
+          for (let k = 0; k < idsaux.length; k++) {
             for (let h = 0; h < imagenescarrito.length; h++) {
               if (
-                self.idsauxiliares[k] == imagenescarrito[h].id &&
-                self.ref[k] == 'B3' &&
-                self.pos[k] == i
+                idsaux[k].toString() == imagenescarrito[h].id &&
+                ref2[k] == 'B3' &&
+                pos2[k] == i
               ) {
                 console.log(imagenescarrito[h].nombre);
-                console.log(self.ref[k]);
-                console.log(self.pos[k]);
+                console.log(ref2[k]);
+                console.log(pos2[k]);
 
                 texturePath =
                   urlFotoProducto +
@@ -787,13 +1041,14 @@ export class ModeloService {
           B3[i].position.x = i === 0 ? -10 : B3[i - 1].position.x + 6.5;
           B3[i].position.z = -22.8;
           B3[i].position.y = 22.5;
-          for (let j = 0; j < self.pos.length; j++) {
-            if (self.ref[j] == 'B3' && self.pos[j] == i) {
+          for (let j = 0; j < pos2.length; j++) {
+            if (ref2[j] == 'B3' && pos2[j] == i) {
               scene.add(B3[i]);
             }
           }
         }
       },
+
       (xhr) => {
         // Progreso de la carga
       },
@@ -1007,6 +1262,7 @@ export class ModeloService {
       scene.remove(scene.children[0]);
     }
   }
+
   crearFormaPlanoConIndicador(
     width: number,
     height: number,

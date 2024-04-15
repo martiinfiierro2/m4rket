@@ -324,6 +324,45 @@ opacity: 1;
   color: #51877a;
 }
 
+//LISTA INTERFACE
+
+.lista{
+  position: absolute;
+  display: none;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 4px 16px;
+  z-index: 14;
+  top: 0;
+  left: 0;
+  opacity: 0; 
+  transform: translateY(700px); 
+  transition: opacity 0.5s, transform 0.5s;
+
+  @media (prefers-color-scheme: dark) {
+    background: #282828; // Cambia el color de fondo en modo oscuro
+  }
+}
+
+.lista-header{
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  margin: 10px;
+}
+
+.cerrar-lista{
+  width: 30px;
+  height: 30px;
+  border-radius: 20px;
+  font-size: 25px;
+  background: none;
+  color: #51877a;
+}
+
+
 .box-envio{
   width: 100%;
   display: flex;

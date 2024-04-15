@@ -8,6 +8,8 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { environment } from "../../environments/environment";
 import * as echarts from 'echarts';
 import { HomePage } from "src/app/home/home.page"
+import { forkJoin } from 'rxjs';
+
 
 interface Stats {
   nombre: string,
@@ -36,6 +38,7 @@ export interface Producto{
   enListaCompra: boolean,
   idLista: string,
   cantidad: number,
+  comprado: boolean,
   //Ubicacions: Ubicaciones[]
  //Promocions: Promociones[]
 }
@@ -47,6 +50,7 @@ export interface ListaCompra{
   idProd: number,
   fecha: string | null,
   cantidad: number,
+  comprado: boolean
 }
 
 @Component({
@@ -70,8 +74,9 @@ export class DrawerComponent  implements AfterViewInit {
  // @Output('openStateChanged') openState: EventEmitter<boolean> = new EventEmitter();
   @ViewChild('botonchatbot', {read: ElementRef}) botonchatbot!: ElementRef;
   @ViewChild('chatbot', {read: ElementRef}) chatbot!: ElementRef;
+  @ViewChild('lista', {read: ElementRef}) lista!: ElementRef;
   @ViewChild('profile', {read: ElementRef}) profile!: ElementRef;
-
+  @ViewChild('recarga', {read: HomePage}) recarga!: HomePage;
   isOpen = true;
   openHeight = 0;
   isMiddle = true;
@@ -82,6 +87,8 @@ export class DrawerComponent  implements AfterViewInit {
   seleccionado: boolean = false;
   listaCompra: ListaCompra [] = [];
 
+  totalProductos: number = 0;
+  totalComprados: number = 0;
   //MODELO
   modeloService = new ModeloService();
 
@@ -193,7 +200,12 @@ export class DrawerComponent  implements AfterViewInit {
 
 
   }
-
+  Recarguita() {
+    const buttonElement = document.getElementById('Recargar');
+    if (buttonElement){
+    buttonElement.dispatchEvent(new Event('click'));
+    }
+  }
   toggleDrawer(){
     const drawer = this.drawer.nativeElement;
     const botonchatbot = this.botonchatbot.nativeElement;
@@ -246,6 +258,7 @@ export class DrawerComponent  implements AfterViewInit {
         this.productoSelect.cantidad = productoEncontrado.cantidad;
         this.productoSelect.idLista = productoEncontrado.id;
         this.productoSelect.enListaCompra = true;
+        this.productoSelect.comprado = productoEncontrado.comprado;
         //console.log('Valores asignados:', this.productoSelect);
       } else {
         console.log('Producto no encontrado en listaCompra');
@@ -345,8 +358,9 @@ EliminarProductoSelect(){
 
   incrementar(productoDetalle: any) {
     productoDetalle.cantidad++;
-    console.log('Nueva cantidad = ' +  productoDetalle.cantidad)
-    this.actualizarCantidad(productoDetalle.id, productoDetalle.cantidad, productoDetalle.idLista) 
+    console.log('Nueva cantidad = ' +  productoDetalle.cantidad);
+    this.actualizarCantidad(productoDetalle.id, productoDetalle.cantidad, productoDetalle.idLista, productoDetalle.comprado) ;
+    this.getListaCompraUsu();
     let tipo = "anadido";
     let fecha = new Date();
     this.estadistica(productoDetalle.id, tipo, fecha);
@@ -368,17 +382,17 @@ EliminarProductoSelect(){
     if (productoDetalle.cantidad > 1){
       productoDetalle.cantidad--;
       console.log('Nueva cantidad = ' +  productoDetalle.cantidad)
-      this.actualizarCantidad(productoDetalle.id, productoDetalle.cantidad, productoDetalle.idLista)
+      this.actualizarCantidad(productoDetalle.id, productoDetalle.cantidad, productoDetalle.idLista, productoDetalle.comprado);
       let tipo = "eliminado";
       let fecha = new Date();
       this.estadistica(productoDetalle.id, tipo, fecha);
-    }else if(productoDetalle.cantidad < 1){
+    }else if(productoDetalle.cantidad <= 1){
       this.eliminar(productoDetalle);
     }else{
       console.log('Solo queda una');
       productoDetalle.cantidad--;
       console.log('Nueva cantidad = ' +  productoDetalle.cantidad)
-      this.actualizarCantidad(productoDetalle.id, productoDetalle.cantidad, productoDetalle.idLista)
+      this.actualizarCantidad(productoDetalle.id, productoDetalle.cantidad, productoDetalle.idLista, productoDetalle.comprado);
       let tipo = "eliminado";
       let fecha = new Date();
       this.estadistica(productoDetalle.id, tipo, fecha);
@@ -389,26 +403,37 @@ EliminarProductoSelect(){
     producto.enListaCompra = false;
     this.borrarProd(producto.idLista);
     console.log('Producto eliminado de la lista');
-    this.EliminarProductoSelect();
+    //this.EliminarProductoSelect();
+    this.getProducto(producto.id);
+    this.getListaCompraUsu();
+    this.Recarguita();
   }
 
   anadirProducto(producto: any){
+
     const fechaActual = new Date().toISOString().split('T')[0];
     const body = {
       idUsu: this.idUsu,
       idProd: producto.id,
       fecha: fechaActual, 
-      cantidad: 1
+      cantidad: 1,
+      comprado: false,
     };
     this.productosService.postListaCompra(body )
     .subscribe((result) => {
       console.log(result);
+      producto.enListaCompra = true;
+      producto.cantidad = 1;
+      this.getListaCompraUsu();
+      this.getProducto(producto.id);
     })
     this.compararListaBusqueda();
     producto.enListaCompra = true;
     let tipo = "anadido";
     let fecha = new Date();
     this.estadistica(producto.id, tipo, fecha);
+    this.Recarguita();
+
   }
 
 
@@ -431,9 +456,23 @@ EliminarProductoSelect(){
         ({ idProd: item.idProd, 
           cantidad: item.cantidad, 
           id: item.id,
+          comprado: item.comprado,
         }));
-  
-        //console.log(this.listaCompra);
+         // Contador de productos en la lista de compra
+      this.totalProductos = this.listaCompra.length;
+
+      // Contador de productos marcados como comprados
+      this.totalComprados = this.listaCompra.reduce((total, item) => {
+        return total + (item.comprado ? 1 : 0);
+      }, 0);
+
+      let a = document.getElementById('contador-p');
+      if(a)
+      a.innerHTML = '<p>'+ this.totalComprados +'/' +this.totalProductos +'</p>';
+    
+      console.log('La lista del usuario es', this.listaCompra);
+      console.log('Total de productos en la lista:', this.totalProductos);
+      console.log('Total de productos marcados como comprados:', this.totalComprados);
       } 
     });
   }
@@ -445,6 +484,7 @@ EliminarProductoSelect(){
         productoEncontrado.enListaCompra = true;
         productoEncontrado.cantidad = productoCompra.cantidad;
         productoEncontrado.idLista = productoCompra.id;
+        productoEncontrado.comprado = productoCompra.comprado;
         //console.log(`Producto con id ${productoEncontrado.id} está en la lista y su cantidad es ${productoEncontrado.cantidad}`);
       } else {
        // console.log(`No se encontró el producto con idProd ${productoCompra.idProd} en la lista de productos`);
@@ -455,17 +495,23 @@ EliminarProductoSelect(){
   borrarProd(idLista: string){
     this.productosService.deleteListaCompra(idLista).subscribe((result) =>{
       //this.getProductos(); //Recarga la lista de producto
+      this.EliminarProductoSelect();
+      this.getListaCompraUsu();
+      
     });
+   
+
   }
 
 
-  actualizarCantidad(idProd: string, nuevaCantidad: number, idLista: string) {
+  actualizarCantidad(idProd: string, nuevaCantidad: number, idLista: string, comprado: boolean) {
     const fechaActual = new Date().toISOString().split('T')[0];
     const body = {
       idUsu: this.idUsu,
       idProd: idProd,
       fecha: fechaActual, 
-      cantidad: nuevaCantidad
+      cantidad: nuevaCantidad, 
+      comprado: comprado
     };
 
     console.log('Cuerpo de la solicitud:', body);
@@ -474,12 +520,40 @@ EliminarProductoSelect(){
       .subscribe(
         (res) => {
           console.log('Respuesta correcta:', res);
+          
         },
         (error) => {
           console.error('Error en la solicitud PUT: again', error);
         }
       );
   }
+
+
+  //MARCAR COMO COMPRADO
+  marcarComprado(producto: any){
+    producto.comprado = true;
+    this.actualizarCantidad(producto.id, producto.cantidad, producto.idLista, producto.comprado);
+    console.log('Producto marcado como comprado');
+    console.log(this.totalComprados);
+    let a = document.getElementById('contador-p');
+    if(a)
+    a.innerHTML = '<p>'+ this.totalComprados +'/' +this.totalProductos +'</p>';
+    //innerhtml
+    this.getListaCompraUsu();
+
+  }
+
+  eliminarComprado(producto: any){
+    producto.comprado = false;
+    this.actualizarCantidad(producto.id, producto.cantidad, producto.idLista, producto.comprado);
+    console.log('Producto eliminado como comprado');
+    let a = document.getElementById('contador-p');
+    if(a)
+    a.innerHTML = '<p>'+ this.totalComprados +'/' +this.totalProductos +'</p>';
+    this.getListaCompraUsu();
+  }
+
+
 
 //CHATBOT
 abrirChatbot() {
@@ -488,7 +562,7 @@ abrirChatbot() {
   setTimeout(() => {
     chatbot.style.opacity = '1';
     chatbot.style.transform = 'translateY(25px)';
-  }, 50); // Agregar un pequeño retraso para asegurar que la transición se aplique correctamente
+  }, 50); 
 }
 
 cerrarChatbot() {
@@ -497,9 +571,27 @@ cerrarChatbot() {
   chatbot.style.transform = 'translateY(700px)';
   setTimeout(() => {
     chatbot.style.display = 'none';
-  }, 500); // Asegurarse de ocultar el chatbot después de la transición completa
+  }, 500); 
 }
 
+//Lista
+abrirLista() {
+  const lista = this.lista.nativeElement;
+  lista.style.display = 'block';
+  setTimeout(() => {
+    lista.style.opacity = '1';
+    lista.style.transform = 'translateY(25px)';
+  }, 50); 
+}
+
+cerrarLista() {
+  const lista = this.lista.nativeElement;
+  lista.style.opacity = '0';
+  lista.style.transform = 'translateY(700px)';
+  setTimeout(() => {
+    lista.style.display = 'none';
+  }, 500); 
+}
 
 //PROFILE
 

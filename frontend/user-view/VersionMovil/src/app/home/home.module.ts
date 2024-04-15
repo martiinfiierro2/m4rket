@@ -19,6 +19,7 @@ import { SharedComponentsModule } from '../components/shared-components.module';
   ],
   declarations: [
     HomePage,
+    MotorComponent
   ]
 })
 export class HomePageModule {}
