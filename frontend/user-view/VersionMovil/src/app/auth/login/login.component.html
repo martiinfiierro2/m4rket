@@ -1,20 +1,36 @@
-
-<form (ngSubmit)="login()" [formGroup]="loginForm">
-  <h2>Iniciar sesión</h2>
-  <label for=" email">
-      Correo eléctrónico
-      <input type="email" name="email" formControlName="email" id="email"> 
-  </label>
-  <label for="pwd">
-      Contraseña
-      <input type="password" name="pwd" formControlName="pwd" id="pwd">
-  </label>
-  <label for="recordarme">Recordarme <input type="checkbox" formControlName="check" name="recordarme" id="recordarme"></label>
-  <div id="avisos">
-      <p class="text-danger" *ngIf="!campoValido('email')">El usuario es obligatorio y debe ser un email</p>
-      <p class="text-danger" *ngIf="!campoValido('pwd')">El campo contraseña es obligatorio</p>
-      <p class="text-danger" *ngIf="avisoError">Campos incorrectos</p>
-  </div>
-  <button type="submit" [disabled]="esperando" ><i id="iconoCarga" class="fas fa-spinner fa-spin" *ngIf="esperando" ></i> Enviar</button>
-  <p><a href="/registro">¿No tienes cuenta?</a></p>
-</form>
+<body>
+    <!--
+    <div class="encabezado">
+        <h1>
+            ¡Hola!
+        </h1>
+        <h2>
+           Bienvenido a 
+           M4RKET 
+        </h2>
+    </div>-->
+    <div class="tarjeta">
+        <form (ngSubmit)="login()" [formGroup]="loginForm">
+            <h2>Iniciar sesión</h2>
+            <label for=" email" class="formulario">
+                <input type="email" name="email" formControlName="email" id="email" placeholder="Correo electrónico"> 
+            </label>
+            <label for="pwd" class="formulario">
+                <input type="password" name="pwd" formControlName="pwd" id="pwd" placeholder="Contraseña">
+            </label>
+            <label for="recordarme">Recuérdame <input type="checkbox" formControlName="check" name="recordarme" id="recordarme" class="recuerdame"></label>
+            <div id="avisos">
+                <p class="text-danger" *ngIf="!campoValido('email')">El usuario es obligatorio y debe ser un email</p>
+                <p class="text-danger" *ngIf="!campoValido('pwd')">El campo contraseña es obligatorio</p>
+                <p class="text-danger" *ngIf="avisoError">Campos incorrectos</p>
+            </div>
+            <button type="submit" [disabled]="esperando" ><i id="iconoCarga" class="fas fa-spinner fa-spin" *ngIf="esperando" ></i> Entrar</button>
+            <div class="registro">
+                <p>¿No tienes una cuenta todavía?</p>
+                <p><a href="/registro">Regístrate aquí</a></p>
+            </div>
+        </form>  
+    </div>
+    
+    
+</body>

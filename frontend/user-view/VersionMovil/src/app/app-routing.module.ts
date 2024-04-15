@@ -20,7 +20,7 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    component: AuthLayoutComponent,
+    component: LoginComponent,
     canActivate: [authGuard2],
     children: [
       { path: '', component: LoginComponent },
