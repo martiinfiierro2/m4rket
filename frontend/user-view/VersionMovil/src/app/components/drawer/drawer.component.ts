@@ -516,44 +516,40 @@ EliminarProductoSelect(){
       cantidad: nuevaCantidad, 
       comprado: comprado
     };
-
+  
     console.log('Cuerpo de la solicitud:', body);
-
+  
     this.productosService.putListaCompra(idLista, body)
       .subscribe(
         (res) => {
           console.log('Respuesta correcta:', res);
-          
+          this.RecargarValoresLista();
+          this.getListaCompraUsu(); // Llamar a getListaCompraUsu() después de la actualización
         },
         (error) => {
-          console.error('Error en la solicitud PUT: again', error);
+          console.error('Error en la solicitud PUT:', error);
         }
       );
   }
+  
 
 
   //MARCAR COMO COMPRADO
   marcarComprado(producto: any){
     producto.comprado = true;
     this.actualizarCantidad(producto.id, producto.cantidad, producto.idLista, producto.comprado);
-    console.log('Producto marcado como comprado');
-    console.log(this.totalComprados);
-    let a = document.getElementById('contador-p');
-    if(a)
-    a.innerHTML = '<p>'+ this.totalComprados +'/' +this.totalProductos +'</p>';
-    //innerhtml
-    this.getListaCompraUsu();
 
   }
 
   eliminarComprado(producto: any){
     producto.comprado = false;
     this.actualizarCantidad(producto.id, producto.cantidad, producto.idLista, producto.comprado);
-    console.log('Producto eliminado como comprado');
+  }
+
+  RecargarValoresLista(){
     let a = document.getElementById('contador-p');
     if(a)
     a.innerHTML = '<p>'+ this.totalComprados +'/' +this.totalProductos +'</p>';
-    this.getListaCompraUsu();
   }
 
 
