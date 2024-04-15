@@ -315,17 +315,12 @@ export class ModeloService {
       borderRadius,
       texturePath
     );
-    console.log('AQUIIIIII');
-    console.log(idsaux);
-    console.log(ref2);
-    console.log(pos2);
     const loader = new GLTFLoader();
     loader.load(
       `assets/${pointerrender}/pointer.glb`,
       (glb) => {
         plano3D.position.set(-8.1, 21.3, 22.6);
         plano3D.scale.set(2.5, 2.5, 2.5);
-        console.log(imagenescarrito);
         const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
         const cubeMaterial = new THREE.MeshBasicMaterial({ visible: false });
         const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
@@ -387,9 +382,7 @@ export class ModeloService {
                 ref2[k] == 'A1' &&
                 pos2[k] == i
               ) {
-                console.log(imagenescarrito[h].nombre);
-                console.log(ref2[k]);
-                console.log(pos2[k]);
+  
 
                 texturePath =
                   urlFotoProducto +
@@ -431,9 +424,6 @@ export class ModeloService {
                 ref2[k] == 'A2' &&
                 pos2[k] == i
               ) {
-                console.log(imagenescarrito[h].nombre);
-                console.log(ref2[k]);
-                console.log(pos2[k]);
 
                 texturePath =
                   urlFotoProducto +
@@ -476,9 +466,7 @@ export class ModeloService {
                 ref2[k] == 'A3' &&
                 pos2[k] == i
               ) {
-                console.log(imagenescarrito[h].nombre);
-                console.log(ref2[k]);
-                console.log(pos2[k]);
+
 
                 texturePath =
                   urlFotoProducto +
@@ -522,9 +510,7 @@ export class ModeloService {
                 ref2[k] == 'A4' &&
                 pos2[k] == i
               ) {
-                console.log(imagenescarrito[h].nombre);
-                console.log(ref2[k]);
-                console.log(pos2[k]);
+
 
                 texturePath =
                   urlFotoProducto +
@@ -566,9 +552,7 @@ export class ModeloService {
                 ref2[k] == 'A5' &&
                 pos2[k] == i
               ) {
-                console.log(imagenescarrito[h].nombre);
-                console.log(ref2[k]);
-                console.log(pos2[k]);
+
 
                 texturePath =
                   urlFotoProducto +
@@ -611,9 +595,7 @@ export class ModeloService {
                 ref2[k] == 'A6' &&
                 pos2[k] == i
               ) {
-                console.log(imagenescarrito[h].nombre);
-                console.log(ref2[k]);
-                console.log(pos2[k]);
+
 
                 texturePath =
                   urlFotoProducto +
@@ -657,9 +639,7 @@ export class ModeloService {
                 ref2[k] == 'A7' &&
                 pos2[k] == i
               ) {
-                console.log(imagenescarrito[h].nombre);
-                console.log(ref2[k]);
-                console.log(pos2[k]);
+
 
                 texturePath =
                   urlFotoProducto +
@@ -702,9 +682,7 @@ export class ModeloService {
                 ref2[k] == 'A8' &&
                 pos2[k] == i
               ) {
-                console.log(imagenescarrito[h].nombre);
-                console.log(ref2[k]);
-                console.log(pos2[k]);
+
 
                 texturePath =
                   urlFotoProducto +
@@ -748,9 +726,7 @@ export class ModeloService {
                 ref2[k] == 'A9' &&
                 pos2[k] == i
               ) {
-                console.log(imagenescarrito[h].nombre);
-                console.log(ref2[k]);
-                console.log(pos2[k]);
+
 
                 texturePath =
                   urlFotoProducto +
@@ -794,9 +770,6 @@ export class ModeloService {
                 ref2[k] == 'A10' &&
                 pos2[k] == i
               ) {
-                console.log(imagenescarrito[h].nombre);
-                console.log(ref2[k]);
-                console.log(pos2[k]);
 
                 texturePath =
                   urlFotoProducto +
@@ -839,9 +812,7 @@ export class ModeloService {
                 ref2[k] == 'A11' &&
                 pos2[k] == i
               ) {
-                console.log(imagenescarrito[h].nombre);
-                console.log(ref2[k]);
-                console.log(pos2[k]);
+
 
                 texturePath =
                   urlFotoProducto +
@@ -885,9 +856,7 @@ export class ModeloService {
                 ref2[k] == 'A12' &&
                 pos2[k] == i
               ) {
-                console.log(imagenescarrito[h].nombre);
-                console.log(ref2[k]);
-                console.log(pos2[k]);
+
 
                 texturePath =
                   urlFotoProducto +
@@ -929,9 +898,7 @@ export class ModeloService {
                 ref2[k] == 'B1' &&
                 pos2[k] == i
               ) {
-                console.log(imagenescarrito[h].nombre);
-                console.log(ref2[k]);
-                console.log(pos2[k]);
+
 
                 texturePath =
                   urlFotoProducto +
@@ -970,9 +937,7 @@ export class ModeloService {
                 ref2[k] == 'B2' &&
                 pos2[k] == i
               ) {
-                console.log(imagenescarrito[h].nombre);
-                console.log(ref2[k]);
-                console.log(pos2[k]);
+
 
                 texturePath =
                   urlFotoProducto +
@@ -1015,9 +980,7 @@ export class ModeloService {
                 ref2[k] == 'B3' &&
                 pos2[k] == i
               ) {
-                console.log(imagenescarrito[h].nombre);
-                console.log(ref2[k]);
-                console.log(pos2[k]);
+
 
                 texturePath =
                   urlFotoProducto +

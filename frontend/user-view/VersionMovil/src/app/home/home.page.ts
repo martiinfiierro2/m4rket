@@ -156,7 +156,6 @@ export class HomePage {
   // FUNCIONES YA CREADAS DE LA ANTIGUA VERSION LISTA DE LA COMPRA
   incrementar(productoDetalle: any) {
     productoDetalle.cantidad++;
-    console.log('Nueva cantidad = ' + productoDetalle.cantidad);
     this.actualizarCantidad(
       productoDetalle.idProducto,
       productoDetalle.cantidad,
@@ -175,13 +174,11 @@ export class HomePage {
       qr: null,
       fecha: fecha,
     };
-    console.log(post);
     this.estadisticasService.postContador(post);
   }
 
   decrementar(productoDetalle: any) {
     productoDetalle.cantidad--;
-    console.log('Nueva cantidad = ' + productoDetalle.cantidad);
     this.actualizarCantidad(
       productoDetalle.idProducto,
       productoDetalle.cantidad,
@@ -201,7 +198,6 @@ export class HomePage {
 
     if (idUsuario !== null) {
       this.idUsu = idUsuario;
-      //console.log('El usuario logueado es: '+ this.idUsu);
     } else {
       console.error('El valor de idUsuario en localStorage es nulo.');
     }
@@ -235,10 +231,6 @@ export class HomePage {
         contador: mostrarContador,
       };
       detallesProductos.push(productoDetalle);
-
-      //console.log('Detalles del producto:', productoDetalle);
-      //console.log('Los productos son: ', detallesProductos);
-
       this.detallesProductos = detallesProductos;
     });
   }
@@ -260,11 +252,9 @@ export class HomePage {
       cantidad: nuevaCantidad,
     };
 
-    console.log('Cuerpo de la solicitud:', body);
 
     this.productosService.putListaCompra(idLista, body).subscribe(
       (res) => {
-        console.log('Respuesta correcta:', res);
       },
       (error) => {
         console.error('Error en la solicitud PUT: again', error);
@@ -471,7 +461,6 @@ export class HomePage {
 
                 //Busco la relacion con produtos
                 self.getIdUbicacion(arrayName, position);
-                console.log(arrayName, position);
               }
               break;
             }
@@ -599,7 +588,6 @@ export class HomePage {
             comprado: item.comprado,
           }));
 
-          console.log(this.listaCompra);
 
           const detallesProductos: ProductoDetalle[] = [];
 
