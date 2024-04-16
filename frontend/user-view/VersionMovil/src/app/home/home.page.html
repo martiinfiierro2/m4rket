@@ -1,23 +1,26 @@
 <ion-content scrollY="false">
   <div class="contenedor">
     <div class="botones-accion">
-      <div class="listado-info">
-        <!--<div class="boton-desplegar">
-          
-          <button class="button"> &nbsp; ▼</button>
-          <div class="dropdown-content">
-            <p id="top">Ocultar productos comprados</p>
-            <p id="middle">Actualizar lista</p>
-            <p id="bottom">Eliminar lista actual</p>
-          </div>
-          
+      <div class="boton-desplegar">
+        <input id="menu" type="checkbox" />
+        <label for="menu" ></label>
+        <div class="menu">
+          <ul>
+            <button>Borrar Productos Comprados</button>
+            <button>Borrar Lista Completa</button>
+          </ul>
         </div>
-        -->
-        <div class="contador-productos" id="contador-p">
-          <p>{{ totalComprados }}/{{ totalProductos }}</p>
-        </div>
+        <!-- <div class="dropdown-content">
+          <p>Ocultar productos comprados</p>
+          <p>Eliminar lista actual</p>
+        </div> -->
       </div>
-      <ion-button (click)="RecargarModelo()" id="Recargar">Recargar_Modelo</ion-button>
+      <ion-button (click)="RecargarModelo()" id="Recargar"
+        >Recargar_Modelo</ion-button
+      >
+      <div class="contador-productos" id="contador-p">
+        <p>{{ totalComprados }}/{{ totalProductos }}</p>
+      </div>
     </div>
 
     <div class="mapa">

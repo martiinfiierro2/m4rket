@@ -252,10 +252,8 @@ export class HomePage {
       cantidad: nuevaCantidad,
     };
 
-
     this.productosService.putListaCompra(idLista, body).subscribe(
-      (res) => {
-      },
+      (res) => {},
       (error) => {
         console.error('Error en la solicitud PUT: again', error);
       }
@@ -302,6 +300,9 @@ export class HomePage {
   B2c: THREE.Object3D[] = []; // Estanterías grandes
   B3c: THREE.Object3D[] = []; // Estantería Frío
   primeravez: boolean;
+
+
+  
 
   CargarModelo() {
     this.primeravez = false;
@@ -492,8 +493,7 @@ export class HomePage {
     );
   }
 
-
-   async RecargarModelo() {
+  async RecargarModelo() {
     try {
       await this.getListaCompraUsu(); // Espera a que getListaCompraUsu() se complete
       // Ahora puedes continuar con las siguientes operaciones
@@ -588,7 +588,6 @@ export class HomePage {
             comprado: item.comprado,
           }));
 
-
           const detallesProductos: ProductoDetalle[] = [];
 
           this.totalProductos = this.listaCompra.length;
@@ -609,7 +608,6 @@ export class HomePage {
           this.getProductosIMG();
           this.getTodasUbicacionesLista();
           resolve();
-          
         } else {
           console.error('Error en la búsqueda dentro de lssta compra.');
         }
