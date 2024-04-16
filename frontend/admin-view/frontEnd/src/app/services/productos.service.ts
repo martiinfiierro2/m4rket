@@ -98,6 +98,10 @@ export class ProductosService {
 
     return this.http.post(environment.base_url +'/uploads/fotoproducto/' + idProducto, formData, {headers: this.cabeceras});
   }
+
+  getFotoProducto( nombreFoto: string): Observable<any>{
+    return this.http.get(environment.base_url + '/uploads/fotoproducto/' + nombreFoto, {headers: this.cabeceras})
+  }
   
 
 }

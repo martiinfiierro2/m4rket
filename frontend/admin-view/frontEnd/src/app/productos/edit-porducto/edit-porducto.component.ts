@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 import { ProductosService } from "../../services/productos.service";
 import { Producto } from '../../pages/productos/productos.component';
 import { environment } from '../../../environments/environment';
-
+import Swal from 'sweetalert2'
 
 
 @Component({
@@ -28,8 +28,10 @@ export class EditPorductoComponent {
   fotoProductoEditar;
   iconoBorrado = false;
   fotoBorrada = false;
+  fotoActualizada = false;
   public srcImagen;
   public foto: File | undefined;
+
   
 
 
@@ -54,6 +56,8 @@ export class EditPorductoComponent {
   }
 
   cambioImagen( evento: any ): void{
+
+    this.fotoActualizada = true;
     
     if (evento.target.files.length != 0) {
       let reader = new FileReader();
@@ -103,23 +107,34 @@ export class EditPorductoComponent {
   }
 
   editProducto(){
-    /*
-    if (this.productoForm.value['foto'] == '') {
-      this.productoForm.value['foto'] = this.productoEditar.foto;
-    }
-    */
-    
-    console.log(this.productoForm.value);
 
-    this.productoService.putProducto(this.productoForm.value, this.idProd)
-    .subscribe( res => {
-        //subida de la foto
-        this.productoService.postFotoProducto(this.foto!, this.idProd)
-          .subscribe( res =>{
-            this.atras();
-          })
-    })
-    
+    if (this.fotoActualizada) {  //si la foto se ha actualizado
+
+      if (this.foto == undefined) { //si la foto esta vacia, error
+        Swal.fire({
+          title: 'Error!',
+          text: "Falta la imagen",
+          icon: 'error',
+          confirmButtonText: 'Ok'
+        });
+      }
+      else{  //si no esta vacia, se actualiza
+        this.productoService.putProducto(this.productoForm.value, this.idProd)
+        .subscribe( res => {
+          this.productoService.postFotoProducto(this.foto!, this.idProd)
+              .subscribe( res =>{
+                this.atras();
+            });
+        })
+      }
+    }
+    else{  //si no se ha actualizado, se usa la antigua
+      this.productoForm.get('foto').setValue(this.productoEditar.foto);
+      this.productoService.putProducto(this.productoForm.value, this.idProd)
+        .subscribe( res => {
+          this.atras();
+      })
+    }
   }
 
   
