@@ -3,25 +3,21 @@
     <div class="botones-accion">
       <div class="boton-desplegar">
         <input id="menu" type="checkbox" />
-        <label for="menu" ></label>
+        <label for="menu"></label>
         <div class="menu">
           <ul>
             <button>Quitar Compras</button>
             <button>Borrar Lista</button>
           </ul>
         </div>
-        <!-- <div class="dropdown-content">
-          <p>Ocultar productos comprados</p>
-          <p>Eliminar lista actual</p>
-        </div> -->
       </div>
       <ion-button (click)="RecargarModelo()" id="Recargar"
-        >Recargar_Modelo</ion-button>
-        <div class="contador-productos" id="contador-p">
-          <span class="icon"><i class="fa-solid fa-cart-shopping"></i></span>
-          <p>Shopping List: {{ totalComprados }}/{{ totalProductos }} items</p>
-        </div>
-        
+        >Recargar_Modelo</ion-button
+      >
+      <div class="contador-productos" id="contador-p">
+        <span class="icon"><i class="fa-solid fa-cart-shopping"></i></span>
+        <p>Shopping List: {{ totalComprados }}/{{ totalProductos }} items</p>
+      </div>
     </div>
 
     <div class="mapa">
