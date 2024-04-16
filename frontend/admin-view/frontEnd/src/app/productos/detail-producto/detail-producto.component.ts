@@ -69,10 +69,7 @@ export class DetailProductoComponent {
     var app = {};
     var option;
 
-    let datosMostrar;
-
-    console.log(this.productoMostrar);
-    
+    let datosMostrar;    
 
     if (this.productoMostrar.valor_energetico != null) {
       datosMostrar = [
@@ -85,7 +82,6 @@ export class DetailProductoComponent {
         { value: this.productoMostrar.proteina, name: 'Proteina' },
         { value: this.productoMostrar.sal, name: 'Sal' },
       ]
-      console.log(datosMostrar);
     }
 
     option = {
@@ -93,7 +89,7 @@ export class DetailProductoComponent {
         trigger: 'item'
       },
       legend: {
-        left: '20%',
+        left: '10%',
         top: 'center',
         orient: 'vertical'
       },
