@@ -1,18 +1,20 @@
 import { mat4, mat3, vec3 } from 'gl-matrix';
 import * as glMatrix from 'gl-matrix';
 import * as OBJ from "webgl-obj-loader";
+import { motor } from '../motor.component';
 export class Malla {
-
     private rotationAngleX: number = 0;
     private rotationAngleY: number = 0;
     private lastTouchX: number = 0;
     private lastTouchY: number = 0;
     private isRightTouchDown: boolean = false;
 
+    private gl!: WebGL2RenderingContext;
+    private program!: WebGLProgram;
     private OBJfile: string;
     private texture: WebGLTexture | null = null;
 
-    constructor(private gl: WebGL2RenderingContext, private program: WebGLProgram, malla: string) {
+    constructor(malla: string) {
         this.OBJfile = malla;
     }
 
@@ -20,24 +22,26 @@ export class Malla {
         const programInfo = {
             program: program,
             attribLocations: {
-                vertexPosition: this.gl!.getAttribLocation(program, "aVertexPosition"),
-                textureCoord: this.gl!.getAttribLocation(program, "aTextureCoord"),
-                normalCoord: this.gl!.getAttribLocation(program, "aNormalCoord")
+                vertexPosition: gl.getAttribLocation(program, "aVertexPosition"),
+                textureCoord: gl.getAttribLocation(program, "aTextureCoord"),
+                normalCoord: gl.getAttribLocation(program, "aNormalCoord")
             },
             uniformLocations: {
-                projectionMatrix: this.gl!.getUniformLocation(
+                projectionMatrix: gl.getUniformLocation(
                     program,
                     "uProjectionMatrix"
                 ),
-                viewMatrix: this.gl!.getUniformLocation(program, "uViewMatrix"),
-                modelMatrix: this.gl!.getUniformLocation(program, "uModelMatrix"),
-                uSampler: this.gl!.getUniformLocation(program, "uSampler")
+                viewMatrix: gl.getUniformLocation(program, "uViewMatrix"),
+                modelMatrix: gl.getUniformLocation(program, "uModelMatrix"),
+                uSampler: gl.getUniformLocation(program, "uSampler")
             }
         };
         return programInfo;
     }
 
     async dibujar() {
+        this.gl = motor.gl;
+        this.program = motor.program;
         const InfoPrograma = this.getProgramInfo(this.gl, this.program);
     
         let mesh = OBJ.initMeshBuffers(this.gl as WebGL2RenderingContext, new OBJ.Mesh(this.OBJfile));
@@ -110,8 +114,9 @@ export class Malla {
         this.gl!.enableVertexAttribArray(InfoPrograma.attribLocations.textureCoord);
         this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, mesh.normalBuffer);
         this.gl!.vertexAttribPointer(InfoPrograma.attribLocations.textureCoord, mesh.textureBuffer.itemSize, this.gl!.FLOAT, false, 0, 0);
-    
-
+        
+        this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, null);
+        console.log(this.gl!.getParameter(this.gl!.ELEMENT_ARRAY_BUFFER_BINDING))
         const draw = () => {
             this.dibujarBucle(InfoPrograma, mesh);
             requestAnimationFrame(draw); // Llamada recursiva para renderizar de forma continua
@@ -120,23 +125,19 @@ export class Malla {
     }
 
     dibujarBucle(InfoPrograma: any, mesh: any){
-        this.gl!.clearColor(1.0, 1.0, 1.0, 1.0);  // Fondo verde
-        this.gl!.clearDepth(1.0);                 // Limpiar
-        this.gl!.enable(this.gl!.DEPTH_TEST);           // Habilitar Z-Buffer
-        this.gl!.depthFunc(this.gl!.LEQUAL);
-
-        // Limpiar canvas
-        this.gl!.clear(this.gl!.COLOR_BUFFER_BIT | this.gl!.DEPTH_BUFFER_BIT);
 
         // Matriz de proyeccion
         // TODO Pasar como parametro a la malla
+        
+        let camara = motor.camaraActiva.getEntidad();
+        
         const projectionMatrix = mat4.create();
         mat4.perspective(
             projectionMatrix,
             (45 * Math.PI) / 180,
             this.gl!.canvas.width / this.gl!.canvas.height,
-            0.1,
-            100.0
+            camara.cercano,
+            camara.lejano
         );
         // El centro de la escena
         const modelViewMatrix = mat4.create();

@@ -1,4 +1,4 @@
-  import { TEntidad } from "./TEntidad";
+import { TEntidad } from "./TEntidad";
 import * as glMatrix from 'gl-matrix';
 
 export class ECamara extends TEntidad {
@@ -60,6 +60,6 @@ export class ECamara extends TEntidad {
     }
 
     dibujar (){
-
+        console.log("estoy en camara")
     }
 }

@@ -6,28 +6,74 @@ import { TGestorRecursos } from "./TGestorRecursos";
 import { TRecursoShader } from './TRecrusoShader';
 import * as glMatrix from 'gl-matrix';
 
+interface Viewport{
+    x: number, 
+    y: number,
+    alto: number,
+    ancho: number
+}
 export class TMotorTAG {
 
     constructor(){
         this.gestorRecursos = new TGestorRecursos(); 
     }
 
-    private raiz!: TNodo;
+    public raiz!: TNodo;
     public gestorRecursos!: TGestorRecursos;
+    public gestorCamaras: TNodo[] = [];
+    public gestorLuces: TNodo[] = [];
+    public gestorViewports: Viewport[] = [];
     public gl!: WebGL2RenderingContext;
     public program!: WebGLProgram;
+    public camaraActiva!: TNodo;
+    public viewportActivo!: number;
+    public lucesActivas: boolean[] = [];
+
+    async registrarCamara(nodoCamara: TNodo) {
+        this.gestorCamaras.push(nodoCamara);
+    }
+
+    async setCamara(nCamara: TNodo){
+        this.camaraActiva = nCamara;
+    }
+
+    async resgistrarViewport(x: number, y: number, alto: number, ancho: number){
+        let viewport!: Viewport;
+        viewport.x = x;
+        viewport.y = y;
+        viewport.alto = alto;
+        viewport.ancho = ancho;
+        this.gestorViewports.push(viewport);
+    }
+
+    async setViewport(nViewport: number){
+        this.viewportActivo = nViewport;
+    }
 
     async iniciarGL(){
         const canvas = document.querySelector("#mercado") as HTMLCanvasElement;
-        let gl = canvas.getContext("webgl") as WebGL2RenderingContext | null;
+        let gl = canvas.getContext("webgl2") as WebGL2RenderingContext | null;
         if (!gl) {
             console.error('No se pudo obtener el contexto Webthis.gl!.');
             return;
         }
         this.gl = gl;
+        
+        this.gl.clearColor(1.0, 1.0, 1.0, 1.0);
+        this.gl.clearDepth(1.0);
+        this.gl.enable(this.gl.DEPTH_TEST);
+        this.gl.depthFunc(this.gl.LEQUAL);
+
+        // Limpiar canvas
+        this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
     }
 
     async iniciarPrograma(){
+        //Calculamos la matriz de vista como la inversa de la matriz de la cámara activa
+        let matrizCamara = this.camaraActiva.getMatrizTransf();
+        let viewMatrix = glMatrix.mat4.create();
+        glMatrix.mat4.invert(viewMatrix, matrizCamara);
+
         const auxVertex= await this.gestorRecursos.getRecurso("vertexShader.glsl", "shader");
         let vertexShaderSource: any, fragmentShaderSource: any;
 
@@ -141,12 +187,11 @@ export class TMotorTAG {
         nodoCreado.setEscalado(esc);
         
         return nodoCreado;
-
     }
 
     crearLuz( padre: TNodo|null, trasl: glMatrix.vec3, rot: glMatrix.vec3, esc: glMatrix.vec3, intensidad: number, tipoLuz: string): TNodo{
 
-        let nodoCreado, entidadLuz;
+        let nodoCreado: any, entidadLuz: any;
 
         nodoCreado = new TNodo();
         if (padre == null) {

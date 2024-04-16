@@ -1,7 +1,5 @@
 import { TRecurso } from "./TRecurso";
 import { Malla } from './Malla';
-import { motor } from '../motor.component';
-
 
 export class TRecursoMalla extends TRecurso {
     
@@ -22,7 +20,7 @@ export class TRecursoMalla extends TRecurso {
                 })
                 .then(data => {
                     const archivo = data;
-                    const _malla: Malla = new Malla(motor.gl, motor.program, archivo);
+                    const _malla: Malla = new Malla(archivo);// valor motor
                     this.mallas.push(_malla);
                     resolve();
                 })
