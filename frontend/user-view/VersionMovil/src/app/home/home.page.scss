@@ -46,22 +46,32 @@
   }
 }
 .contador-productos {
-  background-color: #d5cece;
-  color: #212121;
-  font-size: 15px;
-  width: 3em;
-  height: 20px;
-  border: 2px solid transparent;
+  background-color: #e9e7e7;
+    color: #000000; /* Black text */
+  font-family: 'Arial', sans-serif;
+  font-size: 18px;
+  width: auto; /* Adjust width as needed */
+  height: 30px;
+  border: 2px solid #000000;
   border-radius: 15px;
   cursor: pointer;
-  padding-bottom: 50px;
-  text-align: center;
-
+  padding: 5px 10px; /* Adjust padding for better spacing */
+  display: flex; /* Make it a flexbox container */
+  align-items: center; /* Align content vertically */
+  justify-content: space-between; /* Distribute content horizontally */
 
   @media (prefers-color-scheme: dark) {
     background-color: #282828;
-    color: #fff; // Cambia el color de fondo en modo oscuro
+    color: #fff;
+    border: 2px solid white;
+
   }
+}
+
+.icon {
+  display: inline-block;
+  margin-left: 10px; /* Increase margin for separation */
+  font-size: 12px; /* Reduce icon size */
 }
 
 .contador-productos p {
@@ -74,7 +84,7 @@
 }
 
 .button {
-  background-color: #d5cece;
+  background-color: #e9e7e7;
   color: #212121;
   font-size: 15px;
   height: 42px;
@@ -334,17 +344,10 @@ label:after {
 
 
 
-.menu-icon::after {
-  content: "Menú";
-  margin-left: 10px;
-}
-
-
 /* Estilos del menú desplegado */
 #menu:checked ~ .menu {
   display: block;
-  background-color: #fff; /* Color de fondo del menú */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra suave */
+  background-color:transparent; /* Color de fondo del menú */
   position: absolute;
   left: 0;
   z-index: 1;
@@ -352,23 +355,27 @@ label:after {
 
 .menu button {
   display: block;
-  width: 100px;
+  width: 9em;
+  height: fit-content + 2em;
   text-align: left;
-  border: 1px solid black;
   border-radius: 5px;
   margin-bottom: 10px;
   font-size: 12px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  padding: 4px;
+  background-color: #e9e7e7;
+  @media (prefers-color-scheme: dark) {
+    background-color: #282828;
+  }
 }
 .menu > ul{
   padding: 0;
+  display: relative;
 }
 
 .menu button:active {
-  background-color: #f0f0f0; /* Color de fondo al tocar el botón */
+  background-color: #a09e9e;
 }
 
-.menu button:not(:last-child) {
-  border-bottom: 1px solid #ccc; /* Línea divisoria entre botones */
-}
+

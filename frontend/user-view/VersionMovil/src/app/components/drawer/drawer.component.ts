@@ -484,7 +484,7 @@ export class DrawerComponent implements AfterViewInit {
         let a = document.getElementById('contador-p');
         if (a)
           a.innerHTML =
-            '<p>' + this.totalComprados + '/' + this.totalProductos + '</p>';
+        '<p>' + this.totalComprados + '/' + this.totalProductos + '<i style="margin-left: 10px; font-size: 16px;" class="fa-solid fa-cart-shopping"></i></p>';
 
         console.log('La lista del usuario es', this.listaCompra);
         console.log('Total de productos en la lista:', this.totalProductos);
@@ -575,7 +575,7 @@ export class DrawerComponent implements AfterViewInit {
     let a = document.getElementById('contador-p');
     if (a)
       a.innerHTML =
-        '<p>' + this.totalComprados + '/' + this.totalProductos + '</p>';
+    '<p>' + this.totalComprados + '/' + this.totalProductos + '<i style="margin-left: 10px; font-size: 16px;" class="fa-solid fa-cart-shopping"></i></p>';
   }
 
   //CHATBOT
