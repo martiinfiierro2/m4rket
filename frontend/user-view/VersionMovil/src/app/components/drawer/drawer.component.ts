@@ -621,4 +621,9 @@ export class DrawerComponent implements AfterViewInit {
   //PROFILE
 
   abrirPerfil() {}
+
+   logoutAndRedirectToLogin(): void {
+    localStorage.clear();
+    window.location.href = '/login'; // Reemplaza '/login' con la URL real de tu página de inicio de sesión
+}
 }

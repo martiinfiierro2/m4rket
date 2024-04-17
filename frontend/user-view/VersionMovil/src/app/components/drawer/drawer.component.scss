@@ -67,13 +67,16 @@ margin-left: 20px;
 .buscador{
   width: 100%;
 }
-.profile{
+.profile {
   background: darkgray;
   border-radius: 40px;
   height: 30px;
   width: 30px;
-  display: block;
+  display: flex; /* Utilizamos flexbox para centrar los íconos */
+  justify-content: center; /* Centramos horizontalmente */
+  align-items: center; /* Centramos verticalmente */
 }
+
 
 .cerrar-tarjeta{
   width: 30px;
