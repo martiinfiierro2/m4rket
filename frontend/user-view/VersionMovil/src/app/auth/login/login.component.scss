@@ -101,9 +101,7 @@ button{
     font-size: 25px;
     color: white;
     font-weight: 500;
-
-    position:absolute;
-    bottom:40%;
+    margin-top: 40px;
 
     @media (prefers-color-scheme: dark) {
         background-color: #96b7af; 
