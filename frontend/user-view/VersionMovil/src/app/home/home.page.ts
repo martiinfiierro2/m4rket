@@ -7,6 +7,8 @@ import { EstadisticasService } from '../services/estadisticas.service';
 import { UbicacionesService } from '../services/ubicaciones.service';
 import { json } from 'express';
 import { forkJoin } from 'rxjs';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+
 
 //modelo todo
 import * as THREE from 'three'; // we need @types/three for this to work (next to three package)
@@ -133,7 +135,10 @@ export class HomePage {
     this.getListaCompraUsu();
     this.CargarModelo();
     this.RecargarModelo();
+    this.loadChatbotScript();
   }
+
+  
 
   //Funciones para sacar el valor de los productos a partit de la ubicacion del motor gráfico
   getIdUbicacion(referencia: any, posicion: any) {
@@ -614,4 +619,14 @@ export class HomePage {
       });
     });
   }
+
+  //!Chatbot!!!
+  loadChatbotScript() {
+    const script = document.createElement('script');
+    script.src = 'https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1';
+    script.onload = () => {
+    };
+    document.body.appendChild(script);
+  }
+
 }

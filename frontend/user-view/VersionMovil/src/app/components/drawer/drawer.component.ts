@@ -15,6 +15,8 @@ import { environment } from '../../environments/environment';
 import * as echarts from 'echarts';
 import { HomePage } from 'src/app/home/home.page';
 import { forkJoin } from 'rxjs';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+
 
 interface Stats {
   nombre: string;

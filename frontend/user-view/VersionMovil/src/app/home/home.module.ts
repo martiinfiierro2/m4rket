@@ -6,6 +6,7 @@ import { HomePage } from './home.page';
 
 import { HomePageRoutingModule } from './home-routing.module';
 import { SharedComponentsModule } from '../components/shared-components.module';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 
 
@@ -17,6 +18,8 @@ import { SharedComponentsModule } from '../components/shared-components.module';
     HomePageRoutingModule,
     SharedComponentsModule,
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+
   declarations: [
     HomePage,
     //MotorComponent
