@@ -6,6 +6,7 @@ import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component
 import { SignUpComponent } from './auth/sign-up/sign-up.component';
 import { HomePage } from './home/home.page';
 import { authGuard, authGuard2 } from './guards/auth.guard';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 const routes: Routes = [
   
   {
@@ -39,7 +40,8 @@ const routes: Routes = [
   imports: [
     RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
   ],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 
 export class AppRoutingModule { }
