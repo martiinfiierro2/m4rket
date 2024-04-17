@@ -41,7 +41,7 @@
           </ion-searchbar>
 
   
-          <div class="profile" #profile (click)="abrirPerfil();"></div>
+          <div class="profile" #profile (click)="logoutAndRedirectToLogin();"><i class="fas fa-sign-out-alt logout-icon"></i></div>
         </div>
         <div>
           <div *ngFor="let producto of productos" class="producto-container">
