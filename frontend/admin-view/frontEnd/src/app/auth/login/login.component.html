@@ -17,7 +17,7 @@
                 Contraseña
                 <input type="password" name="pwd" formControlName="pwd" id="pwd" class="box">
             </label>
-            <label for="recordarme">Recordarme <input type="checkbox" formControlName="check" name="recordarme" id="recordarme"></label>
+            <label for="recordarme">Recordarme <input type="checkbox" formControlName="check" name="recordarme" id="recordarme" class="recuerdame"></label>
             <div id="avisos">
                 <p class="text-danger" *ngIf="!campoValido('email')">El usuario es obligatorio y debe ser un email</p>
                 <p class="text-danger" *ngIf="!campoValido('pwd')">El campo contraseña es obligatorio</p>

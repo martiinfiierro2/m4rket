@@ -9,16 +9,27 @@ body{
      
     border-right: solid 1px;
     padding: 60px;
+
+    @media (prefers-color-scheme: dark) {
+        background: #282828; 
+      }
 }
 
 .contenedor h1{
     font-size: 80px;
     margin-bottom: 0px;
     margin-top: 10%;
+
+    @media (prefers-color-scheme: dark) {
+       color: #ffffff;
+      }
 }
 
 .contenedor h2{
     font-weight: 300;
+    @media (prefers-color-scheme: dark) {
+        color: #ffffff;
+       }
 }
 
 .fondoFoto{
@@ -33,12 +44,37 @@ body{
 .box{
     height: 50px;
     border-radius: 7px;
-    border: 1px solid #000;
+    border: 1px solid #282828;
+    @media (prefers-color-scheme: dark) {
+        border: none;
+       }
 }
 button{
     height: 50px;
     font-size: 20px;
     margin-top: 20px;
+
+    @media (prefers-color-scheme: dark) {
+        background-color: #96b7af; 
+        border: none;
+      }
+}
+input{
+    padding-left: 10px;
+    outline-color: #51877a;
+    @media (prefers-color-scheme: dark) {
+        background-color: #4e4e4e; 
+        color:#f9f9f9;
+        border-color:#4e4e4e;
+        outline: none;
+      }
+}
+
+.recuerdame:checked{
+    accent-color: #51877a;
+    @media (prefers-color-scheme: dark) {
+        accent-color: #96b7af; 
+      }
 }
 
 form{
@@ -53,6 +89,9 @@ form{
         margin: 0.2em;
         display: inline-flex;
         flex-direction: column;
+        @media (prefers-color-scheme: dark) {
+            color: #ffffff;
+           }
     }
 
     form > label[for="recordarme"]{
