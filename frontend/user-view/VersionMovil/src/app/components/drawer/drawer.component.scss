@@ -121,7 +121,7 @@ align-items: left;
 
 .disponibilidad{
 display: flex;
-justify-content: center;
+//justify-content: center;
 align-items: center;
 margin: 0;
 padding: 0;
@@ -144,6 +144,12 @@ font-size: 30px;
 
 }
 
+.cantidades{
+  display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 .boton-eliminar{
   background-color: #FDA4AF;
   color: #9F1239;
@@ -235,7 +241,7 @@ opacity: 1;
 
 .add-button {
   font-size: 20px;
-  margin-left: 5px;
+  //margin-left: 5px;
   color: #51877a;
   @media (prefers-color-scheme: dark) {
     color: #9dbbb3;
@@ -255,12 +261,11 @@ opacity: 1;
   padding: 4px;
   justify-content: center;
 }
-
 .add2 button-icon {
   font-size: 20px;
 }
 .add2 span{
-  margin-left: 3px;
+  margin: 3px;
   font-size: 20px;
 }
 .valores-nutricionales{

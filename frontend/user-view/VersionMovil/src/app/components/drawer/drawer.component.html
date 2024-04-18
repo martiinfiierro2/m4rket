@@ -1,4 +1,15 @@
-
+<head>
+  <style>
+    df-messenger {
+      margin: 0;
+      padding: 0;
+      position: fixed;
+      right: 0;
+      transform: translateX(50%) translateY(50%);
+      bottom: -90px;
+    }
+  </style>
+</head>
 
 <div class="chatbot" #chatbot>
   <div class="chatbot-header">
@@ -24,11 +35,22 @@
 
   </div>>
 </div>
-
 <div class="drawer" #drawer>
-  <div class="botonchatbot" #botonchatbot (click)="abrirChatbot()">
-    <ion-icon name="chatbubbles-outline"></ion-icon>
+    
+  <div class="botonchatbot" #botonchatbot><!--(click)="abrirChatbot()"-->
+      <!--<ion-icon name="chatbubbles-outline"></ion-icon>-->
+    <df-messenger
+    intent="WELCOME"
+    chat-title="Fermín"
+    agent-id="182b31cf-14c9-4c0b-9cd2-f35c4e65e132"
+    language-code="es"
+  ></df-messenger>  
   </div>
+  <script>
+    const dfMessenger = document.querySelector('df-messenger').shadowRoot.querySelector('.df-messenger-wrapper').querySelector('#widgetIcon').style.bottom = "5vh";
+
+
+  </script>
   <div class="tarjeta">
     <div class="ion-text-center" (click)="toggleDrawer()">
       <div class="drawer-pull" > </div>
@@ -111,9 +133,12 @@
                       <ion-icon class="add-button" name="add-circle-outline"></ion-icon>
                     </button>
                   </div>
-                  <button class="boton-eliminar"(click)="eliminar(productoSelect);">
-                    Eliminar
-                  </button>
+                  <div>
+                    <button class="boton-eliminar"(click)="eliminar(productoSelect);">
+                      Eliminar
+                    </button>
+                  </div>
+                  
                 </div>
             </div>
             <div class="foto_producto">

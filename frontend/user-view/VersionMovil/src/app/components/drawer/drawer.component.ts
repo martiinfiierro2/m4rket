@@ -626,4 +626,15 @@ export class DrawerComponent implements AfterViewInit {
     localStorage.clear();
     window.location.href = '/login'; // Reemplaza '/login' con la URL real de tu página de inicio de sesión
 }
+  //CHATBOT
+  //!Chatbot!!!
+  loadChatbotScript() {
+    const script = document.createElement('script');
+    script.src = 'https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1';
+    script.onload = () => {
+    };
+    document.body.appendChild(script);
+  }
 }
+
+
