@@ -4,7 +4,7 @@ import { FormBuilder, Validators, ReactiveFormsModule, FormsModule } from '@angu
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common'
 import { Router } from '@angular/router';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 import { IonInput, IonIcon, IonButton } from "@ionic/angular/standalone";
 
 interface Usuario {
@@ -78,12 +78,12 @@ export class LoginComponent {
 
       },(error) =>{
         console.log('error')
-          Swal.fire({
+         // Swal.fire({
         //    title: 'Error!',
         //    text: error.error.msg,
         //    icon: 'error',
         //    confirmButtonText: 'Ok'
-        })
+       // })
       })
       this.esperando = false;
     }   
