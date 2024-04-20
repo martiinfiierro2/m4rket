@@ -77,11 +77,12 @@ export class LoginComponent {
         this.route.navigateByUrl('/home');
 
       },(error) =>{
-        Swal.fire({
-          title: 'Error!',
-          text: error.error.msg,
-          icon: 'error',
-          confirmButtonText: 'Ok'
+        console.log('error');
+        // Swal.fire({
+        //   title: 'Error!',
+        //   text: error.error.msg,
+        //   icon: 'error',
+        //   confirmButtonText: 'Ok'
         })
       })
       this.esperando = false;
