@@ -142,9 +142,16 @@ export class UsuariosComponent {
   crearUsuario(){
 
     if (this.usuarioForm.status != 'VALID') {
-      this.lanzarModelError("Campos incompletos o mal completados");
+      if (this.usuarioForm.controls.rol.status == 'INVALID') {
+        this.usuarioForm.controls.rol.setValue('admin');
+      }
+      else{
+        this.lanzarModelError("Campos incompletos o mal completados");
+      }
+      console.log(this.usuarioForm);
     }
-    else{
+
+    if (this.usuarioForm.status == 'VALID') {
       if (this.validarPwd(this.usuarioForm.value.pwd)) {
         this.usuarioService.crearUsuario(this.usuarioForm.value)
           .subscribe(res =>{
@@ -157,7 +164,7 @@ export class UsuariosComponent {
       else{
         this.lanzarModelError('La logitud de la contraseña tiene que ser de 8 carácteres y debe contener como mínimo una mayúscula, una minúscula, un número y un signo de puntuación');
       }
-    }    
+    }   
   }
 
   cerrarFormulario(){
