@@ -25,11 +25,14 @@
                 <p class="text-danger" *ngIf="avisoError">Campos incorrectos</p>
             </div>
             <button type="submit" [disabled]="esperando" ><i id="iconoCarga" class="fas fa-spinner fa-spin" *ngIf="esperando" ></i> Entrar</button>
-            <div class="registro">
-                <p>¿No tienes una cuenta todavía?</p>
-                <p><a href="/registro">Regístrate aquí</a></p>
-            </div>
+
         </form>  
+        <div class="registro">
+            <p>¿No tienes una cuenta todavía?</p>
+            <p><a href="/registro">Regístrate aquí</a></p>
+        </div>
+
+        
     </div>
     
     
