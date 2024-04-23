@@ -34,12 +34,12 @@ export class SignUpComponent {
 
   sign_up(){
     console.log(this.sign_upForm);
-
     this.usuarioService.registro(this.sign_upForm.value)
       .subscribe( res =>{
         console.log(res);
         this.tokenUsuario = res.token;
         sessionStorage.setItem('tokenUsuario', this.tokenUsuario);
+        localStorage.setItem('idUsuario', res.idUsuario);
 
         this.route.navigate(['/home']);
       }) 
