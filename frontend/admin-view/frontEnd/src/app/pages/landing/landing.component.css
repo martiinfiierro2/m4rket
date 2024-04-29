@@ -220,6 +220,10 @@ header{
             padding-right: 1em;
         }
 
+    menu{
+        height: 100vh;
+    }
+
     .btnCerrar{
         display: block;
         margin-left: 2.5em;
@@ -282,6 +286,9 @@ header{
         gap: 2em;
     }
     
+    .bloqueoScroll{
+        overflow-y: hidden;
+    }
 
 
 

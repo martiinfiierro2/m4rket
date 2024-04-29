@@ -3,10 +3,39 @@
         <input type="text" name="search" id="search" class="barraBusqueda" placeholder="Búsqueda">
     </div>
     <div id="botonesHeader">
-        <button (click)="irNuevaPromo()" class="btnPrimario">Añadir promoción</button>
-        <button (click)="irNuevoTipoPromo()" class="btnSecundario">Añadir tipo promoción</button>
+        <button (click)="desplegarFormulario('promo')" class="btnPrimario">Añadir promoción</button>
+        <button (click)="desplegarFormulario('tipoPromo')" class="btnSecundario">Añadir tipo promoción</button>
     </div>
 </div>
+
+<div id="formularioPromo" *ngIf="creacionPromo">
+    <form [formGroup]="promocionCrearForm" (ngSubmit)="crearPromocion()">
+        <input type="text" name="nombre" id="nombre" formControlName="nombre" placeholder="Nombre*">
+        <label for="fecha_ini">Inicio* <input type="date" name="fecha_ini" id="fecha_ini" formControlName="fecha_ini"></label>
+        <label for="fecha_fin">Fin* <input type="date" name="fecha_fin" id="fecha_fin" formControlName="fecha_fin"></label>
+        <input list="tipoPromos" formControlName="id_tipoPromo" placeholder="Tipo promoción*">
+        <datalist id="tipoPromos">
+            <option *ngFor="let tipoPromo of tipoPromociones" value='{{tipoPromo.id}} - {{tipoPromo.nombre}}'></option>
+        </datalist>
+        <div class="botonesForm">
+            <button type="submit"  class="btnIcon" id="btnCheck"><span class="fa-solid fa-check"></span></button>
+            <button type="button" class="btnIcon" id="btnCancel" (click)="cerrarFormulario('promo')"><span class="fa-solid fa-x"></span></button>
+        </div>
+    </form>
+</div>
+
+<div id="formularioTipoPromo"*ngIf="creacionTipoPromo">
+    <form (ngSubmit)="crearTipoPromo()" [formGroup]="tipoPromoCrearForm">
+        <input type="text" name="nombre" id="nombre" formControlName="nombre" placeholder="Nombre*">
+        <textarea name="descripcion" id="descripcion" cols="30" rows="1" formControlName="descripcion" placeholder="Descripción*"></textarea>
+        <label for="modficador">Descuento<input type="number" name="modificador" id="modificador" formControlName="modificador" max="100" min="0" placeholder=" % "></label>
+        <div class="botonesForm">
+            <button type="submit" class="btnIcon" id="btnCheck"><span class="fa-solid fa-check"></span></button>
+            <button class="btnIcon" id="btnCancel" (click)="cerrarFormulario('tipoPromo')"><span class="fa-solid fa-x"></span></button>
+        </div>
+    </form>
+</div>
+
 <div id="listadoPromociones" *ngIf="promociones">
     <table class="table">
         <thead>

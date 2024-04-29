@@ -21,7 +21,7 @@ import { DatosComponent } from './pages/datos/datos.component';
 import { EditUbicacionComponent } from './ubicaciones/edit-ubicacion/edit-ubicacion.component';
 import { NewUbicacionComponent } from './ubicaciones/new-ubicacion/new-ubicacion.component';
 
-import { authGuard, authGuard2 } from "../app/guards/auth.guard";
+import { authGuard, authGuard2, deviceGuard } from "../app/guards/auth.guard";
 import { UsuariosComponent } from './pages/usuarios/usuarios.component';
 import { DetailProductoComponent } from './productos/detail-producto/detail-producto.component';
 
@@ -32,14 +32,14 @@ export const routes: Routes = [
   { path: 'dataset', component: DatasetComponent},
   { path: 'dataset-producto', component: DatasetProductoComponent},
 
-  { path: 'login', component: LoginComponent, canActivate: [authGuard2],
+  { path: 'login', component: LoginComponent, canActivate: [authGuard2, deviceGuard],
       children: [
         { path: '', component: LoginComponent},
         { path: '**', redirectTo: ''}
       ]
   },
 
-  { path: 'productos', component: AdminLayoutComponent, canActivate: [authGuard],
+  { path: 'productos', component: AdminLayoutComponent, canActivate: [authGuard, deviceGuard],
       children: [
         { path: '', component: ProductosComponent},
         { path: 'newProducto',component: NewProductoComponent},
@@ -48,7 +48,7 @@ export const routes: Routes = [
         { path: '*', redirectTo: ''}
       ]
   },
-  { path: 'promociones', component: AdminLayoutComponent, canActivate: [authGuard],
+  { path: 'promociones', component: AdminLayoutComponent, canActivate: [authGuard,deviceGuard],
       children: [
         { path: '', component: PromocionesComponent},
         { path: 'newPromocion',component: NewPromocionComponent},
@@ -57,7 +57,7 @@ export const routes: Routes = [
         { path: '*', redirectTo: ''}
       ]
   },
-  { path: 'ubicaciones', component: AdminLayoutComponent, canActivate: [authGuard],
+  { path: 'ubicaciones', component: AdminLayoutComponent, canActivate: [authGuard, deviceGuard],
       children: [
         { path: '', component: UbicacionesComponent},
         { path: 'editUbicacion',component: EditUbicacionComponent},
@@ -66,19 +66,19 @@ export const routes: Routes = [
       ]
 
   },
-  { path: 'estadisticas', component: AdminLayoutComponent, canActivate: [authGuard],
+  { path: 'estadisticas', component: AdminLayoutComponent, canActivate: [authGuard, deviceGuard],
       children: [
         { path: '', component: EstadisticasComponent},
         { path: '*', redirectTo: ''}
       ]
   },
-  { path: 'datos', component: AdminLayoutComponent, canActivate: [authGuard],
+  { path: 'datos', component: AdminLayoutComponent, canActivate: [authGuard, deviceGuard],
     children: [
       { path: '', component: DatosComponent},
       { path: '*', redirectTo: ''}
     ]
   },
-  { path: 'usuarios', component: AdminLayoutComponent,
+  { path: 'usuarios', component: AdminLayoutComponent, canActivate: [authGuard, deviceGuard],
     children: [
       { path: '', component: UsuariosComponent},
       { path: '*', redirectTo: ''}

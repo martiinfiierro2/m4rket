@@ -16,7 +16,12 @@ img{
 }
 
 #divAdd{
+    display: flex;
+    flex-direction: column;
     background-color: white;
+    border-radius: 1em;
+    padding: 2.5em 1em;
+    margin: 2em;
 }
 
 form{

@@ -1,29 +1,29 @@
 <div id="sidebar_menu">
     <div id="head">
-        <img src="../../../assets/img/logoBlancoGrande.png" alt="Logo de la aplicación">
-        <h2>M4RKET</h2>
+        <img src="../../../assets/img/logoBlancoGrande.png" alt="Logo de la aplicación" class="icono">
+        <h2 class="texto">M4RKET</h2>
     </div>
     <div id="menuContent">
         <div id="topMenu">
             <div class="linea" id="lineaProductos">
                 <span class="icono"><a href="/productos" class="fa-solid fa-file-lines"></a></span>
-                <span><a href="/productos">Stock</a></span>
+                <span class="texto"><a href="/productos">Stock</a></span>
             </div>
             <div class="linea" id="lineaPromociones">
                 <span class="icono"><a href="/promociones" class="fa-solid fa-percent"></a></span>
-                <span><a href="/promociones">Promociones</a></span>
+                <span class="texto"><a href="/promociones">Promociones</a></span>
             </div>
             <div class="linea" id="lineaUbicaciones">
                 <span class="icono"><a href="/ubicaciones" class="fa-solid fa-location-dot"></a></span>
-                <span><a href="/ubicaciones">Ubicaciones</a></span>
+                <span class="texto"><a href="/ubicaciones">Ubicaciones</a></span>
             </div>
             <div class="linea" id="lineaEstadisticas">
-                <span class="icono"><i class="fa-solid fa-chart-simple"></i><a href="/estadisticas" class="icon-chart"></a></span>
-                <span><a href="/estadisticas">Estadísticas</a></span>
+                <span class="icono"><a href="/estadisticas" class="fa-solid fa-chart-simple"></a></span>
+                <span class="texto"><a href="/estadisticas">Estadísticas</a></span>
             </div>
             <div  [ngClass]="clase"  id="lineaCuentas" *ngIf="superAdmin">
-                <span class="icono fa-solid fa-user-gear"></span>
-                <span><a href="/usuarios">Cuentas</a></span>
+                <span class="icono"><a href="/usuarios" class="fa-solid fa-user-gear"></a></span>
+                <span class="texto"><a href="/usuarios">Cuentas</a></span>
             </div>
         
             
@@ -31,11 +31,11 @@
         <div id="bottomMenu">
             <div class="linea">
                 <span class="icono fa-solid fa-user"></span>
-                <span id="nombreUsuario" class="enlace"></span>
+                <span id="nombreUsuario" class="enlace texto"></span>
             </div>
             <div class="linea">
                 <span class="icono fa-solid fa-right-from-bracket"></span>
-                <span (click)="logOut()" class="enlace">Cerrar sesión</span>
+                <span (click)="logOut()" class="enlace texto">Cerrar sesión</span>
             </div>
         </div>
     </div>

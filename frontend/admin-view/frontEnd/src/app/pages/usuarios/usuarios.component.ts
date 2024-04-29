@@ -141,8 +141,8 @@ export class UsuariosComponent {
 
   crearUsuario(){
 
-    if (this.usuarioForm.status != 'VALID') {
-      if (this.usuarioForm.controls.rol.status == 'INVALID') {
+    if (this.usuarioForm.invalid) {
+      if (this.usuarioForm.controls.rol.invalid) {
         this.usuarioForm.controls.rol.setValue('admin');
       }
       else{
@@ -151,7 +151,7 @@ export class UsuariosComponent {
       console.log(this.usuarioForm);
     }
 
-    if (this.usuarioForm.status == 'VALID') {
+    if (this.usuarioForm.valid) {
       if (this.validarPwd(this.usuarioForm.value.pwd)) {
         this.usuarioService.crearUsuario(this.usuarioForm.value)
           .subscribe(res =>{
@@ -179,9 +179,6 @@ export class UsuariosComponent {
       })
   }
 
-  irEditarUsu( idUsu: number){
-
-  }
 
   lanzarModelError( msg:string ){
     Swal.fire({

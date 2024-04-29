@@ -3,7 +3,7 @@
         <input type="text" name="search" id="search" placeholder="Búsqueda" [(ngModel)]="valueBusquedaInput" class="barraBusqueda">
     </div>
     <div id="botonesHeader">
-        <button (click)="creacionUsuario = true" class="btnPrimario">Registar usuario</button>
+        <button (click)="creacionUsuario = true" class="btnPrimario">Registar admin</button>
         <div id="desplegableFiltros" class="btnSecundario">
             <span (click)="desplegarFiltros()">Filtros búsqueda</span>
             <div id="contenido-desplegableFiltros" *ngIf="mostrarDesplegableFiltros">
@@ -52,7 +52,6 @@
                 <td>{{ usuario.email }}</td>   
                 <td>{{ usuario.rol }}</td>
                 <td>
-                    <button (click)="irEditarUsu(usuario.uid)" class="btnIcon" id="btnEdit"><span class="fa-solid fa-pen"></span></button>
                     <button (click)="borrarUsu(usuario.uid)" class="btnIcon" id="btnBorrar"><span class="fa-solid fa-trash"></span></button>
                 </td>
             </tr>

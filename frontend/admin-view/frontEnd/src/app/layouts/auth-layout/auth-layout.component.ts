@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { HttpClientModule } from "@angular/common/http";
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
   selector: 'app-auth-layout',
@@ -10,7 +11,5 @@ import { HttpClientModule } from "@angular/common/http";
   styleUrl: './auth-layout.component.css'
 })
 export class AuthLayoutComponent {
-
-  constructor( private route: Router){}
 
 }

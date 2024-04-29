@@ -46,7 +46,47 @@ h2{
       vertical-align: middle; /* Centrar verticalmente */
       padding: 10px; /* Ajusta el espaciado según sea necesario */
 
-}
+  }
+
+    #formularioPromo, #formularioTipoPromo{
+      margin: 1em;
+      padding: 1.5em;
+      background-color: white;
+      border-radius: 1em;
+    }
+
+    label{
+      font-size: .9em;
+      color: gray;
+    }
+
+    #formularioPromo > form > label > input, #formularioTipoPromo > form > label > input{
+      margin-left: .5em;
+    }
+
+    #formularioPromo > form, #formularioTipoPromo > form{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between; 
+      align-items: flex-start;
+    }
+
+    .botonesForm > button{
+      margin: .2em;
+    }
+      #btnCheck > span{
+        color: green;
+      }
+
+      #btnCancel > span{
+        color: red;
+      }
+    
+      #btnCheck:hover, #btnCancel:hover{
+        font-size: 1.1em;
+      }
+
+
 
 
 /*MODAL*/

@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterOutlet } from '@angular/router';
-import {  HttpClientModule } from "@angular/common/http";
+import { RouterOutlet } from '@angular/router';
+import { HttpClientModule } from "@angular/common/http";
+
 
 
 
@@ -15,10 +16,8 @@ import {  HttpClientModule } from "@angular/common/http";
 export class AppComponent {
   title = 'frontEnd';
 
-  constructor(private route: Router){}
+  constructor(){}
 
-  ngOnInit(): void{
-    
-  }
+
     
 }
