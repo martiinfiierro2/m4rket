@@ -138,8 +138,9 @@ export class HomePage {
     this.loadChatbotScript();
   }
 
-  
-
+  BorrarListaCompraCompleta(){
+    this.drawerComponent.borrarTodaLaLista();
+  }
   //Funciones para sacar el valor de los productos a partit de la ubicacion del motor gráfico
   getIdUbicacion(referencia: any, posicion: any) {
     for (let index = 0; index < this.listaCompra.length; index++) {
@@ -243,6 +244,25 @@ export class HomePage {
   borrarProd(idLista: string) {
     this.productosService.deleteListaCompra(idLista).subscribe((result) => {
       this.getListaCompraUsu();
+    });
+  }
+
+  borrarTodaLaLista() {
+    this.productosService.getListaCompra(this.idUsu).subscribe((result) => {
+      if (result.listacompra) {
+        const listasCompra = result.listacompra;
+        const deletePromises = listasCompra.map((listaCompra: any) => {
+          return this.productosService.deleteListaCompra(listaCompra.id).toPromise();
+        });
+  
+        Promise.all(deletePromises).then(() => {
+          console.log('Todas las listas de compra han sido eliminadas exitosamente.');
+          this.RecargarModelo();
+          this.getListaCompraUsu();
+        }).catch((error) => {
+          console.error('Error al intentar borrar todas las listas de compra:', error);
+        });
+      }
     });
   }
 
@@ -619,6 +639,7 @@ export class HomePage {
       });
     });
   }
+
 
   //!Chatbot!!!
   loadChatbotScript() {

@@ -422,6 +422,25 @@ export class DrawerComponent implements AfterViewInit {
     }
   }
 
+
+  borrarTodaLaLista() {
+    this.productosService.getListaCompra(this.idUsu).subscribe((result) => {
+      if (result.listacompra) {
+        const listasCompra = result.listacompra;
+        const deletePromises = listasCompra.map((listaCompra: any) => {
+          return this.productosService.deleteListaCompra(listaCompra.id).toPromise();
+        });
+  
+        Promise.all(deletePromises).then(() => {
+          console.log('Todas las listas de compra han sido eliminadas exitosamente.');
+          this.Recarguita();
+          this.getListaCompraUsu();
+        }).catch((error) => {
+          console.error('Error al intentar borrar todas las listas de compra:', error);
+        });
+      }
+    });
+  }
   eliminar(producto: any) {
     producto.enListaCompra = false;
     this.borrarProd(producto.idLista);
@@ -497,6 +516,7 @@ export class DrawerComponent implements AfterViewInit {
       }
     });
   }
+  
 
   compararListaBusqueda() {
     this.listaCompra.forEach((productoCompra) => {
@@ -522,6 +542,7 @@ export class DrawerComponent implements AfterViewInit {
       this.getListaCompraUsu();
     });
   }
+
 
   actualizarCantidad(
     idProd: string,
@@ -562,6 +583,8 @@ export class DrawerComponent implements AfterViewInit {
       producto.comprado
     );
   }
+
+  
 
   eliminarComprado(producto: any) {
     producto.comprado = false;
