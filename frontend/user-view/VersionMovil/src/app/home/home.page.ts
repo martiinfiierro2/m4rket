@@ -620,6 +620,9 @@ export class HomePage {
     });
   }
 
+
+  
+
   //!Chatbot!!!
   loadChatbotScript() {
     const script = document.createElement('script');
