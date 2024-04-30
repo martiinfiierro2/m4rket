@@ -71,10 +71,10 @@ export class ProductosService {
   deleteListaCompra(idLista: string) {
     this.cargarCabeceras();
     let urlCompleta = this.urlLista + '/' + idLista;
-
     return this.http.delete(urlCompleta, { headers: this.cabeceras });
   }
 
+  
   postListaCompra(body: any) {
     return this.http.post(this.urlLista, body, { headers: this.cabeceras });
   }
