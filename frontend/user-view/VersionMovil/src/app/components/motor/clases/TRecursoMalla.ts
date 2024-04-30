@@ -20,7 +20,7 @@ export class TRecursoMalla extends TRecurso {
                 })
                 .then(data => {
                     const archivo = data;
-                    const _malla: Malla = new Malla(archivo);// valor motor
+                    const _malla: Malla = new Malla(archivo);// añadir malla y material
                     this.mallas.push(_malla);
                     resolve();
                 })
@@ -31,10 +31,9 @@ export class TRecursoMalla extends TRecurso {
         });
     }
      
-
-    draw(): void{
+    draw(matTrans: any, textura: any): void{
         for(let i = 0; i < this.mallas.length; i++){
-            this.mallas[i].dibujar();
+            this.mallas[i].dibujar(textura, matTrans);
         }
     }
 }

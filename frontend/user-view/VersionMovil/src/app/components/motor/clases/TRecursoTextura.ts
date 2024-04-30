@@ -1,6 +1,7 @@
 import { TRecurso } from "./TRecurso";
 
 export class TRecursoTextura extends TRecurso {
+    
     constructor(nombre: string){
         super(nombre)
     }
@@ -11,27 +12,19 @@ export class TRecursoTextura extends TRecurso {
     //Variables tipo imagen
     private imagenTextura!: Blob;
 
-    cargarImagenDesdeArchivo(archivo: File): Promise<void> {
-        return new Promise((resolve, reject) => {
-            const lector = new FileReader();
-            lector.onload = (evento) => {
-                const imagen = new Image();
-                imagen.onload = () => {
-                    this.width = imagen.width;
-                    this.height = imagen.height;
-                    this.imagenTextura = archivo;
-                    resolve();
-                };
-                imagen.onerror = (error) => {
-                    reject(error);
-                };
-                imagen.src = evento.target!.result as string;
-            };
-            lector.readAsDataURL(archivo);
-        });
+    async getImagenTextura(){
+        return this.imagenTextura;
     }
 
-    override cargarFichero(filename: string): Promise<void> {
+    async getWidth(){
+        return this.width;
+    }
+
+    async getHeight(){
+        return this.height;
+    }
+
+    override cargarFichero(filename: string): Promise<Blob> {
         return new Promise((resolve, reject) => {
             fetch(`../../assets/motor/texturas/${filename}`)
                 .then(response => {
@@ -40,11 +33,8 @@ export class TRecursoTextura extends TRecurso {
                     }
                     return response.blob();
                 })
-                .then(data => {
-                    return this.cargarImagenDesdeArchivo(new File([data], filename));
-                })
-                .then(() => {
-                    resolve();
+                .then((blob) => {
+                    resolve(blob);
                 })
                 .catch(error => {
                     console.error("Error al cargar el archivo:", error);
@@ -52,7 +42,6 @@ export class TRecursoTextura extends TRecurso {
                 });
         });
     }
-
     draw(): void {
     }
 }

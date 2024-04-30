@@ -1,18 +1,21 @@
 import { TRecursoMalla } from "./TRecursoMalla";
+import { TRecursoTextura } from "./TRecursoTextura";
 
 export class EModelo {
 
     private recursoMalla = new TRecursoMalla("Mallas");
+    private recursoTextura = new TRecursoTextura("Texturas");
 
-    constructor(recurso: any) {
-        this.recursoMalla = recurso;
+    constructor(recursoMalla: any, recursoTextura: any) {
+        this.recursoMalla = recursoMalla;
+        this.recursoTextura = recursoTextura;
     }
 
     cargarFichero( fichero: any ){
     }
 
-    async dibujar(): Promise<void>{
-        console.log(this.recursoMalla)
+    async dibujar(matTrans: any): Promise<void>{
+        console.log(this.recursoMalla.getNombre());
         await new Promise<void>(resolve => {
             if(this.recursoMalla) {
                 resolve();
@@ -28,7 +31,7 @@ export class EModelo {
         })
 
         if(this.recursoMalla) {
-            this.recursoMalla.draw();
+            this.recursoMalla.draw(matTrans, this.recursoTextura.getNombre());
         }
         else {
             console.log("Fallo dibujando la malla");

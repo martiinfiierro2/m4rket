@@ -1,5 +1,6 @@
 import * as glMatrix from 'gl-matrix';
 import { TEntidad } from "../clases/TEntidad";
+import { text } from 'express';
 
 
 
@@ -12,9 +13,7 @@ export class TNodo{
     private rotacion: glMatrix.vec3 = glMatrix.vec3.create();
     private escalado: glMatrix.vec3 = glMatrix.vec3.create();
     private matrizTransf: glMatrix.mat4 = glMatrix.mat4.create();
-    private actualizarMatriz: Boolean = false; //para saber si hay alguna modificación en las transformaciones
-
-
+    private actualizarMatriz: Boolean = false;
 
     // Método para agregar un hijo
     async agregarHijo(nodoHijo: TNodo) {
@@ -39,7 +38,7 @@ export class TNodo{
         }
     
         if (this.getEntidad() != null) {
-            this.entidad.dibujar();
+            this.entidad.dibujar(this.matrizTransf);
         }
     
         // Esperar a que todas las llamadas recursivas se completen
@@ -151,8 +150,6 @@ export class TNodo{
     async setEntidad( entidadAnyadir: any ){
         this.entidad = entidadAnyadir;
     }
-
-
     //Métodos GET
     getTraslacion(){
         return this.traslacion;

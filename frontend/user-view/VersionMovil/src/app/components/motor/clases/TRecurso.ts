@@ -10,7 +10,7 @@ export abstract class TRecurso {
         this.nombre = nombre;
     }
 
-    abstract cargarFichero(nombre: string): Promise<void>;
+    abstract cargarFichero(nombre: string): Promise<any>;
 
     getNombre(): string{
         return this.nombre;

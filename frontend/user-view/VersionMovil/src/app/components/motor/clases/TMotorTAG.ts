@@ -17,17 +17,19 @@ export class TMotorTAG {
     constructor(){
         this.gestorRecursos = new TGestorRecursos(); 
     }
-
     public raiz!: TNodo;
     public gestorRecursos!: TGestorRecursos;
+    public gl!: WebGL2RenderingContext;
+    public program!: WebGLProgram;
+    public nodos: TNodo[] = [];
+    
     public gestorCamaras: TNodo[] = [];
     public gestorLuces: TNodo[] = [];
     public gestorViewports: Viewport[] = [];
-    public gl!: WebGL2RenderingContext;
-    public program!: WebGLProgram;
     public camaraActiva!: TNodo;
     public viewportActivo!: number;
     public lucesActivas: boolean[] = [];
+
 
     async registrarCamara(nodoCamara: TNodo) {
         this.gestorCamaras.push(nodoCamara);
@@ -52,6 +54,7 @@ export class TMotorTAG {
 
     async iniciarGL(){
         const canvas = document.querySelector("#mercado") as HTMLCanvasElement;
+
         let gl = canvas.getContext("webgl2") as WebGL2RenderingContext | null;
         if (!gl) {
             console.error('No se pudo obtener el contexto Webthis.gl!.');
@@ -141,7 +144,6 @@ export class TMotorTAG {
         if (!success) {
             console.error('Error al enlazar el programa de shader.');
             const info = this.gl!.getProgramInfoLog(program);
-            console.error(info);
             return null;
         }
         this.program = program;
@@ -166,6 +168,8 @@ export class TMotorTAG {
         await nodoCreado.setTraslacion(trasl);
         await nodoCreado.setRotacion(rot);
         await nodoCreado.setEscalado(esc);
+
+        this.nodos.push(nodoCreado);
 
         return nodoCreado;
     }
@@ -208,8 +212,8 @@ export class TMotorTAG {
         return nodoCreado;
     }
 
-    async crearModelo( padre: TNodo|null, trasl: glMatrix.vec3, rot: glMatrix.vec3, esc: glMatrix.vec3, nombreFichero: string | undefined, tipo: string){
-        let nodoCreado: any, recursoMalla: any, entidadModelo: any;
+    async crearModelo( padre: TNodo|null, trasl: glMatrix.vec3, rot: glMatrix.vec3, esc: glMatrix.vec3, nombreFichero: string | undefined, tipo: string, textura: any){
+        let nodoCreado: any, recursoMalla: any, recursoTextura: any, entidadModelo: any;
 
         nodoCreado = new TNodo();
         if (padre == null) {
@@ -218,8 +222,9 @@ export class TMotorTAG {
         await padre.agregarHijo(nodoCreado);
         if(nombreFichero != undefined){
             recursoMalla = await this.gestorRecursos.getRecurso(nombreFichero, tipo);
+            recursoTextura = await this.gestorRecursos.getRecurso(textura, "textura")
         }
-        entidadModelo = new EModelo(recursoMalla);
+        entidadModelo = new EModelo(recursoMalla, recursoTextura);
         await nodoCreado.setEntidad(entidadModelo);
         await nodoCreado.setTraslacion(trasl);
         await nodoCreado.setRotacion(rot);

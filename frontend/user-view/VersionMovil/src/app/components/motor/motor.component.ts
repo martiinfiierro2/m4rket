@@ -22,30 +22,31 @@ export class MotorComponent implements OnInit{
     motor = new TMotorTAG();
 
     //Creamos recursos
-    await motor.gestorRecursos.getRecurso("R.jpg", "textura");
+    await motor.gestorRecursos.getRecurso("T.jpeg", "textura");
+    await motor.gestorRecursos.getRecurso("andres.jpg", "textura");
+    await motor.gestorRecursos.getRecurso("madera.jpeg", "textura");
  
     //Creamos nodo padre
-    const personaje: TNodo = await motor.crearNodo( null, glMatrix.vec3.fromValues(10,0,10), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(1,1,1));
+    const personaje: TNodo = await motor.crearNodo( null, glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(1,1,1));
 
     //asignar camara
-    const camara: TNodo = await motor.crearCamara(personaje, glMatrix.vec3.fromValues(10,20,0), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(1,1,1), true, false, 1, 1000);
+    const camara: TNodo = await motor.crearCamara(personaje, glMatrix.vec3.fromValues(0,0,-6), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(1,1,1), true, false, 1, 1000);
     await motor.registrarCamara(camara);
     await motor.setCamara(camara);
  
     //asignar luces
- 
-    //asignar viewports
-
-    const cara: TNodo = await motor.crearModelo( personaje, glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(1,1,1), 'plano.obj', 'malla');
-    const nariz: TNodo = await motor.crearModelo( cara, glMatrix.vec3.fromValues(10,10,0), glMatrix.vec3.fromValues(1,0,0), glMatrix.vec3.fromValues(3,3,3), 'cubo2.obj', 'malla');
-    
+  
     //Iniciamos GL y Programa
     await motor.iniciarGL();
     await motor.iniciarPrograma();
 
+    const cara: TNodo = await motor.crearModelo( personaje, glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(0.5,0.5,0.5), 'conTextura.obj', 'malla', 'andres.jpg');
+    const nariz: TNodo = await motor.crearModelo( cara, glMatrix.vec3.fromValues(2,0,0), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(1,1,1), 'conTextura.obj', 'malla', 'madera.jpeg');
+
     //Asignamos el motor al servicio después de cargarlo para que guarde valores
     await this.motorService.asignarMotor(motor);
-
+    console.log(motor)
+    
     personaje.recorrer(glMatrix.mat4.identity(glMatrix.mat4.create()));
   }
 }

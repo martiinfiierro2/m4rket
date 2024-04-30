@@ -9,11 +9,11 @@ export class TGestorRecursos{
     private recursos: TRecurso[] = [];
 
     async getRecurso( nombre: string, tipo: string ){
-        let res: TRecurso|undefined;
+        let res!: TRecurso;
         let contador = 0;
 
         for (const recurso of this.recursos) {
-            if (recurso.getNombre() === nombre) {
+            if (recurso.getNombre() === nombre && tipo != "malla") {
                 res = recurso;
                 contador += 1;
             }
@@ -23,7 +23,7 @@ export class TGestorRecursos{
                 res = this.crearRecurso(nombre, tipo);
                 if (res != undefined) {
                     try {
-                        await res.cargarFichero(nombre); // Esperar a que se cargue el archivo
+                        await res.cargarFichero(nombre);
                         this.anyadirRecurso(res); // Esperar a que se añada el recurso
                     } catch (error) {
                         console.error("Error al cargar el recurso:", error);

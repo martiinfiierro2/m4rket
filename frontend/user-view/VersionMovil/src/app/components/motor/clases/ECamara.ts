@@ -59,7 +59,14 @@ export class ECamara extends TEntidad {
         this.lejano = lej;
     }
 
+    getCercano(){
+        return this.cercano;
+    }
+
+    getLejano(){
+        return this.lejano;
+    }
+
     dibujar (){
-        console.log("estoy en camara")
     }
 }
