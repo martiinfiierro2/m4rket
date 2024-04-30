@@ -28,7 +28,7 @@ body{
     color: white;
     border-radius: .4em;
     padding: 4px 10px;
-    transition: transform 0.2s;
+    transition: transform 0.2   ;
 }
 
     .btnPrimario:hover{

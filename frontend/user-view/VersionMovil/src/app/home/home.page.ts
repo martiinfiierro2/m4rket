@@ -118,24 +118,20 @@ export class HomePage {
     sessionStorage.getItem('tokenUsuario') ||
     localStorage.getItem('tokenUsuario');
 
-  constructor(
-    private productosService: ProductosService,
-    private estadisticasService: EstadisticasService,
-    private ubicacionesService: UbicacionesService
-  ) {
-    this.scene = new THREE.Scene();
-    this.primeravez = true;
-  }
 
-  ngAfterViewInit(): void {}
+  constructor(private productosService: ProductosService,
+    private estadisticasService: EstadisticasService, 
+    private ubicacionesService: UbicacionesService) {}
+    
+  ngAfterViewInit(): void {
+    this.motorComponent.crearEscena();
+  }
 
   //VERSION ANTIGUA
   ngOnInit(): void {
     this.getUsuarioLog();
     this.getListaCompraUsu();
-    this.CargarModelo();
-    this.RecargarModelo();
-    this.loadChatbotScript();
+    //this.stuff()
   }
 
   BorrarListaCompraCompleta(){
