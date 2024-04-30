@@ -1,22 +1,37 @@
 <body>
 <div class="filtro">
-    <label for="fechaInicio">Fecha de inicio:</label>
-    <input type="date" id="fechaInicio" [(ngModel)]="fechaInicio">
-
-    <label for="fechaFin">Fecha de fin:</label>
-    <input type="date" id="fechaFin" [(ngModel)]="fechaFin">
-    <button (click)="filtrar()">Filtrar</button>
+    <label class="radio">
+        <input type="radio" name="radio" checked="">
+        <span class="name">Hoy</span>
+      </label>
+      <label class="radio">
+        <input type="radio" name="radio">
+        <span class="name">7d</span>
+      </label>
+      <label class="radio">
+        <input type="radio" name="radio">
+        <span class="name">1m</span>
+      </label>
+    <label class="radio">
+        <input type="radio" name="radio" >
+        <span class="name">12m</span>
+      </label>    
 </div>
+<div class="stats">
+    <div class="contadores">
+        <div class="cont-content">ELIMINADOS
+            <div id="deleted" style="width: 50%; height: 50%;"></div>
+        </div>
+        <div class="cont-content">h</div>
+        <div class="cont-content">h</div>
+        <div class="cont-content">h</div>
+    </div>
+    
+</div>
+<!--
 <div class="parent">
     <div class="div1" (click)="mostrarGrafico('masEliminado')" id="masEliminados" style="width: 100%; height: 100%;"></div>
     <div class="div2" (click)="mostrarGrafico('masAnadido')" id="masAnadidos" style="width: 100%; height: 100%;"></div>
-    <div class="div3">
-        <h5>QR usados en la última semana</h5>
-        <p class="valor">{{numQR[0]}}
-            <sup><p class="datoQRP" *ngIf="numQR[2] >= 0"><i class="fa-solid fa-arrow-trend-up"></i>{{numQR[2]}}%</p></sup>
-            <sup><p class="datoQRN" *ngIf="numQR[2] < 0"><i class="fa-solid fa-arrow-trend-down"></i>{{numQR[2]}}%</p></sup>
-        </p>
-    </div>
     <div class="div4">
         <h5>Usuarios activos</h5>
         <p class="valor"> {{usuariosActivos}} </p>
@@ -26,4 +41,5 @@
     <div class="div7"></div>
     <div class="div8" id="graficoSecciones" style="width: 100%; height: 150%;"></div>
 </div>
+-->
 </body>

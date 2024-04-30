@@ -15,13 +15,13 @@ const DatosContadores = sequelize.define('datos_contadores', {
         type: DataTypes.INTEGER,
         allowNull: true,
     },
-    qr: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-    },
     fecha:{
         type: DataTypes.DATE,
         allowNull: false,
+    },
+    id_usuario: {
+        type: DataTypes.STRING,
+        allowNull: true,
     }
 }, {
     tableName: 'datos_contadores',
