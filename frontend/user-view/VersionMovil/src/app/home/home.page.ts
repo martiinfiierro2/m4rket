@@ -152,8 +152,8 @@ export class HomePage {
   ngOnInit(): void {
     this.getUsuarioLog();
     this.getListaCompraUsu();
-    this.CargarModelo();
-    this.RecargarModelo();
+    //this.CargarModelo();
+    //this.RecargarModelo();
     this.loadChatbotScript();
   }
 

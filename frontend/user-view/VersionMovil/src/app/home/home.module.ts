@@ -8,6 +8,8 @@ import { HomePageRoutingModule } from './home-routing.module';
 import { SharedComponentsModule } from '../components/shared-components.module';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
+//IMPORTS MARTIN
+import { MotorComponent } from '../components/motor/motor.component';
 
 
 @NgModule({
@@ -22,7 +24,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
   declarations: [
     HomePage,
-    //MotorComponent
+    MotorComponent
   ]
 })
 export class HomePageModule {}
