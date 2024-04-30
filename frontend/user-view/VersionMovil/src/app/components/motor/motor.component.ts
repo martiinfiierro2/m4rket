@@ -8,7 +8,6 @@ export let motor: TMotorTAG;//Injectable
 @Component({
   selector: 'app-motor',
   templateUrl: './motor.component.html',
-  styleUrls: ['./motor.component.scss'],
 })
 
 export class MotorComponent implements OnInit{

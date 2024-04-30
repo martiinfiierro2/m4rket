@@ -5,6 +5,7 @@ import { environment } from '../environments/environment';
 import { getLocaleFirstDayOfWeek } from '@angular/common';
 import { EstadisticasService } from '../services/estadisticas.service';
 import { UbicacionesService } from '../services/ubicaciones.service';
+import { MotorComponent } from '../components/motor/motor.component';
 import { json } from 'express';
 import { forkJoin } from 'rxjs';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
@@ -110,7 +111,7 @@ export class HomePage {
     //this.drawerComponent.getProducto(producto);
     this.drawerComponent.getProducto(idProd);
   }
-  scene: THREE.Scene;
+  @ViewChild(DrawerComponent) motorComponent!: MotorComponent;
 
   //variables para mostrar foto
   urlFotoProducto = environment.base_url + '/uploads/fotoproducto/';
@@ -123,12 +124,9 @@ export class HomePage {
     private estadisticasService: EstadisticasService, 
     private ubicacionesService: UbicacionesService) {}
     
-  ngAfterViewInit(): void {
-    this.motorComponent.crearEscena();
-  }
-
   //VERSION ANTIGUA
   ngOnInit(): void {
+    this.motorComponent.crearEscena();
     this.getUsuarioLog();
     this.getListaCompraUsu();
     //this.stuff()
@@ -253,7 +251,7 @@ export class HomePage {
   
         Promise.all(deletePromises).then(() => {
           console.log('Todas las listas de compra han sido eliminadas exitosamente.');
-          this.RecargarModelo();
+          //this.RecargarModelo();
           this.getListaCompraUsu();
         }).catch((error) => {
           console.error('Error al intentar borrar todas las listas de compra:', error);
@@ -281,7 +279,7 @@ export class HomePage {
     );
   }
 
-  //! MODELO
+  /*! MODELO
   container: any;
   camera = new THREE.PerspectiveCamera(
     75,
@@ -550,7 +548,7 @@ export class HomePage {
     } catch (error) {
       console.error('Error al recargar el modelo:', error);
     }
-  }
+  }*/
 
   async getProductosIMG() {
     try {
