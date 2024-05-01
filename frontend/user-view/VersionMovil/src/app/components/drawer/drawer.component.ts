@@ -21,8 +21,8 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 interface Stats {
   nombre: string;
   idProd: number;
-  qr: string | null;
   fecha: Date;
+  idUsuario: string;
 }
 export interface Producto {
   id: string;
@@ -384,8 +384,8 @@ export class DrawerComponent implements AfterViewInit {
     const post: Stats = {
       nombre: tipo,
       idProd: id,
-      qr: null,
       fecha: fecha,
+      idUsuario: this.idUsu,
     };
     console.log(post);
     this.estadisticasService.postContador(post);
@@ -401,9 +401,6 @@ export class DrawerComponent implements AfterViewInit {
         productoDetalle.idLista,
         productoDetalle.comprado
       );
-      let tipo = 'eliminado';
-      let fecha = new Date();
-      this.estadistica(productoDetalle.id, tipo, fecha);
     } else if (productoDetalle.cantidad <= 1) {
       this.eliminar(productoDetalle);
     } else {
@@ -449,6 +446,11 @@ export class DrawerComponent implements AfterViewInit {
     this.getProducto(producto.id);
     this.getListaCompraUsu();
     this.Recarguita();
+
+    //ESTADISTICAS
+    let tipo = 'eliminado';
+    let fecha = new Date();
+    this.estadistica(producto.id, tipo, fecha);
   }
 
   anadirProducto(producto: any) {
@@ -582,6 +584,9 @@ export class DrawerComponent implements AfterViewInit {
       producto.idLista,
       producto.comprado
     );
+    let tipo = "comprado";
+    let fecha = new Date()
+    this.estadistica(producto.id, tipo, fecha );
   }
 
   
@@ -657,6 +662,12 @@ export class DrawerComponent implements AfterViewInit {
     script.onload = () => {
     };
     document.body.appendChild(script);
+  }
+
+  buscado(producto: any){
+    let tipo = 'buscado';
+    let fecha = new Date();
+    this.estadistica(producto.id, tipo, fecha);
   }
 }
 

@@ -27,8 +27,38 @@ body{
 }
 
 .filtro{
-    margin: 5%;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    margin-right: 40px;
+    display: flex;
+    justify-content: flex-end;
 }
+
+.filtro .radio .name{
+    margin: 7px;
+}
+.filtro .radio input {
+    display: none;
+  }
+
+  .filtro .radio input:checked + .name {
+    color: #58677a;
+    font-weight: 600;
+  }
+
+  .stats .contadores{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .stats .contadores .cont-content{
+    width: 22%;
+    height: 140px;
+    background-color: #ffffff;
+    margin: 6px;
+    border-radius: 15px;
+  }
 
 .parent {
     display: grid;

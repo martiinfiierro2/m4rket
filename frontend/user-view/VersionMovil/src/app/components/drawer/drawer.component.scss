@@ -192,7 +192,8 @@ opacity: 1;
   display: flex;
   position: relative; 
   @media (prefers-color-scheme: dark) {
-    background: #3f3f3f; // Cambia el color de fondo en modo oscuro
+    background: #3f3f3f;
+    border: none;
   }
 }
 
@@ -407,4 +408,15 @@ opacity: 1;
 
 .recientes{
   padding-left: 10px;
+}
+
+.localizar{
+  background: none;
+  font-size: 17px;
+  //margin-left: 5px;
+  text-align: right;
+  color: #51877a;
+  @media (prefers-color-scheme: dark) {
+    color: #9dbbb3;
+  }
 }

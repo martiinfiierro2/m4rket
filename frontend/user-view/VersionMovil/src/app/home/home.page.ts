@@ -18,6 +18,11 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DomElementSchemaRegistry } from '@angular/compiler';
 import { ModeloService } from '../services/modelo.service';
 
+
+
+//Vainas de martin
+import { MotorComponent } from '../components/motor/motor.component';
+
 export interface Producto {
   id: string;
   nombre: string;
@@ -111,7 +116,15 @@ export class HomePage {
     //this.drawerComponent.getProducto(producto);
     this.drawerComponent.getProducto(idProd);
   }
-  @ViewChild(DrawerComponent) motorComponent!: MotorComponent;
+  
+  
+  scene: THREE.Scene;
+
+
+  //Vainas de Martin
+  //@ViewChild(MotorComponent) motorComponent!: MotorComponent;
+  @ViewChild(MotorComponent) motorComponent!: MotorComponent;
+
 
   //variables para mostrar foto
   urlFotoProducto = environment.base_url + '/uploads/fotoproducto/';
@@ -119,17 +132,31 @@ export class HomePage {
     sessionStorage.getItem('tokenUsuario') ||
     localStorage.getItem('tokenUsuario');
 
+  constructor(
+    private productosService: ProductosService,
+    private estadisticasService: EstadisticasService,
+    private ubicacionesService: UbicacionesService
+  ) {
+    this.scene = new THREE.Scene();
+    this.primeravez = true;
+  }
 
-  constructor(private productosService: ProductosService,
-    private estadisticasService: EstadisticasService, 
-    private ubicacionesService: UbicacionesService) {}
-    
+  ngAfterViewInit(): void {
+    //MARTIN
+   this.motorComponent.crearEscena();
+   console.log(this.motorComponent);
+
+   
+  }
+
   //VERSION ANTIGUA
   ngOnInit(): void {
     this.motorComponent.crearEscena();
     this.getUsuarioLog();
     this.getListaCompraUsu();
-    //this.stuff()
+    //this.CargarModelo();
+    //this.RecargarModelo();
+    this.loadChatbotScript();
   }
 
   BorrarListaCompraCompleta(){

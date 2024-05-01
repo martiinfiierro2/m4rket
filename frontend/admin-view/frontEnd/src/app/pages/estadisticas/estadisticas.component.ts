@@ -13,6 +13,7 @@ import * as echarts from 'echarts';
 import { environment } from '../../../environments/environment';
 import { FormsModule } from '@angular/forms';
 
+
 export interface Contador{
   id: number,
   nombre: string,
@@ -69,67 +70,62 @@ export class EstadisticasComponent {
     private elementRef: ElementRef,
     private route: Router){
   }
-
+/*
   mostrarGrafico(nombre: string): void {
     let url = '/datos?nombre='+nombre;
     window.location.href = url;
   }
-
+*/
   ngOnInit(): void {
-    this.getContadoresMasAnadidos();
-    this.getContadoresMasEliminados();
-    this.getQR();
-    this.getUsuariosActivos();
+   // this.getContadoresMasAnadidos();
+   // this.getContadoresMasEliminados();
+   // this.getUsuariosActivos();
+   this.pruebaGrafico();
   }
-
-  private configurarGraficoSecciones(): void {
-    let opciones = {
-      title: {
-        text: 'Ventas en secciones',
-        left: 'center',
-      },
-      tooltip: {
-        trigger: 'item'
-      },
-      legend: {
-        width: '70%',
-        height: "100%",
-        padding: [15, 5, 3, 5],
-        bottom: "0%",
-        orient: "horizontal"
-      },
-      series: [
-        {
-          name: 'Access From',
-          type: 'pie',
-          radius: ['40%', '70%'],
-          avoidLabelOverlap: false,
-          label: {
-            show: false,
-            position: 'center'
-          },
-          emphasis: {
-            itemStyle: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)'
-            }
-          },
-          data: [
-            { value: 1048, name: 'Search Engine' },
-            { value: 735, name: 'Direct' },
-            { value: 580, name: 'Email' },
-            { value: 484, name: 'Union Ads' },
-            { value: 300, name: 'Video Ads' }
-          ]
-        }
-      ]
-    };
-    this.secciones = echarts.init(this.elementRef.nativeElement.querySelector('#graficoSecciones'));
-    this.secciones.setOption(opciones);
+  
+  private pruebaGrafico() {
+    const chartElement = document.getElementById('deleted');
+  
+    if (chartElement && chartElement.clientWidth > 0 && chartElement.clientHeight > 0) {
+      const myChart = echarts.getInstanceByDom(chartElement) || echarts.init(chartElement);
+  
+      const option: any = {
+        xAxis: {
+          type: 'category',
+          data: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio'],
+          show: false,
+        },
+        yAxis: {
+          type: 'value',
+          show: false
+        },
+        series: [
+          {
+            name: 'Nutrientes',
+            type: 'line',
+            avoidLabelOverlap: false,
+            label: {
+              show: false,
+              position: 'top'
+            },
+            data: [65, 59, 80, 81, 56, 55, 80],
+            fill: false,
+            borderColor: 'rgb(60, 179, 113)',
+            tension: 0.9
+          }
+        ]
+      };
+  
+      myChart.setOption(option);
+    } else {
+      console.warn('El elemento "deleted" no tiene un tamaño válido para mostrar el gráfico.');
+    }
   }
-
+  
+  
   private configurarGraficoEliminados(): void {
+
+    var deleted = document.getElementById('deleted');
     let opciones = {
       title: {
         text: 'Productos más eliminados',
@@ -143,7 +139,8 @@ export class EstadisticasComponent {
           name: 'Veces añadido',
           type: 'pie',
           radius: '50%',  
-          data: this.eliminados.reverse(),
+         // data: this.eliminados.reverse(),
+          data: 30,
           emphasis: {
             itemStyle: {
               shadowBlur: 10,
@@ -154,10 +151,10 @@ export class EstadisticasComponent {
         }
       ]
     };
-    this.masEliminado = echarts.init(this.elementRef.nativeElement.querySelector('#masEliminados'));
+    this.masEliminado = echarts.init(deleted);
     this.masEliminado.setOption(opciones);
   }
-
+/*
   private configurarGraficoAnadidos(): void {
     let opciones = {
       title: {
@@ -188,20 +185,6 @@ export class EstadisticasComponent {
   }
 
   //CRUD
-
-  getQR(){
-    this.estadisticasService.getCountQR().subscribe(res => {
-      this.numQR.push(res.datosContadores.qrPorSemana[res.datosContadores.qrPorSemana.length - 1].totalCount);
-      this.numQR.push(res.datosContadores.qrPorSemana[res.datosContadores.qrPorSemana.length - 2].totalCount);
-      this.calcularCambioPorcentual(this.numQR[0], this.numQR[1]);
-    });
-  }
-
-  calcularCambioPorcentual(valorInicial: number, valorFinal: number){
-    const despejarX = ((valorInicial - valorFinal)/valorFinal).toFixed(2);
-    this.numQR.push(despejarX);
-  }
-
   async getContadoresMasAnadidos() {
     this.anadidos = [];
     if(this.fechaFin !== "" && this.fechaInicio !== ""){
@@ -288,6 +271,6 @@ export class EstadisticasComponent {
   filtrar(){
     this.getContadoresMasAnadidos();
     this.getContadoresMasEliminados();
-    this.getQR();
   }
+  */
 }

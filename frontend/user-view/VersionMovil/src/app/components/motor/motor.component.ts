@@ -2,16 +2,17 @@ import { AfterViewInit, Component, OnInit, Input, Output} from '@angular/core';
 import * as glMatrix from 'gl-matrix';
 import { TMotorTAG } from './clases/TMotorTAG';
 import { TNodo } from './clases/TNodo';
-import { MotorService } from 'src/app/services/motor.service';
+//import { MotorService } from 'src/app/services/motor.service';
 
 export let motor: TMotorTAG;//Injectable
 @Component({
   selector: 'app-motor',
   templateUrl: './motor.component.html',
+  styleUrls: ['./motor.component.scss'],
 })
 
 export class MotorComponent implements OnInit{
-  constructor(private motorService: MotorService) { }
+  constructor(/*private motorService: MotorService*/) { }
 
   ngOnInit(): void {
       
@@ -43,7 +44,7 @@ export class MotorComponent implements OnInit{
     const nariz: TNodo = await motor.crearModelo( cara, glMatrix.vec3.fromValues(2,0,0), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(1,1,1), 'conTextura.obj', 'malla', 'madera.jpeg');
 
     //Asignamos el motor al servicio después de cargarlo para que guarde valores
-    await this.motorService.asignarMotor(motor);
+    //await this.motorService.asignarMotor(motor);
     console.log(motor)
     
     personaje.recorrer(glMatrix.mat4.identity(glMatrix.mat4.create()));
