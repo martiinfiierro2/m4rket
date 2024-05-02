@@ -63,6 +63,9 @@ export class Malla {
 
         // Función para manejar el evento de arrastre con clic derecho
         const handleRightDragMobile = (event: TouchEvent) => {
+            if (event.touches.length === 2) {
+                handlePinch(event);
+            }
             event.preventDefault();
 
             const touch = event.touches[0];
@@ -149,7 +152,6 @@ export class Malla {
         });
     
         canvas.addEventListener('touchmove', (event) => {
-            console.log(event.touches.length);
             if (event.touches.length === 2) {
                 handlePinch(event);
             } else {
