@@ -13,6 +13,10 @@ export class Malla {
     private translationY: number = 0;
     private translationSpeed!: number;
 
+    private zoomFactor!: any;
+    private lastPinchDistance: number = 0;
+    private isPinching: boolean = false;
+
     private matTrans!: any;
     private gl!: WebGL2RenderingContext;
     private program!: WebGLProgram;
@@ -20,8 +24,6 @@ export class Malla {
     private texture: WebGLTexture | null = null;
     private projectionMatrix!: mat4;
     private viewMatrix!: mat4;
-    private lastPinchDistance: number = 0;
-    private isPinching: boolean = false;
 
     constructor(malla: string) {
         this.OBJfile = malla;
@@ -103,11 +105,7 @@ export class Malla {
         
                 // Ajusta el campo de visión de la matriz de proyección en función del pellizco
                 const zoomSpeed = 0.1; // Velocidad de zoom
-                const zoomFactor = 1 + deltaDistance * zoomSpeed;
-        
-                // Aplica el zoom a la matriz de proyección
-                mat4.scale(this.projectionMatrix, this.projectionMatrix, [zoomFactor, zoomFactor, zoomFactor]);
-        
+                this.zoomFactor = 1 + deltaDistance * zoomSpeed;
                 // Actualiza la última distancia de pellizco
                 this.lastPinchDistance = distance;
             }
@@ -205,7 +203,10 @@ export class Malla {
             0.1,
             100
         );
-    
+        
+        // Aplica el zoom a la matriz de proyección
+        mat4.scale(this.projectionMatrix, this.projectionMatrix, [this.zoomFactor, this.zoomFactor, this.zoomFactor]);
+        
         // Enlazar el buffer de índices
         this.gl!.bindBuffer(this.gl!.ELEMENT_ARRAY_BUFFER, mesh.indexBuffer);
     
