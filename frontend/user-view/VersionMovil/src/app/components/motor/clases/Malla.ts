@@ -255,7 +255,7 @@ export class Malla {
         mat4.lookAt(this.viewMatrix, cameraPosition, target, up);
     
         // Aplica el desplazamiento a la matriz de vista
-        mat4.translate(this.viewMatrix, this.viewMatrix, [-this.translationX, -this.translationY, 0]);
+        mat4.translate(this.viewMatrix, this.viewMatrix, [-this.translationX, -this.translationY, -this.zoomFactor]); 
     
         const modelViewMatrix = mat4.create();
         mat4.multiply(modelViewMatrix, this.viewMatrix, modelMatrix);
