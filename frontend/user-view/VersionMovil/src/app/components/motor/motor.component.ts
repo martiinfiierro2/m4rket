@@ -27,10 +27,10 @@ export class MotorComponent implements OnInit{
     await motor.gestorRecursos.getRecurso("madera.jpeg", "textura");
  
     //Creamos nodo padre
-    const personaje: TNodo = await motor.crearNodo( null, glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(1,1,1));
+    const mercado: TNodo = await motor.crearNodo( null, glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(1,1,1));
 
     //asignar camara
-    const camara: TNodo = await motor.crearCamara(personaje, glMatrix.vec3.fromValues(0,0,-6), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(1,1,1), true, false, 1, 1000);
+    const camara: TNodo = await motor.crearCamara(mercado, glMatrix.vec3.fromValues(-4.5,15,-55), glMatrix.vec3.fromValues(15*(Math.PI / 180),0,0), glMatrix.vec3.fromValues(1,1,1), true, false, 1, 1000);
     await motor.registrarCamara(camara);
     await motor.setCamara(camara);
  
@@ -40,13 +40,13 @@ export class MotorComponent implements OnInit{
     await motor.iniciarGL();
     await motor.iniciarPrograma();
 
-    const cara: TNodo = await motor.crearModelo( personaje, glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(0.5,0.5,0.5), 'conTextura.obj', 'malla', 'andres.jpg');
-    const nariz: TNodo = await motor.crearModelo( cara, glMatrix.vec3.fromValues(2,0,0), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(1,1,1), 'conTextura.obj', 'malla', 'madera.jpeg');
+    const suelo: TNodo = await motor.crearModelo( mercado, glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(0,215*(Math.PI / 180),0), glMatrix.vec3.fromValues(0.35,0.35,0.35), 'conTextura.obj', 'malla', 'gris.jpg');
+    const puerta: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(10,10,10), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(1.5,1.5,1.5), 'untitled.obj', 'malla', 'gris.jpg');
 
     //Asignamos el motor al servicio después de cargarlo para que guarde valores
     //await this.motorService.asignarMotor(motor);
     console.log(motor)
     
-    personaje.recorrer(glMatrix.mat4.identity(glMatrix.mat4.create()));
+    mercado.recorrer(glMatrix.mat4.identity(glMatrix.mat4.create()));
   }
 }

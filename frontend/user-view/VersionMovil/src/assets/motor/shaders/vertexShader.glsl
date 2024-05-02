@@ -10,6 +10,7 @@ varying vec3 vNormal;
 varying vec2 vTextureCoord;
                                     
 void main() {
+    vNormal = aVertexNormal;
     gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
     vTextureCoord = aTextureCoord;
 }

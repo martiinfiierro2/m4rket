@@ -33,7 +33,7 @@ export class Malla {
             attribLocations: {
                 vertexPosition: gl.getAttribLocation(program, "aVertexPosition"),
                 textureCoord: gl.getAttribLocation(program, "aTextureCoord"),
-                normalCoord: gl.getAttribLocation(program, "aNormalCoord")
+                normalCoord: gl.getAttribLocation(program, "vNormal")
             },
             uniformLocations: {
                 projectionMatrix: gl.getUniformLocation(
@@ -71,7 +71,7 @@ export class Malla {
                 const deltaTouchX = touchX - this.lastTouchX;
                 const deltaTouchY = touchY - this.lastTouchY;
 
-                this.translationSpeed = 0.01; // Velocidad de rotación
+                this.translationSpeed = 0.1; // Velocidad de rotación
 
                 // Rotación alrededor del eje Y
                 this.translationX += deltaTouchX * this.translationSpeed;
@@ -168,7 +168,7 @@ export class Malla {
         // Agrega un evento touchmove para detectar cuando se mueve el dedo sobre la pantalla
         canvas.addEventListener('touchmove', handleRightDragMobile);
     
-        // Enlazar el buffer de vértices        
+        // Enlazar el buffer de vértices
         this.gl!.enableVertexAttribArray(InfoPrograma.attribLocations.vertexPosition);
         this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, mesh.vertexBuffer);
         this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(mesh.vertices), this.gl!.STATIC_DRAW);
@@ -186,7 +186,7 @@ export class Malla {
         this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(mesh.textures), this.gl!.STATIC_DRAW);
         this.gl!.vertexAttribPointer(InfoPrograma.attribLocations.textureCoord, mesh.textureBuffer.itemSize, this.gl!.FLOAT, false, 0, 0);
         
-        this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, null);
+        //this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, null);
 
         const draw = () => {
             requestAnimationFrame(draw); // Llamada recursiva para renderizar de forma continua
@@ -196,6 +196,7 @@ export class Malla {
     }
 
     dibujarBucle(InfoPrograma: any, mesh: any) {
+
         this.projectionMatrix = mat4.create();
         mat4.perspective(
             this.projectionMatrix,
@@ -216,8 +217,11 @@ export class Malla {
             this.projectionMatrix
         );
     
-        // TODO matriz de vista.
-        const modelMatrix = this.matTrans;
+        // Crear una nueva matriz de transformación para este objeto
+        const modelMatrix = mat4.create();
+
+        // Aplicar la matriz de transformación proporcionada
+        mat4.copy(modelMatrix, this.matTrans);
     
         let MatrizCamara = motor.camaraActiva.getMatrizTransf();
     
@@ -280,7 +284,6 @@ export class Malla {
             0
         );
     }
-    
 
     async loadTexture(nomTextura: any){
         let textura = await motor.gestorRecursos.getRecurso(nomTextura, 'textura');
