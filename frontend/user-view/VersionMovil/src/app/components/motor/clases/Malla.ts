@@ -89,6 +89,7 @@ export class Malla {
         };
 
         const handlePinch = (event: TouchEvent) => {
+            console.log("entra en los eventos");
             event.preventDefault();
     
             const touch1 = event.touches[0];
