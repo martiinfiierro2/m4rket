@@ -13,7 +13,7 @@ export class Malla {
     private translationY: number = 0;
     private translationSpeed!: number;
 
-    private zoomFactor!: any;
+    private zoomFactor: number = 0;
     private lastPinchDistance: number = 0;
     private isPinching: boolean = false;
 
@@ -197,9 +197,6 @@ export class Malla {
 
         this.projectionMatrix = mat4.create();
         
-        // Aplica el zoom a la matriz de proyección
-        mat4.scale(this.projectionMatrix, this.projectionMatrix, [this.zoomFactor, this.zoomFactor, this.zoomFactor]);
-        
         mat4.perspective(
             this.projectionMatrix,
             (45 * Math.PI) / 180,
@@ -207,6 +204,11 @@ export class Malla {
             0.1,
             100
         );
+
+        if(this.zoomFactor != 0){ 
+            // Aplica el zoom a la matriz de proyección
+            mat4.scale(this.projectionMatrix, this.projectionMatrix, [this.zoomFactor, this.zoomFactor, this.zoomFactor]);  
+        }
         
         // Enlazar el buffer de índices
         this.gl!.bindBuffer(this.gl!.ELEMENT_ARRAY_BUFFER, mesh.indexBuffer);
