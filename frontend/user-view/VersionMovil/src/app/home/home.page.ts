@@ -9,7 +9,6 @@ import { json } from 'express';
 import { forkJoin } from 'rxjs';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
-
 //modelo todo
 import * as THREE from 'three'; // we need @types/three for this to work (next to three package)
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
@@ -37,6 +36,7 @@ export interface Producto {
   precio: Float32Array;
   //Ubicacions: Ubicaciones[]
   //Promocions: Promociones[]
+  comprado: boolean;
 
   cantidad: number;
 }
@@ -89,6 +89,7 @@ export class HomePage {
   ProductoUbiListaCompra: Producto[] = [];
   ref: string[] = [];
   pos: number[] = [];
+  comprado: boolean[] = [];
   idsauxiliares: number[] = [];
   fotosdecarrito: string[] = [];
   imagenescarrito: Producto[] = [];
@@ -101,7 +102,7 @@ export class HomePage {
   modeloService = new ModeloService();
   totalProductos: number = 0;
   totalComprados: number = 0;
-
+  mostrarPantallaCarga: boolean = false;
   //USO DEL DRAWER Y PASO DE INFORMACION
   @ViewChild(DrawerComponent) drawerComponent!: DrawerComponent;
 
@@ -118,11 +119,7 @@ export class HomePage {
     sessionStorage.getItem('tokenUsuario') ||
     localStorage.getItem('tokenUsuario');
 
-  constructor(
-    private productosService: ProductosService,
-    private estadisticasService: EstadisticasService,
-    private ubicacionesService: UbicacionesService
-  ) {
+  constructor(private productosService: ProductosService) {
     this.scene = new THREE.Scene();
     this.primeravez = true;
   }
@@ -131,14 +128,14 @@ export class HomePage {
 
   //VERSION ANTIGUA
   ngOnInit(): void {
+    this.mostrarPantallaCarga = true;
     this.getUsuarioLog();
-    this.getListaCompraUsu();
     this.CargarModelo();
     this.RecargarModelo();
     //this.loadChatbotScript();
   }
 
-  BorrarListaCompraCompleta(){
+  BorrarListaCompraCompleta() {
     this.drawerComponent.borrarTodaLaLista();
   }
   //Funciones para sacar el valor de los productos a partit de la ubicacion del motor gráfico
@@ -157,42 +154,6 @@ export class HomePage {
           }
         });
     }
-  }
-
-  // FUNCIONES YA CREADAS DE LA ANTIGUA VERSION LISTA DE LA COMPRA
-  incrementar(productoDetalle: any) {
-    productoDetalle.cantidad++;
-    this.actualizarCantidad(
-      productoDetalle.idProducto,
-      productoDetalle.cantidad,
-      productoDetalle.idLista
-    );
-    let tipo = 'anadido';
-    let fecha = new Date();
-    this.estadistica(productoDetalle.idProducto, tipo, fecha);
-  }
-
-  // Estadisticas
-  estadistica(id: any, tipo: any, fecha: any) {
-    const post: Stats = {
-      nombre: tipo,
-      idProd: id,
-      qr: null,
-      fecha: fecha,
-    };
-    this.estadisticasService.postContador(post);
-  }
-
-  decrementar(productoDetalle: any) {
-    productoDetalle.cantidad--;
-    this.actualizarCantidad(
-      productoDetalle.idProducto,
-      productoDetalle.cantidad,
-      productoDetalle.idLista
-    );
-    let tipo = 'eliminado';
-    let fecha = new Date();
-    this.estadistica(productoDetalle.idProducto, tipo, fecha);
   }
 
   eliminar(productoDetalle: any) {
@@ -244,25 +205,6 @@ export class HomePage {
   borrarProd(idLista: string) {
     this.productosService.deleteListaCompra(idLista).subscribe((result) => {
       this.getListaCompraUsu();
-    });
-  }
-
-  borrarTodaLaLista() {
-    this.productosService.getListaCompra(this.idUsu).subscribe((result) => {
-      if (result.listacompra) {
-        const listasCompra = result.listacompra;
-        const deletePromises = listasCompra.map((listaCompra: any) => {
-          return this.productosService.deleteListaCompra(listaCompra.id).toPromise();
-        });
-  
-        Promise.all(deletePromises).then(() => {
-          console.log('Todas las listas de compra han sido eliminadas exitosamente.');
-          this.RecargarModelo();
-          this.getListaCompraUsu();
-        }).catch((error) => {
-          console.error('Error al intentar borrar todas las listas de compra:', error);
-        });
-      }
     });
   }
 
@@ -326,9 +268,6 @@ export class HomePage {
   B3c: THREE.Object3D[] = []; // Estantería Frío
   primeravez: boolean;
 
-
-  
-
   CargarModelo() {
     this.primeravez = false;
     this.container = document.getElementById('canvas');
@@ -358,21 +297,13 @@ export class HomePage {
     this.modeloService.configurarControles(controls);
 
     //Pointers //Indicadores
-    let pointerrender = 'pointer';
-
-    const self = this;
 
     renderer.setSize(window.innerWidth, window.innerHeight);
     this.container.appendChild(renderer.domElement);
 
-    this.idsauxiliares = this.idsauxiliares;
-    this.ref = this.ref;
-    this.pos = this.pos;
-
     //cargarPointers
     this.modeloService.cargarPointers(
       this.scene,
-      pointerrender,
       this.A1c,
       this.A2c,
       this.A3c,
@@ -394,12 +325,12 @@ export class HomePage {
       true,
       this.idsauxiliares,
       this.ref,
-      this.pos
+      this.pos,
+      this.comprado
     );
 
     this.modeloService.cargarCasters(
       this.scene,
-      pointerrender,
       this.A1,
       this.A2,
       this.A3,
@@ -517,17 +448,29 @@ export class HomePage {
       this.B3c
     );
   }
-
-  async RecargarModelo() {
+   recargandoModelo = false;
+   async RecargarModelo() {
+    if (this.recargandoModelo) {
+      console.log('RecargarModelo ya está en proceso...');
+      return;
+    }
+  
+    // Marcar que RecargarModelo está en proceso de ejecución
+    this.recargandoModelo = true;
+  
     try {
-      await this.getListaCompraUsu(); // Espera a que getListaCompraUsu() se complete
-      // Ahora puedes continuar con las siguientes operaciones
+      // Obtener la lista de compra
+      await this.limpiarDatos();
+      // Obtener la lista de compra
+      await this.getListaCompraUsu();
+      // Obtener las imágenes de los productos y sus ubicaciones
       await this.getProductosIMG();
       await this.getTodasUbicacionesLista();
-      // Luego de que todas las operaciones asincrónicas se completen, puedes llamar a cargarPointers
+
+
+      // Cargar los pointers del modelo
       await this.modeloService.cargarPointers(
         this.scene,
-        'pointer',
         this.A1c,
         this.A2c,
         this.A3c,
@@ -549,21 +492,86 @@ export class HomePage {
         false,
         this.idsauxiliares,
         this.ref,
-        this.pos
+        this.pos,
+        this.comprado
       );
+      // Restablecer la variable de estado a false para permitir futuras llamadas
+      this.recargandoModelo = false;
+      this.mostrarPantallaCarga = false;
+
     } catch (error) {
       console.error('Error al recargar el modelo:', error);
+      // Asegúrate de restablecer la variable de estado incluso en caso de error
+      this.recargandoModelo = false;
     }
+
+
+
+
+
+
+   }
+
+
+   
+
+  // async RecargarModelo() {
+  //   try {
+  //     await this.limpiarDatos();
+  //     // Obtener la lista de compra
+  //     await this.getListaCompraUsu();
+  //     // Obtener las imágenes de los productos y sus ubicaciones
+  //     await this.getProductosIMG();
+  //     await this.getTodasUbicacionesLista();
+
+
+  //     // Cargar los pointers del modelo
+  //     await this.modeloService.cargarPointers(
+  //       this.scene,
+  //       this.A1c,
+  //       this.A2c,
+  //       this.A3c,
+  //       this.A4c,
+  //       this.A5c,
+  //       this.A6c,
+  //       this.A7c,
+  //       this.A8c,
+  //       this.A9c,
+  //       this.A10c,
+  //       this.A11c,
+  //       this.A12c,
+  //       this.B1c,
+  //       this.B2c,
+  //       this.B3c,
+  //       self,
+  //       this.camera,
+  //       this.imagenescarrito,
+  //       false,
+  //       this.idsauxiliares,
+  //       this.ref,
+  //       this.pos,
+  //       this.comprado
+  //     );
+  //     this.mostrarPantallaCarga = false;
+  //   } catch (error) {
+  //     console.error('Error al recargar el modelo:', error);
+  //   }
+  // }
+  async limpiarDatos() {
+    this.comprado = [];
+    this.imagenescarrito = [];
+    this.ref = [];
+    this.pos = [];
+    this.idsauxiliares = [];
   }
 
   async getProductosIMG() {
+    console.log('getProductosIMG');
     try {
-      this.imagenescarrito.splice(0, this.imagenescarrito.length);
       let tokenUsuario =
         sessionStorage.getItem('tokenUsuario') ||
         localStorage.getItem('tokenUsuario');
       let urlFotoProducto = environment.base_url + '/uploads/fotoproducto/';
-
       await Promise.all(
         this.listaCompra.map(async (item) => {
           const res: any = await this.productosService
@@ -573,34 +581,34 @@ export class HomePage {
             urlFotoProducto + res.productos.foto + '?token=' + tokenUsuario
           );
           this.imagenescarrito.push(res.productos);
+
+          // Registro de depuración
         })
       );
     } catch (error) {
       console.error('Error al obtener imágenes de productos:', error);
     }
   }
-  async getTodasUbicacionesLista() {
-    try {
-      this.ref.splice(0, this.ref.length);
-      this.pos.splice(0, this.pos.length);
-      this.idsauxiliares.splice(0, this.idsauxiliares.length);
 
-      await Promise.all(
-        this.listaCompra.map(async (item) => {
-          const res: any = await this.productosService
-            .getProductoId(item.idProd)
-            .toPromise();
-          res.productos.Ubicacions.forEach((ubicacion: any) => {
-            this.ref.push(ubicacion.referencia);
-            this.pos.push(ubicacion.posicion);
-            this.idsauxiliares.push(res.productos.id);
-          });
-        })
-      );
+  async getTodasUbicacionesLista() {
+    console.log('getTodasUbicacionesLista');
+    try {
+      this.ref=[]
+      for (const item of this.listaCompra) {
+        const res: any = await this.productosService.getProductoId(item.idProd).toPromise();
+        res.productos.Ubicacions.forEach((ubicacion: any) => {
+          this.ref.push(ubicacion.referencia);
+          this.pos.push(ubicacion.posicion);
+          this.idsauxiliares.push(res.productos.id);
+          console.log(this.ref);
+          console.log(this.idsauxiliares);
+        });
+      }
     } catch (error) {
       console.error('Error al obtener ubicaciones de productos:', error);
     }
   }
+  
 
   getListaCompraUsu() {
     return new Promise<void>((resolve, reject) => {
@@ -612,9 +620,7 @@ export class HomePage {
             id: item.id,
             comprado: item.comprado,
           }));
-
           const detallesProductos: ProductoDetalle[] = [];
-
           this.totalProductos = this.listaCompra.length;
 
           // Contador de productos marcados como comprados
@@ -629,9 +635,14 @@ export class HomePage {
               productoCompra.id
             );
           });
-
-          this.getProductosIMG();
-          this.getTodasUbicacionesLista();
+          for (let i = 0; i < this.listaCompra.length; i++) {
+            if (this.listaCompra[i].comprado == true) {
+              this.comprado.push(true);
+            } else {
+              this.comprado.push(false);
+            }
+          }
+          console.log(this.comprado);
           resolve();
         } else {
           console.error('Error en la búsqueda dentro de lssta compra.');
@@ -640,14 +651,12 @@ export class HomePage {
     });
   }
 
-
   //!Chatbot!!!
   loadChatbotScript() {
     const script = document.createElement('script');
-    script.src = 'https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1';
-    script.onload = () => {
-    };
+    script.src =
+      'https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1';
+    script.onload = () => {};
     document.body.appendChild(script);
   }
-
 }

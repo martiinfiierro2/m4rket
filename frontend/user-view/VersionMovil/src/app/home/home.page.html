@@ -15,7 +15,7 @@
         >Recargar_Modelo</ion-button>
       <div class="contador-productos" id="contador-p">
         <span class="icon"><i class="fa-solid fa-cart-shopping"></i></span>
-        <p>Shopping List: {{ totalComprados }}/{{ totalProductos }} items</p>
+        <p>{{ totalComprados }}/{{ totalProductos }}</p>
       </div>
     </div>
 
@@ -25,13 +25,14 @@
   </div>
   
   <!-- ?Chatbot icono!!! -->
-  
-  <df-messenger
-    intent="WELCOME"
-    chat-title="Fermín"
-    agent-id="182b31cf-14c9-4c0b-9cd2-f35c4e65e132"
-    language-code="es"
-  ></df-messenger>
+  <div class="pantalla-carga" *ngIf="mostrarPantallaCarga">
+    <div class="spinner"></div>
+  </div>
 
+<df-messenger
+  chat-title="Fermín"
+  agent-id="182b31cf-14c9-4c0b-9cd2-f35c4e65e132"
+  language-code="es"
+></df-messenger>
   <app-drawer></app-drawer>
 </ion-content>

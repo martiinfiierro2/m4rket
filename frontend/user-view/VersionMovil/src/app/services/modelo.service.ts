@@ -67,7 +67,6 @@ export class ModeloService {
 
   cargarCasters(
     scene: THREE.Scene,
-    pointerrender: string,
     A1c: THREE.Object3D[],
     A2c: THREE.Object3D[],
     A3c: THREE.Object3D[],
@@ -275,7 +274,6 @@ export class ModeloService {
 
   cargarPointers(
     scene: THREE.Scene,
-    pointerrender: string,
     A1: THREE.Object3D[],
     A2: THREE.Object3D[],
     A3: THREE.Object3D[],
@@ -297,7 +295,8 @@ export class ModeloService {
     primeravez: boolean,
     idsaux: number[],
     ref2: string[],
-    pos2: number[]
+    pos2: number[],
+    comprados: boolean[]
   ) {
     const width = 1;
     const height = 1;
@@ -317,7 +316,7 @@ export class ModeloService {
     );
     const loader = new GLTFLoader();
     loader.load(
-      `assets/${pointerrender}/pointer.glb`,
+      `assets/pointer/pointer.glb`,
       (glb) => {
         plano3D.position.set(-8.1, 21.3, 22.6);
         plano3D.scale.set(2.5, 2.5, 2.5);
@@ -373,6 +372,7 @@ export class ModeloService {
           }
         }
 
+        let prueba=0;
         //! A1
         for (let i = 0; i <= 9; i++) {
           for (let k = 0; k < idsaux.length; k++) {
@@ -389,16 +389,31 @@ export class ModeloService {
                   imagenescarrito[h].foto +
                   '?token=' +
                   tokenUsuario;
+                  prueba=k;
+                  
               }
             }
           }
-          A1[i] = this.crearPlano3D(
-            width,
-            height,
-            depth,
-            borderRadius,
-            texturePath
-          );
+
+          if(comprados[prueba]==false){
+            A1[i] = this.crearPlano3D(
+              width,
+              height,
+              depth,
+              borderRadius,
+              texturePath
+            );
+
+          }else{
+            A1[i] = this.crearPlano3Dopacidad(
+              width,
+              height,
+              depth,
+              borderRadius,
+              texturePath
+            );
+          }
+
 
           A1[i].position.set(-8.1, 21.3, 22.6);
           A1[i].scale.set(2.5, 2.5, 2.5);
@@ -1315,6 +1330,60 @@ export class ModeloService {
 
     return plano3D;
   }
+
+  crearPlano3Dopacidad(
+    width: number,
+    height: number,
+    depth: number,
+    borderRadius: number,
+    texturePath: string,
+    arrowHeight: number = height / 5,
+    opacity: number = 0.4 // Opacidad predeterminada
+  ) {
+    // Crear la forma del plano con bordes redondeados
+    const formaPlano = this.crearFormaPlanoConIndicador(
+      width,
+      height,
+      borderRadius,
+      arrowHeight
+    );
+  
+    // Crear la geometría extruida a partir de la forma
+    const extrudeSettings = {
+      depth: depth, // Profundidad del objeto 3D
+      bevelEnabled: false, // Desactivar biselado para mantener la forma plana
+    };
+    const geometriaExtruida = new THREE.ExtrudeGeometry(
+      formaPlano,
+      extrudeSettings
+    );
+  
+    // Crear el material con textura para las caras grandes del plano
+    const textureLoader = new THREE.TextureLoader();
+    const texture = textureLoader.load(texturePath);
+    const materialTextura = new THREE.MeshBasicMaterial({
+      map: texture,
+      side: THREE.DoubleSide, // Se aplica la textura en ambas caras
+      opacity: opacity, // Agregar opacidad
+      transparent: true // Habilitar transparencia
+    });
+  
+    // Crear el material blanco para la flecha y los bordes
+    const materialBlanco = new THREE.MeshBasicMaterial({ color: 0xffffff, opacity: opacity});
+  
+    // Crear el plano 3D a partir de la geometría y los materiales
+    const plano3D = new THREE.Mesh(geometriaExtruida, [
+      materialTextura,
+      materialBlanco,
+    ]);
+  
+    return plano3D;
+  }
+
+
+
+
+
 
   obtenerNombreArray(
     objectArray: THREE.Object3D[],

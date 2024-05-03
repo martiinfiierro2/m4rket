@@ -10,12 +10,13 @@ import { ProductosService } from 'src/app/services/productos.service';
 import { EstadisticasService } from 'src/app/services/estadisticas.service';
 import { ModeloService } from 'src/app/services/modelo.service';
 
+
 import { trigger, transition, style, animate } from '@angular/animations';
 import { environment } from '../../environments/environment';
 import * as echarts from 'echarts';
-import { HomePage } from 'src/app/home/home.page';
 import { forkJoin } from 'rxjs';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { HomePage } from '../../../app/home/home.page';
 
 
 interface Stats {
@@ -95,6 +96,7 @@ export class DrawerComponent implements AfterViewInit {
   totalComprados: number = 0;
   //MODELO
   modeloService = new ModeloService();
+  mostrarPantallaCarga: boolean = false;
 
   //VARIABLES FOTO
   tokenUsuario =
@@ -106,7 +108,8 @@ export class DrawerComponent implements AfterViewInit {
     private plt: Platform,
     private gestureCtrl: GestureController,
     private productosService: ProductosService,
-    private estadisticasService: EstadisticasService
+    private estadisticasService: EstadisticasService,
+    private homePage: HomePage
   ) {}
 
   async ngAfterViewInit() {
@@ -173,7 +176,6 @@ export class DrawerComponent implements AfterViewInit {
     });
     gesture.enable(true);
   }
-
   toggleDrawer2(position: number) {
     const drawer = this.drawer.nativeElement;
     const botonchatbot = this.botonchatbot.nativeElement;
@@ -202,14 +204,14 @@ export class DrawerComponent implements AfterViewInit {
       botonchatbot.style.display = 'flex';
     }
   }
-  Recarguita() {
-    this
-    const buttonElement = document.getElementById('Recargar');
-    if (buttonElement) {
-      buttonElement.dispatchEvent(new Event('click'));
-    }
-    console.log('siiii')
-  }
+  // Recarguita() {
+  //   this
+  //   const buttonElement = document.getElementById('Recargar');
+  //   if (buttonElement) {
+  //     buttonElement.dispatchEvent(new Event('click'));
+  //   }
+  //   console.log('siiii')
+  // }
   toggleDrawer() {
     const drawer = this.drawer.nativeElement;
     const botonchatbot = this.botonchatbot.nativeElement;
@@ -472,7 +474,7 @@ export class DrawerComponent implements AfterViewInit {
       let tipo = 'anadido';
       let fecha = new Date();
       this.estadistica(producto.id, tipo, fecha);
-      this.Recarguita(); // Llamar a Recarguita aquí asegura que se ejecute al final
+    this.Recarguita(); // Llamar a Recarguita aquí asegura que se ejecute al final
     });
   }
 
@@ -487,7 +489,7 @@ export class DrawerComponent implements AfterViewInit {
     });
   }
 
-  getListaCompraUsu() {
+ getListaCompraUsu() {
     this.productosService.getListaCompra(this.idUsu).subscribe((result) => {
       if (result.listacompra) {
         this.listaCompra = result.listacompra.map((item: ListaCompra) => ({
@@ -500,15 +502,8 @@ export class DrawerComponent implements AfterViewInit {
         this.totalProductos = this.listaCompra.length;
 
         // Contador de productos marcados como comprados
-        this.totalComprados = this.listaCompra.reduce((total, item) => {
-          return total + (item.comprado ? 1 : 0);
-        }, 0);
-
-        let a = document.getElementById('contador-p');
-        if (a)
-          a.innerHTML =
-        '<p>' + this.totalComprados + '/' + this.totalProductos + '<i style="margin-left: 10px; font-size: 16px;" class="fa-solid fa-cart-shopping"></i></p>';
-
+        this.cambiarValoresComprado();
+        this.Recarguita();
         console.log('La lista del usuario es', this.listaCompra);
         console.log('Total de productos en la lista:', this.totalProductos);
         console.log(
@@ -519,7 +514,18 @@ export class DrawerComponent implements AfterViewInit {
     });
   }
   
+cambiarValoresComprado(){
+  this.totalComprados = this.listaCompra.reduce((total, item) => {
+    return total + (item.comprado ? 1 : 0);
+  }, 0);
+  let a = document.getElementById('contador-p');
+  if (a)
+    a.innerHTML =
+  '<p>' + this.totalComprados + '/' + this.totalProductos + '<i style="margin-left: 10px; font-size: 16px;" class="fa-solid fa-cart-shopping"></i></p>';
 
+  this.Recarguita();
+
+}
   compararListaBusqueda() {
     this.listaCompra.forEach((productoCompra) => {
       const productoEncontrado = this.productos.find(
@@ -660,6 +666,17 @@ export class DrawerComponent implements AfterViewInit {
     };
     document.body.appendChild(script);
   }
+
+
+
+  Recarguita() {
+    this.homePage.RecargarModelo().then(() => {
+      //console.log('Lista de compra actualizada exitosamente desde DrawerComponent');
+    }).catch((error) => {
+      //console.error('Error al actualizar la lista de compra desde DrawerComponent:', error);
+    });
+  }
+
 }
 
 
