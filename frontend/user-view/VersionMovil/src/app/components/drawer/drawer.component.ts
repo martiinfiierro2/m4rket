@@ -203,10 +203,12 @@ export class DrawerComponent implements AfterViewInit {
     }
   }
   Recarguita() {
+    this
     const buttonElement = document.getElementById('Recargar');
     if (buttonElement) {
       buttonElement.dispatchEvent(new Event('click'));
     }
+    console.log('siiii')
   }
   toggleDrawer() {
     const drawer = this.drawer.nativeElement;
@@ -466,14 +468,14 @@ export class DrawerComponent implements AfterViewInit {
       producto.cantidad = 1;
       this.getListaCompraUsu();
       this.getProducto(producto.id);
+      this.compararListaBusqueda();
+      let tipo = 'anadido';
+      let fecha = new Date();
+      this.estadistica(producto.id, tipo, fecha);
+      this.Recarguita(); // Llamar a Recarguita aquí asegura que se ejecute al final
     });
-    this.compararListaBusqueda();
-    producto.enListaCompra = true;
-    let tipo = 'anadido';
-    let fecha = new Date();
-    this.estadistica(producto.id, tipo, fecha);
-    this.Recarguita();
   }
+
 
   getBusquedaProducto(event: any) {
     const query = event.toLowerCase();

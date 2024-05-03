@@ -135,7 +135,7 @@ export class HomePage {
     this.getListaCompraUsu();
     this.CargarModelo();
     this.RecargarModelo();
-    this.loadChatbotScript();
+    //this.loadChatbotScript();
   }
 
   BorrarListaCompraCompleta(){
