@@ -371,9 +371,6 @@ export class ModeloService {
             scene.remove(A15[i]);
           }
         }
-        console.log(idsaux);
-        console.log(ref2);
-        console.log(pos2);
 
         let compradopos: number[] = new Array(15).fill(0);
 
@@ -1497,7 +1494,7 @@ export class ModeloService {
     borderRadius: number,
     texturePath: string,
     arrowHeight: number = height / 5,
-    opacity: number = 0.4 // Opacidad predeterminada
+    opacity: number = 0.2 // Opacidad predeterminada
   ) {
     // Crear la forma del plano con bordes redondeados
     const formaPlano = this.crearFormaPlanoConIndicador(

@@ -566,7 +566,6 @@ export class HomePage {
   }
 
   async getProductosIMG() {
-    console.log('getProductosIMG');
     try {
       let tokenUsuario =
         sessionStorage.getItem('tokenUsuario') ||
@@ -591,7 +590,6 @@ export class HomePage {
   }
 
   async getTodasUbicacionesLista() {
-    console.log('getTodasUbicacionesLista');
     try {
       this.ref=[]
       for (const item of this.listaCompra) {
@@ -600,8 +598,6 @@ export class HomePage {
           this.ref.push(ubicacion.referencia);
           this.pos.push(ubicacion.posicion);
           this.idsauxiliares.push(res.productos.id);
-          console.log(this.ref);
-          console.log(this.idsauxiliares);
         });
       }
     } catch (error) {
@@ -642,7 +638,6 @@ export class HomePage {
               this.comprado.push(false);
             }
           }
-          console.log(this.comprado);
           resolve();
         } else {
           console.error('Error en la búsqueda dentro de lssta compra.');
