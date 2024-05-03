@@ -79,9 +79,9 @@ export class ModeloService {
     A10c: THREE.Object3D[],
     A11c: THREE.Object3D[],
     A12c: THREE.Object3D[],
-    B1c: THREE.Object3D[],
-    B2c: THREE.Object3D[],
-    B3c: THREE.Object3D[],
+    A13c: THREE.Object3D[],
+    A14c: THREE.Object3D[],
+    A15c: THREE.Object3D[],
     self: any,
     camera: THREE.PerspectiveCamera,
     imagenescarrito: Producto[]
@@ -240,35 +240,35 @@ export class ModeloService {
       scene.add(A12c[i]);
     }
 
-    //!B1c
+    //!A13c
     for (let i = 0; i <= 3; i++) {
-      B1c[i] = cube.clone();
-      B1c[i].position.z = i === 0 ? 4.5 : B1c[i - 1].position.z - 3.1;
-      B1c[i].position.x = 29.4;
-      B1c[i].position.y = 26;
-      scene.add(B1c[i]);
+      A13c[i] = cube.clone();
+      A13c[i].position.z = i === 0 ? 4.5 : A13c[i - 1].position.z - 3.1;
+      A13c[i].position.x = 29.4;
+      A13c[i].position.y = 26;
+      scene.add(A13c[i]);
     }
 
-    //!B2c
+    //!A14c
     for (let i = 0; i <= 5; i++) {
-      B2c[i] = cube.clone();
-      B2c[i].position.x =
+      A14c[i] = cube.clone();
+      A14c[i].position.x =
         i === 0
           ? 29
           : i % 2 === 0
-          ? B2c[i - 1].position.x - 3.6
-          : B2c[i - 1].position.x - 3.7;
-      B2c[i].position.z = -22.5;
-      B2c[i].position.y = 26;
-      scene.add(B2c[i]);
+          ? A14c[i - 1].position.x - 3.6
+          : A14c[i - 1].position.x - 3.7;
+      A14c[i].position.z = -22.5;
+      A14c[i].position.y = 26;
+      scene.add(A14c[i]);
     }
-    //!B3c
-    for (let i = 0; i <= 5; i++) {
-      B3c[i] = cube.clone();
-      B3c[i].position.x = i === 0 ? -8.5 : B3c[i - 1].position.x + 6.5;
-      B3c[i].position.z = -22.8;
-      B3c[i].position.y = 24.2;
-      scene.add(B3c[i]);
+    //!A15c
+    for (let i = 0; i <= 2; i++) {
+      A15c[i] = cube.clone();
+      A15c[i].position.x = i === 0 ? -8.5 : A15c[i - 1].position.x + 6.5;
+      A15c[i].position.z = -22.8;
+      A15c[i].position.y = 24.2;
+      scene.add(A15c[i]);
     }
   }
 
@@ -286,9 +286,9 @@ export class ModeloService {
     A10: THREE.Object3D[],
     A11: THREE.Object3D[],
     A12: THREE.Object3D[],
-    B1: THREE.Object3D[],
-    B2: THREE.Object3D[],
-    B3: THREE.Object3D[],
+    A13: THREE.Object3D[],
+    A14: THREE.Object3D[],
+    A15: THREE.Object3D[],
     self: any,
     camera: THREE.PerspectiveCamera,
     imagenescarrito: Producto[],
@@ -361,18 +361,22 @@ export class ModeloService {
           for (let i = 0; i < A12.length; i++) {
             scene.remove(A12[i]);
           }
-          for (let i = 0; i < B1.length; i++) {
-            scene.remove(B1[i]);
+          for (let i = 0; i < A13.length; i++) {
+            scene.remove(A13[i]);
           }
-          for (let i = 0; i < B2.length; i++) {
-            scene.remove(B2[i]);
+          for (let i = 0; i < A14.length; i++) {
+            scene.remove(A14[i]);
           }
-          for (let i = 0; i < B3.length; i++) {
-            scene.remove(B3[i]);
+          for (let i = 0; i < A15.length; i++) {
+            scene.remove(A15[i]);
           }
         }
+        console.log(idsaux);
+        console.log(ref2);
+        console.log(pos2);
 
-        let prueba=0;
+        let compradopos: number[] = new Array(15).fill(0);
+
         //! A1
         for (let i = 0; i <= 9; i++) {
           for (let k = 0; k < idsaux.length; k++) {
@@ -382,20 +386,17 @@ export class ModeloService {
                 ref2[k] == 'A1' &&
                 pos2[k] == i
               ) {
-  
-
                 texturePath =
                   urlFotoProducto +
                   imagenescarrito[h].foto +
                   '?token=' +
                   tokenUsuario;
-                  prueba=k;
-                  
+                compradopos[0] = k;
               }
             }
           }
 
-          if(comprados[prueba]==false){
+          if (comprados[compradopos[0]] == false) {
             A1[i] = this.crearPlano3D(
               width,
               height,
@@ -403,8 +404,7 @@ export class ModeloService {
               borderRadius,
               texturePath
             );
-
-          }else{
+          } else {
             A1[i] = this.crearPlano3Dopacidad(
               width,
               height,
@@ -413,7 +413,6 @@ export class ModeloService {
               texturePath
             );
           }
-
 
           A1[i].position.set(-8.1, 21.3, 22.6);
           A1[i].scale.set(2.5, 2.5, 2.5);
@@ -439,22 +438,33 @@ export class ModeloService {
                 ref2[k] == 'A2' &&
                 pos2[k] == i
               ) {
-
                 texturePath =
                   urlFotoProducto +
                   imagenescarrito[h].foto +
                   '?token=' +
                   tokenUsuario;
+                compradopos[1] = k;
               }
             }
           }
-          A2[i] = this.crearPlano3D(
-            width,
-            height,
-            depth,
-            borderRadius,
-            texturePath
-          );
+
+          if (comprados[compradopos[1]] == false) {
+            A2[i] = this.crearPlano3D(
+              width,
+              height,
+              depth,
+              borderRadius,
+              texturePath
+            );
+          } else {
+            A2[i] = this.crearPlano3Dopacidad(
+              width,
+              height,
+              depth,
+              borderRadius,
+              texturePath
+            );
+          }
 
           A2[i].position.set(-8.1, 21.3, 22.6);
           A2[i].scale.set(2.5, 2.5, 2.5);
@@ -481,23 +491,33 @@ export class ModeloService {
                 ref2[k] == 'A3' &&
                 pos2[k] == i
               ) {
-
-
                 texturePath =
                   urlFotoProducto +
                   imagenescarrito[h].foto +
                   '?token=' +
                   tokenUsuario;
+                compradopos[2] = k;
               }
             }
           }
-          A3[i] = this.crearPlano3D(
-            width,
-            height,
-            depth,
-            borderRadius,
-            texturePath
-          );
+
+          if (comprados[compradopos[2]] == false) {
+            A3[i] = this.crearPlano3D(
+              width,
+              height,
+              depth,
+              borderRadius,
+              texturePath
+            );
+          } else {
+            A3[i] = this.crearPlano3Dopacidad(
+              width,
+              height,
+              depth,
+              borderRadius,
+              texturePath
+            );
+          }
 
           A3[i].position.set(-8.1, 21.3, 22.6);
           A3[i].scale.set(2.5, 2.5, 2.5);
@@ -525,24 +545,33 @@ export class ModeloService {
                 ref2[k] == 'A4' &&
                 pos2[k] == i
               ) {
-
-
                 texturePath =
                   urlFotoProducto +
                   imagenescarrito[h].foto +
                   '?token=' +
                   tokenUsuario;
+                compradopos[3] = k;
               }
             }
           }
-          A4[i] = this.crearPlano3D(
-            width,
-            height,
-            depth,
-            borderRadius,
-            texturePath
-          );
 
+          if (comprados[compradopos[3]] == false) {
+            A4[i] = this.crearPlano3D(
+              width,
+              height,
+              depth,
+              borderRadius,
+              texturePath
+            );
+          } else {
+            A4[i] = this.crearPlano3Dopacidad(
+              width,
+              height,
+              depth,
+              borderRadius,
+              texturePath
+            );
+          }
           A4[i].position.set(-8.1, 21.3, 22.6);
           A4[i].scale.set(2.5, 2.5, 2.5);
           A4[i].position.x =
@@ -567,23 +596,33 @@ export class ModeloService {
                 ref2[k] == 'A5' &&
                 pos2[k] == i
               ) {
-
-
                 texturePath =
                   urlFotoProducto +
                   imagenescarrito[h].foto +
                   '?token=' +
                   tokenUsuario;
+                compradopos[4] = k;
               }
             }
           }
-          A5[i] = this.crearPlano3D(
-            width,
-            height,
-            depth,
-            borderRadius,
-            texturePath
-          );
+
+          if (comprados[compradopos[4]] == false) {
+            A5[i] = this.crearPlano3D(
+              width,
+              height,
+              depth,
+              borderRadius,
+              texturePath
+            );
+          } else {
+            A5[i] = this.crearPlano3Dopacidad(
+              width,
+              height,
+              depth,
+              borderRadius,
+              texturePath
+            );
+          }
 
           A5[i].position.set(-8.1, 21.3, 22.6);
           A5[i].scale.set(2.5, 2.5, 2.5);
@@ -610,23 +649,33 @@ export class ModeloService {
                 ref2[k] == 'A6' &&
                 pos2[k] == i
               ) {
-
-
                 texturePath =
                   urlFotoProducto +
                   imagenescarrito[h].foto +
                   '?token=' +
                   tokenUsuario;
+                compradopos[5] = k;
               }
             }
           }
-          A6[i] = this.crearPlano3D(
-            width,
-            height,
-            depth,
-            borderRadius,
-            texturePath
-          );
+
+          if (comprados[compradopos[5]] == false) {
+            A6[i] = this.crearPlano3D(
+              width,
+              height,
+              depth,
+              borderRadius,
+              texturePath
+            );
+          } else {
+            A6[i] = this.crearPlano3Dopacidad(
+              width,
+              height,
+              depth,
+              borderRadius,
+              texturePath
+            );
+          }
 
           A6[i].position.set(-8.1, 21.3, 22.6);
           A6[i].scale.set(2.5, 2.5, 2.5);
@@ -654,23 +703,35 @@ export class ModeloService {
                 ref2[k] == 'A7' &&
                 pos2[k] == i
               ) {
-
-
                 texturePath =
                   urlFotoProducto +
                   imagenescarrito[h].foto +
                   '?token=' +
                   tokenUsuario;
+                  compradopos[6]=k;
+                  
               }
             }
           }
-          A7[i] = this.crearPlano3D(
-            width,
-            height,
-            depth,
-            borderRadius,
-            texturePath
-          );
+
+          if(comprados[compradopos[6]]==false){
+            A7[i] = this.crearPlano3D(
+              width,
+              height,
+              depth,
+              borderRadius,
+              texturePath
+            );
+
+          }else{
+            A7[i] = this.crearPlano3Dopacidad(
+              width,
+              height,
+              depth,
+              borderRadius,
+              texturePath
+            );
+          }
 
           A7[i].position.set(-8.1, 21.3, 22.6);
           A7[i].scale.set(2.5, 2.5, 2.5);
@@ -697,23 +758,35 @@ export class ModeloService {
                 ref2[k] == 'A8' &&
                 pos2[k] == i
               ) {
-
-
                 texturePath =
                   urlFotoProducto +
                   imagenescarrito[h].foto +
                   '?token=' +
                   tokenUsuario;
+                  compradopos[7]=k;
+                  
               }
             }
           }
-          A8[i] = this.crearPlano3D(
-            width,
-            height,
-            depth,
-            borderRadius,
-            texturePath
-          );
+
+          if(comprados[compradopos[7]]==false){
+            A8[i] = this.crearPlano3D(
+              width,
+              height,
+              depth,
+              borderRadius,
+              texturePath
+            );
+
+          }else{
+            A8[i] = this.crearPlano3Dopacidad(
+              width,
+              height,
+              depth,
+              borderRadius,
+              texturePath
+            );
+          }
 
           A8[i].position.set(-8.1, 21.3, 22.6);
           A8[i].scale.set(2.5, 2.5, 2.5);
@@ -741,23 +814,35 @@ export class ModeloService {
                 ref2[k] == 'A9' &&
                 pos2[k] == i
               ) {
-
-
                 texturePath =
                   urlFotoProducto +
                   imagenescarrito[h].foto +
                   '?token=' +
                   tokenUsuario;
+                  compradopos[8]=k;
+                  
               }
             }
           }
-          A9[i] = this.crearPlano3D(
-            width,
-            height,
-            depth,
-            borderRadius,
-            texturePath
-          );
+
+          if(comprados[compradopos[8]]==false){
+            A9[i] = this.crearPlano3D(
+              width,
+              height,
+              depth,
+              borderRadius,
+              texturePath
+            );
+
+          }else{
+            A9[i] = this.crearPlano3Dopacidad(
+              width,
+              height,
+              depth,
+              borderRadius,
+              texturePath
+            );
+          }
 
           A9[i].position.set(-8.1, 21.3, 22.6);
           A9[i].scale.set(2.5, 2.5, 2.5);
@@ -785,22 +870,35 @@ export class ModeloService {
                 ref2[k] == 'A10' &&
                 pos2[k] == i
               ) {
-
                 texturePath =
                   urlFotoProducto +
                   imagenescarrito[h].foto +
                   '?token=' +
                   tokenUsuario;
+                  compradopos[9]=k;
+                  
               }
             }
           }
-          A10[i] = this.crearPlano3D(
-            width,
-            height,
-            depth,
-            borderRadius,
-            texturePath
-          );
+
+          if(comprados[compradopos[9]]==false){
+            A10[i] = this.crearPlano3D(
+              width,
+              height,
+              depth,
+              borderRadius,
+              texturePath
+            );
+
+          }else{
+            A10[i] = this.crearPlano3Dopacidad(
+              width,
+              height,
+              depth,
+              borderRadius,
+              texturePath
+            );
+          }
 
           A10[i].position.set(-8.1, 21.3, 22.6);
           A10[i].scale.set(2.5, 2.5, 2.5);
@@ -827,23 +925,35 @@ export class ModeloService {
                 ref2[k] == 'A11' &&
                 pos2[k] == i
               ) {
-
-
                 texturePath =
                   urlFotoProducto +
                   imagenescarrito[h].foto +
                   '?token=' +
                   tokenUsuario;
+                  compradopos[10]=k;
+                  
               }
             }
           }
-          A11[i] = this.crearPlano3D(
-            width,
-            height,
-            depth,
-            borderRadius,
-            texturePath
-          );
+
+          if(comprados[compradopos[10]]==false){
+            A11[i] = this.crearPlano3D(
+              width,
+              height,
+              depth,
+              borderRadius,
+              texturePath
+            );
+
+          }else{
+            A11[i] = this.crearPlano3Dopacidad(
+              width,
+              height,
+              depth,
+              borderRadius,
+              texturePath
+            );
+          }
 
           A11[i].position.set(-8.1, 21.3, 22.6);
           A11[i].scale.set(2.5, 2.5, 2.5);
@@ -871,24 +981,35 @@ export class ModeloService {
                 ref2[k] == 'A12' &&
                 pos2[k] == i
               ) {
-
-
                 texturePath =
                   urlFotoProducto +
                   imagenescarrito[h].foto +
                   '?token=' +
                   tokenUsuario;
+                  compradopos[11]=k;
+                  
               }
             }
           }
-          A12[i] = this.crearPlano3D(
-            width,
-            height,
-            depth,
-            borderRadius,
-            texturePath
-          );
 
+          if(comprados[compradopos[11]]==false){
+            A12[i] = this.crearPlano3D(
+              width,
+              height,
+              depth,
+              borderRadius,
+              texturePath
+            );
+
+          }else{
+            A12[i] = this.crearPlano3Dopacidad(
+              width,
+              height,
+              depth,
+              borderRadius,
+              texturePath
+            );
+          }
           A12[i].position.set(-8.1, 21.3, 22.6);
           A12[i].scale.set(2.5, 2.5, 2.5);
           A12[i].position.x =
@@ -904,124 +1025,162 @@ export class ModeloService {
             }
           }
         }
-        //! B1
+        //! A13
         for (let i = 0; i <= 3; i++) {
           for (let k = 0; k < idsaux.length; k++) {
             for (let h = 0; h < imagenescarrito.length; h++) {
               if (
                 idsaux[k].toString() == imagenescarrito[h].id &&
-                ref2[k] == 'B1' &&
+                ref2[k] == 'A13' &&
                 pos2[k] == i
               ) {
-
-
                 texturePath =
                   urlFotoProducto +
                   imagenescarrito[h].foto +
                   '?token=' +
                   tokenUsuario;
+                  compradopos[12]=k;
+                  
               }
             }
           }
-          B1[i] = this.crearPlano3D(
-            width,
-            height,
-            depth,
-            borderRadius,
-            texturePath
-          );
 
-          B1[i].position.set(-8.1, 21.3, 22.6);
-          B1[i].scale.set(2.5, 2.5, 2.5);
+          if(comprados[compradopos[12]]==false){
+            A13[i] = this.crearPlano3D(
+              width,
+              height,
+              depth,
+              borderRadius,
+              texturePath
+            );
 
-          B1[i].position.z = i === 0 ? 4.2 : B1[i - 1].position.z - 3.1;
-          B1[i].position.x = 29.4;
-          B1[i].position.y = 25.7;
+          }else{
+            A13[i] = this.crearPlano3Dopacidad(
+              width,
+              height,
+              depth,
+              borderRadius,
+              texturePath
+            );
+          }
+
+          A13[i].position.set(-8.1, 21.3, 22.6);
+          A13[i].scale.set(2.5, 2.5, 2.5);
+
+          A13[i].position.z = i === 0 ? 4.2 : A13[i - 1].position.z - 3.1;
+          A13[i].position.x = 29.4;
+          A13[i].position.y = 25.7;
           for (let j = 0; j < pos2.length; j++) {
-            if (ref2[j] == 'B1' && pos2[j] == i) {
-              scene.add(B1[i]);
+            if (ref2[j] == 'A13' && pos2[j] == i) {
+              scene.add(A13[i]);
             }
           }
         }
-        //! B2
+        //! A14
         for (let i = 0; i <= 5; i++) {
           for (let k = 0; k < idsaux.length; k++) {
             for (let h = 0; h < imagenescarrito.length; h++) {
               if (
                 idsaux[k].toString() == imagenescarrito[h].id &&
-                ref2[k] == 'B2' &&
+                ref2[k] == 'A14' &&
                 pos2[k] == i
               ) {
-
-
                 texturePath =
                   urlFotoProducto +
                   imagenescarrito[h].foto +
                   '?token=' +
                   tokenUsuario;
+                  compradopos[13]=k;
+                  
               }
             }
           }
-          B2[i] = this.crearPlano3D(
-            width,
-            height,
-            depth,
-            borderRadius,
-            texturePath
-          );
 
-          B2[i].position.set(-8.1, 21.3, 22.6);
-          B2[i].scale.set(2.5, 2.5, 2.5);
-          B2[i].position.x =
+          if(comprados[compradopos[13]]==false){
+            A14[i] = this.crearPlano3D(
+              width,
+              height,
+              depth,
+              borderRadius,
+              texturePath
+            );
+
+          }else{
+            A14[i] = this.crearPlano3Dopacidad(
+              width,
+              height,
+              depth,
+              borderRadius,
+              texturePath
+            );
+          }
+
+
+          A14[i].position.set(-8.1, 21.3, 22.6);
+          A14[i].scale.set(2.5, 2.5, 2.5);
+          A14[i].position.x =
             i === 0
               ? 28
               : i % 2 === 0
-              ? B2[i - 1].position.x - 3.6
-              : B2[i - 1].position.x - 3.7;
-          B2[i].position.z = -22.5;
-          B2[i].position.y = 25;
+              ? A14[i - 1].position.x - 3.6
+              : A14[i - 1].position.x - 3.7;
+          A14[i].position.z = -22.5;
+          A14[i].position.y = 25;
           for (let j = 0; j < pos2.length; j++) {
-            if (ref2[j] == 'B2' && pos2[j] == i) {
-              scene.add(B2[i]);
+            if (ref2[j] == 'A14' && pos2[j] == i) {
+              scene.add(A14[i]);
             }
           }
         }
-        //! B3
+        //! A15
         for (let i = 0; i <= 2; i++) {
           for (let k = 0; k < idsaux.length; k++) {
             for (let h = 0; h < imagenescarrito.length; h++) {
               if (
                 idsaux[k].toString() == imagenescarrito[h].id &&
-                ref2[k] == 'B3' &&
+                ref2[k] == 'A15' &&
                 pos2[k] == i
               ) {
-
-
                 texturePath =
                   urlFotoProducto +
                   imagenescarrito[h].foto +
                   '?token=' +
                   tokenUsuario;
+                  compradopos[14]=k;
+                  
               }
             }
           }
-          B3[i] = this.crearPlano3D(
-            width,
-            height,
-            depth,
-            borderRadius,
-            texturePath
-          );
 
-          B3[i].position.set(-8.1, 21.3, 22.6);
-          B3[i].scale.set(2.5, 2.5, 2.5);
+          if(comprados[compradopos[14]]==false){
+            A15[i] = this.crearPlano3D(
+              width,
+              height,
+              depth,
+              borderRadius,
+              texturePath
+            );
 
-          B3[i].position.x = i === 0 ? -10 : B3[i - 1].position.x + 6.5;
-          B3[i].position.z = -22.8;
-          B3[i].position.y = 22.5;
+          }else{
+            A15[i] = this.crearPlano3Dopacidad(
+              width,
+              height,
+              depth,
+              borderRadius,
+              texturePath
+            );
+          }
+
+
+          A15[i].position.set(-8.1, 21.3, 22.6);
+          A15[i].scale.set(2.5, 2.5, 2.5);
+
+          A15[i].position.x = i === 0 ? -10 : A15[i - 1].position.x + 6.5;
+          A15[i].position.z = -22.8;
+          A15[i].position.y = 22.5;
           for (let j = 0; j < pos2.length; j++) {
-            if (ref2[j] == 'B3' && pos2[j] == i) {
-              scene.add(B3[i]);
+            if (ref2[j] == 'A15' && pos2[j] == i) {
+              scene.add(A15[i]);
             }
           }
         }
@@ -1087,9 +1246,9 @@ export class ModeloService {
     A10: THREE.Object3D[],
     A11: THREE.Object3D[],
     A12: THREE.Object3D[],
-    B1: THREE.Object3D[],
-    B2: THREE.Object3D[],
-    B3: THREE.Object3D[]
+    A13: THREE.Object3D[],
+    A14: THREE.Object3D[],
+    A15: THREE.Object3D[]
   ) {
     this.animateLoop(
       this.animate,
@@ -1108,9 +1267,9 @@ export class ModeloService {
           A10,
           A11,
           A12,
-          B1,
-          B2,
-          B3,
+          A13,
+          A14,
+          A15,
           scene,
           camera
         );
@@ -1163,9 +1322,9 @@ export class ModeloService {
     A10: THREE.Object3D[],
     A11: THREE.Object3D[],
     A12: THREE.Object3D[],
-    B1: THREE.Object3D[],
-    B2: THREE.Object3D[],
-    B3: THREE.Object3D[],
+    A13: THREE.Object3D[],
+    A14: THREE.Object3D[],
+    A15: THREE.Object3D[],
     scene: THREE.Scene,
     camera: THREE.PerspectiveCamera
   ) {
@@ -1205,14 +1364,14 @@ export class ModeloService {
     if (A12.length > 0) {
       this.rotatePointers(A12);
     }
-    if (B1.length > 0) {
-      this.rotatePointers(B1);
+    if (A13.length > 0) {
+      this.rotatePointers(A13);
     }
-    if (B2.length > 0) {
-      this.rotatePointers(B2);
+    if (A14.length > 0) {
+      this.rotatePointers(A14);
     }
-    if (B3.length > 0) {
-      this.rotatePointers(B3);
+    if (A15.length > 0) {
+      this.rotatePointers(A15);
     }
   }
 
@@ -1347,7 +1506,7 @@ export class ModeloService {
       borderRadius,
       arrowHeight
     );
-  
+
     // Crear la geometría extruida a partir de la forma
     const extrudeSettings = {
       depth: depth, // Profundidad del objeto 3D
@@ -1357,7 +1516,7 @@ export class ModeloService {
       formaPlano,
       extrudeSettings
     );
-  
+
     // Crear el material con textura para las caras grandes del plano
     const textureLoader = new THREE.TextureLoader();
     const texture = textureLoader.load(texturePath);
@@ -1365,25 +1524,23 @@ export class ModeloService {
       map: texture,
       side: THREE.DoubleSide, // Se aplica la textura en ambas caras
       opacity: opacity, // Agregar opacidad
-      transparent: true // Habilitar transparencia
+      transparent: true, // Habilitar transparencia
     });
-  
+
     // Crear el material blanco para la flecha y los bordes
-    const materialBlanco = new THREE.MeshBasicMaterial({ color: 0xffffff, opacity: opacity});
-  
+    const materialBlanco = new THREE.MeshBasicMaterial({
+      color: 0xffffff,
+      opacity: opacity,
+    });
+
     // Crear el plano 3D a partir de la geometría y los materiales
     const plano3D = new THREE.Mesh(geometriaExtruida, [
       materialTextura,
       materialBlanco,
     ]);
-  
+
     return plano3D;
   }
-
-
-
-
-
 
   obtenerNombreArray(
     objectArray: THREE.Object3D[],
@@ -1399,9 +1556,9 @@ export class ModeloService {
     A10: THREE.Object3D[],
     A11: THREE.Object3D[],
     A12: THREE.Object3D[],
-    B1: THREE.Object3D[],
-    B2: THREE.Object3D[],
-    B3: THREE.Object3D[]
+    A13: THREE.Object3D[],
+    A14: THREE.Object3D[],
+    A15: THREE.Object3D[]
   ): string {
     const index = [
       A1,
@@ -1416,15 +1573,15 @@ export class ModeloService {
       A10,
       A11,
       A12,
-      B1,
-      B2,
-      B3,
+      A13,
+      A14,
+      A15,
     ].findIndex((arr) => arr === objectArray);
 
     if (index !== -1) {
       return `A${index + 1}`;
     } else {
-      return 'B3'; // En caso de que no se encuentre en la lista, devolvemos un valor predeterminado
+      return 'A15'; // En caso de que no se encuentre en la lista, devolvemos un valor predeterminado
     }
   }
 }

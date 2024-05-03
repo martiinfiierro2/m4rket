@@ -248,9 +248,9 @@ export class HomePage {
   A10: THREE.Object3D[] = []; // Pasillos pegados 1.2
   A11: THREE.Object3D[] = []; //Pasillos pegados 2.1
   A12: THREE.Object3D[] = []; // Pasillos pegados 2.2
-  B1: THREE.Object3D[] = []; // Estanterías finas altas
-  B2: THREE.Object3D[] = []; // Estanterías grandes
-  B3: THREE.Object3D[] = []; // Estantería Frío
+  A13: THREE.Object3D[] = []; // Estanterías finas altas
+  A14: THREE.Object3D[] = []; // Estanterías grandes
+  A15: THREE.Object3D[] = []; // Estantería Frío
   A1c: THREE.Object3D[] = []; // Estanter
   A2c: THREE.Object3D[] = []; // Frutas 2
   A3c: THREE.Object3D[] = []; // Pasillo1.1
@@ -263,9 +263,9 @@ export class HomePage {
   A10c: THREE.Object3D[] = []; // Pasillos pegados 1.2
   A11c: THREE.Object3D[] = []; //Pasillos pegados 2.1
   A12c: THREE.Object3D[] = []; // Pasillos pegados 2.2
-  B1c: THREE.Object3D[] = []; // Estanterías finas altas
-  B2c: THREE.Object3D[] = []; // Estanterías grandes
-  B3c: THREE.Object3D[] = []; // Estantería Frío
+  A13c: THREE.Object3D[] = []; // Estanterías finas altas
+  A14c: THREE.Object3D[] = []; // Estanterías grandes
+  A15c: THREE.Object3D[] = []; // Estantería Frío
   primeravez: boolean;
 
   CargarModelo() {
@@ -316,9 +316,9 @@ export class HomePage {
       this.A10c,
       this.A11c,
       this.A12c,
-      this.B1c,
-      this.B2c,
-      this.B3c,
+      this.A13c,
+      this.A14c,
+      this.A15c,
       self,
       this.camera,
       this.imagenescarrito,
@@ -343,9 +343,9 @@ export class HomePage {
       this.A10,
       this.A11,
       this.A12,
-      this.B1,
-      this.B2,
-      this.B3,
+      this.A13,
+      this.A14,
+      this.A15,
       self,
       this.camera,
       this.imagenescarrito
@@ -384,9 +384,9 @@ export class HomePage {
           self.A10,
           self.A11,
           self.A12,
-          self.B1,
-          self.B2,
-          self.B3,
+          self.A13,
+          self.A14,
+          self.A15
         ];
         for (const objectArray of objectArrays) {
           for (const object of objectArray) {
@@ -410,12 +410,12 @@ export class HomePage {
                   self.A10,
                   self.A11,
                   self.A12,
-                  self.B1,
-                  self.B2,
-                  self.B3
+                  self.A13,
+                  self.A14,
+                  self.A15
                 );
                 const position = objectArray.indexOf(object);
-
+                console.log(arrayName, position);
                 //Busco la relacion con produtos
                 self.getIdUbicacion(arrayName, position);
               }
@@ -443,9 +443,9 @@ export class HomePage {
       this.A10c,
       this.A11c,
       this.A12c,
-      this.B1c,
-      this.B2c,
-      this.B3c
+      this.A13c,
+      this.A14c,
+      this.A15c
     );
   }
    recargandoModelo = false;
@@ -483,9 +483,9 @@ export class HomePage {
         this.A10c,
         this.A11c,
         this.A12c,
-        this.B1c,
-        this.B2c,
-        this.B3c,
+        this.A13c,
+        this.A14c,
+        this.A15c,
         self,
         this.camera,
         this.imagenescarrito,
@@ -540,9 +540,9 @@ export class HomePage {
   //       this.A10c,
   //       this.A11c,
   //       this.A12c,
-  //       this.B1c,
-  //       this.B2c,
-  //       this.B3c,
+  //       this.A13c,
+  //       this.A14c,
+  //       this.A15c,
   //       self,
   //       this.camera,
   //       this.imagenescarrito,
