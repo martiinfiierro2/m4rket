@@ -171,7 +171,7 @@ export class Malla {
             this.dibujarBucle(InfoPrograma, mesh);
             requestAnimationFrame(draw);
         };
-        //draw();
+        draw();
     }
 
     dibujarBucle(InfoPrograma: any, mesh: any) {
