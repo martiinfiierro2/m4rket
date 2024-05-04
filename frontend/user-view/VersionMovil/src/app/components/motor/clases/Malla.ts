@@ -35,7 +35,7 @@ export class Malla {
             attribLocations: {
                 vertexPosition: gl.getAttribLocation(program, "aVertexPosition"),
                 textureCoord: gl.getAttribLocation(program, "aTextureCoord"),
-                normalCoord: gl.getAttribLocation(program, "vNormal")
+                normalCoord: gl.getAttribLocation(program, "aVertexNormal")
             },
             uniformLocations: {
                 projectionMatrix: gl.getUniformLocation(
@@ -70,7 +70,7 @@ export class Malla {
 
             const touch = event.touches[0];
             const touchX = touch.clientX;
-            const touchY = touch.clientY;
+            const touchY = touch.clientY; 
 
             if (this.isRightTouchDown) {
                 const deltaTouchX = touchX - this.lastTouchX;
@@ -166,34 +166,12 @@ export class Malla {
             }
         });
 
-        // Agrega un evento touchmove para detectar cuando se mueve el dedo sobre la pantalla
-        canvas.addEventListener('touchmove', handleRightDragMobile);
-    
-        // Enlazar el buffer de vértices
-        this.gl!.enableVertexAttribArray(InfoPrograma.attribLocations.vertexPosition);
-        this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, mesh.vertexBuffer);
-        this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(mesh.vertices), this.gl!.STATIC_DRAW);
-        this.gl!.vertexAttribPointer(InfoPrograma.attribLocations.vertexPosition, mesh.vertexBuffer.itemSize, this.gl!.FLOAT, false, 0, 0);
-    
-        // Enlazar el buffer de normales
-        this.gl!.enableVertexAttribArray(InfoPrograma.attribLocations.normalCoord);
-        this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, mesh.normalBuffer);
-        this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(mesh.vertexNormals), this.gl!.STATIC_DRAW);
-        this.gl!.vertexAttribPointer(InfoPrograma.attribLocations.normalCoord, mesh.normalBuffer.itemSize, this.gl!.FLOAT, false, 0, 0);
-    
-        // Enlazar el buffer de texturas
-        this.gl!.enableVertexAttribArray(InfoPrograma.attribLocations.textureCoord);
-        this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, mesh.textureBuffer);
-        this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(mesh.textures), this.gl!.STATIC_DRAW);
-        this.gl!.vertexAttribPointer(InfoPrograma.attribLocations.textureCoord, mesh.textureBuffer.itemSize, this.gl!.FLOAT, false, 0, 0);
-        
-        //this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, null);
-
         const draw = () => {
-            requestAnimationFrame(draw); // Llamada recursiva para renderizar de forma continua
+            // Llamada recursiva para renderizar de forma continua
             this.dibujarBucle(InfoPrograma, mesh);
+            requestAnimationFrame(draw);
         };
-        draw();
+        //draw();
     }
 
     dibujarBucle(InfoPrograma: any, mesh: any) {
@@ -208,13 +186,27 @@ export class Malla {
             100
         );
 
-        if(this.zoomFactor != 0){ 
-            // Aplica el zoom a la matriz de proyección
-            mat4.scale(this.projectionMatrix, this.projectionMatrix, [this.zoomFactor, this.zoomFactor, this.zoomFactor]);  
-        }
+        // Enlazar el buffer de vértices
+        this.gl!.enableVertexAttribArray(InfoPrograma.attribLocations.vertexPosition);
+        this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, mesh.vertexBuffer);
+        //this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(mesh.vertices), this.gl!.STATIC_DRAW);
+        this.gl!.vertexAttribPointer(InfoPrograma.attribLocations.vertexPosition, mesh.vertexBuffer.itemSize, this.gl!.FLOAT, false, 0, 0);
+    
+        // Enlazar el buffer de texturas
+        this.gl!.enableVertexAttribArray(InfoPrograma.attribLocations.textureCoord);
+        this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, mesh.textureBuffer);
+        //this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(mesh.textures), this.gl!.STATIC_DRAW);
+        this.gl!.vertexAttribPointer(InfoPrograma.attribLocations.textureCoord, mesh.textureBuffer.itemSize, this.gl!.FLOAT, false, 0, 0);
         
+        // Enlazar el buffer de normales
+        this.gl!.enableVertexAttribArray(InfoPrograma.attribLocations.normalCoord);
+        this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, mesh.normalBuffer);
+        //this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(mesh.vertexNormals), this.gl!.STATIC_DRAW);
+        this.gl!.vertexAttribPointer(InfoPrograma.attribLocations.normalCoord, mesh.normalBuffer.itemSize, this.gl!.FLOAT, false, 0, 0);
+    
         // Enlazar el buffer de índices
         this.gl!.bindBuffer(this.gl!.ELEMENT_ARRAY_BUFFER, mesh.indexBuffer);
+    
     
         // Usar el programa de shaders
         this.gl!.useProgram(InfoPrograma.program);
@@ -259,7 +251,11 @@ export class Malla {
     
         // Aplica el desplazamiento a la matriz de vista
         mat4.translate(this.viewMatrix, this.viewMatrix, [-this.translationX, -this.translationY, -this.zoomFactor]); 
-    
+        if(this.zoomFactor != 0){ 
+            // Aplica el zoom a la matriz de proyección
+            mat4.scale(this.projectionMatrix, this.projectionMatrix, [this.zoomFactor, this.zoomFactor, this.zoomFactor]);  
+        }
+        
         const modelViewMatrix = mat4.create();
         mat4.multiply(modelViewMatrix, this.viewMatrix, modelMatrix);
 
