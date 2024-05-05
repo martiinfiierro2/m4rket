@@ -158,6 +158,20 @@ export class Malla {
         });
     
         canvas.addEventListener('touchmove', (event) => {
+            // Crea un intervalo que ejecute handlePinch repetidamente cada 100 milisegundos
+            const pinchInterval = setInterval(() => {
+                handlePinch(event);
+            }, 100);
+
+            // Maneja el levantamiento del dedo para detener el intervalo
+            const handleTouchEnd = () => {
+                clearInterval(pinchInterval);
+                canvas.removeEventListener('touchend', handleTouchEnd);
+            };
+
+            // Agrega un event listener para el levantamiento del dedo
+            canvas.addEventListener('touchend', handleTouchEnd);
+            
             if (event.touches.length === 2) {
                 handlePinch(event);
             } else {
