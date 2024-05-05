@@ -2,8 +2,6 @@ import { mat4, mat3, vec3 } from 'gl-matrix';
 import * as OBJ from "webgl-obj-loader";
 import { motor } from '../motor.component';
 
-import * as Hammer from 'hammerjs';
-
 export class Malla {
     private rotationAngleX: number = 0;
     private rotationAngleY: number = 0;
@@ -157,11 +155,13 @@ export class Malla {
         });
     
         canvas.addEventListener('touchmove', (event) => {
-            if (event.touches.length === 2) {
-                handlePinch(event);
-            } else {
-                handleRightDragMobile(event);
-            }
+            //const pinchInterval = setInterval(() => {
+                if (event.touches.length === 2) {
+                    handlePinch(event);
+                } else {
+                    handleRightDragMobile(event);
+                }
+            //}, 100);
         });
     
         canvas.addEventListener('touchend', (event) => {

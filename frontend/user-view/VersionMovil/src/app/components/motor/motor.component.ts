@@ -89,11 +89,6 @@ export class MotorComponent implements OnInit{
     const muebleBaldosas2: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(20,0,-5), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(1,1,1), 'supermarket_fridge.obj', 'malla', 'grisclaro.jpeg');
     const muebleBaldosas3: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(0,0,-5), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(1,1,1), 'mueblebaldosas.obj', 'malla', 'grisclaro.jpeg');
 
-
-
-
-
-
     //Asignamos el motor al servicio después de cargarlo para que guarde valores
     //await this.motorService.asignarMotor(motor);
     console.log(motor)
