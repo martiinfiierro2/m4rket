@@ -16,7 +16,8 @@ export class Malla {
     private translationY: number = 0;
     private translationSpeed!: number;
 
-    private zoomFactor: number = 0;
+    private zoomFactor: number = 1;
+    private distancia: number = 0;
     private lastPinchDistance: number = 0;
     private isPinching: boolean = false;
 
@@ -144,10 +145,27 @@ export class Malla {
     
             this.isPinching = false;
         };
-        
+
+        const handleMouseWheel = (event: WheelEvent) => {
+            const delta = event.deltaY;
+            if(delta < 0){
+                this.zoomFactor += 0.2;
+            }
+            else if (delta > 0){
+                this.zoomFactor += -0.2;
+            }
+        };
             
         // Agregar el evento de clic derecho al canvas
         // Agrega un evento touchstart para detectar cuando se toca la pantalla
+        const canvas = this.gl!.canvas as HTMLCanvasElement;
+        canvas.addEventListener('wheel', (event) => {
+            // Verificar si el evento es una rueda del ratón y no un toque
+            if (event.type === 'wheel') {
+                handleMouseWheel(event as WheelEvent);
+            }
+        });
+
         canvas.addEventListener('touchstart', (event) => {
             const touch = event.touches[0];
             this.lastTouchX = touch.clientX;
@@ -273,11 +291,7 @@ export class Malla {
         mat4.lookAt(this.viewMatrix, cameraPosition, target, up);
     
         // Aplica el desplazamiento a la matriz de vista
-        mat4.translate(this.viewMatrix, this.viewMatrix, [-this.translationX, -this.translationY, -this.zoomFactor]); 
-        if(this.zoomFactor != 0){ 
-            // Aplica el zoom a la matriz de proyección
-            mat4.scale(this.projectionMatrix, this.projectionMatrix, [this.zoomFactor, this.zoomFactor, this.zoomFactor]);  
-        }
+        mat4.translate(this.viewMatrix, this.viewMatrix, [-this.translationX, -this.translationY, -this.zoomFactor]);  
         
         const modelViewMatrix = mat4.create();
         mat4.multiply(modelViewMatrix, this.viewMatrix, modelMatrix);
