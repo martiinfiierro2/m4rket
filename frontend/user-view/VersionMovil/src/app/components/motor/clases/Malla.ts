@@ -176,6 +176,7 @@ export class Malla {
         });
 
         //ZOOM
+        /*
         const hammer = new Hammer(canvas);
 
         hammer.on('pinch', (event) => {
@@ -185,6 +186,7 @@ export class Malla {
             mat4.scale(scaleMatrix, scaleMatrix, [zoomFactor, zoomFactor, zoomFactor]);
             mat4.multiply(this.projectionMatrix, this.projectionMatrix, scaleMatrix);
         });
+        */
 
         const draw = () => {
             // Llamada recursiva para renderizar de forma continua
