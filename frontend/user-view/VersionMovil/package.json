@@ -30,6 +30,7 @@
     "@danielblagy/three-mmi": "^1.0.0",
     "@ionic/angular": "^7.0.0",
     "@ionic/cordova-builders": "^11.0.0",
+    "@types/gl-matrix": "^3.2.0",
     "@types/hammerjs": "^2.0.45",
     "@types/three": "^0.161.2",
     "echarts": "^5.5.0",
