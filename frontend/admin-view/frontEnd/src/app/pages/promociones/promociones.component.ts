@@ -39,7 +39,7 @@ export class PromocionesComponent {
   //Variables paginación
   public totalregistros=98;
   public posicionactual=0;
-  public registrosporpagina=4;
+  public registrosporpagina=10;
 
   private paginaUsada = 0;
 

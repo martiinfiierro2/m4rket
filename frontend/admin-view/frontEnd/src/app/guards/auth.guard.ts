@@ -10,14 +10,11 @@ export const authGuard: CanActivateFn = (route, state) => {
   const usuService = inject(UsuariosService);
   const router = inject(Router);
 
-  console.log("Entro al guard del token");
-
   return usuService.validarToken()
          .pipe(
             tap( resp =>{
               console.log(resp);
               if (!resp) {
-                console.log("Hay token pero inválido");
                 localStorage.removeItem('tokenUsuario');
                 localStorage.removeItem('idUsuario');
                 router.navigateByUrl('/login');
