@@ -115,9 +115,9 @@ export class Malla {
                 // Ajusta el campo de visión de la matriz de proyección en función del pellizco
                 const zoomSpeed = 0.1; // Velocidad de zoom
                 this.zoomFactor = 1 + deltaDistance * zoomSpeed;
-                // Actualiza la última distancia de pellizco
-                this.lastPinchDistance = distance;
             }
+            // Actualiza la última distancia de pellizco
+            this.lastPinchDistance = distance;
         }
     
         // Método para manejar el evento de final de pellizco (pinch)
