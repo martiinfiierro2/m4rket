@@ -106,6 +106,31 @@ export class EditPorductoComponent {
     });
   }
 
+  redirigirProducto(idProd){
+    let urlProducto = '/productos/detailProducto?id=' + idProd;
+    this.router.navigateByUrl(urlProducto);
+  }
+
+  modalPostCreacion(){
+    Swal.fire({
+      title: 'Creado correctamente!',
+      icon: 'success',
+      confirmButtonText: 'Ver producto',
+      confirmButtonColor: '#3085d6',
+      showCancelButton: true,
+      cancelButtonText: 'Continuar',
+      cancelButtonColor: "#3085d6",
+
+    }).then((result) =>{
+      if (result.isConfirmed) {
+        this.redirigirProducto(this.idProd);
+      }
+      else{
+        this.atras();
+      }
+    })
+  }
+
   editProducto(){
 
     if (this.fotoActualizada) {  //si la foto se ha actualizado
@@ -123,7 +148,8 @@ export class EditPorductoComponent {
         .subscribe( res => {
           this.productoService.postFotoProducto(this.foto!, this.idProd)
               .subscribe( res =>{
-                this.atras();
+                //this.redirigirProducto(this.idProd);
+                this.modalPostCreacion();
             });
         })
       }
@@ -132,7 +158,8 @@ export class EditPorductoComponent {
       this.productoForm.get('foto').setValue(this.productoEditar.foto);
       this.productoService.putProducto(this.productoForm.value, this.idProd)
         .subscribe( res => {
-          this.atras();
+          //this.redirigirProducto(this.idProd);
+          this.modalPostCreacion();
       })
     }
   }

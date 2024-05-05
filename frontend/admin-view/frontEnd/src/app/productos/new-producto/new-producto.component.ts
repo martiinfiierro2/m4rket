@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { ProductosService } from "../../services/productos.service";
+import Swal from 'sweetalert2'
 
 
 
@@ -39,6 +40,11 @@ export class NewProductoComponent {
   public srcImagen: string = '';
   public foto: File | undefined;
 
+  //Campos formularios
+  infoBasicaDesplegada = false;
+  valoresNutDesplegados = false;
+  imagenProducto = false;
+
 
   constructor( private router: Router,
                 private fb: FormBuilder,
@@ -68,6 +74,64 @@ export class NewProductoComponent {
     this.router.navigate(['/productos']);
   }
 
+  redirigirProducto(idProd){
+    let urlProducto = '/productos/detailProducto?id=' + idProd;
+    this.router.navigateByUrl(urlProducto);
+  }
+
+  modalPostCreacion(idProd){
+    Swal.fire({
+      title: 'Creado correctamente!',
+      icon: 'success',
+      confirmButtonText: 'Ver producto',
+      confirmButtonColor: '#3085d6',
+      showCancelButton: true,
+      cancelButtonText: 'Continuar',
+      cancelButtonColor: "#3085d6",
+
+    }).then((result) =>{
+      if (result.isConfirmed) {
+        this.redirigirProducto(idProd);
+      }
+      else{
+        this.atras();
+      }
+    })
+  }
+
+  desplegarCampo( campo ){
+
+    switch (campo) {
+      case 'infoBasica':
+        if (this.infoBasicaDesplegada) {
+          this.infoBasicaDesplegada = false;
+        }
+        else{
+          this.infoBasicaDesplegada = true;
+        }
+        
+        break;
+      case 'valoresNut':
+        if (this.valoresNutDesplegados) {
+          this.valoresNutDesplegados = false;
+        }
+        else{
+          this.valoresNutDesplegados = true;
+        }
+
+        break;
+      case 'imagenProducto':
+        if (this.imagenProducto) {
+          this.imagenProducto = false;
+        }
+        else{
+          this.imagenProducto = true;
+        }
+
+        break;
+    }
+  }
+
   newProducto(){
 
     let idProducto = '';
@@ -85,7 +149,7 @@ export class NewProductoComponent {
         this.productoService.postFotoProducto(this.foto!, idProducto)
           .subscribe( res =>{
             console.log('Foto añadida: ', res);
-            this.atras();
+            this.modalPostCreacion(idProducto);
           })
       })
     }

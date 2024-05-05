@@ -52,23 +52,34 @@ export class LoginComponent {
       this.usuarioService.login( this.loginForm.value)
       .subscribe( res =>{
 
-        //Recordar sesion
-        if (this.loginForm.value.check) {
-          localStorage.setItem('tokenUsuario', res.token);
-          localStorage.setItem('idUsuario', res.idUsuario);
-          localStorage.setItem('email', res.email);
-          localStorage.setItem('rol', res.rol);
+        //si es usuario no puede acceder al panel de admin
+        if (res.rol == 'usuario') {   
+          Swal.fire({
+            title: 'Error!',
+            text: 'Solo se permite el acceso a los administradores de los comercios',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+          });
+          this.esperando = false;
         }
         else{
-          localStorage.removeItem('email');
-          localStorage.setItem('tokenUsuario', res.token);
-          localStorage.setItem('idUsuario', res.idUsuario);
-          localStorage.setItem('rol', res.rol); 
+          //Recordar sesion
+          if (this.loginForm.value.check) {
+            localStorage.setItem('tokenUsuario', res.token);
+            localStorage.setItem('idUsuario', res.idUsuario);
+            localStorage.setItem('email', res.email);
+            localStorage.setItem('rol', res.rol);
+          }
+          else{
+            localStorage.removeItem('email');
+            localStorage.setItem('tokenUsuario', res.token);
+            localStorage.setItem('idUsuario', res.idUsuario);
+            localStorage.setItem('rol', res.rol); 
+          }
+    
+          this.route.navigateByUrl('/productos');
+          this.esperando = false;
         }
-  
-        this.route.navigateByUrl('/productos');
-        this.esperando = false;
-
       },(error) =>{
         Swal.fire({
           title: 'Error!',

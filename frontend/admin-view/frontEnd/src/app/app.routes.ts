@@ -1,13 +1,10 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './auth/login/login.component';
-import { RecoveryComponent } from "./auth/recovery/recovery.component";
-import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { ProductosComponent } from './pages/productos/productos.component';
 import { PromocionesComponent } from './pages/promociones/promociones.component';
 import { NewProductoComponent } from './productos/new-producto/new-producto.component';
 import { EditPorductoComponent } from "./productos/edit-porducto/edit-porducto.component";
-import { SignUpComponent } from "./auth/sign-up/sign-up.component";
 import { NewPromocionComponent } from './promociones/new-promocion/new-promocion.component';
 import { EditPromocionComponent } from './promociones/edit-promocion/edit-promocion.component';
 import { NewTipoPromocionComponent } from './promociones/new-tipo-promocion/new-tipo-promocion.component';
@@ -20,10 +17,12 @@ import { EstadisticasComponent } from './pages/estadisticas/estadisticas.compone
 import { DatosComponent } from './pages/datos/datos.component';
 import { EditUbicacionComponent } from './ubicaciones/edit-ubicacion/edit-ubicacion.component';
 import { NewUbicacionComponent } from './ubicaciones/new-ubicacion/new-ubicacion.component';
-
-import { authGuard, authGuard2 } from "../app/guards/auth.guard";
 import { UsuariosComponent } from './pages/usuarios/usuarios.component';
 import { DetailProductoComponent } from './productos/detail-producto/detail-producto.component';
+
+import { authGuard, authGuard2 } from "../app/guards/auth.guard";
+import { rolGuard } from './guards/rol.guard';
+
 
 
 export const routes: Routes = [
@@ -78,7 +77,7 @@ export const routes: Routes = [
       { path: '*', redirectTo: ''}
     ]
   },
-  { path: 'usuarios', component: AdminLayoutComponent,
+  { path: 'usuarios', component: AdminLayoutComponent, canActivate: [authGuard, rolGuard],
     children: [
       { path: '', component: UsuariosComponent},
       { path: '*', redirectTo: ''}
