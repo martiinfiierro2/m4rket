@@ -106,14 +106,13 @@ export class Malla {
             const deltaY = touch1.clientY - touch2.clientY;
             const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
         
-            if (this.isPinching) {
-                // Calcula la diferencia de distancia desde el último pellizco
-                const deltaDistance = distance - this.lastPinchDistance;
-        
-                // Ajusta el campo de visión de la matriz de proyección en función del pellizco
-                this.zoomSpeed = 0.1; // Velocidad de zoom
-                this.zoomFactor = 1 + deltaDistance * this.zoomSpeed;
-            }
+            // Calcula la diferencia de distancia desde el último pellizco
+            const deltaDistance = distance - this.lastPinchDistance;
+
+            // Ajusta el factor de zoom en función de la diferencia de distancia
+            this.zoomSpeed = 0.1; // Velocidad de zoom
+            this.zoomFactor *= 1 + deltaDistance * this.zoomSpeed;
+
             // Actualiza la última distancia de pellizco
             this.lastPinchDistance = distance;
         }
@@ -171,7 +170,7 @@ export class Malla {
 
             // Agrega un event listener para el levantamiento del dedo
             canvas.addEventListener('touchend', handleTouchEnd);
-            
+
             if (event.touches.length === 2) {
                 handlePinch(event);
             } else {
