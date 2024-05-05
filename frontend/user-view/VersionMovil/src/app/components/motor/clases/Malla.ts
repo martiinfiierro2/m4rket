@@ -67,10 +67,6 @@ export class Malla {
         // Cargar textura
         this.texture = await this.loadTexture(textura);
 
-
-        //EVENTOS
-        const canvas = this.gl!.canvas as HTMLCanvasElement;
-
         // Función para manejar el evento de arrastre con clic derecho
         const handleRightDragMobile = (event: TouchEvent) => {
             if (event.touches.length === 2) {
@@ -149,10 +145,10 @@ export class Malla {
         const handleMouseWheel = (event: WheelEvent) => {
             const delta = event.deltaY;
             if(delta < 0){
-                this.zoomFactor += 0.2;
+                this.zoomFactor += 0.01;
             }
             else if (delta > 0){
-                this.zoomFactor += -0.2;
+                this.zoomFactor += -0.01;
             }
         };
             
@@ -193,19 +189,6 @@ export class Malla {
             }
         });
 
-        //ZOOM
-        /*
-        const hammer = new Hammer(canvas);
-
-        hammer.on('pinch', (event) => {
-            const zoomFactor = event.scale;
-            
-            const scaleMatrix = mat4.create();
-            mat4.scale(scaleMatrix, scaleMatrix, [zoomFactor, zoomFactor, zoomFactor]);
-            mat4.multiply(this.projectionMatrix, this.projectionMatrix, scaleMatrix);
-        });
-        */
-
         const draw = () => {
             // Llamada recursiva para renderizar de forma continua
             this.dibujarBucle(InfoPrograma, mesh);
@@ -224,7 +207,7 @@ export class Malla {
             (45 * Math.PI) / 180,
             this.gl!.canvas.width / this.gl!.canvas.height,
             0.1,
-            100
+            200
         );
 
         // Enlazar el buffer de vértices
@@ -247,15 +230,6 @@ export class Malla {
     
         // Enlazar el buffer de índices
         this.gl!.bindBuffer(this.gl!.ELEMENT_ARRAY_BUFFER, mesh.indexBuffer);
-    
-    
-        // Usar el programa de shaders
-        this.gl!.useProgram(InfoPrograma.program);
-        this.gl!.uniformMatrix4fv(
-            InfoPrograma.uniformLocations.projectionMatrix,
-            false,
-            this.projectionMatrix
-        );
     
         // Crear una nueva matriz de transformación para este objeto
         const modelMatrix = mat4.create();
@@ -291,7 +265,10 @@ export class Malla {
         mat4.lookAt(this.viewMatrix, cameraPosition, target, up);
     
         // Aplica el desplazamiento a la matriz de vista
-        mat4.translate(this.viewMatrix, this.viewMatrix, [-this.translationX, -this.translationY, -this.zoomFactor]);  
+        mat4.translate(this.viewMatrix, this.viewMatrix, [-this.translationX, -this.translationY, 0]);
+
+        // Aplica el zoom a la matriz de proyección
+        mat4.scale(this.projectionMatrix, this.projectionMatrix, [1, 1, this.zoomFactor]);  
         
         const modelViewMatrix = mat4.create();
         mat4.multiply(modelViewMatrix, this.viewMatrix, modelMatrix);
@@ -300,6 +277,14 @@ export class Malla {
         const normalMatrix = mat4.create();
         mat4.invert(normalMatrix, modelViewMatrix);
         mat4.transpose(normalMatrix, normalMatrix);
+
+        // Usar el programa de shaders
+        this.gl!.useProgram(InfoPrograma.program);
+        this.gl!.uniformMatrix4fv(
+            InfoPrograma.uniformLocations.projectionMatrix,
+            false,
+            this.projectionMatrix
+        );
 
         this.gl!.uniformMatrix4fv(
             InfoPrograma.uniformLocations.viewMatrix,
