@@ -120,21 +120,6 @@ export class Malla {
             }
         }
     
-        // Método para manejar el evento de inicio de pellizco (pinch)
-        const handlePinchStart = (event: TouchEvent) => {
-            event.preventDefault();
-    
-            const touch1 = event.touches[0];
-            const touch2 = event.touches[1];
-    
-            // Calcula la distancia entre los dos puntos de contacto
-            const deltaX = touch1.clientX - touch2.clientX;
-            const deltaY = touch1.clientY - touch2.clientY;
-            this.lastPinchDistance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-    
-            this.isPinching = true;
-        };
-    
         // Método para manejar el evento de final de pellizco (pinch)
         const handlePinchEnd = (event: TouchEvent) => {
             event.preventDefault();
@@ -168,7 +153,7 @@ export class Malla {
             this.lastTouchY = touch.clientY;
     
             if (event.touches.length === 2) {
-                handlePinchStart(event);
+                this.isPinching = true;
             } else {
                 this.isRightTouchDown = true;
             }
@@ -268,7 +253,7 @@ export class Malla {
         mat4.translate(this.viewMatrix, this.viewMatrix, [-this.translationX, -this.translationY, 0]);
 
         // Aplica el zoom a la matriz de proyección
-        mat4.scale(this.projectionMatrix, this.projectionMatrix, [1, 1, this.zoomFactor]);  
+        mat4.scale(this.projectionMatrix, this.projectionMatrix, [1, 1, -this.zoomFactor]);  
         
         const modelViewMatrix = mat4.create();
         mat4.multiply(modelViewMatrix, this.viewMatrix, modelMatrix);
@@ -359,7 +344,3 @@ export class Malla {
         return (valor & (valor -1)) === 0;
     }
 }
-function escalarMatrizProyeccion(zoom: any) {
-    throw new Error('Function not implemented.');
-}
-
