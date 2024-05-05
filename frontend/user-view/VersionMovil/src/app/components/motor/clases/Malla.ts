@@ -160,20 +160,6 @@ export class Malla {
             if (event.touches.length === 2) {
                 handlePinch(event);
             } else {
-                //Intervalo para evitar desplazamientos erróneos
-                const pinchInterval = setInterval(() => {
-                    handlePinch(event);
-                }, 100);
-
-                //Función para vaciar el intervalo en caso de no haber touch en la pantalla
-                const handleTouchEnd = () => {
-                    clearInterval(pinchInterval);
-                    canvas.removeEventListener('touchend', handleTouchEnd);
-                };
-        
-                // Agrega un event listener para el levantamiento del dedo
-                canvas.addEventListener('touchend', handleTouchEnd);
-                
                 handleRightDragMobile(event);
             }
         });
