@@ -17,6 +17,7 @@ export class Malla {
     private translationSpeed!: number;
 
     private zoomFactor: number = 1;
+    private zoomSpeed!: number;
     private distancia: number = 0;
     private lastPinchDistance: number = 0;
     private isPinching: boolean = false;
@@ -69,9 +70,6 @@ export class Malla {
 
         // Función para manejar el evento de arrastre con clic derecho
         const handleRightDragMobile = (event: TouchEvent) => {
-            if (event.touches.length === 2) {
-                handlePinch(event);
-            }
             event.preventDefault();
 
             const touch = event.touches[0];
@@ -113,8 +111,8 @@ export class Malla {
                 const deltaDistance = distance - this.lastPinchDistance;
         
                 // Ajusta el campo de visión de la matriz de proyección en función del pellizco
-                const zoomSpeed = 0.1; // Velocidad de zoom
-                this.zoomFactor = 1 + deltaDistance * zoomSpeed;
+                this.zoomSpeed = 0.1; // Velocidad de zoom
+                this.zoomFactor = 1 + deltaDistance * this.zoomSpeed;
             }
             // Actualiza la última distancia de pellizco
             this.lastPinchDistance = distance;
