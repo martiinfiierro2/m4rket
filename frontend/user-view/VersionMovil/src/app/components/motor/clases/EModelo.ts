@@ -15,7 +15,6 @@ export class EModelo {
     }
 
     async dibujar(matTrans: any): Promise<void>{
-        console.log(this.recursoMalla.getNombre());
         await new Promise<void>(resolve => {
             if(this.recursoMalla) {
                 resolve();
