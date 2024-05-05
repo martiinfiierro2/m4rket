@@ -129,10 +129,10 @@ export class Malla {
 
         const handleMouseWheel = (event: WheelEvent) => {
             const delta = event.deltaY;
-            if(delta < 0){
+            if(delta > 0){
                 this.zoomFactor += 0.01;
             }
-            else if (delta > 0){
+            else if (delta < 0){
                 this.zoomFactor += -0.01;
             }
         };
@@ -253,7 +253,7 @@ export class Malla {
         mat4.translate(this.viewMatrix, this.viewMatrix, [-this.translationX, -this.translationY, 0]);
 
         // Aplica el zoom a la matriz de proyección
-        mat4.scale(this.projectionMatrix, this.projectionMatrix, [1, 1, -this.zoomFactor]);  
+        mat4.scale(this.projectionMatrix, this.projectionMatrix, [1, 1, this.zoomFactor]);  
         
         const modelViewMatrix = mat4.create();
         mat4.multiply(modelViewMatrix, this.viewMatrix, modelMatrix);
@@ -344,3 +344,7 @@ export class Malla {
         return (valor & (valor -1)) === 0;
     }
 }
+function escalarMatrizProyeccion(zoom: any) {
+    throw new Error('Function not implemented.');
+}
+
