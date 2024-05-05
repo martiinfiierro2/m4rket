@@ -1,6 +1,9 @@
 import { mat4, mat3, vec3 } from 'gl-matrix';
 import * as OBJ from "webgl-obj-loader";
 import { motor } from '../motor.component';
+
+import * as Hammer from 'hammerjs';
+
 export class Malla {
     private rotationAngleX: number = 0;
     private rotationAngleY: number = 0;
@@ -51,6 +54,7 @@ export class Malla {
         return programInfo;
     }
 
+
     async dibujar(textura: any, matTrans: any) {
         this.matTrans = matTrans;
         this.gl = motor.gl;
@@ -61,6 +65,10 @@ export class Malla {
 
         // Cargar textura
         this.texture = await this.loadTexture(textura);
+
+
+        //EVENTOS
+        const canvas = this.gl!.canvas as HTMLCanvasElement;
 
         // Función para manejar el evento de arrastre con clic derecho
         const handleRightDragMobile = (event: TouchEvent) => {
@@ -136,10 +144,10 @@ export class Malla {
     
             this.isPinching = false;
         };
+        
             
         // Agregar el evento de clic derecho al canvas
         // Agrega un evento touchstart para detectar cuando se toca la pantalla
-        const canvas = this.gl!.canvas as HTMLCanvasElement;
         canvas.addEventListener('touchstart', (event) => {
             const touch = event.touches[0];
             this.lastTouchX = touch.clientX;
@@ -167,6 +175,17 @@ export class Malla {
             }
         });
 
+        //ZOOM
+        const hammer = new Hammer(canvas);
+
+        hammer.on('pinch', (event) => {
+            const zoomFactor = event.scale;
+            
+            const scaleMatrix = mat4.create();
+            mat4.scale(scaleMatrix, scaleMatrix, [zoomFactor, zoomFactor, zoomFactor]);
+            mat4.multiply(this.projectionMatrix, this.projectionMatrix, scaleMatrix);
+        });
+
         const draw = () => {
             // Llamada recursiva para renderizar de forma continua
             this.dibujarBucle(InfoPrograma, mesh);
@@ -174,6 +193,7 @@ export class Malla {
         };
         draw();
     }
+
 
     dibujarBucle(InfoPrograma: any, mesh: any) {
 
@@ -338,3 +358,7 @@ export class Malla {
         return (valor & (valor -1)) === 0;
     }
 }
+function escalarMatrizProyeccion(zoom: any) {
+    throw new Error('Function not implemented.');
+}
+
