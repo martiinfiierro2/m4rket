@@ -181,6 +181,11 @@ export class Malla {
 
 
     dibujarBucle(InfoPrograma: any, mesh: any) {
+        // Habilitar el culling
+        //gthis.gl.enable(this.gl.CULL_FACE);
+
+        // Especificar qué caras cullar (en este caso, cullar las caras traseras)
+        //this.gl.cullFace(this.gl.BACK);
 
         this.projectionMatrix = mat4.create();
         

@@ -69,13 +69,6 @@ export class TMotorTAG {
         
         // Limpiar canvas
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-
-        // Habilitar el culling
-        this.gl.enable(this.gl.CULL_FACE);
-
-        // Especificar qué caras cullar (en este caso, cullar las caras traseras)
-        this.gl.cullFace(this.gl.BACK);
-
     }
 
     async iniciarPrograma(){
