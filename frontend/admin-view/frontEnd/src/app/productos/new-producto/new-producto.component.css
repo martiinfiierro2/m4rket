@@ -115,6 +115,13 @@ form{
                 margin: 0em .5em 0em 0em;
             }
 
+            #tituloInfoBasica:hover, #tituloValoresNut:hover, #tituloImagen:hover{
+                cursor: pointer;
+                font-size: 1.05em;
+                color: #51877A;
+                border-color: #51877A;
+            }
+
 
         #contenidoInfoBasica, #contenidoValoresNut, #contenidoImagen{
             display: flex;
@@ -175,3 +182,7 @@ form{
                 margin-left: 1.6em;
                 margin-top: 1em;
             }
+
+                #btnFoto:hover{
+                    cursor: pointer;
+                }

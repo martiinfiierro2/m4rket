@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component} from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -34,7 +34,7 @@ export class NewProductoComponent {
     fibra: [null],
     proteina: [null],
     sal: [null],
-    foto: ['', [Validators.required]]  
+    foto: ['',[Validators.required]]  
   });
 
   public srcImagen: string = '';
@@ -44,6 +44,9 @@ export class NewProductoComponent {
   infoBasicaDesplegada = false;
   valoresNutDesplegados = false;
   imagenProducto = false;
+
+  hayFoto = false;
+
 
 
   constructor( private router: Router,
@@ -64,8 +67,7 @@ export class NewProductoComponent {
       reader.readAsDataURL(evento.target.files[0]);
       reader.onload = (event) =>{
         this.srcImagen = event.target!.result!.toString();
-        document.getElementById('previewImagen')!.style.display = 'block';
-        console.log(this.foto);
+        this.hayFoto = true;
       }
     }
   }
@@ -101,33 +103,56 @@ export class NewProductoComponent {
 
   desplegarCampo( campo ){
 
+    let iconoTituloInfoBasica = document.querySelector('#iconoTituloInfoBasica');
+    let iconoTituloImagen = document.querySelector('#iconoTituloImagen');
+    let iconoTituloValoresNut = document.querySelector('#iconoTituloValoresNut');
+
+
     switch (campo) {
       case 'infoBasica':
-        if (this.infoBasicaDesplegada) {
+        //cerrar
+        if (this.infoBasicaDesplegada) { 
           this.infoBasicaDesplegada = false;
+          iconoTituloInfoBasica.classList.remove('fa-angle-up');
+          iconoTituloInfoBasica.classList.add('fa-angle-down');
         }
-        else{
+        //abrir
+        else{ 
           this.infoBasicaDesplegada = true;
+          iconoTituloInfoBasica.classList.remove('fa-angle-down');
+          iconoTituloInfoBasica.classList.add('fa-angle-up');
         }
         
         break;
       case 'valoresNut':
         if (this.valoresNutDesplegados) {
           this.valoresNutDesplegados = false;
+          iconoTituloValoresNut.classList.remove('fa-angle-up');
+          iconoTituloValoresNut.classList.add('fa-angle-down');
         }
         else{
           this.valoresNutDesplegados = true;
+          iconoTituloValoresNut.classList.remove('fa-angle-down');
+          iconoTituloValoresNut.classList.add('fa-angle-up');
         }
 
         break;
       case 'imagenProducto':
+
         if (this.imagenProducto) {
           this.imagenProducto = false;
+          iconoTituloImagen.classList.remove('fa-angle-up');
+          iconoTituloImagen.classList.add('fa-angle-down');
         }
         else{
           this.imagenProducto = true;
+          iconoTituloImagen.classList.remove('fa-angle-down');
+          iconoTituloImagen.classList.add('fa-angle-up');
         }
 
+        if (this.srcImagen != '') {
+          this.hayFoto = true;
+        }
         break;
     }
   }

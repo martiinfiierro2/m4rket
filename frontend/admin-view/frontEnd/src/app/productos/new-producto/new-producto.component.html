@@ -40,9 +40,9 @@
     <div id="formulario">
         <form (ngSubmit)="newProducto()" [formGroup]="productoForm">
             <div id="divInfoBasica">
-                <div id="tituloInfoBasica" (click)="desplegarCampo('infoBasica')">
-                    <p>Información básica</p>
-                    <i class="fa-solid fa-angle-down"></i>
+                <div id="tituloInfoBasica" #tituloInfoBasica (click)="desplegarCampo('infoBasica')">
+                    <p>Información básica *</p>
+                    <i class="fa-solid fa-angle-down" id="iconoTituloInfoBasica"></i>
                 </div>
                 <div id="contenidoInfoBasica" *ngIf="infoBasicaDesplegada">
                     <div class="divCampo">
@@ -69,11 +69,11 @@
             </div>
             <div id="divImagen">
                 <div id="tituloImagen" (click)="desplegarCampo('imagenProducto')">
-                    <p>Imagen del producto</p>
-                    <i class="fa-solid fa-angle-down"></i>
+                    <p>Imagen del producto *</p>
+                    <i class="fa-solid fa-angle-down" id="iconoTituloImagen"></i>
                 </div>
                 <div id="contenidoImagen" *ngIf="imagenProducto">
-                    <img [src]="srcImagen" alt="foto del producto" style="display: none" id="previewImagen">
+                    <img [src]="srcImagen" *ngIf="hayFoto == true" alt="foto del producto" id="previewImagen">
                     <input type="file" accept="image/png" name="foto" style="display: none;" id="foto" formControlName="foto" (change)="cambioImagen( $event )">
                     <label for="foto" id="btnFoto">Subir imagen</label>
                 </div>
@@ -81,7 +81,7 @@
             <div id="divValoresNutri">
                 <div id="tituloValoresNut" (click)="desplegarCampo('valoresNut')">
                     <p>Valores nutricionales</p>
-                    <i class="fa-solid fa-angle-down"></i>
+                    <i class="fa-solid fa-angle-down" id="iconoTituloValoresNut"></i>
                 </div>
                 <div id="contenidoValoresNut" *ngIf="valoresNutDesplegados">
                     <div class="divCampo">
