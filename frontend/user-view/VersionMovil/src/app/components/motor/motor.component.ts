@@ -2,8 +2,8 @@ import { AfterViewInit, Component, OnInit, Input, Output} from '@angular/core';
 import * as glMatrix from 'gl-matrix';
 import { TMotorTAG } from './clases/TMotorTAG';
 import { TNodo } from './clases/TNodo';
-//import { MotorService } from 'src/app/services/motor.service';
-
+import { ProductosService } from 'src/app/services/productos.service';
+import { Producto } from '../drawer/drawer.component';
 export let motor: TMotorTAG;//Injectable
 @Component({
   selector: 'app-motor',
@@ -12,7 +12,9 @@ export let motor: TMotorTAG;//Injectable
 })
 
 export class MotorComponent implements OnInit{
-  constructor(/*private motorService: MotorService*/) { }
+  private productos!: Producto[];
+  private length: number = 0;
+  constructor(private productosService: ProductosService) { }
 
   ngOnInit(): void {
       
@@ -101,11 +103,24 @@ export class MotorComponent implements OnInit{
     const caja3: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(-25,0,18), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(4,4,4), 'cajaregistradora.obj', 'malla', 'blanco.jpeg');
     const caja4: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(-25,0,24), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(4,4,4), 'cajaregistradora.obj', 'malla', 'blanco.jpeg');
 
+    await this.cargarProductos();
+    
+    for(let i = 0; i < this.length; i++){
+      console.log(i)
+      const pin: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(i+1,10,0), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(4,4,4), 'pin.obj', 'malla', this.productos[i].foto);
+    }
 
     //Asignamos el motor al servicio después de cargarlo para que guarde valores
     //await this.motorService.asignarMotor(motor);
     console.log(motor)
     
     mercado.recorrer(glMatrix.mat4.identity(glMatrix.mat4.create()));
+  }
+
+  async cargarProductos(){
+    this.productosService.getAllProductos().subscribe((result) =>{
+      this.productos = result.productos;
+      this.length = result.productos.length;
+    });
   }
 }

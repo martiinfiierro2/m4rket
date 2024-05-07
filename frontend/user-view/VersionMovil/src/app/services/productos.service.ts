@@ -34,8 +34,6 @@ export class ProductosService {
   }
   //CRUD
   getAllProductos(): Observable<any> {
-    console.log('getProductos() desde el servicio');
-
     return this.http.get(this.url, { headers: this.cabeceras });
   }
 
