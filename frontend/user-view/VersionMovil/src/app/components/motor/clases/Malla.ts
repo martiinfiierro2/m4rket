@@ -170,7 +170,6 @@ export class Malla {
                 handlePinchEnd(event);
             }
         });
-
         const draw = () => {
             // Llamada recursiva para renderizar de forma continua
             this.dibujarBucle(InfoPrograma, mesh);
@@ -186,6 +185,11 @@ export class Malla {
 
         // Especificar qué caras cullar (en este caso, cullar las caras traseras)
         //this.gl.cullFace(this.gl.BACK);
+        
+        //Coger la camara para obtener valores de lejano y cercano para la cámara
+        // Establecer las dimensiones del viewport
+        this.gl!.viewport(0, 0, this.gl!.canvas.width/2, this.gl!.canvas.height/2)
+        const camara = motor.camaraActiva.getEntidad();
 
         this.projectionMatrix = mat4.create();
         
@@ -193,8 +197,8 @@ export class Malla {
             this.projectionMatrix,
             (45 * Math.PI) / 180,
             this.gl!.canvas.width / this.gl!.canvas.height,
-            0.1,
-            200
+            camara.cercano,
+            camara.lejano
         );
 
         // Enlazar el buffer de vértices
@@ -264,7 +268,7 @@ export class Malla {
         const normalMatrix = mat4.create();
         mat4.invert(normalMatrix, modelViewMatrix);
         mat4.transpose(normalMatrix, normalMatrix);
-
+   
         // Usar el programa de shaders
         this.gl!.useProgram(InfoPrograma.program);
         this.gl!.uniformMatrix4fv(
@@ -346,7 +350,3 @@ export class Malla {
         return (valor & (valor -1)) === 0;
     }
 }
-function escalarMatrizProyeccion(zoom: any) {
-    throw new Error('Function not implemented.');
-}
-

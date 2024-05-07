@@ -69,6 +69,11 @@ export class TMotorTAG {
         
         // Limpiar canvas
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+        // Habilitar el culling
+        this.gl.enable(this.gl.CULL_FACE);
+
+        // Especificar qué caras cullar (en este caso, cullar las caras traseras)
+        this.gl.cullFace(this.gl.BACK);
     }
 
     async iniciarPrograma(){
@@ -214,7 +219,7 @@ export class TMotorTAG {
 
     async crearModelo( padre: TNodo|null, trasl: glMatrix.vec3, rot: glMatrix.vec3, esc: glMatrix.vec3, nombreFichero: string | undefined, tipo: string, textura: any){
         let nodoCreado: any, recursoMalla: any, recursoTextura: any, entidadModelo: any;
-
+        
         nodoCreado = new TNodo();
         if (padre == null) {
             padre = this.raiz;
