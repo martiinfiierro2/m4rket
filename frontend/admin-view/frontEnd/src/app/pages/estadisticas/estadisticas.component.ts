@@ -12,6 +12,7 @@ import { PaginationComponent } from "../../pagination/pagination.component";
 import * as echarts from 'echarts';
 import { environment } from '../../../environments/environment';
 import { FormsModule } from '@angular/forms';
+import { log } from 'node:console';
 
 
 export interface Contador{
@@ -56,13 +57,45 @@ export class EstadisticasComponent {
   secciones: any;
   aux: DatosContadores[] = [];
   usuariosActivos: any;
+  fecha: string;
+  idProd: string;
+  listaMasComprados: any = this.anadidos.slice(0, 5);
+  
+
+  
+  
   //Fitro fechas
   fechaInicio: string="";
   fechaFin: string="";
 
+  //VARIABLES GLOBALES
+  totalAnadidos: number = 0;
+  totalEliminados: number = 0;
+
   //variables para mostrar foto
   tokenUsuario = sessionStorage.getItem('tokenUsuario') || localStorage.getItem('tokenUsuario');
   urlFotoProducto = environment.base_url + '/uploads/fotoproducto/';
+
+
+  //Variables para el gráfico: 
+  xAxisData: string[] = [];
+  seriesData: number[] = [];
+  echartsInstance: any;
+/*
+  procesarDatosParaGrafico() {
+    // Limpiar los datos anteriores
+    this.xAxisData = [];
+    this.seriesData = [];
+
+    // Obtener los datos para el eje X y el eje Y
+    for (let contador of this.anadidos) {
+      this.xAxisData.push(contador.name); // Suponiendo que tienes una propiedad "fecha" en tus datos
+      this.seriesData.push(contador.value);
+    }
+
+    // Actualizar el gráfico
+    this.actualizarGrafico();
+  }*/
 
   constructor (
     private estadisticasService: EstadisticasService,
@@ -70,17 +103,65 @@ export class EstadisticasComponent {
     private elementRef: ElementRef,
     private route: Router){
   }
-/*
+
+  fechasDefecto(){
+    const hoy = new Date();
+    const fechaInicio = new Date(hoy);
+    const fechaFin = new Date(hoy);
+
+    fechaInicio.setDate(fechaInicio.getDate() - 7);
+
+    this.fechaInicio = fechaInicio.toISOString().split('T')[0];
+    this.fechaFin = fechaFin.toISOString().split('T')[0];
+
+    console.log('La fecha de inicio es: ' + this.fechaInicio + ' y la fecha de fin es: ' + this.fechaFin); 
+
+  }
+  obtenerFechasRangoSeleccionado(opcion: string) {
+    const hoy = new Date();
+    const fechaInicio = new Date(hoy);
+    const fechaFin = new Date(hoy);
+  
+    switch (opcion) {
+      case '7d':
+        fechaInicio.setDate(fechaInicio.getDate() - 7);
+        break;
+      case '1m':
+        fechaInicio.setDate(fechaInicio.getDate() - 30);
+        break;
+      case '12m':
+        fechaInicio.setFullYear(fechaInicio.getFullYear()- 1);
+        break;
+    }
+  
+    const fechaInicioFormateada = fechaInicio.toISOString().split('T')[0];
+    const fechaFinFormateada = fechaFin.toISOString().split('T')[0];
+
+    this.fechaInicio = fechaInicio.toISOString().split('T')[0];
+    this.fechaFin = fechaFin.toISOString().split('T')[0];
+
+    this.getContadoresMasAnadidos();
+    this.getContadoresMasEliminados();
+  
+    return {
+      fechaInicio: fechaInicioFormateada,
+      fechaFin: fechaFinFormateada
+    };
+    
+  }
+
   mostrarGrafico(nombre: string): void {
     let url = '/datos?nombre='+nombre;
     window.location.href = url;
   }
-*/
+
   ngOnInit(): void {
-   // this.getContadoresMasAnadidos();
-   // this.getContadoresMasEliminados();
-   // this.getUsuariosActivos();
-   this.pruebaGrafico();
+    this.fechasDefecto();
+    this.getContadoresMasAnadidos();
+    this.getContadoresMasEliminados();
+    //this.getUsuariosActivos();
+    //this.pruebaGrafico();
+    
   }
   
   private pruebaGrafico() {
@@ -154,7 +235,7 @@ export class EstadisticasComponent {
     this.masEliminado = echarts.init(deleted);
     this.masEliminado.setOption(opciones);
   }
-/*
+
   private configurarGraficoAnadidos(): void {
     let opciones = {
       title: {
@@ -187,6 +268,7 @@ export class EstadisticasComponent {
   //CRUD
   async getContadoresMasAnadidos() {
     this.anadidos = [];
+    this.totalAnadidos = 0;
     if(this.fechaFin !== "" && this.fechaInicio !== ""){
       try {
         const res = await this.estadisticasService.getCountAnadidosFecha(this.fechaInicio, this.fechaFin).toPromise();
@@ -198,8 +280,9 @@ export class EstadisticasComponent {
           contador.name = res2.productos.nombre;
           contador.value = res.datosContadores[index].totalCount;
           this.anadidos.push(contador);
+          this.totalAnadidos += parseInt(contador.value);
         }
-        this.configurarGraficoAnadidos();
+        //this.configurarGraficoAnadidos();
       } catch (error) {
         console.error(error);
       }
@@ -212,25 +295,26 @@ export class EstadisticasComponent {
           let contador = new DatosContadores();
     
           const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
-          contador.name = res2.productos.nombre;
+          //contador.name = res2.productos.nombre;
           contador.value = res.datosContadores[index].totalCount;
           this.anadidos.push(contador);
         }
-        this.configurarGraficoAnadidos();
+        //this.configurarGraficoAnadidos();
       } catch (error) {
         console.error(error);
       }
     }
   }
-
+/*
   getUsuariosActivos(){
     let res = this.estadisticasService.getUsuariosActivos().subscribe( res => {
       this.usuariosActivos = res.usuariosActivos;
     });
   }
-
+*/
   async getContadoresMasEliminados() {
     this.eliminados = [];
+    this.totalEliminados = 0;
     if(this.fechaFin !== "" && this.fechaInicio !== ""){
       try {
         const res = await this.estadisticasService.getCountEliminadosFecha(this.fechaInicio, this.fechaFin).toPromise();
@@ -239,11 +323,12 @@ export class EstadisticasComponent {
           let contador = new DatosContadores();
     
           const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
-          contador.name = res2.productos.nombre;
+          //contador.name = res2.productos.nombre;
           contador.value = res.datosContadores[index].totalCount;
           this.eliminados.push(contador);
+          this.totalEliminados += parseInt(contador.value);
         }
-        this.configurarGraficoEliminados();
+        //this.configurarGraficoEliminados();
       } catch (error) {
         console.error(error);
       }
@@ -256,21 +341,16 @@ export class EstadisticasComponent {
           let contador = new DatosContadores();
     
           const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
-          contador.name = res2.productos.nombre;
+          //contador.name = res2.productos.nombre;
           contador.value = res.datosContadores[index].totalCount;
           this.eliminados.push(contador);
         }
         console.log(this.eliminados);
-        this.configurarGraficoEliminados();
+       // this.configurarGraficoEliminados();
       } catch (error) {
         console.error(error);
       }
     }
   }
-
-  filtrar(){
-    this.getContadoresMasAnadidos();
-    this.getContadoresMasEliminados();
-  }
-  */
+  
 }
