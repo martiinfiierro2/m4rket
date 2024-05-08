@@ -30,7 +30,7 @@ export class TNodo{
         }
     }
 
-    recorrer(matrizAcum: any) {
+    async recorrer(matrizAcum: any) {
         let matrix!: glMatrix.mat4;
         if (this.actualizarMatriz) {
             matrix = glMatrix.mat4.multiply(this.matrizTransf, matrizAcum, this.matrizTransf);

@@ -9,6 +9,8 @@ export class TRecursoMalla extends TRecurso {
         super(nombre);
     }
 
+    async cargarFicheroAPI(nombre: string): Promise<any>{}
+
     override cargarFichero(filename: string): Promise<void> {
         return new Promise((resolve, reject) => {
             fetch(`../../assets/motor/objetos/${filename}`)
@@ -20,7 +22,7 @@ export class TRecursoMalla extends TRecurso {
                 })
                 .then(data => {
                     const archivo = data;
-                    const _malla: Malla = new Malla(archivo);// añadir malla y material
+                    const _malla: Malla = new Malla(archivo, filename);// añadir malla y material
                     this.mallas.push(_malla);
                     resolve();
                 })

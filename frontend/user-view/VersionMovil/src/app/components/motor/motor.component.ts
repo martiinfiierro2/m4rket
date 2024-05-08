@@ -4,6 +4,7 @@ import { TMotorTAG } from './clases/TMotorTAG';
 import { TNodo } from './clases/TNodo';
 import { ProductosService } from 'src/app/services/productos.service';
 import { Producto } from '../drawer/drawer.component';
+import { RouterLinkDelegate } from '@ionic/angular';
 export let motor: TMotorTAG;//Injectable
 @Component({
   selector: 'app-motor',
@@ -11,13 +12,13 @@ export let motor: TMotorTAG;//Injectable
   styleUrls: ['./motor.component.scss'],
 })
 
-export class MotorComponent implements OnInit{
+export class MotorComponent implements AfterViewInit{
   private productos!: Producto[];
-  private length: number = 0;
+  private suelo!: TNodo;
   constructor(private productosService: ProductosService) { }
 
-  ngOnInit(): void {
-      
+  ngAfterViewInit(): void {
+    
   }
 
   async crearEscena(){
@@ -37,90 +38,98 @@ export class MotorComponent implements OnInit{
     await motor.iniciarGL();
     await motor.iniciarPrograma();
 
-    const suelo: TNodo = await motor.crearModelo( mercado, glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(0,215*(Math.PI / 180),0), glMatrix.vec3.fromValues(0.425,0.425,0.425), 'suelo.obj', 'malla', 'gris.jpg');
-    const puerta: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(-25,0,43), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(1,1,1), 'puerta.obj', 'malla', 'grisclaro.jpeg');
+    this.suelo = await motor.crearModelo( mercado, glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(0,215*(Math.PI / 180),0), glMatrix.vec3.fromValues(0.425,0.425,0.425), 'suelo.obj', 'malla', 'gris.jpg');
+
+    await this.cargarNodosPines();
+
+    const puerta: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(-25,0,43), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(1,1,1), 'puerta.obj', 'malla', 'grisclaro.jpeg');
     //Fruta
-    const cajaFruta1: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(-8,0,38), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(2.5,2.5,2.5), 'mueblefrutas.obj', 'malla', 'grisclaro.jpeg');
-    const cajaFruta2: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(-1,0,38), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(2.5,2.5,2.5), 'mueblefrutas.obj', 'malla', 'grisclaro.jpeg');
-    const cajaFruta3: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(6,0,38), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(2.5,2.5,2.5), 'mueblefrutas.obj', 'malla', 'grisclaro.jpeg');
-    const cajaFruta4: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(13,0,38), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(2.5,2.5,2.5), 'mueblefrutas.obj', 'malla', 'grisclaro.jpeg');
-    const cajaFruta5: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(20,0,38), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(2.5,2.5,2.5), 'mueblefrutas.obj', 'malla', 'grisclaro.jpeg');
+    const cajaFruta1: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(-8,0,38), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(2.5,2.5,2.5), 'mueblefrutas.obj', 'malla', 'grisclaro.jpeg');
+    const cajaFruta2: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(-1,0,38), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(2.5,2.5,2.5), 'mueblefrutas.obj', 'malla', 'grisclaro.jpeg');
+    const cajaFruta3: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(6,0,38), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(2.5,2.5,2.5), 'mueblefrutas.obj', 'malla', 'grisclaro.jpeg');
+    const cajaFruta4: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(13,0,38), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(2.5,2.5,2.5), 'mueblefrutas.obj', 'malla', 'grisclaro.jpeg');
+    const cajaFruta5: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(20,0,38), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(2.5,2.5,2.5), 'mueblefrutas.obj', 'malla', 'grisclaro.jpeg');
     
     //Estanterias pasillo 1
-    const estanteria1: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(-14,0,27), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
-    const estanteria2: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(-8,0,27), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
-    const estanteria3: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(-2,0,27), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
-    const estanteria4: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(-14,0,24), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
-    const estanteria5: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(-8,0,24), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
-    const estanteria6: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(-2,0,24), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
+    const estanteria1: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(-14,0,27), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
+    const estanteria2: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(-8,0,27), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
+    const estanteria3: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(-2,0,27), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
+    const estanteria4: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(-14,0,24), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
+    const estanteria5: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(-8,0,24), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
+    const estanteria6: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(-2,0,24), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
     
     //Estanterias pasillo 2
-    const estanteria7: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(-14,0,17), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
-    const estanteria8: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(-8,0,17), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
-    const estanteria9: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(-2,0,17), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
-    const estanteria10: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(-14,0,14), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
-    const estanteria11: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(-8,0,14), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
-    const estanteria12: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(-2,0,14), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
+    const estanteria7: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(-14,0,17), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
+    const estanteria8: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(-8,0,17), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
+    const estanteria9: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(-2,0,17), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
+    const estanteria10: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(-14,0,14), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
+    const estanteria11: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(-8,0,14), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
+    const estanteria12: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(-2,0,14), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
 
     //Estanterias pasillo 3
-    const estanteria13: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(-14,0,7), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
-    const estanteria14: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(-8,0,7), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
-    const estanteria15: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(-2,0,7), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
-    const estanteria16: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(-14,0,4), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
-    const estanteria17: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(-8,0,4), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
-    const estanteria18: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(-2,0,4), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
+    const estanteria13: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(-14,0,7), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
+    const estanteria14: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(-8,0,7), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
+    const estanteria15: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(-2,0,7), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
+    const estanteria16: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(-14,0,4), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
+    const estanteria17: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(-8,0,4), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
+    const estanteria18: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(-2,0,4), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
 
     //Estanterias fondo
-    const estanteria19: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(12,0,10), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
-    const estanteria20: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(12,0,13), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
-    const estanteria21: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(18,0,10), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
-    const estanteria22: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(18,0,13), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
+    const estanteria19: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(12,0,10), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
+    const estanteria20: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(12,0,13), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
+    const estanteria21: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(18,0,10), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
+    const estanteria22: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(18,0,13), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
 
-    const estanteria23: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(12,0,18), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
-    const estanteria24: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(12,0,21), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
-    const estanteria25: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(18,0,18), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
-    const estanteria26: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(18,0,21), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
+    const estanteria23: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(12,0,18), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
+    const estanteria24: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(12,0,21), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
+    const estanteria25: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(18,0,18), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
+    const estanteria26: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(18,0,21), glMatrix.vec3.fromValues(0,90*(Math.PI / 180),0), glMatrix.vec3.fromValues(1,1,1), 'estanteria.obj', 'malla', 'grisclaro.jpeg');
 
     //Armarios
-    const armario1: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(7,0,-5), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(2,2,2), 'armario.obj', 'malla', 'grisclaro.jpeg');
-    const armario2: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(14,0,-5), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(2,2,2), 'armario.obj', 'malla', 'grisclaro.jpeg');
-    const armario3: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(21,0,-5), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(2,2,2), 'armario.obj', 'malla', 'grisclaro.jpeg');
+    const armario1: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(7,0,-5), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(2,2,2), 'armario.obj', 'malla', 'grisclaro.jpeg');
+    const armario2: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(14,0,-5), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(2,2,2), 'armario.obj', 'malla', 'grisclaro.jpeg');
+    const armario3: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(21,0,-5), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(2,2,2), 'armario.obj', 'malla', 'grisclaro.jpeg');
 
     //Frigos
-    const muebleBaldosas1: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(28,0,12), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(2,2,2), 'frigo.obj', 'malla', 'grisclaro.jpeg');
-    const muebleBaldosas2: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(28,0,15), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(2,2,2), 'frigo.obj', 'malla', 'grisclaro.jpeg');
-    const muebleBaldosas3: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(28,0,18), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(2,2,2), 'frigo.obj', 'malla', 'grisclaro.jpeg');
-    const muebleBaldosas4: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(28,0,21), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(2,2,2), 'frigo.obj', 'malla', 'grisclaro.jpeg');
+    const muebleBaldosas1: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(28,0,12), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(2,2,2), 'frigo.obj', 'malla', 'grisclaro.jpeg');
+    const muebleBaldosas2: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(28,0,15), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(2,2,2), 'frigo.obj', 'malla', 'grisclaro.jpeg');
+    const muebleBaldosas3: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(28,0,18), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(2,2,2), 'frigo.obj', 'malla', 'grisclaro.jpeg');
+    const muebleBaldosas4: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(28,0,21), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(2,2,2), 'frigo.obj', 'malla', 'grisclaro.jpeg');
 
     //Mueble dobles
-    const muebleDoble1: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(-1,0,-5), glMatrix.vec3.fromValues(0,180*(Math.PI / 180),0), glMatrix.vec3.fromValues(3.3,3.3,3.3), 'muebledoble.obj', 'malla', 'grisclaro.jpeg');
-    const muebleDoble2: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(-8,0,-5), glMatrix.vec3.fromValues(0,180*(Math.PI / 180),0), glMatrix.vec3.fromValues(3.3,3.3,3.3), 'muebledoble.obj', 'malla', 'grisclaro.jpeg');
-    const muebleDoble3: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(-15,0,-5), glMatrix.vec3.fromValues(0,180*(Math.PI / 180),0), glMatrix.vec3.fromValues(3.3,3.3,3.3), 'muebledoble.obj', 'malla', 'grisclaro.jpeg');
+    const muebleDoble1: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(-1,0,-5), glMatrix.vec3.fromValues(0,180*(Math.PI / 180),0), glMatrix.vec3.fromValues(3.3,3.3,3.3), 'muebledoble.obj', 'malla', 'grisclaro.jpeg');
+    const muebleDoble2: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(-8,0,-5), glMatrix.vec3.fromValues(0,180*(Math.PI / 180),0), glMatrix.vec3.fromValues(3.3,3.3,3.3), 'muebledoble.obj', 'malla', 'grisclaro.jpeg');
+    const muebleDoble3: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(-15,0,-5), glMatrix.vec3.fromValues(0,180*(Math.PI / 180),0), glMatrix.vec3.fromValues(3.3,3.3,3.3), 'muebledoble.obj', 'malla', 'grisclaro.jpeg');
 
     //Cajas registradoras
-    const caja1: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(-25,0,6), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(4,4,4), 'cajaregistradora.obj', 'malla', 'blanco.jpeg');
-    const caja2: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(-25,0,12), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(4,4,4), 'cajaregistradora.obj', 'malla', 'blanco.jpeg');
-    const caja3: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(-25,0,18), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(4,4,4), 'cajaregistradora.obj', 'malla', 'blanco.jpeg');
-    const caja4: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(-25,0,24), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(4,4,4), 'cajaregistradora.obj', 'malla', 'blanco.jpeg');
-
-    await this.cargarProductos();
+    const caja1: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(-25,0,6), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(4,4,4), 'cajaregistradora.obj', 'malla', 'blanco.jpeg');
+    const caja2: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(-25,0,12), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(4,4,4), 'cajaregistradora.obj', 'malla', 'blanco.jpeg');
+    const caja3: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(-25,0,18), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(4,4,4), 'cajaregistradora.obj', 'malla', 'blanco.jpeg');
+    const caja4: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(-25,0,24), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(4,4,4), 'cajaregistradora.obj', 'malla', 'blanco.jpeg');
     
-    for(let i = 0; i < this.length; i++){
-      console.log(i)
-      const pin: TNodo = await motor.crearModelo( suelo, glMatrix.vec3.fromValues(i+1,10,0), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(4,4,4), 'pin.obj', 'malla', this.productos[i].foto);
-    }
-
-    //Asignamos el motor al servicio después de cargarlo para que guarde valores
-    //await this.motorService.asignarMotor(motor);
-    console.log(motor)
+    console.log(motor.gestorRecursos)
     
     mercado.recorrer(glMatrix.mat4.identity(glMatrix.mat4.create()));
   }
 
-  async cargarProductos(){
-    this.productosService.getAllProductos().subscribe((result) =>{
-      this.productos = result.productos;
-      this.length = result.productos.length;
-    });
+  async cargarNodosPines() {
+    try {
+      const res: any = await this.productosService.getAllProductos().toPromise();
+      console.log(res.productos);
+      for (let index = 0; index < res.productos.length; index++) {
+        const producto: Producto = res.productos[index];
+        const pin = await motor.crearModelo(
+          this.suelo,
+          glMatrix.vec3.fromValues(0, 10, 0),
+          glMatrix.vec3.fromValues(0, 0, 0),
+          glMatrix.vec3.fromValues(4, 4, 4),
+          'pin.obj',
+          'malla',
+          producto.foto
+        );
+      }
+    } catch (error) {
+      console.error('Error al cargar los nodos de pines:', error);
+    }
   }
 }

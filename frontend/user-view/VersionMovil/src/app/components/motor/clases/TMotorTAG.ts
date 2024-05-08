@@ -228,8 +228,13 @@ export class TMotorTAG {
         await padre.agregarHijo(nodoCreado);
         if(nombreFichero != undefined){
             recursoMalla = await this.gestorRecursos.getRecurso(nombreFichero, tipo);
-            recursoTextura = await this.gestorRecursos.getRecurso(textura, "textura")
+            if(nombreFichero != 'pin.obj'){
+                recursoTextura = await this.gestorRecursos.getRecurso(textura, "textura")
+            }else{
+                recursoTextura = await this.gestorRecursos.getRecursoAPI(textura, "textura")
+            }
         }
+        console.log(recursoTextura)
         entidadModelo = new EModelo(recursoMalla, recursoTextura);
         await nodoCreado.setEntidad(entidadModelo);
         await nodoCreado.setTraslacion(trasl);
