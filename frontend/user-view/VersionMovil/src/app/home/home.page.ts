@@ -108,6 +108,7 @@ export class HomePage {
   totalComprados: number = 0;
 
   //USO DEL DRAWER Y PASO DE INFORMACION
+  @ViewChild(MotorComponent) motorComponent!: MotorComponent;
   @ViewChild(DrawerComponent) drawerComponent!: DrawerComponent;
 
   llamarFuncionDrawer(idProd: string) {
@@ -122,7 +123,6 @@ export class HomePage {
 
   //Vainas de Martin
   //@ViewChild(MotorComponent) motorComponent!: MotorComponent;
-  @ViewChild(MotorComponent) motorComponent!: MotorComponent;
 
 
   //variables para mostrar foto
@@ -143,9 +143,6 @@ export class HomePage {
   ngAfterViewInit(): void {
     //MARTIN
    this.motorComponent.crearEscena();
-   console.log(this.motorComponent);
-
-   
   }
 
   //VERSION ANTIGUA
