@@ -14,6 +14,7 @@ export class TNodo{
     private escalado: glMatrix.vec3 = glMatrix.vec3.create();
     private matrizTransf: glMatrix.mat4 = glMatrix.mat4.create();
     private actualizarMatriz: Boolean = false;
+    private dibujar: Boolean = false;
 
     // Método para agregar un hijo
     async agregarHijo(nodoHijo: TNodo) {
@@ -30,7 +31,7 @@ export class TNodo{
         }
     }
 
-    recorrer(matrizAcum: any) {
+    async recorrer(matrizAcum: any) {
         let matrix!: glMatrix.mat4;
         if (this.actualizarMatriz) {
             matrix = glMatrix.mat4.multiply(this.matrizTransf, matrizAcum, this.matrizTransf);
@@ -150,6 +151,11 @@ export class TNodo{
     async setEntidad( entidadAnyadir: any ){
         this.entidad = entidadAnyadir;
     }
+
+    async setDibujar (dibujar: boolean){
+        this.dibujar = true;
+    }
+
     //Métodos GET
     getTraslacion(){
         return this.traslacion;
@@ -161,6 +167,10 @@ export class TNodo{
 
     getEscalado(){
         return this.escalado;
+    }
+
+    getDibujar(){
+        return this.dibujar;
     }
 
     getMatrizTransf(){

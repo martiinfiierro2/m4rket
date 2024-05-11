@@ -13,6 +13,8 @@ export class TRecursoMaterial extends TRecurso{
    private mapaKa!: Blob;
    private mapaKd!: Blob;
    private mapaKs!: Blob;
+   
+   async cargarFicheroAPI(nombre: string): Promise<any>{}
 
     async cargarFichero( nombre:string ): Promise<void>{
         

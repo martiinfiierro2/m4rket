@@ -3,9 +3,11 @@ const { check } = require('express-validator'); //Permite hacer validacions de c
                                                 //Check permite validar todo (Hay modulos para partes concretas)
 const { validarCampos } = require('../middleware/validar-campos');
 const { validarJWT } = require('../middleware/validar-jwt');
-const { obtenerProducto, crearProducto, obtenerProductoDataset, filtrarProducto, actualizarProducto, borrarProducto, buscarProducto } = require('../controllers/productos');
+const { obtenerAllProductos, obtenerProducto, crearProducto, obtenerProductoDataset, actualizarProducto, borrarProducto, buscarProducto } = require('../controllers/productos');
 
 const router = Router(); //Declaramos un router de tipo Router
+
+router.get('/allproductos', validarJWT, obtenerAllProductos)
 
 router.get('/productos', validarJWT, obtenerProducto);
 

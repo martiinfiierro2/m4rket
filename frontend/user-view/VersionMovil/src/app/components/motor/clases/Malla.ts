@@ -24,12 +24,14 @@ export class Malla {
     private gl!: WebGL2RenderingContext;
     private program!: WebGLProgram;
     private OBJfile: string;
+    private nombre: string;
     private texture: WebGLTexture | null = null;
     private projectionMatrix!: mat4;
     private viewMatrix!: mat4;
 
-    constructor(malla: string) {
+    constructor(malla: string, filename: string) {
         this.OBJfile = malla;
+        this.nombre = filename;
     }
 
     async getProgramInfo(gl: any, program: any){
@@ -168,7 +170,6 @@ export class Malla {
                 handlePinchEnd(event);
             }
         });
-
         const draw = () => {
             // Llamada recursiva para renderizar de forma continua
             this.dibujarBucle(InfoPrograma, mesh);
@@ -184,6 +185,11 @@ export class Malla {
 
         // Especificar qué caras cullar (en este caso, cullar las caras traseras)
         //this.gl.cullFace(this.gl.BACK);
+        
+        //Coger la camara para obtener valores de lejano y cercano para la cámara
+        // Establecer las dimensiones del viewport
+        this.gl!.viewport(0, 0, this.gl!.canvas.width/2, this.gl!.canvas.height/2)
+        const camara = motor.camaraActiva.getEntidad();
 
         this.projectionMatrix = mat4.create();
         
@@ -191,8 +197,8 @@ export class Malla {
             this.projectionMatrix,
             (45 * Math.PI) / 180,
             this.gl!.canvas.width / this.gl!.canvas.height,
-            0.1,
-            200
+            camara.cercano,
+            camara.lejano
         );
 
         // Enlazar el buffer de vértices
@@ -262,7 +268,7 @@ export class Malla {
         const normalMatrix = mat4.create();
         mat4.invert(normalMatrix, modelViewMatrix);
         mat4.transpose(normalMatrix, normalMatrix);
-
+   
         // Usar el programa de shaders
         this.gl!.useProgram(InfoPrograma.program);
         this.gl!.uniformMatrix4fv(
@@ -324,26 +330,50 @@ export class Malla {
 
         // Crear una imagen para la textura
         const image = new Image();
-        await textura.cargarFichero(nomTextura).then((blob: any) => {
-            image.crossOrigin = "anonymous"
-            image.onload = () => {
-                // Asignar la imagen a la textura
-                this.gl!.bindTexture(this.gl!.TEXTURE_2D, texture);
-                
-                this.gl!.texImage2D(this.gl!.TEXTURE_2D, 0, this.gl!.RGBA, this.gl!.RGBA, this.gl!.UNSIGNED_BYTE, image);
-                // Configurar parámetros de la textura
-                if (this.isPot2(image.width) && this.isPot2(image.height)) {
-                    this.gl!.generateMipmap(this.gl!.TEXTURE_2D);
-                }
-                else{
-                    this.gl!.texParameteri(this.gl!.TEXTURE_2D, this.gl!.TEXTURE_WRAP_S, this.gl!.CLAMP_TO_EDGE);
-                    this.gl!.texParameteri(this.gl!.TEXTURE_2D, this.gl!.TEXTURE_WRAP_T, this.gl!.CLAMP_TO_EDGE);
-                    this.gl!.texParameteri(this.gl!.TEXTURE_2D, this.gl!.TEXTURE_MIN_FILTER, this.gl!.NEAREST);
-                }
-                
-            };
-            image.src = URL.createObjectURL(blob);
-        });
+        if(this.nombre == 'pin.obj'){
+            await textura.cargarFicheroAPI(nomTextura).then((blob: any) => {
+                image.crossOrigin = "anonymous"
+                image.onload = () => {
+                    // Asignar la imagen a la textura
+                    this.gl!.bindTexture(this.gl!.TEXTURE_2D, texture);
+                    
+                    this.gl!.texImage2D(this.gl!.TEXTURE_2D, 0, this.gl!.RGBA, this.gl!.RGBA, this.gl!.UNSIGNED_BYTE, image);
+                    // Configurar parámetros de la textura
+                    if (this.isPot2(image.width) && this.isPot2(image.height)) {
+                        this.gl!.generateMipmap(this.gl!.TEXTURE_2D);
+                    }
+                    else{
+                        this.gl!.texParameteri(this.gl!.TEXTURE_2D, this.gl!.TEXTURE_WRAP_S, this.gl!.CLAMP_TO_EDGE);
+                        this.gl!.texParameteri(this.gl!.TEXTURE_2D, this.gl!.TEXTURE_WRAP_T, this.gl!.CLAMP_TO_EDGE);
+                        this.gl!.texParameteri(this.gl!.TEXTURE_2D, this.gl!.TEXTURE_MIN_FILTER, this.gl!.NEAREST);
+                    }
+                    
+                };
+                image.src = URL.createObjectURL(blob);
+            });
+        }
+        else{
+            await textura.cargarFichero(nomTextura).then((blob: any) => {
+                image.crossOrigin = "anonymous"
+                image.onload = () => {
+                    // Asignar la imagen a la textura
+                    this.gl!.bindTexture(this.gl!.TEXTURE_2D, texture);
+                    
+                    this.gl!.texImage2D(this.gl!.TEXTURE_2D, 0, this.gl!.RGBA, this.gl!.RGBA, this.gl!.UNSIGNED_BYTE, image);
+                    // Configurar parámetros de la textura
+                    if (this.isPot2(image.width) && this.isPot2(image.height)) {
+                        this.gl!.generateMipmap(this.gl!.TEXTURE_2D);
+                    }
+                    else{
+                        this.gl!.texParameteri(this.gl!.TEXTURE_2D, this.gl!.TEXTURE_WRAP_S, this.gl!.CLAMP_TO_EDGE);
+                        this.gl!.texParameteri(this.gl!.TEXTURE_2D, this.gl!.TEXTURE_WRAP_T, this.gl!.CLAMP_TO_EDGE);
+                        this.gl!.texParameteri(this.gl!.TEXTURE_2D, this.gl!.TEXTURE_MIN_FILTER, this.gl!.NEAREST);
+                    }
+                    
+                };
+                image.src = URL.createObjectURL(blob);
+            });
+        }
         return texture;
     }
 
@@ -351,7 +381,3 @@ export class Malla {
         return (valor & (valor -1)) === 0;
     }
 }
-function escalarMatrizProyeccion(zoom: any) {
-    throw new Error('Function not implemented.');
-}
-

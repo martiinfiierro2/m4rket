@@ -81,6 +81,12 @@ export class TMotorTAG {
         
         // Limpiar canvas
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+
+        // Habilitar el culling
+        this.gl.enable(this.gl.CULL_FACE);
+
+        // Especificar qué caras cullar (en este caso, cullar las caras traseras)
+        this.gl.cullFace(this.gl.BACK);
     }
 
     async iniciarPrograma(){
@@ -224,9 +230,9 @@ export class TMotorTAG {
         return nodoCreado;
     }
 
-    async crearModelo( padre: TNodo|null, trasl: glMatrix.vec3, rot: glMatrix.vec3, esc: glMatrix.vec3, nombreFichero: string | undefined, tipo: string, textura: any){
+    async crearModelo( padre: TNodo|null, trasl: glMatrix.vec3, rot: glMatrix.vec3, esc: glMatrix.vec3, nombreFichero: string | undefined, tipo: string, textura: any, dibujar: boolean){
         let nodoCreado: any, recursoMalla: any, recursoTextura: any, entidadModelo: any;
-
+        
         nodoCreado = new TNodo();
         if (padre == null) {
             padre = this.raiz;
@@ -234,9 +240,14 @@ export class TMotorTAG {
         await padre.agregarHijo(nodoCreado);
         if(nombreFichero != undefined){
             recursoMalla = await this.gestorRecursos.getRecurso(nombreFichero, tipo);
-            recursoTextura = await this.gestorRecursos.getRecurso(textura, "textura")
+            if(nombreFichero != 'pin.obj'){
+                recursoTextura = await this.gestorRecursos.getRecurso(textura, "textura")
+            }else{
+                recursoTextura = await this.gestorRecursos.getRecursoAPI(textura, "textura")
+            }
         }
         entidadModelo = new EModelo(recursoMalla, recursoTextura);
+        await nodoCreado.setDibujar(dibujar);
         await nodoCreado.setEntidad(entidadModelo);
         await nodoCreado.setTraslacion(trasl);
         await nodoCreado.setRotacion(rot);
