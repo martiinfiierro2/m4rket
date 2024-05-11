@@ -8,7 +8,6 @@ import { ProductosService } from "../../services/productos.service";
 import Swal from 'sweetalert2'
 
 
-
 @Component({
   selector: 'app-new-producto',
   standalone: true,

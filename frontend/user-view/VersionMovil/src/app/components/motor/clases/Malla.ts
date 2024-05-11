@@ -24,12 +24,14 @@ export class Malla {
     private gl!: WebGL2RenderingContext;
     private program!: WebGLProgram;
     private OBJfile: string;
+    private nombre: string;
     private texture: WebGLTexture | null = null;
     private projectionMatrix!: mat4;
     private viewMatrix!: mat4;
 
-    constructor(malla: string) {
+    constructor(malla: string, filename: string) {
         this.OBJfile = malla;
+        this.nombre = filename;
     }
 
     async getProgramInfo(gl: any, program: any){
@@ -323,26 +325,50 @@ export class Malla {
 
         // Crear una imagen para la textura
         const image = new Image();
-        await textura.cargarFichero(nomTextura).then((blob: any) => {
-            image.crossOrigin = "anonymous"
-            image.onload = () => {
-                // Asignar la imagen a la textura
-                this.gl!.bindTexture(this.gl!.TEXTURE_2D, texture);
-                
-                this.gl!.texImage2D(this.gl!.TEXTURE_2D, 0, this.gl!.RGBA, this.gl!.RGBA, this.gl!.UNSIGNED_BYTE, image);
-                // Configurar parámetros de la textura
-                if (this.isPot2(image.width) && this.isPot2(image.height)) {
-                    this.gl!.generateMipmap(this.gl!.TEXTURE_2D);
-                }
-                else{
-                    this.gl!.texParameteri(this.gl!.TEXTURE_2D, this.gl!.TEXTURE_WRAP_S, this.gl!.CLAMP_TO_EDGE);
-                    this.gl!.texParameteri(this.gl!.TEXTURE_2D, this.gl!.TEXTURE_WRAP_T, this.gl!.CLAMP_TO_EDGE);
-                    this.gl!.texParameteri(this.gl!.TEXTURE_2D, this.gl!.TEXTURE_MIN_FILTER, this.gl!.NEAREST);
-                }
-                
-            };
-            image.src = URL.createObjectURL(blob);
-        });
+        if(this.nombre == 'pin.obj'){
+            await textura.cargarFicheroAPI(nomTextura).then((blob: any) => {
+                image.crossOrigin = "anonymous"
+                image.onload = () => {
+                    // Asignar la imagen a la textura
+                    this.gl!.bindTexture(this.gl!.TEXTURE_2D, texture);
+                    
+                    this.gl!.texImage2D(this.gl!.TEXTURE_2D, 0, this.gl!.RGBA, this.gl!.RGBA, this.gl!.UNSIGNED_BYTE, image);
+                    // Configurar parámetros de la textura
+                    if (this.isPot2(image.width) && this.isPot2(image.height)) {
+                        this.gl!.generateMipmap(this.gl!.TEXTURE_2D);
+                    }
+                    else{
+                        this.gl!.texParameteri(this.gl!.TEXTURE_2D, this.gl!.TEXTURE_WRAP_S, this.gl!.CLAMP_TO_EDGE);
+                        this.gl!.texParameteri(this.gl!.TEXTURE_2D, this.gl!.TEXTURE_WRAP_T, this.gl!.CLAMP_TO_EDGE);
+                        this.gl!.texParameteri(this.gl!.TEXTURE_2D, this.gl!.TEXTURE_MIN_FILTER, this.gl!.NEAREST);
+                    }
+                    
+                };
+                image.src = URL.createObjectURL(blob);
+            });
+        }
+        else{
+            await textura.cargarFichero(nomTextura).then((blob: any) => {
+                image.crossOrigin = "anonymous"
+                image.onload = () => {
+                    // Asignar la imagen a la textura
+                    this.gl!.bindTexture(this.gl!.TEXTURE_2D, texture);
+                    
+                    this.gl!.texImage2D(this.gl!.TEXTURE_2D, 0, this.gl!.RGBA, this.gl!.RGBA, this.gl!.UNSIGNED_BYTE, image);
+                    // Configurar parámetros de la textura
+                    if (this.isPot2(image.width) && this.isPot2(image.height)) {
+                        this.gl!.generateMipmap(this.gl!.TEXTURE_2D);
+                    }
+                    else{
+                        this.gl!.texParameteri(this.gl!.TEXTURE_2D, this.gl!.TEXTURE_WRAP_S, this.gl!.CLAMP_TO_EDGE);
+                        this.gl!.texParameteri(this.gl!.TEXTURE_2D, this.gl!.TEXTURE_WRAP_T, this.gl!.CLAMP_TO_EDGE);
+                        this.gl!.texParameteri(this.gl!.TEXTURE_2D, this.gl!.TEXTURE_MIN_FILTER, this.gl!.NEAREST);
+                    }
+                    
+                };
+                image.src = URL.createObjectURL(blob);
+            });
+        }
         return texture;
     }
 

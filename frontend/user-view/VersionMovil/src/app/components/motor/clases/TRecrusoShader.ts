@@ -6,6 +6,8 @@ export class TRecursoShader extends TRecurso{
     constructor(nombre: string){
         super(nombre)
     }
+    
+    async cargarFicheroAPI(nombre: string): Promise<any>{}
 
     override cargarFichero(filename: string): Promise<void> {
         return new Promise((resolve, reject) => {

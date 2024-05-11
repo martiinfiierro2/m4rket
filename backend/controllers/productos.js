@@ -3,6 +3,30 @@ const { Ubicacion } = require('../models/ubicaciones');
 const { Promocion } = require('../models/promociones');
 const { Op } = require('sequelize');
 
+const obtenerAllProductos = async(req, res) => {
+    try{
+        let [productos] = await Promise.all([
+            Producto.findAll({
+                include: [
+                    Ubicacion,
+                    Promocion,
+                ]
+            }),
+        ]);
+        res.json({
+            ok: true,
+            msg: 'getAllProductos',
+            productos: productos
+        });
+    }catch (error) {
+        return res.status(400).json({
+            ok: false,
+            msg: 'Error obteniendo todos productos',
+            error: error
+        });
+    }
+}
+
 const obtenerProducto = async(req, res) => {
     const id = req.query.id;
 
@@ -322,4 +346,4 @@ const borrarProducto = async(req, res) => {
     }
 }
 
-module.exports = { obtenerProducto, crearProducto, obtenerProductoDataset, actualizarProducto, borrarProducto, buscarProducto };
+module.exports = { obtenerAllProductos, obtenerProducto, crearProducto, obtenerProductoDataset, actualizarProducto, borrarProducto, buscarProducto };

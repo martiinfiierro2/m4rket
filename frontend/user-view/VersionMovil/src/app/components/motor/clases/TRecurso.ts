@@ -12,6 +12,8 @@ export abstract class TRecurso {
 
     abstract cargarFichero(nombre: string): Promise<any>;
 
+    abstract cargarFicheroAPI(nombre: string): any;
+
     getNombre(): string{
         return this.nombre;
     }
