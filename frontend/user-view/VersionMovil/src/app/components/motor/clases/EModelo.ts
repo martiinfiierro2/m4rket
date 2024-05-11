@@ -30,7 +30,6 @@ export class EModelo {
         })
 
         if(this.recursoMalla) {
-            console.log(this.recursoTextura)
             this.recursoMalla.draw(matTrans, this.recursoTextura.getNombre());
         }
         else {

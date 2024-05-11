@@ -35,7 +35,7 @@ export class TRecursoMalla extends TRecurso {
      
     draw(matTrans: any, textura: any): void{
         for(let i = 0; i < this.mallas.length; i++){
-            this.mallas[i].dibujar(textura, matTrans);
+            this.mallas[i].dibujar(textura, matTrans);  
         }
     }
 }

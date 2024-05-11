@@ -11,6 +11,7 @@ export class ProductosService {
 
   private url: string = environment.base_url + '/productos';
   private urlLista: string = environment.base_url + '/listacompra';
+  private urlPag: string = environment.base_url + '/allproductos';
 
   private token: string | any;
   private cabeceras: any;
@@ -35,6 +36,10 @@ export class ProductosService {
   //CRUD
   getAllProductos(): Observable<any> {
     return this.http.get(this.url, { headers: this.cabeceras });
+  }
+  
+  getAllProdSinPag(): Observable<any> {
+    return this.http.get(this.urlPag, { headers: this.cabeceras });
   }
 
   getProductoId(idProd: string): Observable<any> {

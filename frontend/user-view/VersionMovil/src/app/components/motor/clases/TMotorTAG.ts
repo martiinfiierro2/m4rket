@@ -218,7 +218,7 @@ export class TMotorTAG {
         return nodoCreado;
     }
 
-    async crearModelo( padre: TNodo|null, trasl: glMatrix.vec3, rot: glMatrix.vec3, esc: glMatrix.vec3, nombreFichero: string | undefined, tipo: string, textura: any){
+    async crearModelo( padre: TNodo|null, trasl: glMatrix.vec3, rot: glMatrix.vec3, esc: glMatrix.vec3, nombreFichero: string | undefined, tipo: string, textura: any, dibujar: boolean){
         let nodoCreado: any, recursoMalla: any, recursoTextura: any, entidadModelo: any;
         
         nodoCreado = new TNodo();
@@ -234,8 +234,8 @@ export class TMotorTAG {
                 recursoTextura = await this.gestorRecursos.getRecursoAPI(textura, "textura")
             }
         }
-        console.log(recursoTextura)
         entidadModelo = new EModelo(recursoMalla, recursoTextura);
+        await nodoCreado.setDibujar(dibujar);
         await nodoCreado.setEntidad(entidadModelo);
         await nodoCreado.setTraslacion(trasl);
         await nodoCreado.setRotacion(rot);
