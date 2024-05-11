@@ -41,14 +41,12 @@ export class Malla {
                 normalCoord: gl.getAttribLocation(program, "aVertexNormal")
             },
             uniformLocations: {
-                projectionMatrix: gl.getUniformLocation(
-                    program,
-                    "uProjectionMatrix"
-                ),
+                projectionMatrix: gl.getUniformLocation(program,"uProjectionMatrix"),
                 viewMatrix: gl.getUniformLocation(program, "uViewMatrix"),
                 modelMatrix: gl.getUniformLocation(program, "uModelMatrix"),
                 uSampler: gl.getUniformLocation(program, "uSampler"),
-                normalMatrix: gl.getUniformLocation(program, "uNormalMatrix")
+                normalMatrix: gl.getUniformLocation(program, "uNormalMatrix"),
+                modelViewMatrix: gl.getUniformLocation(program, "uModelViewMatrix")
             }
         };
         return programInfo;
@@ -290,6 +288,13 @@ export class Malla {
             false,
             normalMatrix
         );
+
+        this.gl!.uniformMatrix4fv(
+            InfoPrograma.uniformLocations.modelViewMatrix,
+            false,
+            modelViewMatrix
+        );
+
     
         // Tell the shader we bound the texture to texture unit 0
         this.gl!.uniform1i(InfoPrograma.uniformLocations.uSampler, 0);

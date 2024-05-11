@@ -1,32 +1,39 @@
-attribute vec3 aVertexPosition;
-attribute vec3 aNormalCoord;
-attribute vec2 aTextureCoord;
-                                    
-uniform mat4 uModelMatrix;
-uniform mat4 uProjectionMatrix;
-uniform mat4 uViewMatrix;
-uniform mat4 uNormalMatrix;
-                                    
-varying vec3 vNormal;
-varying vec2 vTextureCoord;
- varying highp vec3 vLighting;
-                                    
+// ATRIBUTOS
+attribute vec4 aVertexPosition;   // VÉRTICE EN SIT. COORD. LOCAL
+attribute vec3 aNormalCoord;     // NORMAL EN SIT. COORD. LOCAL
+
+
+// ESTADO DE OPENGL
+uniform mat4 uModelMatrix;       //M. DE MODELO
+uniform mat4 uViewMatrix;        // M. DE VISTA
+uniform mat3 uNormalMatrix;      // M. DE NORMALES
+uniform mat4 uProjectionMatrix;  // MATRIZ DE PROYECCIÓN
+//uniform mat4 uModelViewMatrix;    //M. MODELO-VISTA
+
+
+// SALIDA PARA COMUNICAR CON EL FRAGMENT
+varying vec3 Position;   // VÉRTICE EN COORDINADAS DE VISTA
+varying vec3 Normal;     // NORMAL EN COORDENADAS DE VISTA
+
+
 void main() {
-    gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
-    vTextureCoord = aTextureCoord;
 
-    // Apply lighting effect
+    //CÁLCULO MATRIZ MODELO-VISTA
+    highp mat4 ModelViewMatrix = uModelMatrix * uViewMatrix;
 
-    highp vec3 ambientLight = vec3(0.3, 0.3, 0.3);
-    highp vec3 directionalLightColor = vec3(1.0, 1.0, 0.0); //Color verde
-    highp vec3 directionalVector = normalize(vec3(0, 0, 1));  //Apunta desde en frente
+    //CÁLCULO MATRIZ MODELO-VISTA-PROYECCIÓN
+    highp mat4 MVP = ModelViewMatrix * uProjectionMatrix;
 
-    highp vec4 transformedNormal = uNormalMatrix * vec4(aNormalCoord, 1.0);
+    // TRANSFORMAR EL VÉRTICE Y LA NORMAL A COORDENADAS DE VISTA (calculo variables)
+    highp vec3 vertexToClip = vec3(ModelViewMatrix * aVertexPosition);
+    highp vec3 worldNormal = normalize(uNormalMatrix * aNormalCoord);
+    
+    // TRANSFORMAR EL VÉRTICE Y LA NORMAL A COORDENADAS DE VISTA (asingacion variables)
+    Position = vertexToClip;
+    Normal = worldNormal;
 
-    highp float directional = max(dot(transformedNormal.xyz, directionalVector), 0.0);
-    vLighting = ambientLight + (directionalLightColor * directional);
-    //vLighting = (directionalLightColor * directional);
-
+    // TRANSFORMACIÓN COMPLETA DEL VÉRTICE
+    gl_Position = MVP * aVertexPosition;
 }
 
 

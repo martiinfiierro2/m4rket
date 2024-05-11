@@ -4,8 +4,8 @@ import * as glMatrix from 'gl-matrix';
 export class ELuz extends TEntidad {
     
     
-    private intensidad!: glMatrix.vec4; //rgb alpha
-    private tipoLuz!: any; //Enum
+    private intensidad!: glMatrix.vec3; 
+    private tipoLuz!: string;
     private apertura!: number; //Flotante
     private atenAngular!: number; //Flotante
     private atenCte!: number; //Flotante
@@ -18,7 +18,7 @@ export class ELuz extends TEntidad {
     }
 
     //SETTERS
-    setIntensidad( intesidad: glMatrix.vec4){
+    setIntensidad( intesidad: glMatrix.vec3){
         this.intensidad = intesidad;
     }
 
@@ -49,7 +49,7 @@ export class ELuz extends TEntidad {
 
 
     //GETTERS
-    getIntensidad(): glMatrix.vec4{
+    getIntensidad(){
         return this.intensidad;
     }
 

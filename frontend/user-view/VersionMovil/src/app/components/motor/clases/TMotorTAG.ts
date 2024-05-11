@@ -28,7 +28,7 @@ export class TMotorTAG {
     public gestorViewports: Viewport[] = [];
     public camaraActiva!: TNodo;
     public viewportActivo!: number;
-    public lucesActivas: boolean[] = [];
+    public lucesActivas: TNodo[] = [];
 
 
     async registrarCamara(nodoCamara: TNodo) {
@@ -37,6 +37,18 @@ export class TMotorTAG {
 
     async setCamara(nCamara: TNodo){
         this.camaraActiva = nCamara;
+    }
+
+    async registrarLuz(nodoLuz: TNodo){
+        this.gestorLuces.push(nodoLuz);
+    }
+
+    async setLuz(nLuz: TNodo){
+        this.lucesActivas.push(nLuz)
+    }
+
+    async removeLuz(nodoLuz: TNodo){
+        this.lucesActivas = this.lucesActivas.filter(TNodo => TNodo != nodoLuz);
     }
 
     async resgistrarViewport(x: number, y: number, alto: number, ancho: number){

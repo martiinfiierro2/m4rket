@@ -30,6 +30,9 @@ export class MotorComponent implements OnInit{
     await motor.setCamara(camara);
  
     //asignar luces
+    const luzTop: TNodo = await motor.crearLuz(null, glMatrix.vec3.fromValues(200, 200, 200), glMatrix.vec3.fromValues(0, 0, 0), glMatrix.vec3.fromValues(0, 0, 0), 1.5, "Direccional");
+    await motor.registrarLuz(luzTop);
+    await motor.setLuz(luzTop);
   
     //Iniciamos GL y Programa
     await motor.iniciarGL();
