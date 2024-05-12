@@ -108,8 +108,8 @@ export class HomePage {
   totalComprados: number = 0;
 
   //USO DEL DRAWER Y PASO DE INFORMACION
-  @ViewChild(MotorComponent) motorComponent!: MotorComponent;
   @ViewChild(DrawerComponent) drawerComponent!: DrawerComponent;
+  @ViewChild(MotorComponent) motorComponent!: MotorComponent;
 
   llamarFuncionDrawer(idProd: string) {
     // Llama a la función del componente Drawer

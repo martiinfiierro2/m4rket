@@ -15,9 +15,8 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { environment } from '../../environments/environment';
 import * as echarts from 'echarts';
 import { HomePage } from 'src/app/home/home.page';
-import { forkJoin } from 'rxjs';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-
+import { Malla } from '../motor/clases/Malla';
+import { RotacionService } from 'src/app/services/rotacion.service';
 
 interface Stats {
   nombre: string;
@@ -86,6 +85,7 @@ export class DrawerComponent implements AfterViewInit {
   openHeight = 0;
   isMiddle = true;
 
+
   //PRODUCTO SELECCIONADO
   productoSelect: any;
   dispo: string = '';
@@ -104,11 +104,13 @@ export class DrawerComponent implements AfterViewInit {
   urlFotoProducto = environment.base_url + '/uploads/fotoproducto/';
 
   @ViewChild(MotorComponent) motorComponent!: MotorComponent;
+  @ViewChild(Malla) malla!: Malla;
   constructor(
     private plt: Platform,
     private gestureCtrl: GestureController,
     private productosService: ProductosService,
-    private estadisticasService: EstadisticasService
+    private estadisticasService: EstadisticasService,
+    private rotacionService: RotacionService
   ) {}
 
   async ngAfterViewInit() {
@@ -529,6 +531,10 @@ export class DrawerComponent implements AfterViewInit {
         console.error('Error en la solicitud PUT:', error);
       }
     );
+  }
+
+  sendRotacion(event: any) {
+    this.rotacionService.setRotacion(event.target.value);
   }
 
   //MARCAR COMO COMPRADO

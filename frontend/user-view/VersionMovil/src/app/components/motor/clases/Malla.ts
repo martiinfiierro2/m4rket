@@ -1,14 +1,12 @@
 import { mat4, mat3, vec3 } from 'gl-matrix';
 import * as OBJ from "webgl-obj-loader";
 import { motor } from '../motor.component';
-
+import { glMatrix } from 'gl-matrix';
 export class Malla {
-    private rotationAngleX: number = 0;
-    private rotationAngleY: number = 0;
+    private rotation: number = 0;
     private lastTouchX: number = 0;
     private lastTouchY: number = 0;
     private isRightTouchDown: boolean = false;
-    private rotationSpeed!: number;
 
     private translationX: number = 0;
     private translationY: number = 0;
@@ -56,8 +54,13 @@ export class Malla {
         return programInfo;
     }
 
+    setRotacion(valor: number){
+        console.log(valor);
+    }
+
 
     async dibujar(textura: any, matTrans: any) {
+
         this.matTrans = matTrans;
         this.gl = motor.gl;
         this.program = motor.program;
@@ -110,7 +113,7 @@ export class Malla {
             const deltaDistance = distance - this.lastPinchDistance;
 
             // Ajusta el factor de zoom en función de la diferencia de distancia
-            this.zoomSpeed = 0.1; // Velocidad de zoom
+            this.zoomSpeed = 0.05; // Velocidad de zoom
             this.zoomFactor *= 1 + deltaDistance * this.zoomSpeed;
 
             // Actualiza la última distancia de pellizco
@@ -190,6 +193,12 @@ export class Malla {
         
         //Coger la camara para obtener valores de lejano y cercano para la cámara
         // Establecer las dimensiones del viewport
+
+        const valorRotacion = document.querySelector<HTMLInputElement>('#rotacion');
+        if(valorRotacion){
+            this.rotation = parseInt(valorRotacion.value);
+        }
+
         this.gl!.viewport(0, 0, this.gl!.canvas.width/2, this.gl!.canvas.height/2)
         const camara = motor.camaraActiva.getEntidad();
 
@@ -259,6 +268,9 @@ export class Malla {
     
         // Aplica el desplazamiento a la matriz de vista
         mat4.translate(this.viewMatrix, this.viewMatrix, [-this.translationX, -this.translationY, 0]);
+
+        // Aplicar la rotación en torno al eje Y
+        mat4.rotate(this.viewMatrix, this.viewMatrix, this.rotation*(Math.PI / 180), [0, 1, 0]);
 
         // Aplica el zoom a la matriz de proyección
         mat4.scale(this.projectionMatrix, this.projectionMatrix, [1, 1, this.zoomFactor]);  

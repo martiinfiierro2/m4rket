@@ -5,6 +5,7 @@ import { EModelo } from "./EModelo";
 import { TGestorRecursos } from "./TGestorRecursos";
 import { TRecursoShader } from './TRecrusoShader';
 import * as glMatrix from 'gl-matrix';
+import { RotacionService } from '../../../services/rotacion.service';
 
 interface Viewport{
     x: number, 
@@ -29,8 +30,6 @@ export class TMotorTAG {
     public camaraActiva!: TNodo;
     public viewportActivo!: number;
     public lucesActivas: boolean[] = [];
-
-
     async registrarCamara(nodoCamara: TNodo) {
         this.gestorCamaras.push(nodoCamara);
     }

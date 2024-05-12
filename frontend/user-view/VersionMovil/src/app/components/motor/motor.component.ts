@@ -4,6 +4,7 @@ import { TMotorTAG } from './clases/TMotorTAG';
 import { TNodo } from './clases/TNodo';
 import { ProductosService } from 'src/app/services/productos.service';
 import { Producto} from '../drawer/drawer.component';
+
 export let motor: TMotorTAG;
 
 interface lista{
@@ -22,7 +23,10 @@ export class MotorComponent{
   private ubicaciones: TNodo[] = [];
   private pins: TNodo[] = [];
   private listaCompra: lista[] = [];
-  constructor(private productosService: ProductosService) { }
+
+  constructor(
+    private productosService: ProductosService, 
+  ) { }
 
   async crearEscena(){
     motor = new TMotorTAG();
