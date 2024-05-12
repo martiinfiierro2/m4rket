@@ -9,15 +9,15 @@
       -->
       <label class="radio">
         <input type="radio" name="radio" checked="" (click)="obtenerFechasRangoSeleccionado('7d')">
-        <span class="name">7d</span>
+        <span class="name">Últimos 7 días</span>
       </label>
       <label class="radio">
         <input type="radio" name="radio" (click)="obtenerFechasRangoSeleccionado('1m')">
-        <span class="name">1m</span>
+        <span class="name">Últimos 30 días</span>
       </label>
     <label class="radio">
         <input type="radio" name="radio" (click)="obtenerFechasRangoSeleccionado('12m')">
-        <span class="name">12m</span>
+        <span class="name">2024</span>
       </label>    
 </div>
 
@@ -27,6 +27,7 @@
     <div class="div1" id="divs_stats">
       <p class="stat_title">Productos listados</p>
       <p>{{totalAnadidos}}</p>
+      <div id="graf-list" style="width: 50%; height: 50%;"></div>
     </div>
     <div class="div2" id="divs_stats"> 
       <p class="stat_title" id="masAnadidos">Total comprados</p>
@@ -43,7 +44,7 @@
       <div id="grafico" style="width: 95%; height: 90%;"></div>
     </div>
     <div class="div6" id="divs_stats"> 
-      <p class="stat_title" >Productos más comprados</p>
+      <p class="stat_title" >Productos más buscados</p>
       <div *ngFor="let producto of anadidos; let i = index">
         <div class="content_prods" >
           <div class="prod" *ngIf="i < 5">
@@ -58,7 +59,7 @@
       <p class="stat_title">Usuarios únicos</p>
     </div>
     <div class="div8" id="divs_stats"> 
-      <p class="stat_title">Productos más localizados</p>
+      <p class="stat_title">Tiempo de uso medio por usuario</p>
     </div>
     <div class="div9" id="divs_stats"> 
       <p class="stat_title">Localizaciones totales</p>
