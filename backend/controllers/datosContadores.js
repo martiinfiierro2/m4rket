@@ -10,7 +10,7 @@ async function obtenerDatosContadores(req, res) {
 
     try {
         let datosContadores;
-        if (nombre === "anadido" || nombre === "eliminado") {
+        if (nombre === "mascomprado") {
             if (inicio !== null && fin !== null) {
                 datosContadores = await DatosContadores.findAll({
                     attributes: ['idProd', [Sequelize.fn('COUNT', Sequelize.col('*')), 'totalCount']],
@@ -32,21 +32,21 @@ async function obtenerDatosContadores(req, res) {
                 });
             }
         }
-        else if(nombre === "qr"){
-            qrPorSemana = await DatosContadores.findAll({
+        else if(nombre === "activo" || nombre === "eliminado" || nombre === "anadido"|| nombre === "comprado" | nombre === "localizado"){
+            datosContadores = await DatosContadores.findAll({
                 attributes: [
-                    [Sequelize.fn('COUNT', Sequelize.col('*')), 'totalCount'],
-                    [Sequelize.fn('WEEK', Sequelize.col('fecha')), 'semana_del_anio']
+                    [Sequelize.literal('DATE(fecha)'), 'fecha'],
+                    [Sequelize.fn('COUNT', Sequelize.col('*')), 'totalCount']
                 ],
                 where: {
-                    nombre: nombre
+                    nombre: nombre,
+                    fecha: {
+                        [Sequelize.Op.between]: [inicio, fin]
+                    }
                 },
-                group: [Sequelize.fn('WEEK', Sequelize.col('fecha'))], // Agrupar por semana del año
-                order: [[Sequelize.fn('WEEK', Sequelize.col('fecha')), 'ASC']]
+                group: [Sequelize.literal('DATE(fecha)')], 
+                order: [[Sequelize.literal('fecha'), 'ASC']] 
             });
-            datosContadores = {
-                qrPorSemana: qrPorSemana
-            };
         }
         
         res.json({

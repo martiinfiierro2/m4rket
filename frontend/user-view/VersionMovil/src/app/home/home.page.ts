@@ -157,6 +157,15 @@ export class HomePage {
     this.loadChatbotScript();
   }
 
+  //ESTADISTICAS
+  //ABRE LA APP
+  ionViewDidEnter() {
+    console.log('HOLA HE ABIERTO LA APP');
+    let tipo = 'eliminado';
+    let fecha = new Date();
+    let producto = 0;
+    this.estadistica(producto, tipo, fecha);
+  }
   
 
   //Funciones para sacar el valor de los productos a partit de la ubicacion del motor gráfico

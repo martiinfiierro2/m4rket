@@ -20,6 +20,7 @@ export class EstadisticasService {
 
   
   //CRUD
+  
   getUsuariosActivos(): Observable<any> {
     let urlCompleta = environment.base_url + '/usuarios-activos';
     return this.http.get(urlCompleta, {headers: this.cabeceras});
@@ -34,12 +35,12 @@ export class EstadisticasService {
     let urlCompleta = this.url + '?nombre=eliminado';
     return this.http.get(urlCompleta, {headers: this.cabeceras});
   }
-
+/*
   getCountSecciones(): Observable<any>{
     let urlCompleta = this.url + '?nombre=secciones';
     return this.http.get(urlCompleta, {headers: this.cabeceras});
   }
-
+*/
   getCountAnadidosFecha(inicio: string, fin: string): Observable<any>{
     const fechaInicioCodificada = encodeURIComponent(inicio);
     const fechaFinCodificada = encodeURIComponent(fin);
@@ -51,11 +52,6 @@ export class EstadisticasService {
     const fechaInicioCodificada = encodeURIComponent(inicio);
     const fechaFinCodificada = encodeURIComponent(fin);
     let urlCompleta = this.url + '?nombre=eliminado&inicio=' + fechaInicioCodificada + '&fin=' + fechaFinCodificada;
-    return this.http.get(urlCompleta, {headers: this.cabeceras});
-  }
-
-  getCountQR(): Observable<any>{
-    let urlCompleta = this.url + '?nombre=qr';
     return this.http.get(urlCompleta, {headers: this.cabeceras});
   }
 

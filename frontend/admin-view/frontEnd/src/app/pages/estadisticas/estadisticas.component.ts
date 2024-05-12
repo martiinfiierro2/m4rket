@@ -81,21 +81,6 @@ export class EstadisticasComponent {
   xAxisData: string[] = [];
   seriesData: number[] = [];
   echartsInstance: any;
-/*
-  procesarDatosParaGrafico() {
-    // Limpiar los datos anteriores
-    this.xAxisData = [];
-    this.seriesData = [];
-
-    // Obtener los datos para el eje X y el eje Y
-    for (let contador of this.anadidos) {
-      this.xAxisData.push(contador.name); // Suponiendo que tienes una propiedad "fecha" en tus datos
-      this.seriesData.push(contador.value);
-    }
-
-    // Actualizar el gráfico
-    this.actualizarGrafico();
-  }*/
 
   constructor (
     private estadisticasService: EstadisticasService,
@@ -113,10 +98,13 @@ export class EstadisticasComponent {
 
     this.fechaInicio = fechaInicio.toISOString().split('T')[0];
     this.fechaFin = fechaFin.toISOString().split('T')[0];
+    this.calcularEjeX('7d');
 
     console.log('La fecha de inicio es: ' + this.fechaInicio + ' y la fecha de fin es: ' + this.fechaFin); 
 
+
   }
+
   obtenerFechasRangoSeleccionado(opcion: string) {
     const hoy = new Date();
     const fechaInicio = new Date(hoy);
@@ -125,12 +113,18 @@ export class EstadisticasComponent {
     switch (opcion) {
       case '7d':
         fechaInicio.setDate(fechaInicio.getDate() - 7);
+        this.calcularEjeX('7d');
+        this.pruebaGrafico();
         break;
       case '1m':
         fechaInicio.setDate(fechaInicio.getDate() - 30);
+        this.calcularEjeX('1m');
+        this.pruebaGrafico();
         break;
       case '12m':
         fechaInicio.setFullYear(fechaInicio.getFullYear()- 1);
+        this.calcularEjeX('12m');
+        this.pruebaGrafico();
         break;
     }
   
@@ -159,26 +153,29 @@ export class EstadisticasComponent {
     this.fechasDefecto();
     this.getContadoresMasAnadidos();
     this.getContadoresMasEliminados();
-    //this.getUsuariosActivos();
-    //this.pruebaGrafico();
+    this.pruebaGrafico();
     
   }
   
   private pruebaGrafico() {
-    const chartElement = document.getElementById('deleted');
+    const chartElement = document.getElementById('grafico');
   
     if (chartElement && chartElement.clientWidth > 0 && chartElement.clientHeight > 0) {
-      const myChart = echarts.getInstanceByDom(chartElement) || echarts.init(chartElement);
+      // Eliminar el gráfico existente si lo hay
+      echarts.dispose(chartElement);
+  
+      // Crear un nuevo gráfico
+      const myChart = echarts.init(chartElement);
   
       const option: any = {
         xAxis: {
           type: 'category',
-          data: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio'],
-          show: false,
+          data: this.xAxisData, // Actualiza esta propiedad según tu lógica
+          show: true,
         },
         yAxis: {
           type: 'value',
-          show: false
+          show: true
         },
         series: [
           {
@@ -189,7 +186,7 @@ export class EstadisticasComponent {
               show: false,
               position: 'top'
             },
-            data: [65, 59, 80, 81, 56, 55, 80],
+            data:[65, 59, 80, 81, 56, 55, 80], // Actualiza esta propiedad según tu lógica
             fill: false,
             borderColor: 'rgb(60, 179, 113)',
             tension: 0.9
@@ -197,73 +194,58 @@ export class EstadisticasComponent {
         ]
       };
   
+      // Establecer las opciones en el nuevo gráfico
       myChart.setOption(option);
     } else {
-      console.warn('El elemento "deleted" no tiene un tamaño válido para mostrar el gráfico.');
+      console.warn('El elemento "grafico" no tiene un tamaño válido para mostrar el gráfico.');
     }
   }
   
   
-  private configurarGraficoEliminados(): void {
+  calcularEjeX(opcion: string): string[] {
+ 
+  const hoy = new Date();
 
-    var deleted = document.getElementById('deleted');
-    let opciones = {
-      title: {
-        text: 'Productos más eliminados',
-        left: 'center'
-      },
-      tooltip: {
-        trigger: 'item'
-      },
-      series: [
-        {
-          name: 'Veces añadido',
-          type: 'pie',
-          radius: '50%',  
-         // data: this.eliminados.reverse(),
-          data: 30,
-          emphasis: {
-            itemStyle: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)'
-            }
-          }
-        }
-      ]
-    };
-    this.masEliminado = echarts.init(deleted);
-    this.masEliminado.setOption(opciones);
+  this.xAxisData= [];
+  
+  switch (opcion) {
+    case '7d':
+      for (let i = 6; i >= 0; i--) {
+        const fecha = new Date(hoy);
+        fecha.setDate(fecha.getDate() - i);
+        this.xAxisData.push(this.obtenerNombreDiaSemana(fecha));
+      }
+      break;
+    case '1m':
+      const fechaInicio30d = new Date(hoy);
+      fechaInicio30d.setDate(fechaInicio30d.getDate() - 29);
+      for (let i = 0; i < 30; i++) {
+        const fecha = new Date(fechaInicio30d);
+        fecha.setDate(fecha.getDate() + i);
+        this.xAxisData.push(fecha.toLocaleDateString('es-ES', { day: 'numeric' }));
+      }
+      break;
+    case '12m':
+      const fechaInicio1a = new Date(hoy);
+      fechaInicio1a.setFullYear(fechaInicio1a.getFullYear() - 1);
+      fechaInicio1a.setMonth(hoy.getMonth() + 1); // Ajuste para iniciar desde el mes siguiente al actual
+      for (let i = 0; i < 12; i++) {
+        const fecha = new Date(fechaInicio1a);
+        fecha.setMonth(fecha.getMonth() + i);
+       this.xAxisData.push(fecha.toLocaleDateString('es-ES', { month: 'long' }));
+      }
+      break;
+    default:
+      break;
   }
+  return this.xAxisData;
+}
 
-  private configurarGraficoAnadidos(): void {
-    let opciones = {
-      title: {
-        text: 'Productos más anadidos',
-        left: 'center'
-      },
-      tooltip: {
-        trigger: 'item'
-      },
-      series: [
-        {
-          name: 'Veces añadido',
-          type: 'pie',
-          radius: '50%',
-          data: this.anadidos.reverse(),
-          emphasis: {
-            itemStyle: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)'
-            }
-          }
-        }
-      ]
-    };
-    this.masAnadido = echarts.init(this.elementRef.nativeElement.querySelector('#masAnadidos'));
-    this.masAnadido.setOption(opciones);
-  }
+obtenerNombreDiaSemana(fecha: Date): string {
+  const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+  return diasSemana[fecha.getDay()];
+}
+
 
   //CRUD
   async getContadoresMasAnadidos() {
@@ -273,6 +255,7 @@ export class EstadisticasComponent {
       try {
         const res = await this.estadisticasService.getCountAnadidosFecha(this.fechaInicio, this.fechaFin).toPromise();
         console.log(res);
+        
         for (let index = 0; index < res.datosContadores.length; index++) {
           let contador = new DatosContadores();
     
