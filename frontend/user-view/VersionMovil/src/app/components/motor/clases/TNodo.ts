@@ -38,7 +38,7 @@ export class TNodo{
             this.actualizarMatriz = false;
         }
     
-        if (this.getEntidad() != null) {
+        if (this.getEntidad() != null && this.getDibujar() != false) {
             this.entidad.dibujar(this.matrizTransf);
         }
     
@@ -153,7 +153,7 @@ export class TNodo{
     }
 
     async setDibujar (dibujar: boolean){
-        this.dibujar = true;
+        this.dibujar = dibujar;
     }
 
     //Métodos GET

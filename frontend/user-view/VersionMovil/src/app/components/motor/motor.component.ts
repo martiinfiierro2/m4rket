@@ -1,11 +1,16 @@
-import { AfterViewInit, Component, OnInit, Input, Output} from '@angular/core';
+import { AfterViewInit, Component, OnInit} from '@angular/core';
 import * as glMatrix from 'gl-matrix';
 import { TMotorTAG } from './clases/TMotorTAG';
 import { TNodo } from './clases/TNodo';
 import { ProductosService } from 'src/app/services/productos.service';
-import { Producto } from '../drawer/drawer.component';
-import { RouterLinkDelegate } from '@ionic/angular';
-export let motor: TMotorTAG;//Injectable
+import { Producto} from '../drawer/drawer.component';
+
+export let motor: TMotorTAG;
+
+interface lista{
+  id: string,
+  estado: boolean
+}
 @Component({
   selector: 'app-motor',
   templateUrl: './motor.component.html',
@@ -13,24 +18,31 @@ export let motor: TMotorTAG;//Injectable
 })
 
 export class MotorComponent implements AfterViewInit{
-  private productos!: Producto[];
   private suelo!: TNodo;
+  private mercado!: TNodo;
   private ubicaciones: TNodo[] = [];
   private pins: TNodo[] = [];
-  constructor(private productosService: ProductosService) { }
+  private listaCompra: lista[] = [];
+
+  constructor(
+    private productosService: ProductosService, 
+  ) { }
 
   ngAfterViewInit(): void {
-    
+  }
+
+  gestionarMarcado(IDProd: number){
+    console.log(IDProd);
   }
 
   async crearEscena(){
     motor = new TMotorTAG();
  
     //Creamos nodo padre
-    const mercado: TNodo = await motor.crearNodo( null, glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(1,1,1));
+    this.mercado = await motor.crearNodo( null, glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(1,1,1));
 
     //asignar camara
-    const camara: TNodo = await motor.crearCamara(mercado, glMatrix.vec3.fromValues(-4.5,15,-55), glMatrix.vec3.fromValues(15*(Math.PI / 180),0,0), glMatrix.vec3.fromValues(1,1,1), true, false, 0.1, 100);
+    const camara: TNodo = await motor.crearCamara(this.mercado, glMatrix.vec3.fromValues(-4.5,15,-55), glMatrix.vec3.fromValues(15*(Math.PI / 180),0,0), glMatrix.vec3.fromValues(1,1,1), true, false, 0.1, 100);
     await motor.registrarCamara(camara);
     await motor.setCamara(camara);
  
@@ -40,7 +52,7 @@ export class MotorComponent implements AfterViewInit{
     await motor.iniciarGL();
     await motor.iniciarPrograma();
 
-    this.suelo = await motor.crearModelo( mercado, glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(0,215*(Math.PI / 180),0), glMatrix.vec3.fromValues(0.425,0.425,0.425), 'suelo.obj', 'malla', 'gris.jpg', true);
+    this.suelo = await motor.crearModelo( this.mercado, glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(0,215*(Math.PI / 180),0), glMatrix.vec3.fromValues(0.425,0.425,0.425), 'suelo.obj', 'malla', 'gris.jpg', true);
 
     const puerta: TNodo = await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(-25,0,43), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(1,1,1), 'puerta.obj', 'malla', 'grisclaro.jpeg', true);
 
@@ -108,13 +120,34 @@ export class MotorComponent implements AfterViewInit{
     const caja3: TNodo =  await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(-25,0,18), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(4,4,4), 'cajaregistradora.obj', 'malla', 'blanco.jpeg', true);
     const caja4: TNodo =  await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(-25,0,24), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(4,4,4), 'cajaregistradora.obj', 'malla', 'blanco.jpeg', true);
 
+    console.log(motor)
     await this.cargarNodosPines();
-    
-    mercado.recorrer(glMatrix.mat4.identity(glMatrix.mat4.create()));
+  }
+
+  async getUsuarioLog() {
+    const idUsuario = localStorage.getItem('idUsuario');
+    let idUsu = '';
+    if (idUsuario !== null) {
+      idUsu = idUsuario;
+    } else {
+      console.error('El valor de idUsuario en localStorage es nulo.');
+    }
+    return idUsu;
   }
 
   async cargarNodosPines() {
     try {
+      const idUsu: string = await this.getUsuarioLog();
+      this.productosService.getListaCompra(idUsu).subscribe( res => {
+        for(let j = 0; j < res.listacompra.length; j++){
+          const newLista = {
+            id: res.listacompra[j].idProd, 
+            estado: res.listacompra[j].comprado
+          };
+          this.listaCompra.push(newLista);
+        }
+      });
+
       const res: any = await this.productosService.getAllProdSinPag().toPromise();
       for (let index = 0; index < res.productos.length; index++) {
         let pin!: TNodo;
@@ -123,31 +156,84 @@ export class MotorComponent implements AfterViewInit{
       
       for (let index = 0; index < res.productos.length; index++) {
         const producto: Producto = res.productos[index];
-        if(index <= 5){  
+        let estado: boolean = false;
+        let compradoTextura: string = producto.foto;
+        let nombreMalla: string = 'pin.obj'
+
+        for(let x = 0; x < this.listaCompra.length; x++){
+          if(producto.id == this.listaCompra[x].id){
+            estado = true;
+            if(this.listaCompra[x].estado == true){
+              nombreMalla = 'pin2.obj';
+              compradoTextura = 'andres.jpg';
+            }
+          }
+        }
+        
+        if(index <= 4){
           this.pins[index] = await motor.crearModelo(
             this.ubicaciones[index],
             glMatrix.vec3.fromValues(0, 0, 0),
-            glMatrix.vec3.fromValues(0, -90*(Math.PI / 180), 0),
+            glMatrix.vec3.fromValues(0, 45*(Math.PI / 180), 0),
             glMatrix.vec3.fromValues(1, 1, 1),
-            'pin.obj',
+            nombreMalla,
             'malla',
-            producto.foto, 
-            false
+            compradoTextura,
+            estado
           );
         }
-        else if(index > 5){
+        else if(index > 4 && index <= 30){
           this.pins[index] = await motor.crearModelo(
             this.ubicaciones[index],
             glMatrix.vec3.fromValues(0, 0, 0),
-            glMatrix.vec3.fromValues(0, 0, 0),
+            glMatrix.vec3.fromValues(0, -45*(Math.PI / 180), 0),
             glMatrix.vec3.fromValues(2.5, 2.5, 2.5),
-            'pin.obj',
+            nombreMalla,
             'malla',
-            producto.foto,
-            true
+            compradoTextura,
+            estado
+          );
+        }
+        else if(index > 30 && index <= 33){
+          this.pins[index] = await motor.crearModelo(
+            this.ubicaciones[index],
+            glMatrix.vec3.fromValues(0, 2.5, 0),
+            glMatrix.vec3.fromValues(0, 45*(Math.PI / 180), 0),
+            glMatrix.vec3.fromValues(1.5, 1.5, 1.5),
+            nombreMalla,
+            'malla',
+            compradoTextura,
+            estado
+          );
+        }
+        else if(index > 33 && index <= 37){
+          this.pins[index] = await motor.crearModelo(
+            this.ubicaciones[index],
+            glMatrix.vec3.fromValues(0, 2.5, 0),
+            glMatrix.vec3.fromValues(0, 45*(Math.PI / 180), 0),
+            glMatrix.vec3.fromValues(1.5, 1.5, 1.5),
+            nombreMalla,
+            'malla',
+            compradoTextura,
+            estado
+          );
+        }
+        else if(index > 37 && index <= 40){
+          this.pins[index] = await motor.crearModelo(
+            this.ubicaciones[index],
+            glMatrix.vec3.fromValues(0, 1, 0),
+            glMatrix.vec3.fromValues(0, 45*(Math.PI / 180), 0),
+            glMatrix.vec3.fromValues(1, 1, 1),
+            nombreMalla,
+            'malla',
+            compradoTextura,
+            estado
           );
         }
       }
+
+      //recorrer y dibujar
+      this.mercado.recorrer(glMatrix.mat4.identity(glMatrix.mat4.create()));
     } catch (error) {
       console.error('Error al cargar los nodos de pines:', error);
     }
