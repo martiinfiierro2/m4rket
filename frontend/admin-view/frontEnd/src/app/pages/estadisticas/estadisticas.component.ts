@@ -82,6 +82,11 @@ export class EstadisticasComponent {
   //Variables para el gráfico: 
   xAxisData: string[] = [];
 
+
+  //Varible de graficos
+  datosEliminados: string[] = [];
+  datosActivos: string [] = [];
+
   constructor (
     private estadisticasService: EstadisticasService,
     private productoService: ProductosService,
@@ -98,7 +103,6 @@ export class EstadisticasComponent {
 
     this.fechaInicio = fechaInicio.toISOString().split('T')[0];
     this.fechaFin = fechaFin.toISOString().split('T')[0];
-    //this.calcularEjeX('7d');
 
   }
 
@@ -108,10 +112,6 @@ export class EstadisticasComponent {
     this.getContadoresActivos(opcion);
   }
 
-  async actualizarGraficos(valores: any){
-    this.pruebaGrafico(valores);
-    this.graficoListados(valores);
-  }
   async obtenerFechasRangoSeleccionado(opcion: string) {
     const hoy = new Date();
     const fechaInicio = new Date(hoy);
@@ -149,12 +149,14 @@ export class EstadisticasComponent {
     this.getContadoresMasAnadidos();
     this.getContadoresMasEliminados('7d');
     this.getContadoresActivos('7d');
-    this.pruebaGrafico(this.activos);
+    //this.pruebaGrafico();
     
   }
   
-  async pruebaGrafico(valores: any) {
+  async pruebaGrafico(opcion: any, respuesta: any) {
     const chartElement = document.getElementById('grafico');
+    const datos = await this.procesarDatos(opcion, respuesta);
+    console.log('Datos de grafico ' + datos);
   
     if (chartElement && chartElement.clientWidth > 0 && chartElement.clientHeight > 0) {
       echarts.dispose(chartElement);
@@ -162,6 +164,7 @@ export class EstadisticasComponent {
       const myChart = echarts.init(chartElement);
   
       const option: any = {
+        color:'rgba(81, 135, 122, 1)' ,
         xAxis: {
           type: 'category',
           data: this.xAxisData,
@@ -180,10 +183,8 @@ export class EstadisticasComponent {
               show: false,
               position: 'top'
             },
-            data:valores,
-            fill: false,
-            borderColor: 'rgb(60, 179, 113)',
-            tension: 0.9
+            data: datos,
+            smooth: true,
           }
         ]
       };
@@ -194,8 +195,11 @@ export class EstadisticasComponent {
     }
   }
 
-  async graficoListados(valores: any) {
+  async graficoListados(opcion: any, respuesta: any) {
     const chartElement = document.getElementById('graf-list');
+    
+    const datos = await this.procesarDatos(opcion, respuesta);
+    console.log('Datos de listado ' + datos);
   
     if (chartElement && chartElement.clientWidth > 0 && chartElement.clientHeight > 0) {
       echarts.dispose(chartElement);
@@ -203,6 +207,7 @@ export class EstadisticasComponent {
       const myChart = echarts.init(chartElement);
   
       const option: any = {
+        color:'rgba(81, 135, 122, 1)' ,
         xAxis: {
           type: 'category',
           data: this.xAxisData,
@@ -221,9 +226,9 @@ export class EstadisticasComponent {
               show: false,
               position: 'top'
             },
-            data:valores,
+            data:datos,
             fill: false,
-            borderColor: 'rgb(60, 179, 113)',
+            borderColor: 'rgb(81, 135, 122))',
             tension: 0.9
           }
         ]
@@ -235,10 +240,10 @@ export class EstadisticasComponent {
     }
   }
   
-obtenerNombreDiaSemana(fecha: Date): string {
-  const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-  return diasSemana[fecha.getDay()];
-}
+  obtenerNombreDiaSemana(fecha: Date): string {
+    const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    return diasSemana[fecha.getDay()];
+  }
 
 
   //CRUD
@@ -248,7 +253,7 @@ obtenerNombreDiaSemana(fecha: Date): string {
     if(this.fechaFin !== "" && this.fechaInicio !== ""){
       try {
         const res = await this.estadisticasService.getCountAnadidosFecha(this.fechaInicio, this.fechaFin).toPromise();
-        console.log(res);
+        //console.log(res);
         
         for (let index = 0; index < res.datosContadores.length; index++) {
           let contador = new DatosContadores();
@@ -294,8 +299,13 @@ obtenerNombreDiaSemana(fecha: Date): string {
     this.totalEliminados = 0;
       try {
         const res = await this.estadisticasService.getCountEliminadosFecha(this.fechaInicio, this.fechaFin).toPromise();
-        console.log(res);
-        await this.procesarDatos(opcion, res);
+        //console.log(res);
+              
+       // await this.procesarDatos(opcion, res);
+       await this.graficoListados(opcion, res);
+
+
+
         /*
         for (let index = 0; index < res.datosContadores.length; index++) {
           let contador = new DatosContadores();
@@ -320,7 +330,7 @@ obtenerNombreDiaSemana(fecha: Date): string {
     try {
       const res = await this.estadisticasService.getCountActivosFecha(this.fechaInicio, this.fechaFin).toPromise();
       console.log(res);
-      await this.procesarDatos(opcion, res);
+      await this.pruebaGrafico(opcion, res);
     } catch (error) {
       console.error(error);
     }
@@ -328,19 +338,22 @@ obtenerNombreDiaSemana(fecha: Date): string {
   
 
   async procesarDatos(opcion: string, res: any) {
+    let datos;
     switch (opcion) {
       case '7d':
-        await this.procesarDatosPorUltimos7Dias(res);
+        datos = await this.procesarDatosPorUltimos7Dias(res);
         break;
       case '1m':
-        await this.procesarDatosPorUltimos30Dias(res);
+        datos = await this.procesarDatosPorUltimos30Dias(res);
         break;
       case '12m':
-        await this.procesarDatosPorUltimoAno(res);
+        datos = await this.procesarDatosPorUltimoAno(res);
         break;
     }
+
+    return datos;
   }
-  async procesarDatosPorUltimos7Dias(datos) {
+  async procesarDatosPorUltimos7Dias(datos: any) {
     this.xAxisData= [];
     const hoy = new Date();
     for (let i = 6; i >= 0; i--) {
@@ -362,18 +375,16 @@ obtenerNombreDiaSemana(fecha: Date): string {
         const diaSemana = (diaSemanaActual - i + 7) % 7; 
         valores[6 - i] = dataByDayOfWeek[diaSemana] || 0; 
       }
-      
-      await this.actualizarGraficos(valores);
+    return valores;
   }
   
-  async procesarDatosPorUltimos30Dias(datos) {
+  async procesarDatosPorUltimos30Dias(datos: any) {
     let valores = [];
     let dias = [];
     this.xAxisData = [];
   
     const dataByDay = {};
   
-    // Recorre los datos y agrupa los valores por día
     for (const dato of datos.datosContadores) {
       const fecha = new Date(dato.fecha);
       const dia = fecha.getDate(); // Obtener el día del mes
@@ -398,15 +409,18 @@ obtenerNombreDiaSemana(fecha: Date): string {
     }
   
     this.xAxisData = dias;
-    await this.actualizarGraficos(valores);
+
+    return valores;
   }
   
   
   
   
   
-  async procesarDatosPorUltimoAno(datos) {
+  async procesarDatosPorUltimoAno(datos: any) {
     this.xAxisData= [];
+
+    let valores = [];
     const fechaInicio1a = new Date();
       for (let i = 0; i < fechaInicio1a.getMonth() + 1; i++) {
         const fecha = new Date(fechaInicio1a.getFullYear(), i, 1);
@@ -430,12 +444,9 @@ obtenerNombreDiaSemana(fecha: Date): string {
     for (let i = 1; i <= currentMonth; i++) {
       let contador = new DatosContadores();
       contador.value = dataByMonth[i] || 0; 
-      this.activos.push(contador.value);
+      valores.push(contador.value);
       this.totalActivos += parseInt(contador.value);
     }
-
-    await this.actualizarGraficos(this.activos);
+    return valores;
   }
-  
-  
 }
