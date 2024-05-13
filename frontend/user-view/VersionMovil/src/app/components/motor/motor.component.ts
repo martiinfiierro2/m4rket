@@ -35,7 +35,7 @@ export class MotorComponent implements AfterViewInit{
     await motor.setCamara(camara);
  
     //asignar luces
-    const luzTop: TNodo = await motor.crearLuz(null, glMatrix.vec3.fromValues(200, 200, 200), glMatrix.vec3.fromValues(0, 0, 0), glMatrix.vec3.fromValues(0, 0, 0), 1.5, "Direccional");
+    const luzTop: TNodo = await motor.crearLuz(null, glMatrix.vec3.fromValues(200, 200, 200), glMatrix.vec3.fromValues(0, 0, 0), glMatrix.vec3.fromValues(0, 0, 0), glMatrix.vec3.fromValues(1.0,1.0,1.0), "Direccional", glMatrix.vec4.fromValues(20,20,20,1));
     await motor.registrarLuz(luzTop);
     await motor.setLuz(luzTop);
   

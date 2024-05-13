@@ -211,7 +211,7 @@ export class TMotorTAG {
         return nodoCreado;
     }
 
-    crearLuz( padre: TNodo|null, trasl: glMatrix.vec3, rot: glMatrix.vec3, esc: glMatrix.vec3, intensidad: number, tipoLuz: string): TNodo{
+    crearLuz( padre: TNodo|null, trasl: glMatrix.vec3, rot: glMatrix.vec3, esc: glMatrix.vec3, intensidad: glMatrix.vec3, tipoLuz: string, posicionLuz: glMatrix.vec4): TNodo{
 
         let nodoCreado: any, entidadLuz: any;
 
@@ -221,7 +221,7 @@ export class TMotorTAG {
         }
         padre.agregarHijo(nodoCreado);
 
-        entidadLuz = new ELuz(); //falta añadir los atributos pasados por param.
+        entidadLuz = new ELuz(intensidad, tipoLuz, posicionLuz); //falta añadir los atributos pasados por param.
         nodoCreado.setEntidad(entidadLuz);
         nodoCreado.setTraslacion(trasl);
         nodoCreado.setRotacion(rot);

@@ -151,7 +151,7 @@ void main() {
 
 
 
-//SIMPLE + PHONG
+//SIMPLE + PHONG(PROFESOR)
 precision mediump float;
 
 // ENTRADA, PROVENIENTE DEL VERTEX SHADER
@@ -162,8 +162,7 @@ varying vec2 TextureCoord;
 uniform sampler2D uSampler;
 
 
-void main () { // CALCULAR EL COLOR DEL FRAGMENTO
-
+void main () { 
     //VALORES PROVISIONALES
     highp vec4 LightPosition = vec4(40, 40, 40, 1);     
     highp vec3 LightIntensity = vec3(1.0, 1.0, 1.0);   
@@ -180,5 +179,7 @@ void main () { // CALCULAR EL COLOR DEL FRAGMENTO
 
     highp vec4 texelColor = texture2D(uSampler, TextureCoord);
 
-    gl_FragColor = vec4 (light.rgb *  texelColor.rgb, texelColor.a);
+    gl_FragColor = vec4 (light.rgb *  texelColor.rgb, texelColor.a);    
 } 
+
+
