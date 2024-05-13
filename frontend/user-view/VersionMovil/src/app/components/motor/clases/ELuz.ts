@@ -3,22 +3,26 @@ import * as glMatrix from 'gl-matrix';
 
 export class ELuz extends TEntidad {
     
-    
-    private intensidad!: glMatrix.vec4; //rgb alpha
-    private tipoLuz!: any; //Enum
+    private posicion!: glMatrix.vec4;
+    private intensidad!: glMatrix.vec3; 
+    private tipoLuz!: string;
     private apertura!: number; //Flotante
     private atenAngular!: number; //Flotante
     private atenCte!: number; //Flotante
     private atenLineal!: number; //Flotante
     private atenCuadrat!: number; //Flotante
 
+    dibujar(){}
 
-    dibujar(){
-        
+    constructor(intensidad: glMatrix.vec3, tipoLuz: string, posicionLuz: glMatrix.vec4){
+        super();
+        this.intensidad = intensidad;
+        this.tipoLuz = tipoLuz;
+        this.posicion = posicionLuz;
     }
 
     //SETTERS
-    setIntensidad( intesidad: glMatrix.vec4){
+    setIntensidad( intesidad: glMatrix.vec3){
         this.intensidad = intesidad;
     }
 
@@ -46,10 +50,14 @@ export class ELuz extends TEntidad {
         this.atenCuadrat = atCuadr;
     }
 
+    setPosicion( pos: glMatrix.vec4){
+        this.posicion = pos;
+    }
+
 
 
     //GETTERS
-    getIntensidad(): glMatrix.vec4{
+    getIntensidad(){
         return this.intensidad;
     }
 
@@ -75,6 +83,10 @@ export class ELuz extends TEntidad {
 
     getAtenCuadrat(){
         return this.atenCuadrat;
+    }
+
+    getPosicion(){
+        return this.posicion;
     }
 
 
