@@ -12,6 +12,7 @@ import { PaginationComponent } from "../../pagination/pagination.component";
 import * as echarts from 'echarts';
 import { environment } from '../../../environments/environment';
 import { FormsModule } from '@angular/forms';
+import { log } from 'node:console';
 
 
 export interface Contador{
@@ -56,13 +57,35 @@ export class EstadisticasComponent {
   secciones: any;
   aux: DatosContadores[] = [];
   usuariosActivos: any;
+  activos: any;
+  fecha: string;
+  idProd: string;
+  listaMasComprados: any = this.anadidos.slice(0, 5);
+  
+
+  
+  
   //Fitro fechas
   fechaInicio: string="";
   fechaFin: string="";
 
+  //VARIABLES GLOBALES
+  totalAnadidos: number = 0;
+  totalEliminados: number = 0;
+  totalActivos: number = 0;
+
   //variables para mostrar foto
   tokenUsuario = sessionStorage.getItem('tokenUsuario') || localStorage.getItem('tokenUsuario');
   urlFotoProducto = environment.base_url + '/uploads/fotoproducto/';
+
+
+  //Variables para el gráfico: 
+  xAxisData: string[] = [];
+
+
+  //Varible de graficos
+  datosEliminados: string[] = [];
+  datosActivos: string [] = [];
 
   constructor (
     private estadisticasService: EstadisticasService,
@@ -70,29 +93,124 @@ export class EstadisticasComponent {
     private elementRef: ElementRef,
     private route: Router){
   }
-/*
-  mostrarGrafico(nombre: string): void {
-    let url = '/datos?nombre='+nombre;
-    window.location.href = url;
+
+  fechasDefecto(){
+    const hoy = new Date();
+    const fechaInicio = new Date(hoy);
+    const fechaFin = new Date(hoy);
+
+    fechaInicio.setDate(fechaInicio.getDate() - 7);
+
+    this.fechaInicio = fechaInicio.toISOString().split('T')[0];
+    this.fechaFin = fechaFin.toISOString().split('T')[0];
+
   }
-*/
+
+  async actualizarDatos(opcion: string){
+    this.getContadoresMasAnadidos();
+    this.getContadoresMasEliminados(opcion);
+    this.getContadoresActivos(opcion);
+  }
+
+  async obtenerFechasRangoSeleccionado(opcion: string) {
+    const hoy = new Date();
+    const fechaInicio = new Date(hoy);
+    const fechaFin = new Date(hoy);
+  
+    switch (opcion) {
+      case '7d':
+        fechaInicio.setDate(fechaInicio.getDate() - 7);
+        break;
+      case '1m':
+        fechaInicio.setDate(fechaInicio.getDate() - 30);
+        break;
+      case '12m':
+        fechaInicio.setFullYear(fechaInicio.getFullYear()- 1);
+        break;
+    }
+  
+    const fechaInicioFormateada = fechaInicio.toISOString().split('T')[0];
+    const fechaFinFormateada = fechaFin.toISOString().split('T')[0];
+
+    this.fechaInicio = fechaInicio.toISOString().split('T')[0];
+    this.fechaFin = fechaFin.toISOString().split('T')[0];
+
+    this.actualizarDatos(opcion);
+  
+    return {
+      fechaInicio: fechaInicioFormateada,
+      fechaFin: fechaFinFormateada
+    };
+    
+  }
+
   ngOnInit(): void {
-   // this.getContadoresMasAnadidos();
-   // this.getContadoresMasEliminados();
-   // this.getUsuariosActivos();
-   this.pruebaGrafico();
+    this.fechasDefecto();
+    this.getContadoresMasAnadidos();
+    this.getContadoresMasEliminados('7d');
+    this.getContadoresActivos('7d');
+    //this.pruebaGrafico();
+    
   }
   
-  private pruebaGrafico() {
-    const chartElement = document.getElementById('deleted');
+  async pruebaGrafico(opcion: any, respuesta: any) {
+    const chartElement = document.getElementById('grafico');
+    const datos = await this.procesarDatos(opcion, respuesta);
+    console.log('Datos de grafico ' + datos);
   
     if (chartElement && chartElement.clientWidth > 0 && chartElement.clientHeight > 0) {
-      const myChart = echarts.getInstanceByDom(chartElement) || echarts.init(chartElement);
+      echarts.dispose(chartElement);
+  
+      const myChart = echarts.init(chartElement);
   
       const option: any = {
+        color:'rgba(81, 135, 122, 1)' ,
         xAxis: {
           type: 'category',
-          data: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio'],
+          data: this.xAxisData,
+          show: true,
+        },
+        yAxis: {
+          type: 'value',
+          show: true
+        },
+        series: [
+          {
+            name: 'Nutrientes',
+            type: 'line',
+            avoidLabelOverlap: false,
+            label: {
+              show: false,
+              position: 'top'
+            },
+            data: datos,
+            smooth: true,
+          }
+        ]
+      };
+  
+      myChart.setOption(option);
+    } else {
+      console.warn('El elemento "grafico" no tiene un tamaño válido para mostrar el gráfico.');
+    }
+  }
+
+  async graficoListados(opcion: any, respuesta: any) {
+    const chartElement = document.getElementById('graf-list');
+    
+    const datos = await this.procesarDatos(opcion, respuesta);
+    console.log('Datos de listado ' + datos);
+  
+    if (chartElement && chartElement.clientWidth > 0 && chartElement.clientHeight > 0) {
+      echarts.dispose(chartElement);
+  
+      const myChart = echarts.init(chartElement);
+  
+      const option: any = {
+        color:'rgba(81, 135, 122, 1)' ,
+        xAxis: {
+          type: 'category',
+          data: this.xAxisData,
           show: false,
         },
         yAxis: {
@@ -108,9 +226,9 @@ export class EstadisticasComponent {
               show: false,
               position: 'top'
             },
-            data: [65, 59, 80, 81, 56, 55, 80],
+            data:datos,
             fill: false,
-            borderColor: 'rgb(60, 179, 113)',
+            borderColor: 'rgb(81, 135, 122))',
             tension: 0.9
           }
         ]
@@ -118,79 +236,25 @@ export class EstadisticasComponent {
   
       myChart.setOption(option);
     } else {
-      console.warn('El elemento "deleted" no tiene un tamaño válido para mostrar el gráfico.');
+      console.warn('El elemento "grafico" no tiene un tamaño válido para mostrar el gráfico.');
     }
   }
   
-  
-  private configurarGraficoEliminados(): void {
+  obtenerNombreDiaSemana(fecha: Date): string {
+    const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    return diasSemana[fecha.getDay()];
+  }
 
-    var deleted = document.getElementById('deleted');
-    let opciones = {
-      title: {
-        text: 'Productos más eliminados',
-        left: 'center'
-      },
-      tooltip: {
-        trigger: 'item'
-      },
-      series: [
-        {
-          name: 'Veces añadido',
-          type: 'pie',
-          radius: '50%',  
-         // data: this.eliminados.reverse(),
-          data: 30,
-          emphasis: {
-            itemStyle: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)'
-            }
-          }
-        }
-      ]
-    };
-    this.masEliminado = echarts.init(deleted);
-    this.masEliminado.setOption(opciones);
-  }
-/*
-  private configurarGraficoAnadidos(): void {
-    let opciones = {
-      title: {
-        text: 'Productos más anadidos',
-        left: 'center'
-      },
-      tooltip: {
-        trigger: 'item'
-      },
-      series: [
-        {
-          name: 'Veces añadido',
-          type: 'pie',
-          radius: '50%',
-          data: this.anadidos.reverse(),
-          emphasis: {
-            itemStyle: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)'
-            }
-          }
-        }
-      ]
-    };
-    this.masAnadido = echarts.init(this.elementRef.nativeElement.querySelector('#masAnadidos'));
-    this.masAnadido.setOption(opciones);
-  }
 
   //CRUD
   async getContadoresMasAnadidos() {
     this.anadidos = [];
+    this.totalAnadidos = 0;
     if(this.fechaFin !== "" && this.fechaInicio !== ""){
       try {
         const res = await this.estadisticasService.getCountAnadidosFecha(this.fechaInicio, this.fechaFin).toPromise();
-        console.log(res);
+        //console.log(res);
+        
         for (let index = 0; index < res.datosContadores.length; index++) {
           let contador = new DatosContadores();
     
@@ -198,8 +262,9 @@ export class EstadisticasComponent {
           contador.name = res2.productos.nombre;
           contador.value = res.datosContadores[index].totalCount;
           this.anadidos.push(contador);
+          this.totalAnadidos += parseInt(contador.value);
         }
-        this.configurarGraficoAnadidos();
+        //this.configurarGraficoAnadidos();
       } catch (error) {
         console.error(error);
       }
@@ -212,65 +277,176 @@ export class EstadisticasComponent {
           let contador = new DatosContadores();
     
           const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
-          contador.name = res2.productos.nombre;
+          //contador.name = res2.productos.nombre;
           contador.value = res.datosContadores[index].totalCount;
           this.anadidos.push(contador);
         }
-        this.configurarGraficoAnadidos();
+        //this.configurarGraficoAnadidos();
       } catch (error) {
         console.error(error);
       }
     }
   }
-
+/*
   getUsuariosActivos(){
     let res = this.estadisticasService.getUsuariosActivos().subscribe( res => {
       this.usuariosActivos = res.usuariosActivos;
     });
   }
-
-  async getContadoresMasEliminados() {
+*/
+  async getContadoresMasEliminados(opcion:string) {
     this.eliminados = [];
-    if(this.fechaFin !== "" && this.fechaInicio !== ""){
+    this.totalEliminados = 0;
       try {
         const res = await this.estadisticasService.getCountEliminadosFecha(this.fechaInicio, this.fechaFin).toPromise();
-        console.log(res);
+        //console.log(res);
+              
+       // await this.procesarDatos(opcion, res);
+       await this.graficoListados(opcion, res);
+
+
+
+        /*
         for (let index = 0; index < res.datosContadores.length; index++) {
           let contador = new DatosContadores();
     
           const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
-          contador.name = res2.productos.nombre;
+          //contador.name = res2.productos.nombre;
           contador.value = res.datosContadores[index].totalCount;
           this.eliminados.push(contador);
+          this.totalEliminados += parseInt(contador.value);
         }
-        this.configurarGraficoEliminados();
+        //this.configurarGraficoEliminados();*/
+
       } catch (error) {
         console.error(error);
       }
-    }
-    else{
-      try {
-        const res = await this.estadisticasService.getCountEliminados().toPromise();
-        console.log(res);
-        for (let index = 0; index < res.datosContadores.length; index++) {
-          let contador = new DatosContadores();
     
-          const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
-          contador.name = res2.productos.nombre;
-          contador.value = res.datosContadores[index].totalCount;
-          this.eliminados.push(contador);
-        }
-        console.log(this.eliminados);
-        this.configurarGraficoEliminados();
-      } catch (error) {
-        console.error(error);
-      }
-    }
   }
 
-  filtrar(){
-    this.getContadoresMasAnadidos();
-    this.getContadoresMasEliminados();
+  async getContadoresActivos(opcion: string) {
+    this.activos = [];
+    this.totalActivos = 0;
+    try {
+      const res = await this.estadisticasService.getCountActivosFecha(this.fechaInicio, this.fechaFin).toPromise();
+      console.log(res);
+      await this.pruebaGrafico(opcion, res);
+    } catch (error) {
+      console.error(error);
+    }
   }
-  */
+  
+
+  async procesarDatos(opcion: string, res: any) {
+    let datos;
+    switch (opcion) {
+      case '7d':
+        datos = await this.procesarDatosPorUltimos7Dias(res);
+        break;
+      case '1m':
+        datos = await this.procesarDatosPorUltimos30Dias(res);
+        break;
+      case '12m':
+        datos = await this.procesarDatosPorUltimoAno(res);
+        break;
+    }
+
+    return datos;
+  }
+  async procesarDatosPorUltimos7Dias(datos: any) {
+    this.xAxisData= [];
+    const hoy = new Date();
+    for (let i = 6; i >= 0; i--) {
+      const fecha = new Date(hoy);
+      fecha.setDate(fecha.getDate() - i);
+      this.xAxisData.push(this.obtenerNombreDiaSemana(fecha));
+    }
+      const valores = new Array(7).fill(0);
+    
+      const diaSemanaActual = new Date().getDay();
+      
+      const dataByDayOfWeek = {};
+      for (const dato of datos.datosContadores) {
+        const fecha = new Date(dato.fecha);
+        const diaSemana = fecha.getDay();
+        dataByDayOfWeek[diaSemana] = dato.totalCount;
+      }
+      for (let i = 0; i < 7; i++) {
+        const diaSemana = (diaSemanaActual - i + 7) % 7; 
+        valores[6 - i] = dataByDayOfWeek[diaSemana] || 0; 
+      }
+    return valores;
+  }
+  
+  async procesarDatosPorUltimos30Dias(datos: any) {
+    let valores = [];
+    let dias = [];
+    this.xAxisData = [];
+  
+    const dataByDay = {};
+  
+    for (const dato of datos.datosContadores) {
+      const fecha = new Date(dato.fecha);
+      const dia = fecha.getDate(); // Obtener el día del mes
+      dataByDay[dia] = dato.totalCount;
+    }
+  
+    // Obtener la fecha de inicio (hace 30 días) y la fecha de fin (hoy)
+    const fechaFin = new Date();
+    const fechaInicio = new Date();
+    fechaInicio.setDate(fechaInicio.getDate() - 29); // Retroceder 29 días
+  
+    // Obtener los valores y los días correspondientes
+    for (let fecha = new Date(fechaInicio); fecha <= fechaFin; fecha.setDate(fecha.getDate() + 1)) {
+      const dia = fecha.getDate();
+      if (dataByDay[dia] !== undefined) {
+        valores.push(dataByDay[dia]); // Insertar al final para mantener el orden cronológico
+        dias.push(dia); // Insertar al final para mantener el orden cronológico
+      } else {
+        valores.push(0); // Si no hay datos, agregar un 0
+        dias.push(dia); // Insertar el día sin datos
+      }
+    }
+  
+    this.xAxisData = dias;
+
+    return valores;
+  }
+  
+  
+  
+  
+  
+  async procesarDatosPorUltimoAno(datos: any) {
+    this.xAxisData= [];
+
+    let valores = [];
+    const fechaInicio1a = new Date();
+      for (let i = 0; i < fechaInicio1a.getMonth() + 1; i++) {
+        const fecha = new Date(fechaInicio1a.getFullYear(), i, 1);
+        this.xAxisData.push(fecha.toLocaleDateString('es-ES', { month: 'long' }));
+      }
+
+    const dataByMonth = {};
+  
+    for (let index = 0; index < datos.datosContadores.length; index++) {
+      const fecha = new Date(datos.datosContadores[index].fecha);
+      const mes = fecha.getMonth() + 1; 
+
+      if (!dataByMonth[mes]) {
+        dataByMonth[mes] = datos.datosContadores[index].totalCount;
+      } else {
+        dataByMonth[mes] += datos.datosContadores[index].totalCount;
+      }
+    }
+
+    const currentMonth = new Date().getMonth() + 1;
+    for (let i = 1; i <= currentMonth; i++) {
+      let contador = new DatosContadores();
+      contador.value = dataByMonth[i] || 0; 
+      valores.push(contador.value);
+      this.totalActivos += parseInt(contador.value);
+    }
+    return valores;
+  }
 }

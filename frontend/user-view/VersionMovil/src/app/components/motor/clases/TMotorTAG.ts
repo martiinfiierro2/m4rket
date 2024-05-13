@@ -5,6 +5,7 @@ import { EModelo } from "./EModelo";
 import { TGestorRecursos } from "./TGestorRecursos";
 import { TRecursoShader } from './TRecrusoShader';
 import * as glMatrix from 'gl-matrix';
+import { RotacionService } from '../../../services/rotacion.service';
 
 interface Viewport{
     x: number, 
@@ -28,7 +29,7 @@ export class TMotorTAG {
     public gestorViewports: Viewport[] = [];
     public camaraActiva!: TNodo;
     public viewportActivo!: number;
-    public lucesActivas: boolean[] = [];
+    public lucesActivas: TNodo[] = [];
 
 
     async registrarCamara(nodoCamara: TNodo) {
@@ -37,6 +38,18 @@ export class TMotorTAG {
 
     async setCamara(nCamara: TNodo){
         this.camaraActiva = nCamara;
+    }
+
+    async registrarLuz(nodoLuz: TNodo){
+        this.gestorLuces.push(nodoLuz);
+    }
+
+    async setLuz(nLuz: TNodo){
+        this.lucesActivas.push(nLuz)
+    }
+
+    async removeLuz(nodoLuz: TNodo){
+        this.lucesActivas = this.lucesActivas.filter(TNodo => TNodo != nodoLuz);
     }
 
     async resgistrarViewport(x: number, y: number, alto: number, ancho: number){
@@ -75,7 +88,6 @@ export class TMotorTAG {
 
         // Especificar qué caras cullar (en este caso, cullar las caras traseras)
         this.gl.cullFace(this.gl.BACK);
-
     }
 
     async iniciarPrograma(){
@@ -200,7 +212,7 @@ export class TMotorTAG {
         return nodoCreado;
     }
 
-    crearLuz( padre: TNodo|null, trasl: glMatrix.vec3, rot: glMatrix.vec3, esc: glMatrix.vec3, intensidad: number, tipoLuz: string): TNodo{
+    crearLuz( padre: TNodo|null, trasl: glMatrix.vec3, rot: glMatrix.vec3, esc: glMatrix.vec3, intensidad: glMatrix.vec3, tipoLuz: string, posicionLuz: glMatrix.vec4): TNodo{
 
         let nodoCreado: any, entidadLuz: any;
 
@@ -210,7 +222,7 @@ export class TMotorTAG {
         }
         padre.agregarHijo(nodoCreado);
 
-        entidadLuz = new ELuz(); //falta añadir los atributos pasados por param.
+        entidadLuz = new ELuz(intensidad, tipoLuz, posicionLuz); //falta añadir los atributos pasados por param.
         nodoCreado.setEntidad(entidadLuz);
         nodoCreado.setTraslacion(trasl);
         nodoCreado.setRotacion(rot);
@@ -219,9 +231,9 @@ export class TMotorTAG {
         return nodoCreado;
     }
 
-    async crearModelo( padre: TNodo|null, trasl: glMatrix.vec3, rot: glMatrix.vec3, esc: glMatrix.vec3, nombreFichero: string | undefined, tipo: string, textura: any){
+    async crearModelo( padre: TNodo|null, trasl: glMatrix.vec3, rot: glMatrix.vec3, esc: glMatrix.vec3, nombreFichero: string | undefined, tipo: string, textura: any, dibujar: boolean){
         let nodoCreado: any, recursoMalla: any, recursoTextura: any, entidadModelo: any;
-
+        
         nodoCreado = new TNodo();
         if (padre == null) {
             padre = this.raiz;
@@ -229,9 +241,14 @@ export class TMotorTAG {
         await padre.agregarHijo(nodoCreado);
         if(nombreFichero != undefined){
             recursoMalla = await this.gestorRecursos.getRecurso(nombreFichero, tipo);
-            recursoTextura = await this.gestorRecursos.getRecurso(textura, "textura")
+            if(nombreFichero != 'pin.obj'){
+                recursoTextura = await this.gestorRecursos.getRecurso(textura, "textura")
+            }else{
+                recursoTextura = await this.gestorRecursos.getRecursoAPI(textura, "textura")
+            }
         }
         entidadModelo = new EModelo(recursoMalla, recursoTextura);
+        await nodoCreado.setDibujar(dibujar);
         await nodoCreado.setEntidad(entidadModelo);
         await nodoCreado.setTraslacion(trasl);
         await nodoCreado.setRotacion(rot);

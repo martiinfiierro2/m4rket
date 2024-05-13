@@ -37,14 +37,8 @@
 </div>
 <div class="drawer" #drawer>
     
-  <div class="botonchatbot" #botonchatbot><!--(click)="abrirChatbot()"-->
-      <!--<ion-icon name="chatbubbles-outline"></ion-icon>-->
-    <df-messenger
-    intent="WELCOME"
-    chat-title="Fermín"
-    agent-id="182b31cf-14c9-4c0b-9cd2-f35c4e65e132"
-    language-code="es"
-  ></df-messenger>  
+  
+  <div #botonchatbot>
   </div>
   <script>
     const dfMessenger = document.querySelector('df-messenger').shadowRoot.querySelector('.df-messenger-wrapper').querySelector('#widgetIcon').style.bottom = "5vh";
@@ -68,15 +62,14 @@
         <div>
           <div *ngFor="let producto of productos" class="producto-container" (click)="buscado(producto)">
             <div class="navegador-producto" (click)="getProducto(producto.id)">
-              <img [src]="urlFotoProducto + producto.foto + '?token=' +tokenUsuario" alt="Product Image" />
-              <div class="product-text">
+                <img [src]="urlFotoProducto + producto.foto + '?token=' +tokenUsuario" alt="Product Image" />
+               <div class="product-text">
                 <h3>{{producto.nombre}}</h3>
                 <p> {{ producto.precio }}€</p>
               </div>
             </div>
           
             <div class="product-buttons">
-              <button class="localizar">Localizar</button>
               <button *ngIf="!producto.enListaCompra" (click)="anadirProducto(producto); buscado(producto)"class="add" >Añadir  
                 <ion-icon class="add-button" name="add-circle-outline"></ion-icon>
               </button>

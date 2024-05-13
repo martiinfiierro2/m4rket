@@ -9,14 +9,14 @@ import { GestureController, Platform } from '@ionic/angular';
 import { ProductosService } from 'src/app/services/productos.service';
 import { EstadisticasService } from 'src/app/services/estadisticas.service';
 import { ModeloService } from 'src/app/services/modelo.service';
+import { MotorComponent } from '../motor/motor.component';
 
 import { trigger, transition, style, animate } from '@angular/animations';
 import { environment } from '../../environments/environment';
 import * as echarts from 'echarts';
 import { HomePage } from 'src/app/home/home.page';
-import { forkJoin } from 'rxjs';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-
+import { Malla } from '../motor/clases/Malla';
+import { RotacionService } from 'src/app/services/rotacion.service';
 
 interface Stats {
   nombre: string;
@@ -74,6 +74,7 @@ export interface ListaCompra {
   ],
 })
 export class DrawerComponent implements AfterViewInit {
+  @ViewChild(MotorComponent) motorComponent!: MotorComponent;
   @ViewChild('drawer', { read: ElementRef }) drawer!: ElementRef;
   // @Output('openStateChanged') openState: EventEmitter<boolean> = new EventEmitter();
   @ViewChild('botonchatbot', { read: ElementRef }) botonchatbot!: ElementRef;
@@ -84,6 +85,7 @@ export class DrawerComponent implements AfterViewInit {
   isOpen = true;
   openHeight = 0;
   isMiddle = true;
+
 
   //PRODUCTO SELECCIONADO
   productoSelect: any;
@@ -101,15 +103,50 @@ export class DrawerComponent implements AfterViewInit {
     sessionStorage.getItem('tokenUsuario') ||
     localStorage.getItem('tokenUsuario');
   urlFotoProducto = environment.base_url + '/uploads/fotoproducto/';
-
+  @ViewChild(Malla) malla!: Malla;
   constructor(
     private plt: Platform,
     private gestureCtrl: GestureController,
     private productosService: ProductosService,
-    private estadisticasService: EstadisticasService
-  ) {}
+    private estadisticasService: EstadisticasService,
+    private rotacionService: RotacionService
+  ) {
+  
+  }
+
+  borrarProductosCompradosEnServidor() {
+    const productosComprados = this.listaCompra.filter(producto => producto.comprado);
+    productosComprados.forEach(producto => {
+      this.productosService.deleteListaCompra(producto.id).subscribe(() => {
+      });
+    });
+  
+    this.listaCompra = this.listaCompra.filter(producto => !producto.comprado);
+    this.Recarguita();
+    this.getListaCompraUsu();
+    console.log('Productos comprados eliminados del servidor y local:', this.listaCompra);
+  }
+
+  borrarTodaLaLista() {
+    this.productosService.getListaCompra(this.idUsu).subscribe((result) => {
+      if (result.listacompra) {
+        const listasCompra = result.listacompra;
+        const deletePromises = listasCompra.map((listaCompra: any) => {
+          return this.productosService.deleteListaCompra(listaCompra.id).toPromise();
+        });
+  
+        Promise.all(deletePromises).then(() => {
+          console.log('Todas las listas de compra han sido eliminadas exitosamente.');
+          this.getListaCompraUsu();
+        }).catch((error) => {
+          console.error('Error al intentar borrar todas las listas de compra:', error);
+        });
+      }
+    });
+  }
 
   async ngAfterViewInit() {
+    console.log(this.motorComponent); 
     const drawer = this.drawer.nativeElement;
     this.openHeight = this.plt.height() / 100;
     const botonchatbot = this.botonchatbot.nativeElement;
@@ -136,19 +173,16 @@ export class DrawerComponent implements AfterViewInit {
             this.isOpen = true;
             botonchatbot.style.display = 'none';
             profile.style.display = 'none';
-            console.log('Vamos arriba');
           } else if (ev.deltaY > 50) {
             drawer.style.transition = '.4s ease-out';
             drawer.style.transform = `translateY(${this.openHeight * 84}px)`; // Ir a la posición inferior
             this.isMiddle = false;
             this.isOpen = false;
             botonchatbot.style.display = 'flex';
-            console.log('Vamos abajo');
           } else {
             drawer.style.transition = '.4s ease-out';
             drawer.style.transform = `translateY(${this.openHeight * 60}px)`;
             botonchatbot.style.display = 'flex';
-            console.log('Vamos medio');
           }
         } else if (this.isOpen) {
           if (ev.deltaY > 50) {
@@ -157,7 +191,6 @@ export class DrawerComponent implements AfterViewInit {
             this.isOpen = false;
             this.isMiddle = true;
             botonchatbot.style.display = 'flex';
-            console.log('Vamos medio');
           }
         } else {
           if (ev.deltaY < -50) {
@@ -166,7 +199,6 @@ export class DrawerComponent implements AfterViewInit {
             this.isOpen = true;
             this.isMiddle = true;
             botonchatbot.style.display = 'flex';
-            console.log('Vamos medio');
           }
         }
       },
@@ -217,21 +249,18 @@ export class DrawerComponent implements AfterViewInit {
       this.isMiddle = false;
       this.isOpen = true;
       botonchatbot.style.display = 'none';
-      console.log('Vamos arriba');
     } else if (this.isOpen && !this.isMiddle) {
       drawer.style.transition = '.4s ease-out';
       drawer.style.transform = `translateY(${this.openHeight * 84}px)`;
       this.isMiddle = false;
       this.isOpen = false;
       botonchatbot.style.display = 'flex';
-      console.log('Vamos abajo');
     } else if (!this.isOpen) {
       drawer.style.transition = '.4s ease-out';
       drawer.style.transform = `translateY(${this.openHeight * 60}px)`;
       this.isMiddle = true;
       this.isOpen = true;
       botonchatbot.style.display = 'flex';
-      console.log('Vamos medio');
     }
   }
 
@@ -366,7 +395,6 @@ export class DrawerComponent implements AfterViewInit {
 
   incrementar(productoDetalle: any) {
     productoDetalle.cantidad++;
-    console.log('Nueva cantidad = ' + productoDetalle.cantidad);
     this.actualizarCantidad(
       productoDetalle.id,
       productoDetalle.cantidad,
@@ -387,14 +415,12 @@ export class DrawerComponent implements AfterViewInit {
       fecha: fecha,
       idUsuario: this.idUsu,
     };
-    console.log(post);
     this.estadisticasService.postContador(post);
   }
 
   decrementar(productoDetalle: any) {
     if (productoDetalle.cantidad > 1) {
       productoDetalle.cantidad--;
-      console.log('Nueva cantidad = ' + productoDetalle.cantidad);
       this.actualizarCantidad(
         productoDetalle.id,
         productoDetalle.cantidad,
@@ -404,9 +430,7 @@ export class DrawerComponent implements AfterViewInit {
     } else if (productoDetalle.cantidad <= 1) {
       this.eliminar(productoDetalle);
     } else {
-      console.log('Solo queda una');
       productoDetalle.cantidad--;
-      console.log('Nueva cantidad = ' + productoDetalle.cantidad);
       this.actualizarCantidad(
         productoDetalle.id,
         productoDetalle.cantidad,
@@ -422,7 +446,6 @@ export class DrawerComponent implements AfterViewInit {
   eliminar(producto: any) {
     producto.enListaCompra = false;
     this.borrarProd(producto.idLista);
-    console.log('Producto eliminado de la lista');
     //this.EliminarProductoSelect();
     this.getProducto(producto.id);
     this.getListaCompraUsu();
@@ -435,6 +458,7 @@ export class DrawerComponent implements AfterViewInit {
   }
 
   anadirProducto(producto: any) {
+    //this.motorComponent.crearEscena();
     const fechaActual = new Date().toISOString().split('T')[0];
     const body = {
       idUsu: this.idUsu,
@@ -444,7 +468,6 @@ export class DrawerComponent implements AfterViewInit {
       comprado: false,
     };
     this.productosService.postListaCompra(body).subscribe((result) => {
-      console.log(result);
       producto.enListaCompra = true;
       producto.cantidad = 1;
       this.getListaCompraUsu();
@@ -462,7 +485,6 @@ export class DrawerComponent implements AfterViewInit {
     const query = event.toLowerCase();
     this.productosService.getBusquedaProducto(query).subscribe((res) => {
       this.productos = res.productos;
-      console.log(this.productos);
 
       this.compararListaBusqueda();
     });
@@ -489,13 +511,6 @@ export class DrawerComponent implements AfterViewInit {
         if (a)
           a.innerHTML =
         '<p>' + this.totalComprados + '/' + this.totalProductos + '<i style="margin-left: 10px; font-size: 16px;" class="fa-solid fa-cart-shopping"></i></p>';
-
-        console.log('La lista del usuario es', this.listaCompra);
-        console.log('Total de productos en la lista:', this.totalProductos);
-        console.log(
-          'Total de productos marcados como comprados:',
-          this.totalComprados
-        );
       }
     });
   }
@@ -540,11 +555,8 @@ export class DrawerComponent implements AfterViewInit {
       comprado: comprado,
     };
 
-    console.log('Cuerpo de la solicitud:', body);
-
     this.productosService.putListaCompra(idLista, body).subscribe(
       (res) => {
-        console.log('Respuesta correcta:', res);
         this.RecargarValoresLista();
         this.getListaCompraUsu(); // Llamar a getListaCompraUsu() después de la actualización
       },
@@ -552,6 +564,10 @@ export class DrawerComponent implements AfterViewInit {
         console.error('Error en la solicitud PUT:', error);
       }
     );
+  }
+
+  sendRotacion(event: any) {
+    this.rotacionService.setRotacion(event.target.value);
   }
 
   //MARCAR COMO COMPRADO
@@ -566,6 +582,7 @@ export class DrawerComponent implements AfterViewInit {
     let tipo = "comprado";
     let fecha = new Date()
     this.estadistica(producto.id, tipo, fecha );
+    //this.motorComponent.cargarNodosPines();
   }
 
   eliminarComprado(producto: any) {

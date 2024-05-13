@@ -1,79 +1,77 @@
 import { mat4, mat3, vec3 } from 'gl-matrix';
 import * as OBJ from 'webgl-obj-loader';
 import { motor } from '../motor.component';
-
-import * as Hammer from 'hammerjs';
-
+import { glMatrix } from 'gl-matrix';
 export class Malla {
-  private rotationAngleX: number = 0;
-  private rotationAngleY: number = 0;
-  private lastTouchX: number = 0;
-  private lastTouchY: number = 0;
-  private isRightTouchDown: boolean = false;
-  private rotationSpeed!: number;
+    private rotation: number = 0;
+    private lastTouchX: number = 0;
+    private lastTouchY: number = 0;
+    private isRightTouchDown: boolean = false;
 
   private translationX: number = 0;
   private translationY: number = 0;
   private translationSpeed!: number;
 
-  private zoomFactor: number = 0;
-  private lastPinchDistance: number = 0;
-  private isPinching: boolean = false;
+    private zoomFactor: number = 1;
+    private zoomSpeed!: number;
+    private distancia: number = 0;
+    private lastPinchDistance: number = 0;
+    private isPinching: boolean = false;
 
-  private matTrans!: any;
-  private gl!: WebGL2RenderingContext;
-  private program!: WebGLProgram;
-  private OBJfile: string;
-  private texture: WebGLTexture | null = null;
-  private projectionMatrix!: mat4;
-  private viewMatrix!: mat4;
+    private matTrans!: any;
+    private gl!: WebGL2RenderingContext;
+    private program!: WebGLProgram;
+    private OBJfile: string;
+    private nombre: string;
+    private texture: WebGLTexture | null = null;
+    private projectionMatrix!: mat4;
+    private viewMatrix!: mat4;
 
-  constructor(malla: string) {
-    this.OBJfile = malla;
-  }
+    constructor(malla: string, filename: string) {
+        this.OBJfile = malla;
+        this.nombre = filename;
+    }
 
-  async getProgramInfo(gl: any, program: any) {
-    const programInfo = {
-      program: program,
-      attribLocations: {
-        vertexPosition: gl.getAttribLocation(program, 'aVertexPosition'),
-        textureCoord: gl.getAttribLocation(program, 'aTextureCoord'),
-        normalCoord: gl.getAttribLocation(program, 'aVertexNormal'),
-      },
-      uniformLocations: {
-        projectionMatrix: gl.getUniformLocation(program, 'uProjectionMatrix'),
-        viewMatrix: gl.getUniformLocation(program, 'uViewMatrix'),
-        modelMatrix: gl.getUniformLocation(program, 'uModelMatrix'),
-        uSampler: gl.getUniformLocation(program, 'uSampler'),
-        normalMatrix: gl.getUniformLocation(program, 'uNormalMatrix'),
-      },
-    };
-    return programInfo;
-  }
+    async getProgramInfo(gl: any, program: any){
+        const programInfo = {
+            program: program,
+            attribLocations: {
+                vertexPosition: gl.getAttribLocation(program, "aVertexPosition"),
+                textureCoord: gl.getAttribLocation(program, "aTextureCoord"),
+                normalCoord: gl.getAttribLocation(program, "aVertexNormal")
+            },
+            uniformLocations: {
+                projectionMatrix: gl.getUniformLocation(program,"uProjectionMatrix"),
+                viewMatrix: gl.getUniformLocation(program, "uViewMatrix"),
+                modelMatrix: gl.getUniformLocation(program, "uModelMatrix"),
+                uSampler: gl.getUniformLocation(program, "uSampler"),
+                normalMatrix: gl.getUniformLocation(program, "uNormalMatrix"),
+                modelViewMatrix: gl.getUniformLocation(program, "uModelViewMatrix")
+            }
+        };
+        return programInfo;
+    }
 
-  async dibujar(textura: any, matTrans: any) {
-    this.matTrans = matTrans;
-    this.gl = motor.gl;
-    this.program = motor.program;
-    const InfoPrograma = await this.getProgramInfo(this.gl, this.program);
+    setRotacion(valor: number){
+        console.log(valor);
+    }
 
-    let mesh = OBJ.initMeshBuffers(
-      this.gl as WebGL2RenderingContext,
-      new OBJ.Mesh(this.OBJfile)
-    );
 
-    // Cargar textura
-    this.texture = await this.loadTexture(textura);
+    async dibujar(textura: any, matTrans: any) {
 
-    //EVENTOS
-    const canvas = this.gl!.canvas as HTMLCanvasElement;
+        this.matTrans = matTrans;
+        this.gl = motor.gl;
+        this.program = motor.program;
+        const InfoPrograma = await this.getProgramInfo(this.gl, this.program);
+    
+        let mesh = OBJ.initMeshBuffers(this.gl as WebGL2RenderingContext, new OBJ.Mesh(this.OBJfile));
 
-    // Función para manejar el evento de arrastre con clic derecho
-    const handleRightDragMobile = (event: TouchEvent) => {
-      if (event.touches.length === 2) {
-        handlePinch(event);
-      }
-      event.preventDefault();
+        // Cargar textura
+        this.texture = await this.loadTexture(textura);
+
+        // Función para manejar el evento de arrastre con clic derecho
+        const handleRightDragMobile = (event: TouchEvent) => {
+            event.preventDefault();
 
       const touch = event.touches[0];
       const touchX = touch.clientX;
@@ -98,281 +96,198 @@ export class Malla {
       this.lastTouchY = touchY;
     };
 
-    const handlePinch = (event: TouchEvent) => {
-      event.preventDefault();
+        const handlePinch = (event: TouchEvent) => {
+            event.preventDefault();
+    
+            const touch1 = event.touches[0];
+            const touch2 = event.touches[1];
+        
+            // Calcula la distancia entre los dos puntos de contacto
+            const deltaX = touch1.clientX - touch2.clientX;
+            const deltaY = touch1.clientY - touch2.clientY;
+            const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        
+            // Calcula la diferencia de distancia desde el último pellizco
+            const deltaDistance = distance - this.lastPinchDistance;
 
-      const touch1 = event.touches[0];
-      const touch2 = event.touches[1];
+            // Ajusta el factor de zoom en función de la diferencia de distancia
+            this.zoomSpeed = 0.05; // Velocidad de zoom
+            this.zoomFactor *= 1 + deltaDistance * this.zoomSpeed;
 
-      // Calcula la distancia entre los dos puntos de contacto
-      const deltaX = touch1.clientX - touch2.clientX;
-      const deltaY = touch1.clientY - touch2.clientY;
-      const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-
-      if (this.isPinching) {
-        // Calcula la diferencia de distancia desde el último pellizco
-        const deltaDistance = distance - this.lastPinchDistance;
-
-        // Ajusta el campo de visión de la matriz de proyección en función del pellizco
-        const zoomSpeed = 0.1; // Velocidad de zoom
-        this.zoomFactor = 1 + deltaDistance * zoomSpeed;
-        // Actualiza la última distancia de pellizco
-        this.lastPinchDistance = distance;
-      }
-    };
-
-    // Método para manejar el evento de inicio de pellizco (pinch)
-    const handlePinchStart = (event: TouchEvent) => {
-      event.preventDefault();
-
-      const touch1 = event.touches[0];
-      const touch2 = event.touches[1];
-
-      // Calcula la distancia entre los dos puntos de contacto
-      const deltaX = touch1.clientX - touch2.clientX;
-      const deltaY = touch1.clientY - touch2.clientY;
-      this.lastPinchDistance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-
-      this.isPinching = true;
-    };
-
-    // Método para manejar el evento de final de pellizco (pinch)
-    const handlePinchEnd = (event: TouchEvent) => {
-      event.preventDefault();
-
-      this.isPinching = false;
-    };
-
-    // Agregar el evento de clic derecho al canvas
-    // Agrega un evento touchstart para detectar cuando se toca la pantalla
-    canvas.addEventListener('touchstart', (event) => {
-      const touch = event.touches[0];
-      this.lastTouchX = touch.clientX;
-      this.lastTouchY = touch.clientY;
-
-      if (event.touches.length === 2) {
-        handlePinchStart(event);
-      } else {
-        this.isRightTouchDown = true;
-      }
-    });
-
-    canvas.addEventListener('touchmove', (event) => {
-      if (event.touches.length === 2) {
-        handlePinch(event);
-      } else {
-        handleRightDragMobile(event);
-      }
-      console.log('se mueve');
-    });
-
-    canvas.addEventListener('touchend', (event) => {
-      if (event.touches.length === 0) {
-        this.isRightTouchDown = false;
-        handlePinchEnd(event);
-      }
-    });
-
-    canvas.addEventListener('wheel', (event) => {
-      console.log("Hola")
-      if (event.type === 'wheel') {
-          handleMouseWheel(event as WheelEvent);
-      }
-  });
-
-    //ZOOM
-    /*
-        const hammer = new Hammer(canvas);
-
-        hammer.on('pinch', (event) => {
-            const zoomFactor = event.scale;
-            
-            const scaleMatrix = mat4.create();
-            mat4.scale(scaleMatrix, scaleMatrix, [zoomFactor, zoomFactor, zoomFactor]);
-            mat4.multiply(this.projectionMatrix, this.projectionMatrix, scaleMatrix);
-        });
-        */
-
-    // Obtener el canvas y su contexto
-    const ctx = canvas.getContext('2d');
-
-    // Variables para almacenar el estado del zoom
-    let lastDistance = 0;
-    let currentZoom = 1;
-
-    // Registrar eventos táctiles
-    canvas.addEventListener('touchstart', handleTouchStart);
-    canvas.addEventListener('touchmove', handleTouchMove);
-
-    function handleTouchStart(event: TouchEvent) {
-      if (event.touches.length >= 2) {
-        lastDistance = getDistance(event.touches[0], event.touches[1]);
-      }
-    }
-
-    function handleTouchMove(event: TouchEvent) {
-      event.preventDefault();
-
-      if (event.touches.length >= 2) {
-        const distance = getDistance(event.touches[0], event.touches[1]);
-        const delta = distance - lastDistance;
-
-        // Calcular el factor de zoom
-        const zoomFactor = 1 + delta * 0.01;
-
-        // Aplicar el zoom al contexto del canvas
-        if (ctx != null) {
-          ctx.translate(canvas.width / 2, canvas.height / 2);
-          ctx.scale(zoomFactor, zoomFactor);
-          ctx.translate(-canvas.width / 2, -canvas.height / 2);
+            // Actualiza la última distancia de pellizco
+            this.lastPinchDistance = distance;
         }
-        // Actualizar el último valor de distancia
-        lastDistance = distance;
-      }
+    
+        // Método para manejar el evento de final de pellizco (pinch)
+        const handlePinchEnd = (event: TouchEvent) => {
+            event.preventDefault();
+    
+            this.isPinching = false;
+        };
+
+        const handleMouseWheel = (event: WheelEvent) => {
+            const delta = event.deltaY;
+            if(delta > 0){
+                this.zoomFactor += 0.01;
+            }
+            else if (delta < 0){
+                this.zoomFactor += -0.01;
+            }
+        };
+            
+        // Agregar el evento de clic derecho al canvas
+        // Agrega un evento touchstart para detectar cuando se toca la pantalla
+        const canvas = this.gl!.canvas as HTMLCanvasElement;
+        canvas.addEventListener('wheel', (event) => {
+            // Verificar si el evento es una rueda del ratón y no un toque
+            if (event.type === 'wheel') {
+                handleMouseWheel(event as WheelEvent);
+            }
+        });
+
+        canvas.addEventListener('touchstart', (event) => {
+            const touch = event.touches[0];
+            this.lastTouchX = touch.clientX;
+            this.lastTouchY = touch.clientY;
+    
+            if (event.touches.length === 2) {
+                this.isPinching = true;
+            } else {
+                this.isRightTouchDown = true;
+            }
+        });
+    
+        canvas.addEventListener('touchmove', (event) => {
+            //const pinchInterval = setInterval(() => {
+                if (event.touches.length === 2) {
+                    handlePinch(event);
+                } else {
+                    handleRightDragMobile(event);
+                }
+            //}, 100);
+        });
+    
+        canvas.addEventListener('touchend', (event) => {
+            if (event.touches.length === 0) {
+                this.isRightTouchDown = false;
+                handlePinchEnd(event);
+            }
+        });
+        const draw = () => {
+            // Llamada recursiva para renderizar de forma continua
+            this.dibujarBucle(InfoPrograma, mesh);
+            requestAnimationFrame(draw);
+        };
+        draw();
     }
 
-    function getDistance(touch1: Touch, touch2: Touch) {
-      const dx = touch1.clientX - touch2.clientX;
-      const dy = touch1.clientY - touch2.clientY;
-      return Math.sqrt(dx * dx + dy * dy);
-    }
 
-    //raton
+    dibujarBucle(InfoPrograma: any, mesh: any) {
+        // Habilitar el culling
+        //gthis.gl.enable(this.gl.CULL_FACE);
 
-    const handleMouseWheel = (event: WheelEvent) => { 
-      console.log("Mouse wheel event detected.");
-      // Obtener el desplazamiento de la rueda en píxeles
-      const delta = Math.sign((<WheelEvent>event).deltaY);
-      console.log("Delta: ", delta);
-      // Calcular el factor de zoom
-      const zoomFactor = 1 + (delta > 0 ? 0.1 : -0.1); // Cambiar 0.1 o -0.1 según la dirección de la rueda
-      //this.zoomFactor = 1 + (delta > 0 ? 0.1 : -0.1); // Cambiar 0.1 o -0.1 según la dirección de la rueda
-      console.log("Zoom factor: ", zoomFactor);
+        // Especificar qué caras cullar (en este caso, cullar las caras traseras)
+        //this.gl.cullFace(this.gl.BACK);
+        
+        //Coger la camara para obtener valores de lejano y cercano para la cámara
+        // Establecer las dimensiones del viewport
 
-      event.preventDefault();
-  };
-    const draw = () => {
-      // Llamada recursiva para renderizar de forma continua
-      this.dibujarBucle(InfoPrograma, mesh);
-      requestAnimationFrame(draw);
-    };
-    draw();
-  }
+        const valorRotacion = document.querySelector<HTMLInputElement>('#rotacion');
+        if(valorRotacion){
+            this.rotation = parseInt(valorRotacion.value);
+        }
 
-  dibujarBucle(InfoPrograma: any, mesh: any) {
-    this.projectionMatrix = mat4.create();
+        this.gl!.viewport(0, 0, this.gl!.canvas.width/2, this.gl!.canvas.height/2)
+        const camara = motor.camaraActiva.getEntidad();
 
-    mat4.perspective(
-      this.projectionMatrix,
-      (45 * Math.PI) / 180,
-      this.gl!.canvas.width / this.gl!.canvas.height,
-      0.1,
-      100
-    );
+        this.projectionMatrix = mat4.create();
+        
+        mat4.perspective(
+            this.projectionMatrix,
+            (45 * Math.PI) / 180,
+            this.gl!.canvas.width / this.gl!.canvas.height,
+            camara.cercano,
+            camara.lejano
+        );
 
-    // Enlazar el buffer de vértices
-    this.gl!.enableVertexAttribArray(
-      InfoPrograma.attribLocations.vertexPosition
-    );
-    this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, mesh.vertexBuffer);
-    //this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(mesh.vertices), this.gl!.STATIC_DRAW);
-    this.gl!.vertexAttribPointer(
-      InfoPrograma.attribLocations.vertexPosition,
-      mesh.vertexBuffer.itemSize,
-      this.gl!.FLOAT,
-      false,
-      0,
-      0
-    );
+        // Enlazar el buffer de vértices
+        this.gl!.enableVertexAttribArray(InfoPrograma.attribLocations.vertexPosition);
+        this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, mesh.vertexBuffer);
+        //this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(mesh.vertices), this.gl!.STATIC_DRAW);
+        this.gl!.vertexAttribPointer(InfoPrograma.attribLocations.vertexPosition, mesh.vertexBuffer.itemSize, this.gl!.FLOAT, false, 0, 0);
+    
+        // Enlazar el buffer de texturas
+        this.gl!.enableVertexAttribArray(InfoPrograma.attribLocations.textureCoord);
+        this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, mesh.textureBuffer);
+        //this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(mesh.textures), this.gl!.STATIC_DRAW);
+        this.gl!.vertexAttribPointer(InfoPrograma.attribLocations.textureCoord, mesh.textureBuffer.itemSize, this.gl!.FLOAT, false, 0, 0);
+        
+        // Enlazar el buffer de normales
+        this.gl!.enableVertexAttribArray(InfoPrograma.attribLocations.normalCoord);
+        this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, mesh.normalBuffer);
+        //this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(mesh.vertexNormals), this.gl!.STATIC_DRAW);
+        this.gl!.vertexAttribPointer(InfoPrograma.attribLocations.normalCoord, mesh.normalBuffer.itemSize, this.gl!.FLOAT, false, 0, 0);
+    
+        // Enlazar el buffer de índices
+        this.gl!.bindBuffer(this.gl!.ELEMENT_ARRAY_BUFFER, mesh.indexBuffer);
+    
+        // Crear una nueva matriz de transformación para este objeto
+        const modelMatrix = mat4.create();
 
-    // Enlazar el buffer de texturas
-    this.gl!.enableVertexAttribArray(InfoPrograma.attribLocations.textureCoord);
-    this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, mesh.textureBuffer);
-    //this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(mesh.textures), this.gl!.STATIC_DRAW);
-    this.gl!.vertexAttribPointer(
-      InfoPrograma.attribLocations.textureCoord,
-      mesh.textureBuffer.itemSize,
-      this.gl!.FLOAT,
-      false,
-      0,
-      0
-    );
+        // Aplicar la matriz de transformación proporcionada
+        mat4.copy(modelMatrix, this.matTrans);
+    
+        let MatrizCamara = motor.camaraActiva.getMatrizTransf();
+    
+        // Extraer la posición de la cámara (los primeros tres elementos de la cuarta columna)
+        let cameraPosition = vec3.fromValues(
+            MatrizCamara[12],
+            MatrizCamara[13],
+            MatrizCamara[14]
+        );
+    
+        // Extraer el "target" (los primeros tres elementos de la primera fila)
+        let target = vec3.fromValues(
+            MatrizCamara[12] + MatrizCamara[8],
+            MatrizCamara[13] + MatrizCamara[9],
+            MatrizCamara[14] + MatrizCamara[10]
+        );
+    
+        // Extraer el vector "up" (los siguientes tres elementos de la primera fila)
+        let up = vec3.fromValues(
+            MatrizCamara[4],
+            MatrizCamara[5],
+            MatrizCamara[6]
+        );
+    
+        this.viewMatrix = mat4.create();
+    
+        mat4.lookAt(this.viewMatrix, cameraPosition, target, up);
+    
+        // Aplica el desplazamiento a la matriz de vista
+        mat4.translate(this.viewMatrix, this.viewMatrix, [-this.translationX, -this.translationY, 0]);
 
-    // Enlazar el buffer de normales
-    this.gl!.enableVertexAttribArray(InfoPrograma.attribLocations.normalCoord);
-    this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, mesh.normalBuffer);
-    //this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(mesh.vertexNormals), this.gl!.STATIC_DRAW);
-    this.gl!.vertexAttribPointer(
-      InfoPrograma.attribLocations.normalCoord,
-      mesh.normalBuffer.itemSize,
-      this.gl!.FLOAT,
-      false,
-      0,
-      0
-    );
+        // Aplicar la rotación en torno al eje Y
+        mat4.rotate(this.viewMatrix, this.viewMatrix, this.rotation*(Math.PI / 180), [0, 1, 0]);
 
-    // Enlazar el buffer de índices
-    this.gl!.bindBuffer(this.gl!.ELEMENT_ARRAY_BUFFER, mesh.indexBuffer);
+        // Aplica el zoom a la matriz de proyección
+        mat4.scale(this.projectionMatrix, this.projectionMatrix, [1, 1, this.zoomFactor]);  
+        
+        const modelViewMatrix = mat4.create();
+        mat4.multiply(modelViewMatrix, this.viewMatrix, modelMatrix);
 
-    // Usar el programa de shaders
-    this.gl!.useProgram(InfoPrograma.program);
-    this.gl!.uniformMatrix4fv(
-      InfoPrograma.uniformLocations.projectionMatrix,
-      false,
-      this.projectionMatrix
-    );
-
-    // Crear una nueva matriz de transformación para este objeto
-    const modelMatrix = mat4.create();
-
-    // Aplicar la matriz de transformación proporcionada
-    mat4.copy(modelMatrix, this.matTrans);
-
-    let MatrizCamara = motor.camaraActiva.getMatrizTransf();
-
-    // Extraer la posición de la cámara (los primeros tres elementos de la cuarta columna)
-    let cameraPosition = vec3.fromValues(
-      MatrizCamara[12],
-      MatrizCamara[13],
-      MatrizCamara[14]
-    );
-
-    // Extraer el "target" (los primeros tres elementos de la primera fila)
-    let target = vec3.fromValues(
-      MatrizCamara[12] + MatrizCamara[8],
-      MatrizCamara[13] + MatrizCamara[9],
-      MatrizCamara[14] + MatrizCamara[10]
-    );
-
-    // Extraer el vector "up" (los siguientes tres elementos de la primera fila)
-    let up = vec3.fromValues(MatrizCamara[4], MatrizCamara[5], MatrizCamara[6]);
-
-    this.viewMatrix = mat4.create();
-
-    mat4.lookAt(this.viewMatrix, cameraPosition, target, up);
-
-    // Aplica el desplazamiento a la matriz de vista
-    mat4.translate(this.viewMatrix, this.viewMatrix, [
-      -this.translationX,
-      -this.translationY,
-      -this.zoomFactor,
-    ]);
-    if (this.zoomFactor != 0) {
-      // Aplica el zoom a la matriz de proyección
-      mat4.scale(this.projectionMatrix, this.projectionMatrix, [
-        this.zoomFactor,
-        this.zoomFactor,
-        this.zoomFactor,
-      ]);
-    }
-
-    const modelViewMatrix = mat4.create();
-    mat4.multiply(modelViewMatrix, this.viewMatrix, modelMatrix);
-
-    //Crear matriz normales
-    const normalMatrix = mat4.create();
-    mat4.invert(normalMatrix, modelViewMatrix);
-    mat4.transpose(normalMatrix, normalMatrix);
+        //Crear matriz normales
+        const normalMatrix = mat4.create();
+        mat4.invert(normalMatrix, modelViewMatrix);
+        mat4.transpose(normalMatrix, normalMatrix);
+   
+        // Usar el programa de shaders
+        this.gl!.useProgram(InfoPrograma.program);
+        this.gl!.uniformMatrix4fv(
+            InfoPrograma.uniformLocations.projectionMatrix,
+            false,
+            this.projectionMatrix
+        );
 
     this.gl!.uniformMatrix4fv(
       InfoPrograma.uniformLocations.viewMatrix,
@@ -386,28 +301,35 @@ export class Malla {
       modelMatrix
     );
 
-    this.gl!.uniformMatrix4fv(
-      InfoPrograma.uniformLocations.normalMatrix,
-      false,
-      normalMatrix
-    );
+        this.gl!.uniformMatrix4fv(
+            InfoPrograma.uniformLocations.normalMatrix,
+            false,
+            normalMatrix
+        );
 
-    // Tell the shader we bound the texture to texture unit 0
-    this.gl!.uniform1i(InfoPrograma.uniformLocations.uSampler, 0);
-    this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
+        this.gl!.uniformMatrix4fv(
+            InfoPrograma.uniformLocations.modelViewMatrix,
+            false,
+            modelViewMatrix
+        );
 
-    // Bind de la textura
-    this.gl!.activeTexture(this.gl!.TEXTURE0);
-    this.gl!.bindTexture(this.gl!.TEXTURE_2D, this.texture);
-
-    // Dibujar los elementos
-    this.gl!.drawElements(
-      this.gl!.TRIANGLES,
-      mesh.indexBuffer.numItems,
-      this.gl!.UNSIGNED_SHORT,
-      0
-    );
-  }
+    
+        // Tell the shader we bound the texture to texture unit 0
+        this.gl!.uniform1i(InfoPrograma.uniformLocations.uSampler, 0);
+        this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
+    
+        // Bind de la textura
+        this.gl!.activeTexture(this.gl!.TEXTURE0);
+        this.gl!.bindTexture(this.gl!.TEXTURE_2D, this.texture);
+    
+        // Dibujar los elementos
+        this.gl!.drawElements(
+            this.gl!.TRIANGLES,
+            mesh.indexBuffer.numItems,
+            this.gl!.UNSIGNED_SHORT,
+            0
+        );
+    }
 
   async loadTexture(nomTextura: any) {
     let textura = await motor.gestorRecursos.getRecurso(nomTextura, 'textura');
@@ -428,52 +350,56 @@ export class Malla {
       new Uint8Array([0, 0, 255, 255])
     );
 
-    // Crear una imagen para la textura
-    const image = new Image();
-    await textura.cargarFichero(nomTextura).then((blob: any) => {
-      image.crossOrigin = 'anonymous';
-      image.onload = () => {
-        // Asignar la imagen a la textura
-        this.gl!.bindTexture(this.gl!.TEXTURE_2D, texture);
-
-        this.gl!.texImage2D(
-          this.gl!.TEXTURE_2D,
-          0,
-          this.gl!.RGBA,
-          this.gl!.RGBA,
-          this.gl!.UNSIGNED_BYTE,
-          image
-        );
-        // Configurar parámetros de la textura
-        if (this.isPot2(image.width) && this.isPot2(image.height)) {
-          this.gl!.generateMipmap(this.gl!.TEXTURE_2D);
-        } else {
-          this.gl!.texParameteri(
-            this.gl!.TEXTURE_2D,
-            this.gl!.TEXTURE_WRAP_S,
-            this.gl!.CLAMP_TO_EDGE
-          );
-          this.gl!.texParameteri(
-            this.gl!.TEXTURE_2D,
-            this.gl!.TEXTURE_WRAP_T,
-            this.gl!.CLAMP_TO_EDGE
-          );
-          this.gl!.texParameteri(
-            this.gl!.TEXTURE_2D,
-            this.gl!.TEXTURE_MIN_FILTER,
-            this.gl!.NEAREST
-          );
+        // Crear una imagen para la textura
+        const image = new Image();
+        if(this.nombre == 'pin.obj'){
+            await textura.cargarFicheroAPI(nomTextura).then((blob: any) => {
+                image.crossOrigin = "anonymous"
+                image.onload = () => {
+                    // Asignar la imagen a la textura
+                    this.gl!.bindTexture(this.gl!.TEXTURE_2D, texture);
+                    
+                    this.gl!.texImage2D(this.gl!.TEXTURE_2D, 0, this.gl!.RGBA, this.gl!.RGBA, this.gl!.UNSIGNED_BYTE, image);
+                    // Configurar parámetros de la textura
+                    if (this.isPot2(image.width) && this.isPot2(image.height)) {
+                        this.gl!.generateMipmap(this.gl!.TEXTURE_2D);
+                    }
+                    else{
+                        this.gl!.texParameteri(this.gl!.TEXTURE_2D, this.gl!.TEXTURE_WRAP_S, this.gl!.CLAMP_TO_EDGE);
+                        this.gl!.texParameteri(this.gl!.TEXTURE_2D, this.gl!.TEXTURE_WRAP_T, this.gl!.CLAMP_TO_EDGE);
+                        this.gl!.texParameteri(this.gl!.TEXTURE_2D, this.gl!.TEXTURE_MIN_FILTER, this.gl!.NEAREST);
+                    }
+                    
+                };
+                image.src = URL.createObjectURL(blob);
+            });
         }
-      };
-      image.src = URL.createObjectURL(blob);
-    });
-    return texture;
-  }
+        else{
+            await textura.cargarFichero(nomTextura).then((blob: any) => {
+                image.crossOrigin = "anonymous"
+                image.onload = () => {
+                    // Asignar la imagen a la textura
+                    this.gl!.bindTexture(this.gl!.TEXTURE_2D, texture);
+                    
+                    this.gl!.texImage2D(this.gl!.TEXTURE_2D, 0, this.gl!.RGBA, this.gl!.RGBA, this.gl!.UNSIGNED_BYTE, image);
+                    // Configurar parámetros de la textura
+                    if (this.isPot2(image.width) && this.isPot2(image.height)) {
+                        this.gl!.generateMipmap(this.gl!.TEXTURE_2D);
+                    }
+                    else{
+                        this.gl!.texParameteri(this.gl!.TEXTURE_2D, this.gl!.TEXTURE_WRAP_S, this.gl!.CLAMP_TO_EDGE);
+                        this.gl!.texParameteri(this.gl!.TEXTURE_2D, this.gl!.TEXTURE_WRAP_T, this.gl!.CLAMP_TO_EDGE);
+                        this.gl!.texParameteri(this.gl!.TEXTURE_2D, this.gl!.TEXTURE_MIN_FILTER, this.gl!.NEAREST);
+                    }
+                    
+                };
+                image.src = URL.createObjectURL(blob);
+            });
+        }
+        return texture;
+    }
 
   isPot2(valor: any) {
     return (valor & (valor - 1)) === 0;
   }
-}
-function escalarMatrizProyeccion(zoom: any) {
-  throw new Error('Function not implemented.');
 }

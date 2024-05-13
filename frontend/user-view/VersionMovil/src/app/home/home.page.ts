@@ -108,6 +108,7 @@ export class HomePage {
   totalComprados: number = 0;
 
   //USO DEL DRAWER Y PASO DE INFORMACION
+  @ViewChild(MotorComponent) motorComponent!: MotorComponent;
   @ViewChild(DrawerComponent) drawerComponent!: DrawerComponent;
 
   llamarFuncionDrawer(idProd: string) {
@@ -122,7 +123,6 @@ export class HomePage {
 
   //Vainas de Martin
   //@ViewChild(MotorComponent) motorComponent!: MotorComponent;
-  @ViewChild(MotorComponent) motorComponent!: MotorComponent;
 
 
   //variables para mostrar foto
@@ -142,10 +142,8 @@ export class HomePage {
 
   ngAfterViewInit(): void {
     //MARTIN
+    console.log(this.motorComponent)
    this.motorComponent.crearEscena();
-   console.log(this.motorComponent);
-
-   
   }
 
   //VERSION ANTIGUA
@@ -157,6 +155,22 @@ export class HomePage {
     this.loadChatbotScript();
   }
 
+  borrarProductosCompradosEnServidorHome(){
+    this.drawerComponent.borrarProductosCompradosEnServidor();
+  }
+
+  BorrarListaCompraCompleta() {
+    this.drawerComponent.borrarTodaLaLista();
+  }
+  //ESTADISTICAS
+  //ABRE LA APP
+  ionViewDidEnter() {
+    console.log('HOLA HE ABIERTO LA APP');
+    let tipo = 'eliminado';
+    let fecha = new Date();
+    let producto = 0;
+    this.estadistica(producto, tipo, fecha);
+  }
   
 
   //Funciones para sacar el valor de los productos a partit de la ubicacion del motor gráfico
