@@ -134,7 +134,9 @@ export class HomePage {
     this.RecargarModelo();
     //this.loadChatbotScript();
   }
-
+  borrarProductosCompradosEnServidorHome(){
+    this.drawerComponent.borrarProductosCompradosEnServidor();
+  }
   BorrarListaCompraCompleta() {
     this.drawerComponent.borrarTodaLaLista();
   }

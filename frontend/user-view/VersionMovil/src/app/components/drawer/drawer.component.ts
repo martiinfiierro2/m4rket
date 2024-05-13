@@ -513,6 +513,20 @@ export class DrawerComponent implements AfterViewInit {
       }
     });
   }
+
+  borrarProductosCompradosEnServidor() {
+    const productosComprados = this.listaCompra.filter(producto => producto.comprado);
+    productosComprados.forEach(producto => {
+      this.productosService.deleteListaCompra(producto.id).subscribe(() => {
+        console.log(`Producto comprado "${producto.id}" eliminado del servidor`);
+      });
+    });
+  
+    this.listaCompra = this.listaCompra.filter(producto => !producto.comprado);
+    this.Recarguita();
+    this.getListaCompraUsu();
+    console.log('Productos comprados eliminados del servidor y local:', this.listaCompra);
+  }
   
 cambiarValoresComprado(){
   this.totalComprados = this.listaCompra.reduce((total, item) => {
