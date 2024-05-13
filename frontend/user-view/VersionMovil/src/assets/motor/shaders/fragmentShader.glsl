@@ -165,7 +165,7 @@ uniform sampler2D uSampler;
 void main () { 
     //VALORES PROVISIONALES
     highp vec4 LightPosition = vec4(40, 40, 40, 1);     
-    highp vec3 LightIntensity = vec3(1.0, 1.0, 1.0);   
+    highp vec3 LightIntensity = vec3(1.5, 1.5, 1.5);   
     highp vec3 Kd = vec3(0.1, 0.1, 0.1);                
     highp vec3 Ka = vec3(0.5, 0.5, 0.5);                
     highp vec3 Ks = vec3(0.1, 0.1,0.1);               
