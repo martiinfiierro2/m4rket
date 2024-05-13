@@ -74,6 +74,7 @@ export interface ListaCompra {
   ],
 })
 export class DrawerComponent implements AfterViewInit {
+  @ViewChild(MotorComponent) motorComponent!: MotorComponent;
   @ViewChild('drawer', { read: ElementRef }) drawer!: ElementRef;
   // @Output('openStateChanged') openState: EventEmitter<boolean> = new EventEmitter();
   @ViewChild('botonchatbot', { read: ElementRef }) botonchatbot!: ElementRef;
@@ -102,8 +103,6 @@ export class DrawerComponent implements AfterViewInit {
     sessionStorage.getItem('tokenUsuario') ||
     localStorage.getItem('tokenUsuario');
   urlFotoProducto = environment.base_url + '/uploads/fotoproducto/';
-
-  @ViewChild(MotorComponent) motorComponent!: MotorComponent;
   @ViewChild(Malla) malla!: Malla;
   constructor(
     private plt: Platform,
@@ -111,9 +110,30 @@ export class DrawerComponent implements AfterViewInit {
     private productosService: ProductosService,
     private estadisticasService: EstadisticasService,
     private rotacionService: RotacionService
-  ) {}
+  ) {
+  
+  }
+
+  borrarTodaLaLista() {
+    this.productosService.getListaCompra(this.idUsu).subscribe((result) => {
+      if (result.listacompra) {
+        const listasCompra = result.listacompra;
+        const deletePromises = listasCompra.map((listaCompra: any) => {
+          return this.productosService.deleteListaCompra(listaCompra.id).toPromise();
+        });
+  
+        Promise.all(deletePromises).then(() => {
+          console.log('Todas las listas de compra han sido eliminadas exitosamente.');
+          this.getListaCompraUsu();
+        }).catch((error) => {
+          console.error('Error al intentar borrar todas las listas de compra:', error);
+        });
+      }
+    });
+  }
 
   async ngAfterViewInit() {
+    console.log(this.motorComponent); 
     const drawer = this.drawer.nativeElement;
     this.openHeight = this.plt.height() / 100;
     const botonchatbot = this.botonchatbot.nativeElement;

@@ -108,8 +108,8 @@ export class HomePage {
   totalComprados: number = 0;
 
   //USO DEL DRAWER Y PASO DE INFORMACION
-  @ViewChild(DrawerComponent) drawerComponent!: DrawerComponent;
   @ViewChild(MotorComponent) motorComponent!: MotorComponent;
+  @ViewChild(DrawerComponent) drawerComponent!: DrawerComponent;
 
   llamarFuncionDrawer(idProd: string) {
     // Llama a la función del componente Drawer
@@ -142,6 +142,7 @@ export class HomePage {
 
   ngAfterViewInit(): void {
     //MARTIN
+    console.log(this.motorComponent)
    this.motorComponent.crearEscena();
   }
 
@@ -154,7 +155,9 @@ export class HomePage {
     this.loadChatbotScript();
   }
 
-  
+  BorrarListaCompraCompleta() {
+    this.drawerComponent.borrarTodaLaLista();
+  }
 
   //Funciones para sacar el valor de los productos a partit de la ubicacion del motor gráfico
   getIdUbicacion(referencia: any, posicion: any) {

@@ -1,4 +1,4 @@
-import { Component} from '@angular/core';
+import { AfterViewInit, Component, OnInit} from '@angular/core';
 import * as glMatrix from 'gl-matrix';
 import { TMotorTAG } from './clases/TMotorTAG';
 import { TNodo } from './clases/TNodo';
@@ -17,7 +17,7 @@ interface lista{
   styleUrls: ['./motor.component.scss'],
 })
 
-export class MotorComponent{
+export class MotorComponent implements AfterViewInit{
   private suelo!: TNodo;
   private mercado!: TNodo;
   private ubicaciones: TNodo[] = [];
@@ -27,6 +27,13 @@ export class MotorComponent{
   constructor(
     private productosService: ProductosService, 
   ) { }
+
+  ngAfterViewInit(): void {
+  }
+
+  gestionarMarcado(IDProd: number){
+    console.log(IDProd);
+  }
 
   async crearEscena(){
     motor = new TMotorTAG();
@@ -113,6 +120,7 @@ export class MotorComponent{
     const caja3: TNodo =  await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(-25,0,18), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(4,4,4), 'cajaregistradora.obj', 'malla', 'blanco.jpeg', true);
     const caja4: TNodo =  await motor.crearModelo( this.suelo, glMatrix.vec3.fromValues(-25,0,24), glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(4,4,4), 'cajaregistradora.obj', 'malla', 'blanco.jpeg', true);
 
+    console.log(motor)
     await this.cargarNodosPines();
   }
 
@@ -223,6 +231,8 @@ export class MotorComponent{
           );
         }
       }
+
+      //recorrer y dibujar
       this.mercado.recorrer(glMatrix.mat4.identity(glMatrix.mat4.create()));
     } catch (error) {
       console.error('Error al cargar los nodos de pines:', error);
