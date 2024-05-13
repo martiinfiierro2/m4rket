@@ -25,19 +25,23 @@
 <div class="contenedor_stats">
   <div class="parent">
     <div class="div1" id="divs_stats">
-      <p class="stat_title">Productos listados</p>
+      <p class="stat_title">Productos añadidos</p>
       <p>{{totalAnadidos}}</p>
       <div id="graf-list" style="width: 50%; height: 50%;"></div>
     </div>
     <div class="div2" id="divs_stats"> 
-      <p class="stat_title" id="masAnadidos">Total comprados</p>
+      <p class="stat_title" id="masComprados">Total comprados</p>
+      <p>{{totalComprados}}</p>
+      <div id="graf-comp" style="width: 50%; height: 50%;"></div>
     </div>
     <div class="div3" id="divs_stats"> 
       <p class="stat_title">Total eliminados</p>
       <p>{{totalEliminados}}</p>
+      <div id="graf-elim" style="width: 50%; height: 50%;"></div>
     </div>
     <div class="div4" id="divs_stats"> 
       <p class="stat_title">Porcentaje añadidos/comprados</p>
+      <p>{{porcentaje}}%</p>
     </div>
     <div class="div5" id="divs_stats"> 
       <p class="stat_title">Usuarios activos</p>
@@ -45,7 +49,7 @@
     </div>
     <div class="div6" id="divs_stats"> 
       <p class="stat_title" >Productos más buscados</p>
-      <div *ngFor="let producto of anadidos; let i = index">
+      <div *ngFor="let producto of buscados; let i = index">
         <div class="content_prods" >
           <div class="prod" *ngIf="i < 5">
             <p>{{producto.name}}</p>
