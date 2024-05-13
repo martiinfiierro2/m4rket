@@ -498,6 +498,7 @@ export class DrawerComponent implements AfterViewInit {
           cantidad: item.cantidad,
           id: item.id,
           comprado: item.comprado,
+          fecha: item.fecha
         }));
         // Contador de productos en la lista de compra
         this.totalProductos = this.listaCompra.length;
@@ -512,6 +513,7 @@ export class DrawerComponent implements AfterViewInit {
           a.innerHTML =
         '<p>' + this.totalComprados + '/' + this.totalProductos + '<i style="margin-left: 10px; font-size: 16px;" class="fa-solid fa-cart-shopping"></i></p>';
       }
+      console.log(this.listaCompra);
     });
   }
 
