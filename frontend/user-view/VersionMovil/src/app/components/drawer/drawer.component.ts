@@ -471,7 +471,7 @@ export class DrawerComponent implements AfterViewInit {
       producto.enListaCompra = true;
       producto.cantidad = 1;
       this.getListaCompraUsu();
-      this.getProducto(producto.id);
+      //this.getProducto(producto.id);
     });
     this.compararListaBusqueda();
     producto.enListaCompra = true;
