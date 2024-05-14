@@ -67,8 +67,8 @@ interface ProductoDetalle {
 interface Stats {
   nombre: string;
   idProd: number;
-  qr: string | null;
   fecha: Date;
+  id_usuario: string;
 }
 
 export interface Ubicacion {
@@ -169,7 +169,7 @@ export class HomePage {
     let tipo = 'eliminado';
     let fecha = new Date();
     let producto = 0;
-    this.estadistica(producto, tipo, fecha);
+    //this.estadistica(producto, tipo, fecha);
   }
   
 
@@ -209,12 +209,11 @@ export class HomePage {
     const post: Stats = {
       nombre: tipo,
       idProd: id,
-      qr: null,
       fecha: fecha,
+      id_usuario: this.idUsu,
     };
     this.estadisticasService.postContador(post);
   }
-
   decrementar(productoDetalle: any) {
     productoDetalle.cantidad--;
     this.actualizarCantidad(
