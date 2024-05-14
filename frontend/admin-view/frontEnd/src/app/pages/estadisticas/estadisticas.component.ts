@@ -45,6 +45,8 @@ export class DatosContadores{
 
 export class EstadisticasComponent {
   anadidos: DatosContadores[] = [];
+  buscados: DatosContadores[] = [];
+  comprados: DatosContadores[] = [];
   prodMasAnadido: Producto;
   prodMasEliminado: Producto;
   eliminados: DatosContadores[] = [];
@@ -73,6 +75,9 @@ export class EstadisticasComponent {
   totalAnadidos: number = 0;
   totalEliminados: number = 0;
   totalActivos: number = 0;
+  totalComprados: number = 0;
+  totalBuscados: number = 0;
+  porcentaje: number = 0;
 
   //variables para mostrar foto
   tokenUsuario = sessionStorage.getItem('tokenUsuario') || localStorage.getItem('tokenUsuario');
@@ -82,10 +87,6 @@ export class EstadisticasComponent {
   //Variables para el gráfico: 
   xAxisData: string[] = [];
 
-
-  //Varible de graficos
-  datosEliminados: string[] = [];
-  datosActivos: string [] = [];
 
   constructor (
     private estadisticasService: EstadisticasService,
@@ -107,9 +108,11 @@ export class EstadisticasComponent {
   }
 
   async actualizarDatos(opcion: string){
-    this.getContadoresMasAnadidos();
+    this.getContadoresMasBuscados();
     this.getContadoresMasEliminados(opcion);
     this.getContadoresActivos(opcion);
+    this.getContadoresComprados(opcion);
+    this.getContadoresListados(opcion);
   }
 
   async obtenerFechasRangoSeleccionado(opcion: string) {
@@ -146,9 +149,11 @@ export class EstadisticasComponent {
 
   ngOnInit(): void {
     this.fechasDefecto();
-    this.getContadoresMasAnadidos();
+    this.getContadoresMasBuscados();
     this.getContadoresMasEliminados('7d');
     this.getContadoresActivos('7d');
+    this.getContadoresComprados('7d');
+    this.getContadoresListados('7d');
     //this.pruebaGrafico();
     
   }
@@ -239,6 +244,94 @@ export class EstadisticasComponent {
       console.warn('El elemento "grafico" no tiene un tamaño válido para mostrar el gráfico.');
     }
   }
+
+  async graficoComprados(opcion: any, respuesta: any) {
+    const chartElement = document.getElementById('graf-comp');
+    
+    const datos = await this.procesarDatos(opcion, respuesta);
+  
+    if (chartElement && chartElement.clientWidth > 0 && chartElement.clientHeight > 0) {
+      echarts.dispose(chartElement);
+  
+      const myChart = echarts.init(chartElement);
+  
+      const option: any = {
+        color:'rgba(81, 135, 122, 1)' ,
+        xAxis: {
+          type: 'category',
+          data: this.xAxisData,
+          show: false,
+        },
+        yAxis: {
+          type: 'value',
+          show: false
+        },
+        series: [
+          {
+            name: 'Nutrientes',
+            type: 'line',
+            avoidLabelOverlap: false,
+            label: {
+              show: false,
+              position: 'top'
+            },
+            data:datos,
+            fill: false,
+            borderColor: 'rgb(81, 135, 122))',
+            tension: 0.9
+          }
+        ]
+      };
+  
+      myChart.setOption(option);
+    } else {
+      console.warn('El elemento "grafico" no tiene un tamaño válido para mostrar el gráfico.');
+    }
+  }
+
+  async graficoEliminados(opcion: any, respuesta: any) {
+    const chartElement = document.getElementById('graf-elim');
+    
+    const datos = await this.procesarDatos(opcion, respuesta);
+  
+    if (chartElement && chartElement.clientWidth > 0 && chartElement.clientHeight > 0) {
+      echarts.dispose(chartElement);
+  
+      const myChart = echarts.init(chartElement);
+  
+      const option: any = {
+        color:'rgba(81, 135, 122, 1)' ,
+        xAxis: {
+          type: 'category',
+          data: this.xAxisData,
+          show: false,
+        },
+        yAxis: {
+          type: 'value',
+          show: false
+        },
+        series: [
+          {
+            name: 'Nutrientes',
+            type: 'line',
+            avoidLabelOverlap: false,
+            label: {
+              show: false,
+              position: 'top'
+            },
+            data:datos,
+            fill: false,
+            borderColor: 'rgb(81, 135, 122))',
+            tension: 0.9
+          }
+        ]
+      };
+  
+      myChart.setOption(option);
+    } else {
+      console.warn('El elemento "grafico" no tiene un tamaño válido para mostrar el gráfico.');
+    }
+  }
   
   obtenerNombreDiaSemana(fecha: Date): string {
     const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
@@ -247,12 +340,12 @@ export class EstadisticasComponent {
 
 
   //CRUD
-  async getContadoresMasAnadidos() {
-    this.anadidos = [];
-    this.totalAnadidos = 0;
+  async getContadoresMasBuscados() {
+    this.buscados = [];
+    this.totalBuscados = 0;
     if(this.fechaFin !== "" && this.fechaInicio !== ""){
       try {
-        const res = await this.estadisticasService.getCountAnadidosFecha(this.fechaInicio, this.fechaFin).toPromise();
+        const res = await this.estadisticasService.getCountBuscadosFecha(this.fechaInicio, this.fechaFin).toPromise();
         //console.log(res);
         
         for (let index = 0; index < res.datosContadores.length; index++) {
@@ -261,10 +354,9 @@ export class EstadisticasComponent {
           const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
           contador.name = res2.productos.nombre;
           contador.value = res.datosContadores[index].totalCount;
-          this.anadidos.push(contador);
-          this.totalAnadidos += parseInt(contador.value);
+          this.buscados.push(contador);
+          this.totalBuscados += parseInt(contador.value);
         }
-        //this.configurarGraficoAnadidos();
       } catch (error) {
         console.error(error);
       }
@@ -299,14 +391,11 @@ export class EstadisticasComponent {
     this.totalEliminados = 0;
       try {
         const res = await this.estadisticasService.getCountEliminadosFecha(this.fechaInicio, this.fechaFin).toPromise();
-        //console.log(res);
+        console.log(res);
               
        // await this.procesarDatos(opcion, res);
-       await this.graficoListados(opcion, res);
+       await this.graficoEliminados(opcion, res);
 
-
-
-        /*
         for (let index = 0; index < res.datosContadores.length; index++) {
           let contador = new DatosContadores();
     
@@ -316,7 +405,6 @@ export class EstadisticasComponent {
           this.eliminados.push(contador);
           this.totalEliminados += parseInt(contador.value);
         }
-        //this.configurarGraficoEliminados();*/
 
       } catch (error) {
         console.error(error);
@@ -329,13 +417,69 @@ export class EstadisticasComponent {
     this.totalActivos = 0;
     try {
       const res = await this.estadisticasService.getCountActivosFecha(this.fechaInicio, this.fechaFin).toPromise();
-      console.log(res);
+      //console.log(res);
       await this.pruebaGrafico(opcion, res);
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async getContadoresComprados(opcion: string) {
+    this.comprados = [];
+    this.totalComprados = 0;
+    try {
+      const res = await this.estadisticasService.getCountCompradosFecha(this.fechaInicio, this.fechaFin).toPromise();
+      //console.log(res);
+      await this.graficoComprados(opcion, res);
+
+      for (let index = 0; index < res.datosContadores.length; index++) {
+        let contador = new DatosContadores();
+  
+        const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
+        //contador.name = res2.productos.nombre;
+        contador.value = res.datosContadores[index].totalCount;
+        this.comprados.push(contador);
+        this.totalComprados += parseInt(contador.value);
+        await this.getPorcentajeComprados();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+
+  }
+
+  async getContadoresListados(opcion: string) {
+    this.anadidos = [];
+    this.totalAnadidos = 0;
+    try {
+      const res = await this.estadisticasService.getCountListadosFecha(this.fechaInicio, this.fechaFin).toPromise();
+      console.log(res);
+      await this.graficoListados(opcion, res);
+
+      for (let index = 0; index < res.datosContadores.length; index++) {
+        let contador = new DatosContadores();
+  
+        const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
+        //contador.name = res2.productos.nombre;
+        contador.value = res.datosContadores[index].totalCount;
+        this.anadidos.push(contador);
+        this.totalAnadidos += parseInt(contador.value);
+
+      }
     } catch (error) {
       console.error(error);
     }
   }
   
+  async getPorcentajeComprados(){
+    this.porcentaje = 0;
+    if(this.totalComprados && this.totalAnadidos){
+      this.porcentaje = parseFloat((this.totalEliminados / this.totalAnadidos * 100).toFixed(2));
+      console.log(this.porcentaje);
+    }
+  }
 
   async procesarDatos(opcion: string, res: any) {
     let datos;
@@ -353,6 +497,7 @@ export class EstadisticasComponent {
 
     return datos;
   }
+
   async procesarDatosPorUltimos7Dias(datos: any) {
     this.xAxisData= [];
     const hoy = new Date();
@@ -412,10 +557,6 @@ export class EstadisticasComponent {
 
     return valores;
   }
-  
-  
-  
-  
   
   async procesarDatosPorUltimoAno(datos: any) {
     this.xAxisData= [];
