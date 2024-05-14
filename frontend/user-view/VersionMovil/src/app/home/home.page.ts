@@ -655,11 +655,13 @@ export class HomePage {
 
   //!Chatbot!!!
   loadChatbotScript() {
-    const script = document.createElement('script');
-    script.src = 'https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1';
-    script.onload = () => {
-    };
-    document.body.appendChild(script);
+    setTimeout(() => {
+      const script = document.createElement('script');
+      script.src = 'https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1';
+      script.onload = () => {
+  
+      };
+      document.body.appendChild(script);
+    }, 1000); // Espera 3000 milisegundos (3 segundos) antes de ejecutar el código
   }
-
 }

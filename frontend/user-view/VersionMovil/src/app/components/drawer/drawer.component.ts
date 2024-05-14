@@ -446,7 +446,7 @@ export class DrawerComponent implements AfterViewInit {
   eliminar(producto: any) {
     producto.enListaCompra = false;
     this.borrarProd(producto.idLista);
-    //this.EliminarProductoSelect();
+    this.EliminarProductoSelect();
     //this.getProducto(producto.id);
     this.toggleDrawer2(1);
     this.getListaCompraUsu();
