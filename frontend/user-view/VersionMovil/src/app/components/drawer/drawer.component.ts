@@ -448,6 +448,7 @@ export class DrawerComponent implements AfterViewInit {
     this.borrarProd(producto.idLista);
     //this.EliminarProductoSelect();
     //this.getProducto(producto.id);
+    this.toggleDrawer2(1);
     this.getListaCompraUsu();
     this.Recarguita();
 
@@ -471,7 +472,7 @@ export class DrawerComponent implements AfterViewInit {
       producto.enListaCompra = true;
       producto.cantidad = 1;
       this.getListaCompraUsu();
-      this.getProducto(producto.id);
+      //this.getProducto(producto.id);
     });
     this.compararListaBusqueda();
     producto.enListaCompra = true;
