@@ -168,7 +168,7 @@ export class MotorComponent implements AfterViewInit{
             estado = true;
             if(this.listaCompra[x].estado == true){
               nombreMalla = 'pin2.obj';
-              compradoTextura = 'andres.jpg';
+              compradoTextura = 'T.jpeg';
             }
           }
         }

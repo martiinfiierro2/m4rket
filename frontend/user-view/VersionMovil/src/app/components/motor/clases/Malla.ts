@@ -36,17 +36,17 @@ export class Malla {
         const programInfo = {
             program: program,
             attribLocations: {
-                vertexPosition: gl.getAttribLocation(program, "aVertexPosition"),
-                textureCoord: gl.getAttribLocation(program, "aTextureCoord"),
-                normalCoord: gl.getAttribLocation(program, "aVertexNormal")
+                vertexPosition: this.gl!.getAttribLocation(program, "aVertexPosition"),
+                textureCoord: this.gl!.getAttribLocation(program, "aTextureCoord"),
+                normalCoord: this.gl!.getAttribLocation(program, "aVertexNormal")
             },
             uniformLocations: {
-                projectionMatrix: gl.getUniformLocation(program,"uProjectionMatrix"),
-                viewMatrix: gl.getUniformLocation(program, "uViewMatrix"),
-                modelMatrix: gl.getUniformLocation(program, "uModelMatrix"),
-                uSampler: gl.getUniformLocation(program, "uSampler"),
-                normalMatrix: gl.getUniformLocation(program, "uNormalMatrix"),
-                modelViewMatrix: gl.getUniformLocation(program, "uModelViewMatrix")
+                projectionMatrix: this.gl!.getUniformLocation(program,"uProjectionMatrix"),
+                viewMatrix: this.gl!.getUniformLocation(program, "uViewMatrix"),
+                modelMatrix: this.gl!.getUniformLocation(program, "uModelMatrix"),
+                uSampler: this.gl!.getUniformLocation(program, "uSampler"),
+                normalMatrix: this.gl!.getUniformLocation(program, "uNormalMatrix"),
+                modelViewMatrix: this.gl!.getUniformLocation(program, "uModelViewMatrix")
             }
         };
         return programInfo;
@@ -68,7 +68,7 @@ export class Malla {
 
         // Cargar textura
         this.texture = await this.loadTexture(textura);
-
+        
         // Función para manejar el evento de arrastre con clic derecho
         const handleRightDragMobile = (event: TouchEvent) => {
             event.preventDefault();
@@ -181,17 +181,7 @@ export class Malla {
         draw();
     }
 
-
     dibujarBucle(InfoPrograma: any, mesh: any) {
-        // Habilitar el culling
-        //gthis.gl.enable(this.gl.CULL_FACE);
-
-        // Especificar qué caras cullar (en este caso, cullar las caras traseras)
-        //this.gl.cullFace(this.gl.BACK);
-        
-        //Coger la camara para obtener valores de lejano y cercano para la cámara
-        // Establecer las dimensiones del viewport
-
         const valorRotacion = document.querySelector<HTMLInputElement>('#rotacion');
         if(valorRotacion){
             this.rotation = parseInt(valorRotacion.value);
@@ -266,6 +256,7 @@ export class Malla {
     
         // Aplica el desplazamiento a la matriz de vista
         mat4.translate(this.viewMatrix, this.viewMatrix, [-this.translationX, -this.translationY, 0]);
+        
 
         // Aplicar la rotación en torno al eje Y
         mat4.rotate(this.viewMatrix, this.viewMatrix, this.rotation*(Math.PI / 180), [0, 1, 0]);
@@ -316,12 +307,12 @@ export class Malla {
     
         // Tell the shader we bound the texture to texture unit 0
         this.gl!.uniform1i(InfoPrograma.uniformLocations.uSampler, 0);
-        this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
-    
+        this.gl!.viewport(0, 0, this.gl!.canvas.width, this.gl!.canvas.height);
+
         // Bind de la textura
         this.gl!.activeTexture(this.gl!.TEXTURE0);
         this.gl!.bindTexture(this.gl!.TEXTURE_2D, this.texture);
-    
+        
         // Dibujar los elementos
         this.gl!.drawElements(
             this.gl!.TRIANGLES,
@@ -342,7 +333,7 @@ export class Malla {
 
         // Crear una imagen para la textura
         const image = new Image();
-        if(this.nombre == 'pin.obj'){
+        if(nomTextura != 'gris.jpg' && nomTextura != 'grisclaro.jpeg' && nomTextura != 'blanco.jpeg'){
             await textura.cargarFicheroAPI(nomTextura).then((blob: any) => {
                 image.crossOrigin = "anonymous"
                 image.onload = () => {
@@ -379,7 +370,7 @@ export class Malla {
                     else{
                         this.gl!.texParameteri(this.gl!.TEXTURE_2D, this.gl!.TEXTURE_WRAP_S, this.gl!.CLAMP_TO_EDGE);
                         this.gl!.texParameteri(this.gl!.TEXTURE_2D, this.gl!.TEXTURE_WRAP_T, this.gl!.CLAMP_TO_EDGE);
-                        this.gl!.texParameteri(this.gl!.TEXTURE_2D, this.gl!.TEXTURE_MIN_FILTER, this.gl!.NEAREST);
+                        this.gl!.texParameteri(this.gl!.TEXTURE_2D, this.gl!.TEXTURE_MIN_FILTER, this.gl!.LINEAR);
                     }
                     
                 };
