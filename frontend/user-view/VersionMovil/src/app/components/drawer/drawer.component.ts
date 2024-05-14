@@ -363,7 +363,7 @@ export class DrawerComponent implements AfterViewInit {
   EliminarProductoSelect() {
     this.productoSelect = null;
     this.seleccionado = false;
-    this.toggleDrawer2(2);
+    //this.toggleDrawer2(2);
   }
 
   //FUNCIONES BUSCADOR
@@ -447,7 +447,7 @@ export class DrawerComponent implements AfterViewInit {
     producto.enListaCompra = false;
     this.borrarProd(producto.idLista);
     //this.EliminarProductoSelect();
-    this.getProducto(producto.id);
+    //this.getProducto(producto.id);
     this.getListaCompraUsu();
     this.Recarguita();
 
