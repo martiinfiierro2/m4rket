@@ -22,7 +22,7 @@ interface Stats {
   nombre: string;
   idProd: number;
   fecha: Date;
-  idUsuario: string;
+  id_usuario: string;
 }
 export interface Producto {
   id: string;
@@ -58,6 +58,14 @@ export interface ListaCompra {
   cantidad: number;
   comprado: boolean;
 }
+
+export class DatosContadores{
+  nombre: string = "";
+  precio: number = 0;
+  id: string ="";
+  foto: string = "";
+}
+
 
 @Component({
   selector: 'app-drawer',
@@ -97,6 +105,74 @@ export class DrawerComponent implements AfterViewInit {
   totalComprados: number = 0;
   //MODELO
   modeloService = new ModeloService();
+
+
+
+  //Más buscados
+  masBuscados: DatosContadores[] = [];
+  buscados: DatosContadores[] = [];
+
+  fechaInicio: string="";
+  fechaFin: string="";
+
+  async fechasDefecto(){
+    const hoy = new Date();
+    const fechaInicio = new Date(hoy);
+    const fechaFin = new Date(hoy);
+
+    fechaInicio.setDate(fechaInicio.getDate() - 29);
+
+    this.fechaInicio = fechaInicio.toISOString().split('T')[0];
+    this.fechaFin = fechaFin.toISOString().split('T')[0];
+
+    await this.getContadoresMasBuscados();
+
+  }
+
+/*
+  async getContadoresMasBuscados() {
+    this.buscados = [];
+    if(this.fechaFin !== "" && this.fechaInicio !== ""){
+      try {
+        const res = await this.estadisticasService.getCountBuscadosFecha(this.fechaInicio, this.fechaFin, this.idUsu).toPromise();
+        console.log(res);
+        
+        for (let index = 0; index < res.datosContadores.length; index++) {
+          let contador = new DatosContadores();
+    
+          const res2 = await this.productosService.getProductoId(res.datosContadores[index].idProd).toPromise();
+          contador.name = res2.productos.nombre;
+          contador.value = res.datosContadores[index].totalCount;
+          this.buscados.push(contador);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
+*/
+  async getContadoresMasBuscados() {
+    this.buscados = [];
+    if(this.fechaFin !== "" && this.fechaInicio !== ""){
+      try {
+        const res = await this.estadisticasService.getCountBuscadosFecha(this.fechaInicio, this.fechaFin, this.idUsu).toPromise();
+        console.log(res);
+        
+        for (let index = 0; index < res.datosContadores.length; index++) {
+          let contador = new DatosContadores();
+    
+          const res2 = await this.productosService.getProductoId(res.datosContadores[index].idProd).toPromise();
+          contador.nombre = res2.productos.nombre;
+          contador.precio = res2.productos.precio;
+          contador.foto = res2.productos.foto;
+          contador.id = res2.productos.id;
+          this.buscados.push(contador);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
 
   //VARIABLES FOTO
   tokenUsuario =
@@ -369,6 +445,8 @@ export class DrawerComponent implements AfterViewInit {
   //FUNCIONES BUSCADOR
   productos: Producto[] = [];
 
+  buscadosP: Producto[] = [];
+
   //listaCompra: ListaCompra [] = [];
 
   valueBusquedaInput = '';
@@ -378,6 +456,7 @@ export class DrawerComponent implements AfterViewInit {
   ngOnInit(): void {
     this.getUsuarioLog();
     this.getListaCompraUsu();
+    this.fechasDefecto();
   }
 
   getUsuarioLog() {
@@ -413,7 +492,7 @@ export class DrawerComponent implements AfterViewInit {
       nombre: tipo,
       idProd: id,
       fecha: fecha,
-      idUsuario: this.idUsu,
+      id_usuario: this.idUsu,
     };
     this.estadisticasService.postContador(post);
   }
@@ -519,6 +598,23 @@ export class DrawerComponent implements AfterViewInit {
   }
 
   compararListaBusqueda() {
+    this.listaCompra.forEach((productoCompra) => {
+      const productoEncontrado = this.productos.find(
+        (producto) => productoCompra.idProd === parseInt(producto.id)
+      );
+      if (productoEncontrado) {
+        productoEncontrado.enListaCompra = true;
+        productoEncontrado.cantidad = productoCompra.cantidad;
+        productoEncontrado.idLista = productoCompra.id;
+        productoEncontrado.comprado = productoCompra.comprado;
+        //console.log(`Producto con id ${productoEncontrado.id} está en la lista y su cantidad es ${productoEncontrado.cantidad}`);
+      } else {
+        // console.log(`No se encontró el producto con idProd ${productoCompra.idProd} en la lista de productos`);
+      }
+    });
+  }
+
+  compararListaMasBuscados() {
     this.listaCompra.forEach((productoCompra) => {
       const productoEncontrado = this.productos.find(
         (producto) => productoCompra.idProd === parseInt(producto.id)

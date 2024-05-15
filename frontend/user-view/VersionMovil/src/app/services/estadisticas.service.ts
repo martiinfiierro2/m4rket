@@ -67,6 +67,16 @@ export class EstadisticasService {
     return this.http.get(urlCompleta, {headers: this.cabeceras});
   }
 
+
+  getCountBuscadosFecha(inicio: string, fin: string, idUsu: string): Observable<any>{
+    this.cargarCabeceras();
+    const fechaInicioCodificada = encodeURIComponent(inicio);
+    const fechaFinCodificada = encodeURIComponent(fin);
+    const UsuCodificado = encodeURIComponent(idUsu);
+    let urlCompleta = this.url + '?nombre=buscadousu&inicio=' + fechaInicioCodificada + '&fin=' + fechaFinCodificada + '&idUsu=' + UsuCodificado;
+    return this.http.get(urlCompleta, {headers: this.cabeceras});
+  }
+
   postContador(body: any){
     this.cargarCabeceras();
     return this.http.post(this.url, body, {headers: this.cabeceras}).subscribe(
