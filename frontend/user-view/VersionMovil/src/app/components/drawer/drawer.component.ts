@@ -17,6 +17,7 @@ import * as echarts from 'echarts';
 import { HomePage } from 'src/app/home/home.page';
 import { Malla } from '../motor/clases/Malla';
 import { RotacionService } from 'src/app/services/rotacion.service';
+import { TRecursoMalla } from '../motor/clases/TRecursoMalla';
 
 interface Stats {
   nombre: string;
@@ -562,6 +563,7 @@ export class DrawerComponent implements AfterViewInit {
   }
 
   getBusquedaProducto(event: any) {
+    this.mostrarBusqueda = true;
     const query = event.toLowerCase();
     this.productosService.getBusquedaProducto(query).subscribe((res) => {
       this.productos = res.productos;
@@ -610,6 +612,12 @@ export class DrawerComponent implements AfterViewInit {
         // console.log(`No se encontró el producto con idProd ${productoCompra.idProd} en la lista de productos`);
       }
     });
+  }
+
+  mostrarBusqueda: boolean = false;
+  borrarBusqueda(){
+    this.mostrarBusqueda = false;
+    console.log("Pase");
   }
 
   compararListaMasBuscados() {

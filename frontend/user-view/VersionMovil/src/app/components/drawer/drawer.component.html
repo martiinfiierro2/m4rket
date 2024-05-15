@@ -53,13 +53,13 @@
       <div class="contenido-buscador" *ngIf="!productoSelect" [@fadeAnimation]>
         <div class="drawer-header">
           <ion-searchbar (ionChange)="getBusquedaProducto($event.detail.value)" [debounce]="50" show-clear-button="never" show-cancel-button="focus" cancel-button-text="Cancelar" 
-            placeholder="Buscar en M4rket" class="buscador" (ionFocus)="toggleDrawer2(1)">
+            placeholder="Buscar en M4rket" class="buscador" (ionFocus)="toggleDrawer2(1)" (ionCancel)="borrarBusqueda();">
           </ion-searchbar>
 
   
           <div class="profile" #profile (click)="logoutAndRedirectToLogin();"><i class="fas fa-sign-out-alt logout-icon"></i></div>
         </div>
-        <div>
+        <div *ngIf="mostrarBusqueda">
           <div *ngFor="let producto of productos" class="producto-container" (click)="buscado(producto)">
             <div class="navegador-producto" (click)="getProducto(producto.id)">
                 <img [src]="urlFotoProducto + producto.foto + '?token=' +tokenUsuario" alt="Product Image" />
