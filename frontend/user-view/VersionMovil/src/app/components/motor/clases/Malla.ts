@@ -327,9 +327,6 @@ export class Malla {
 
         //Cargar textura
         const texture = this.gl!.createTexture();
-        this.gl!.bindTexture(this.gl!.TEXTURE_2D, texture);
-
-        this.gl!.texImage2D(this.gl!.TEXTURE_2D, 0, this.gl!.RGBA, 1, 1, 0, this.gl!.RGBA, this.gl!.UNSIGNED_BYTE, new Uint8Array([0, 0, 255, 255]));
 
         // Crear una imagen para la textura
         const image = new Image();
