@@ -1,31 +1,9 @@
 body{
     overflow-y: block;
 }
-
-.datoQRP{
-    color: green;
-    font-size: small;
-    display: inline;
+hr{
+    margin: 1px;
 }
-
-.datoQRN{
-    color: red;
-    font-size: small;
-    display: inline;
-}
-
-.valor{
-    font-size: xx-large;
-}
-
-.grande{
-    font-size: x-large;
-}
-
-#fechaInicio{
-    margin-right: 10%;
-}
-
 .filtro{
     margin-top: 40px;
     margin-bottom: 20px;
@@ -46,6 +24,9 @@ body{
     font-weight: 600;
   }
 
+img{
+    height: 60px;
+}
 .contenedor_stats{
     display: flex;
     width: 96%;
@@ -72,8 +53,17 @@ body{
         font-size: 15px;
     }
 
+    .datos_stats{
+        display: flex;
+        align-items:baseline;
+        justify-content: left;
+    }
     .valor_stat{
-        font-size: 24px;
+        font-size: 28px;
+    }
+
+    .graficos{
+        margin: auto;
     }
     .parent div p{
         margin: 0px;
@@ -94,4 +84,18 @@ body{
     .div8 { grid-area: 4 / 2 / 5 / 3; }
     .div9 { grid-area: 4 / 3 / 5 / 4; }
 
-    
+    .content_prods{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .busqueda_text{
+        font-size: 15px;
+        font-weight: 100;
+        text-align: right;
+    }
+
+    .porcentaje_text{
+        font-size: 50px;
+        font-weight: 500;
+    }

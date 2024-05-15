@@ -1,12 +1,5 @@
 <body>
 <div class="filtro">
-   <!--
-    <label class="radio">
-      
-        <input type="radio" name="radio" checked="">
-        <span class="name">Hoy</span>
-      </label>
-      -->
       <label class="radio">
         <input type="radio" name="radio" checked="" (click)="obtenerFechasRangoSeleccionado('7d')">
         <span class="name">Últimos 7 días</span>
@@ -26,49 +19,70 @@
   <div class="parent">
     <div class="div1" id="divs_stats">
       <p class="stat_title">Productos añadidos</p>
-      <p class="valor_stat">{{totalAnadidos}}</p><div [style.color]="cAnadidos ? 'green' : 'red'">
-        {{ pAnadidos }}%
-        <ng-container *ngIf="cAnadidos; else negativo">
-          <svg width="7%" height="7%" viewBox="0 -3 16 16" id="meteor-icon-kit__regular-chart-line-up-s" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.032"></g><g id="SVGRepo_iconCarrier"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.5858 2H10C9.4477 2 9 1.55228 9 1C9 0.44772 9.4477 0 10 0H15C15.5523 0 16 0.44772 16 1V6C16 6.5523 15.5523 7 15 7C14.4477 7 14 6.5523 14 6V3.4142L9.7071 7.7071C9.3166 8.0976 8.6834 8.0976 8.2929 7.7071L6 5.4142L1.70711 9.7071C1.31658 10.0976 0.68342 10.0976 0.29289 9.7071C-0.09763 9.3166 -0.09763 8.6834 0.29289 8.2929L5.29289 3.2929C5.68342 2.90237 6.3166 2.90237 6.7071 3.2929L9 5.5858L12.5858 2z" fill="#30750a"></path></g></svg>
-        </ng-container>
-        <ng-template #negativo>
-          <svg width="7%" height="7%" viewBox="0 -3 16 16" id="meteor-icon-kit__regular-chart-line-down-s" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.5858 8L9 4.4142L6.7071 6.7071C6.3166 7.0976 5.68342 7.0976 5.29289 6.7071L0.29289 1.70711C-0.09763 1.31658 -0.09763 0.68342 0.29289 0.29289C0.68342 -0.09763 1.31658 -0.09763 1.70711 0.29289L6 4.5858L8.2929 2.29289C8.6834 1.90237 9.3166 1.90237 9.7071 2.29289L14 6.5858V4C14 3.4477 14.4477 3 15 3C15.5523 3 16 3.4477 16 4V9C16 9.5523 15.5523 10 15 10H10C9.4477 10 9 9.5523 9 9C9 8.4477 9.4477 8 10 8H12.5858z" fill="#af4141"></path></g></svg>
-        </ng-template>
-        
-      </div>
-      <div id="graf-list" style="width: 40%; height: 40%;"></div>
-      
+      <div class="datos_stats">
+        <p class="valor_stat">{{totalAnadidos}}</p>
+        <div [style.color]="cAnadidos ? 'green' : 'red'">
+          {{ pAnadidos }}%
+          <ng-container *ngIf="cAnadidos; else negativo">
+            <svg width="7%" height="7%" viewBox="0 -3 16 16" id="meteor-icon-kit__regular-chart-line-up-s" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.032"></g><g id="SVGRepo_iconCarrier"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.5858 2H10C9.4477 2 9 1.55228 9 1C9 0.44772 9.4477 0 10 0H15C15.5523 0 16 0.44772 16 1V6C16 6.5523 15.5523 7 15 7C14.4477 7 14 6.5523 14 6V3.4142L9.7071 7.7071C9.3166 8.0976 8.6834 8.0976 8.2929 7.7071L6 5.4142L1.70711 9.7071C1.31658 10.0976 0.68342 10.0976 0.29289 9.7071C-0.09763 9.3166 -0.09763 8.6834 0.29289 8.2929L5.29289 3.2929C5.68342 2.90237 6.3166 2.90237 6.7071 3.2929L9 5.5858L12.5858 2z" fill="#30750a"></path></g></svg>
+          </ng-container>
+          <ng-template #negativo>
+            <svg width="7%" height="7%" viewBox="0 -3 16 16" id="meteor-icon-kit__regular-chart-line-down-s" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.5858 8L9 4.4142L6.7071 6.7071C6.3166 7.0976 5.68342 7.0976 5.29289 6.7071L0.29289 1.70711C-0.09763 1.31658 -0.09763 0.68342 0.29289 0.29289C0.68342 -0.09763 1.31658 -0.09763 1.70711 0.29289L6 4.5858L8.2929 2.29289C8.6834 1.90237 9.3166 1.90237 9.7071 2.29289L14 6.5858V4C14 3.4477 14.4477 3 15 3C15.5523 3 16 3.4477 16 4V9C16 9.5523 15.5523 10 15 10H10C9.4477 10 9 9.5523 9 9C9 8.4477 9.4477 8 10 8H12.5858z" fill="#af4141"></path></g></svg>
+          </ng-template>
+        </div>
+      </div>   
+      <div class="graficos" id="graf-list" style="width: 50%; height: 50%;"></div>
     </div>
     <div class="div2" id="divs_stats"> 
       <p class="stat_title" id="masComprados">Total comprados</p>
-      <p>{{totalComprados}}</p>
-      <div id="graf-comp" style="width: 40%; height: 40%;"></div>
-      <p>{{pComprados}}%       
-      </p>
+      <div class="datos_stats">
+        <p class="valor_stat">{{totalComprados}}</p>
+        <div [style.color]="cComprados ? 'green' : 'red'">
+          {{ pComprados }}%
+          <ng-container *ngIf="cComprados; else negativo">
+            <svg width="7%" height="7%" viewBox="0 -3 16 16" id="meteor-icon-kit__regular-chart-line-up-s" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.032"></g><g id="SVGRepo_iconCarrier"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.5858 2H10C9.4477 2 9 1.55228 9 1C9 0.44772 9.4477 0 10 0H15C15.5523 0 16 0.44772 16 1V6C16 6.5523 15.5523 7 15 7C14.4477 7 14 6.5523 14 6V3.4142L9.7071 7.7071C9.3166 8.0976 8.6834 8.0976 8.2929 7.7071L6 5.4142L1.70711 9.7071C1.31658 10.0976 0.68342 10.0976 0.29289 9.7071C-0.09763 9.3166 -0.09763 8.6834 0.29289 8.2929L5.29289 3.2929C5.68342 2.90237 6.3166 2.90237 6.7071 3.2929L9 5.5858L12.5858 2z" fill="#30750a"></path></g></svg>
+          </ng-container>
+          <ng-template #negativo>
+            <svg width="7%" height="7%" viewBox="0 -3 16 16" id="meteor-icon-kit__regular-chart-line-down-s" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.5858 8L9 4.4142L6.7071 6.7071C6.3166 7.0976 5.68342 7.0976 5.29289 6.7071L0.29289 1.70711C-0.09763 1.31658 -0.09763 0.68342 0.29289 0.29289C0.68342 -0.09763 1.31658 -0.09763 1.70711 0.29289L6 4.5858L8.2929 2.29289C8.6834 1.90237 9.3166 1.90237 9.7071 2.29289L14 6.5858V4C14 3.4477 14.4477 3 15 3C15.5523 3 16 3.4477 16 4V9C16 9.5523 15.5523 10 15 10H10C9.4477 10 9 9.5523 9 9C9 8.4477 9.4477 8 10 8H12.5858z" fill="#af4141"></path></g></svg>
+          </ng-template>
+        </div>
+      </div>   
+      <div class="graficos"id="graf-comp" style="width: 50%; height: 50%;"></div>
     </div>
     <div class="div3" id="divs_stats"> 
-      <p class="stat_title">Total eliminados</p>
-      <p>{{totalEliminados}}</p>
-      <div id="graf-elim" style="width: 40%; height: 40%;"></div>
-      <p>{{pEliminados}}%      
-</p>
+      <p class="stat_title" >Total eliminados</p>
+      <div class="datos_stats">
+        <p class="valor_stat">{{totalEliminados}}</p>
+        <div [style.color]="cEliminados ? 'green' : 'red'">
+          {{ pEliminados }}%
+          <ng-container *ngIf="cEliminados; else negativo">
+            <svg width="7%" height="7%" viewBox="0 -3 16 16" id="meteor-icon-kit__regular-chart-line-up-s" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.032"></g><g id="SVGRepo_iconCarrier"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.5858 2H10C9.4477 2 9 1.55228 9 1C9 0.44772 9.4477 0 10 0H15C15.5523 0 16 0.44772 16 1V6C16 6.5523 15.5523 7 15 7C14.4477 7 14 6.5523 14 6V3.4142L9.7071 7.7071C9.3166 8.0976 8.6834 8.0976 8.2929 7.7071L6 5.4142L1.70711 9.7071C1.31658 10.0976 0.68342 10.0976 0.29289 9.7071C-0.09763 9.3166 -0.09763 8.6834 0.29289 8.2929L5.29289 3.2929C5.68342 2.90237 6.3166 2.90237 6.7071 3.2929L9 5.5858L12.5858 2z" fill="#30750a"></path></g></svg>
+          </ng-container>
+          <ng-template #negativo>
+            <svg width="7%" height="7%" viewBox="0 -3 16 16" id="meteor-icon-kit__regular-chart-line-down-s" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.5858 8L9 4.4142L6.7071 6.7071C6.3166 7.0976 5.68342 7.0976 5.29289 6.7071L0.29289 1.70711C-0.09763 1.31658 -0.09763 0.68342 0.29289 0.29289C0.68342 -0.09763 1.31658 -0.09763 1.70711 0.29289L6 4.5858L8.2929 2.29289C8.6834 1.90237 9.3166 1.90237 9.7071 2.29289L14 6.5858V4C14 3.4477 14.4477 3 15 3C15.5523 3 16 3.4477 16 4V9C16 9.5523 15.5523 10 15 10H10C9.4477 10 9 9.5523 9 9C9 8.4477 9.4477 8 10 8H12.5858z" fill="#af4141"></path></g></svg>
+          </ng-template>
+        </div>
+      </div>   
+      <div class="graficos"id="graf-elim" style="width: 50%; height: 50%;"></div>    
     </div>
     <div class="div4" id="divs_stats"> 
       <p class="stat_title">Porcentaje añadidos/comprados</p>
-      <p>{{porcentaje}}%</p>
+      <p class="porcentaje_text">{{porcentaje}}%</p>
     </div>
     <div class="div5" id="divs_stats"> 
       <p class="stat_title">Usuarios activos</p>
-      <div id="grafico" style="width: 95%; height: 90%;"></div>
+      <div id="grafico" style="width: 100%; height: 90%;"></div>
     </div>
     <div class="div6" id="divs_stats"> 
       <p class="stat_title" >Productos más buscados</p>
       <div *ngFor="let producto of buscados; let i = index">
-        <div class="content_prods" >
-          <div class="prod" *ngIf="i < 5">
+        <div class="content_prods" *ngIf="i < 6" >
+            <img [src]="urlFotoProducto + producto.foto + '?token=' +tokenUsuario" alt="Imagen del producto">
             <p>{{producto.name}}</p>
-            <p>{{producto.value}} veces comprado</p>
-          </div>
+            <p class="busqueda_text">{{producto.value}} búsquedas</p>
+        </div>
+        <div *ngIf="i < 6" >
+          <hr size="1px" color="black" >
         </div>
       </div>
       
@@ -86,32 +100,4 @@
     </div>
 
 </div>
-
-
-<!--
-<div class="stats">
-  
-    <div class="contadores">
-        <div class="cont-content">
-            <div id="deleted" style="width: 50%; height: 50%;"></div>
-        </div>
-    </div>
-    
-</div>
-
-
-
-<div class="parent">
-    <div class="div1" (click)="mostrarGrafico('masEliminado')" id="masEliminados" style="width: 100%; height: 100%;"></div>
-    <div class="div2" (click)="mostrarGrafico('masAnadido')" id="masAnadidos" style="width: 100%; height: 100%;"></div>
-    <div class="div4">
-        <h5>Usuarios activos</h5>
-        <p class="valor"> {{usuariosActivos}} </p>
-    </div>
-    <div class="div5"></div>
-    <div class="div6"></div>
-    <div class="div7"></div>
-    <div class="div8" id="graficoSecciones" style="width: 100%; height: 150%;"></div>
-</div>
--->
 </body>

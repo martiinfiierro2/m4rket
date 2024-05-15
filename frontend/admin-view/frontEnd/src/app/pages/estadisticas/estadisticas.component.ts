@@ -13,6 +13,7 @@ import * as echarts from 'echarts';
 import { environment } from '../../../environments/environment';
 import { FormsModule } from '@angular/forms';
 import { log } from 'node:console';
+import { waitForAsync } from '@angular/core/testing';
 
 
 export interface Contador{
@@ -33,6 +34,7 @@ export interface Tiempo{
 export class DatosContadores{
   value: string;
   name: number;
+  foto: string;
 }
 
 @Component({
@@ -266,9 +268,7 @@ export class EstadisticasComponent {
               position: 'top'
             },
             data:datos,
-            fill: false,
-            borderColor: 'rgb(81, 135, 122))',
-            tension: 0.9
+            smooth: true,
           }
         ]
       };
@@ -310,9 +310,7 @@ export class EstadisticasComponent {
               position: 'top'
             },
             data:datos,
-            fill: false,
-            borderColor: 'rgb(81, 135, 122))',
-            tension: 0.9
+            smooth: true,
           }
         ]
       };
@@ -354,9 +352,7 @@ export class EstadisticasComponent {
               position: 'top'
             },
             data:datos,
-            fill: false,
-            borderColor: 'rgb(81, 135, 122))',
-            tension: 0.9
+            smooth: true,
           }
         ]
       };
@@ -382,12 +378,13 @@ export class EstadisticasComponent {
         const res = await this.estadisticasService.getCountBuscadosFecha(this.fechaInicio, this.fechaFin).toPromise();
         //console.log(res);
         
-        for (let index = 0; index < res.datosContadores.length; index++) {
+        for (let index = 0; index < 7; index++) {
           let contador = new DatosContadores();
     
           const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
           contador.name = res2.productos.nombre;
           contador.value = res.datosContadores[index].totalCount;
+          contador.foto = res2.productos.foto;
           this.buscados.push(contador);
           this.totalBuscados += parseInt(contador.value);
         }
@@ -439,7 +436,7 @@ export class EstadisticasComponent {
           this.eliminados.push(contador);
           this.totalEliminados += parseInt(contador.value);
         }
-      this.getTendenciaEliminados();
+      await this.getTendenciaEliminados();
       } catch (error) {
         console.error(error);
       }
@@ -475,9 +472,9 @@ export class EstadisticasComponent {
         contador.value = res.datosContadores[index].totalCount;
         this.comprados.push(contador);
         this.totalComprados += parseInt(contador.value);
-        await this.getPorcentajeComprados();
       }
-      this.getTendenciaComprados();
+      await this.getPorcentajeComprados();
+      await this.getTendenciaComprados();
     } catch (error) {
       console.error(error);
     }
@@ -499,18 +496,18 @@ export class EstadisticasComponent {
         contador.value = res.datosContadores[index].totalCount;
         this.anadidos.push(contador);
         this.totalAnadidos += parseInt(contador.value);
-
       }
-      this.getTendenciaListados();
+      await this.getTendenciaListados();
     } catch (error) {
       console.error(error);
     }
   }
   
   async getPorcentajeComprados(){
+    await Promise.all([this.totalComprados, this.totalAnadidos]);
     this.porcentaje = 0;
     if(this.totalComprados && this.totalAnadidos){
-      this.porcentaje = parseFloat((this.totalEliminados / this.totalAnadidos * 100).toFixed(2));
+      this.porcentaje = parseFloat((this.totalComprados * 100 / this.totalAnadidos).toFixed(2));
     }
   }
 
