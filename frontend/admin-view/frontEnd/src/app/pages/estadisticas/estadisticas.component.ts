@@ -79,6 +79,24 @@ export class EstadisticasComponent {
   totalBuscados: number = 0;
   porcentaje: number = 0;
 
+
+  //VARIABLES TENDENCIA 
+  tendenciaAnadidos: number = 0;
+  tendenciaEliminados: number = 0;
+  tendenciaActivos: number = 0;
+  tendenciaComprados: number = 0;
+  tendenciaBuscados: number = 0;
+  tendenciaFechaInicio: string="";
+  tendenciaFechaFin: string ="";
+
+  pAnadidos: number = 0;
+  cAnadidos: boolean = true;
+  pEliminados: number = 0;
+  cEliminados: boolean = true;
+  pComprados: number = 0;
+  cComprados: boolean = true;
+
+
   //variables para mostrar foto
   tokenUsuario = sessionStorage.getItem('tokenUsuario') || localStorage.getItem('tokenUsuario');
   urlFotoProducto = environment.base_url + '/uploads/fotoproducto/';
@@ -99,12 +117,17 @@ export class EstadisticasComponent {
     const hoy = new Date();
     const fechaInicio = new Date(hoy);
     const fechaFin = new Date(hoy);
+    const fechaTendenciaInicio =  new Date(hoy);
+
+    fechaTendenciaInicio.setDate(fechaInicio.getDate() - 14);
 
     fechaInicio.setDate(fechaInicio.getDate() - 7);
 
     this.fechaInicio = fechaInicio.toISOString().split('T')[0];
     this.fechaFin = fechaFin.toISOString().split('T')[0];
 
+    this.tendenciaFechaFin = fechaInicio.toISOString().split('T')[0];
+    this.tendenciaFechaInicio = fechaTendenciaInicio.toISOString().split('T')[0];
   }
 
   async actualizarDatos(opcion: string){
@@ -119,16 +142,24 @@ export class EstadisticasComponent {
     const hoy = new Date();
     const fechaInicio = new Date(hoy);
     const fechaFin = new Date(hoy);
+    const fechaTendenciaInicio =  new Date(hoy);
+    const fechaTendenciaFin = new Date(hoy);
   
     switch (opcion) {
       case '7d':
         fechaInicio.setDate(fechaInicio.getDate() - 7);
+        fechaTendenciaInicio.setDate(fechaInicio.getDate() - 14);
+        fechaTendenciaFin.setDate(fechaInicio.getDate() - 7);
         break;
       case '1m':
         fechaInicio.setDate(fechaInicio.getDate() - 30);
+        fechaTendenciaInicio.setDate(fechaInicio.getDate() - 60);
+        fechaTendenciaFin.setDate(fechaInicio.getDate() - 30);
         break;
       case '12m':
         fechaInicio.setFullYear(fechaInicio.getFullYear()- 1);
+        fechaTendenciaInicio.setFullYear(fechaInicio.getFullYear() - 2);
+        fechaTendenciaFin.setFullYear(fechaInicio.getFullYear()- 1);
         break;
     }
   
@@ -137,6 +168,11 @@ export class EstadisticasComponent {
 
     this.fechaInicio = fechaInicio.toISOString().split('T')[0];
     this.fechaFin = fechaFin.toISOString().split('T')[0];
+
+    this.tendenciaFechaFin = fechaTendenciaFin.toISOString().split('T')[0];
+    this.tendenciaFechaInicio = fechaTendenciaInicio.toISOString().split('T')[0];
+
+    console.log('Fecha inicio tendencia: ' + this.tendenciaFechaInicio + 'al ' + this.tendenciaFechaFin);
 
     this.actualizarDatos(opcion);
   
@@ -161,7 +197,6 @@ export class EstadisticasComponent {
   async pruebaGrafico(opcion: any, respuesta: any) {
     const chartElement = document.getElementById('grafico');
     const datos = await this.procesarDatos(opcion, respuesta);
-    console.log('Datos de grafico ' + datos);
   
     if (chartElement && chartElement.clientWidth > 0 && chartElement.clientHeight > 0) {
       echarts.dispose(chartElement);
@@ -204,7 +239,6 @@ export class EstadisticasComponent {
     const chartElement = document.getElementById('graf-list');
     
     const datos = await this.procesarDatos(opcion, respuesta);
-    console.log('Datos de listado ' + datos);
   
     if (chartElement && chartElement.clientWidth > 0 && chartElement.clientHeight > 0) {
       echarts.dispose(chartElement);
@@ -405,7 +439,7 @@ export class EstadisticasComponent {
           this.eliminados.push(contador);
           this.totalEliminados += parseInt(contador.value);
         }
-
+      this.getTendenciaEliminados();
       } catch (error) {
         console.error(error);
       }
@@ -443,11 +477,10 @@ export class EstadisticasComponent {
         this.totalComprados += parseInt(contador.value);
         await this.getPorcentajeComprados();
       }
+      this.getTendenciaComprados();
     } catch (error) {
       console.error(error);
     }
-
-
   }
 
   async getContadoresListados(opcion: string) {
@@ -468,6 +501,7 @@ export class EstadisticasComponent {
         this.totalAnadidos += parseInt(contador.value);
 
       }
+      this.getTendenciaListados();
     } catch (error) {
       console.error(error);
     }
@@ -477,7 +511,6 @@ export class EstadisticasComponent {
     this.porcentaje = 0;
     if(this.totalComprados && this.totalAnadidos){
       this.porcentaje = parseFloat((this.totalEliminados / this.totalAnadidos * 100).toFixed(2));
-      console.log(this.porcentaje);
     }
   }
 
@@ -497,6 +530,79 @@ export class EstadisticasComponent {
 
     return datos;
   }
+
+
+
+  // DATOS DE TENDENCIA
+  async getTendenciaListados() {
+    this.tendenciaAnadidos = 0;
+    this.pAnadidos = 0;
+    try {
+      const res = await this.estadisticasService.getCountListadosFecha(this.tendenciaFechaInicio, this.tendenciaFechaFin).toPromise();
+      for (let index = 0; index < res.datosContadores.length; index++) {
+        let contador = new DatosContadores();
+        contador.value = res.datosContadores[index].totalCount;
+        this.tendenciaAnadidos += parseInt(contador.value);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    if(this.totalAnadidos){
+      this.pAnadidos = parseFloat((((this.totalAnadidos - this.tendenciaAnadidos) / this.tendenciaAnadidos) * 100).toFixed(2));
+      if(this.pAnadidos < 0){
+        this.cAnadidos = false;
+      }
+    }
+    
+  }
+
+
+  async getTendenciaEliminados() {
+    this.tendenciaEliminados = 0;
+    this.pEliminados = 0;
+      try {
+        const res = await this.estadisticasService.getCountEliminadosFecha(this.tendenciaFechaInicio, this.tendenciaFechaFin).toPromise();
+        for (let index = 0; index < res.datosContadores.length; index++) {
+          let contador = new DatosContadores();
+          contador.value = res.datosContadores[index].totalCount;
+          this.tendenciaEliminados += parseInt(contador.value);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+      if(this.totalEliminados){
+        this.pEliminados = parseFloat((((this.totalEliminados - this.tendenciaEliminados) / this.tendenciaEliminados) * 100).toFixed(2));
+        if(this.tendenciaEliminados = 0){
+          this.pEliminados = 0;
+          if(this.pEliminados < 0){
+            this.cEliminados = false;
+          }
+        }
+      }
+  }
+
+  async getTendenciaComprados() {
+    this.tendenciaComprados = 0;
+    this.pComprados = 0;
+    try {
+      const res = await this.estadisticasService.getCountCompradosFecha(this.tendenciaFechaInicio, this.tendenciaFechaFin).toPromise();
+      for (let index = 0; index < res.datosContadores.length; index++) {
+        let contador = new DatosContadores();
+        contador.value = res.datosContadores[index].totalCount;
+        this.tendenciaComprados += parseInt(contador.value);
+        await this.getPorcentajeComprados();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    if(this.totalComprados){
+      this.pComprados = parseFloat((((this.totalComprados - this.tendenciaComprados) / this.tendenciaComprados) * 100).toFixed(2));
+      if(this.pComprados < 0){
+        this.cComprados = false;
+      }
+    }
+  }
+
 
   async procesarDatosPorUltimos7Dias(datos: any) {
     this.xAxisData= [];

@@ -67,9 +67,16 @@ body{
         border: 0.5px solid #c3c3c3;
         padding: 15px;
     }
+
+    .stat_title{
+        font-size: 15px;
+    }
+
+    .valor_stat{
+        font-size: 24px;
+    }
     .parent div p{
         margin: 0px;
-        font-size: 20px;
     }
 
     .parent div div{
@@ -86,3 +93,5 @@ body{
     .div7 { grid-area: 4 / 1 / 5 / 2; }
     .div8 { grid-area: 4 / 2 / 5 / 3; }
     .div9 { grid-area: 4 / 3 / 5 / 4; }
+
+    
