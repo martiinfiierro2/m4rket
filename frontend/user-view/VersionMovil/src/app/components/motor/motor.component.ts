@@ -141,32 +141,28 @@ export class MotorComponent implements AfterViewInit{
   async cargarNodosPines() {
     try {
       const idUsu: string = await this.getUsuarioLog();
+      //Para cada producto en lista compra
       this.productosService.getListaCompra(idUsu).subscribe( res => {
         for(let j = 0; j < res.listacompra.length; j++){
-          const newLista = {
-            id: res.listacompra[j].idProd, 
-            estado: res.listacompra[j].comprado
-          };
-          this.listaCompra.push(newLista);
+          this.listaCompra.push(res.listacompra[j].idProd, res.listacompra[j].comprado);
         }
       });
 
+      //Para cada producto existente
       const res: any = await this.productosService.getAllProdSinPag().toPromise();
       for (let index = 0; index < res.productos.length; index++) {
         let pin!: TNodo;
         this.pins.push(pin);
-      }
-      
-      for (let index = 0; index < res.productos.length; index++) {
+
         const producto: Producto = res.productos[index];
         let estado: boolean = false;
         let compradoTextura: string = producto.foto;
         let nombreMalla: string = 'pin.obj'
 
         for(let x = 0; x < this.listaCompra.length; x++){
-          if(producto.id == this.listaCompra[x].id){
+          if(this.listaCompra.find(lista => lista.id === producto.id)){
             estado = true;
-            if(this.listaCompra[x].estado == true){
+            if(this.listaCompra.find(lista => lista.estado === true)){
               nombreMalla = 'pin2.obj';
               compradoTextura = 'T.jpeg';
             }
@@ -234,9 +230,8 @@ export class MotorComponent implements AfterViewInit{
           );
         }
       }
-
       //recorrer y dibujar
-      this.mercado.recorrer(glMatrix.mat4.identity(glMatrix.mat4.create()));
+      await this.mercado.recorrer(glMatrix.mat4.identity(glMatrix.mat4.create()));
     } catch (error) {
       console.error('Error al cargar los nodos de pines:', error);
     }
