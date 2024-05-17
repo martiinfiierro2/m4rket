@@ -4,6 +4,8 @@ import { ProductosService } from 'src/app/services/productos.service';
 import { EstadisticasService } from 'src/app/services/estadisticas.service';
 import { ModeloService } from 'src/app/services/modelo.service';
 import { MotorComponent } from '../motor/motor.component';
+import { TRecursoMalla } from '../motor/clases/TRecursoMalla';
+
 
 import { trigger, transition, style, animate } from '@angular/animations';
 import { environment } from '../../environments/environment';
@@ -575,13 +577,19 @@ export class DrawerComponent implements AfterViewInit {
 
   getBusquedaProducto(event: any) {
     const query = event.toLowerCase();
+    this.mostrarBusqueda = true;
+
     this.productosService.getBusquedaProducto(query).subscribe((res) => {
       this.productos = res.productos;
 
       this.compararListaBusqueda();
     });
   }
-
+  mostrarBusqueda: boolean = false;
+  borrarBusqueda(){
+    this.mostrarBusqueda = false;
+    console.log("Pase");
+  }
   async getListaCompraUsu() {
     this.productosService.getListaCompra(this.idUsu).subscribe((result) => {
       if (result.listacompra) {
