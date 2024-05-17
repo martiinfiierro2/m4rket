@@ -68,8 +68,8 @@ interface ProductoDetalle {
 interface Stats {
   nombre: string;
   idProd: number;
-  qr: string | null;
   fecha: Date;
+  id_usuario: string;
 }
 
 export interface Ubicacion {
@@ -173,7 +173,7 @@ export class HomePage {
     let tipo = 'eliminado';
     let fecha = new Date();
     let producto = 0;
-    this.estadistica(producto, tipo, fecha);
+    //this.estadistica(producto, tipo, fecha);
   }
   
 
@@ -213,12 +213,11 @@ export class HomePage {
     const post: Stats = {
       nombre: tipo,
       idProd: id,
-      qr: null,
       fecha: fecha,
+      id_usuario: this.idUsu,
     };
     this.estadisticasService.postContador(post);
   }
-
   decrementar(productoDetalle: any) {
     productoDetalle.cantidad--;
     this.actualizarCantidad(
@@ -659,11 +658,13 @@ export class HomePage {
 
   //!Chatbot!!!
   loadChatbotScript() {
-    const script = document.createElement('script');
-    script.src = 'https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1';
-    script.onload = () => {
-    };
-    document.body.appendChild(script);
+    setTimeout(() => {
+      const script = document.createElement('script');
+      script.src = 'https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1';
+      script.onload = () => {
+  
+      };
+      document.body.appendChild(script);
+    }, 1000); // Espera 3000 milisegundos (3 segundos) antes de ejecutar el código
   }
-
 }

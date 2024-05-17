@@ -17,6 +17,8 @@ export class SignUpComponent {
 
 
   private tokenUsuario = '';
+  private idUsuario = '';
+  private email = '';
   
   constructor( private fb: FormBuilder,
                private usuarioService: UsuariosService,
@@ -37,10 +39,16 @@ export class SignUpComponent {
     this.usuarioService.registro(this.sign_upForm.value)
       .subscribe( res =>{
         console.log(res);
+        console.log('tetas');
+        console.log(res.idUsuario);
+        this.idUsuario = res.usuario.id;
         this.tokenUsuario = res.token;
+        this.email = res.usuario.email;
+        console.log(this.idUsuario);
+        console.log(this.tokenUsuario);
         sessionStorage.setItem('tokenUsuario', this.tokenUsuario);
-        localStorage.setItem('idUsuario', res.idUsuario);
-
+        localStorage.setItem('idUsuario', this.idUsuario);
+        localStorage.setItem('email', this.email);
         this.route.navigate(['/home']);
       }) 
   }

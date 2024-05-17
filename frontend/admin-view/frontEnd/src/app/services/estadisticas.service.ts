@@ -41,10 +41,17 @@ export class EstadisticasService {
     return this.http.get(urlCompleta, {headers: this.cabeceras});
   }
 */
-  getCountAnadidosFecha(inicio: string, fin: string): Observable<any>{
+  getCountBuscadosFecha(inicio: string, fin: string): Observable<any>{
     const fechaInicioCodificada = encodeURIComponent(inicio);
     const fechaFinCodificada = encodeURIComponent(fin);
-    let urlCompleta = this.url + '?nombre=mascomprado&inicio=' + fechaInicioCodificada + '&fin=' + fechaFinCodificada;
+    let urlCompleta = this.url + '?nombre=buscado&inicio=' + fechaInicioCodificada + '&fin=' + fechaFinCodificada;
+    return this.http.get(urlCompleta, {headers: this.cabeceras});
+  }
+
+  getCountListadosFecha(inicio: string, fin: string): Observable<any>{
+    const fechaInicioCodificada = encodeURIComponent(inicio);
+    const fechaFinCodificada = encodeURIComponent(fin);
+    let urlCompleta = this.url + '?nombre=anadido&inicio=' + fechaInicioCodificada + '&fin=' + fechaFinCodificada;
     return this.http.get(urlCompleta, {headers: this.cabeceras});
   }
 
@@ -58,7 +65,14 @@ export class EstadisticasService {
   getCountActivosFecha(inicio: string, fin: string): Observable<any>{
     const fechaInicioCodificada = encodeURIComponent(inicio);
     const fechaFinCodificada = encodeURIComponent(fin);
-    let urlCompleta = this.url + '?nombre=anadido&inicio=' + fechaInicioCodificada + '&fin=' + fechaFinCodificada;
+    let urlCompleta = this.url + '?nombre=activo&inicio=' + fechaInicioCodificada + '&fin=' + fechaFinCodificada;
+    return this.http.get(urlCompleta, {headers: this.cabeceras});
+  }
+
+  getCountCompradosFecha(inicio: string, fin: string): Observable<any>{
+    const fechaInicioCodificada = encodeURIComponent(inicio);
+    const fechaFinCodificada = encodeURIComponent(fin);
+    let urlCompleta = this.url + '?nombre=comprado&inicio=' + fechaInicioCodificada + '&fin=' + fechaFinCodificada;
     return this.http.get(urlCompleta, {headers: this.cabeceras});
   }
 
