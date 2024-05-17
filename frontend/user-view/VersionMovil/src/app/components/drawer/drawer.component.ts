@@ -574,7 +574,6 @@ export class DrawerComponent implements AfterViewInit {
   }
 
   getBusquedaProducto(event: any) {
-    this.mostrarBusqueda = true;
     const query = event.toLowerCase();
     this.productosService.getBusquedaProducto(query).subscribe((res) => {
       this.productos = res.productos;
