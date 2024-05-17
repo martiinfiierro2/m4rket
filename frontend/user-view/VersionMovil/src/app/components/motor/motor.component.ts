@@ -1,9 +1,10 @@
-import { AfterViewInit, Component, OnInit} from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit} from '@angular/core';
 import * as glMatrix from 'gl-matrix';
 import { TMotorTAG } from './clases/TMotorTAG';
 import { TNodo } from './clases/TNodo';
 import { ProductosService } from 'src/app/services/productos.service';
 import { Producto} from '../drawer/drawer.component';
+import { MotorService } from "../../services/motor.service";
 
 export let motor: TMotorTAG;
 
@@ -25,7 +26,8 @@ export class MotorComponent implements AfterViewInit{
   private listaCompra: lista[] = [];
 
   constructor(
-    private productosService: ProductosService, 
+    private productosService: ProductosService,
+    @Inject(MotorService) private motorServicio: MotorService
   ) { }
 
   ngAfterViewInit(): void {
@@ -138,10 +140,11 @@ export class MotorComponent implements AfterViewInit{
     return idUsu;
   }
 
-  async cargarNodosPines() {
+  public async cargarNodosPines() {
     try {
       const idUsu: string = await this.getUsuarioLog();
       this.productosService.getListaCompra(idUsu).subscribe( res => {
+        console.log("Cantidad de productos en cargarNodosPines: " + res.listacompra.length);
         for(let j = 0; j < res.listacompra.length; j++){
           const newLista = {
             id: res.listacompra[j].idProd, 
@@ -150,12 +153,15 @@ export class MotorComponent implements AfterViewInit{
           this.listaCompra.push(newLista);
         }
       });
-
+      
       const res: any = await this.productosService.getAllProdSinPag().toPromise();
+
       for (let index = 0; index < res.productos.length; index++) {
+
         let pin!: TNodo;
         this.pins.push(pin);
       }
+
       
       for (let index = 0; index < res.productos.length; index++) {
         const producto: Producto = res.productos[index];
@@ -235,8 +241,9 @@ export class MotorComponent implements AfterViewInit{
         }
       }
 
-      //recorrer y dibujar
-      this.mercado.recorrer(glMatrix.mat4.identity(glMatrix.mat4.create()));
+      console.log("Lista de la compra al final: " + this.listaCompra.length);
+      //recorrer y dibujarCanti
+      await this.mercado.recorrer(glMatrix.mat4.identity(glMatrix.mat4.create()));
     } catch (error) {
       console.error('Error al cargar los nodos de pines:', error);
     }

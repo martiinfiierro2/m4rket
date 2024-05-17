@@ -1,10 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  ViewChild,
-  AfterViewInit,
-  Input,
-} from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, Inject} from '@angular/core';
 import { GestureController, Platform } from '@ionic/angular';
 import { ProductosService } from 'src/app/services/productos.service';
 import { EstadisticasService } from 'src/app/services/estadisticas.service';
@@ -17,6 +11,7 @@ import * as echarts from 'echarts';
 import { HomePage } from 'src/app/home/home.page';
 import { Malla } from '../motor/clases/Malla';
 import { RotacionService } from 'src/app/services/rotacion.service';
+import { MotorService } from 'src/app/services/motor.service';
 
 interface Stats {
   nombre: string;
@@ -74,7 +69,6 @@ export interface ListaCompra {
   ],
 })
 export class DrawerComponent implements AfterViewInit {
-  @ViewChild(MotorComponent) motorComponent!: MotorComponent;
   @ViewChild('drawer', { read: ElementRef }) drawer!: ElementRef;
   // @Output('openStateChanged') openState: EventEmitter<boolean> = new EventEmitter();
   @ViewChild('botonchatbot', { read: ElementRef }) botonchatbot!: ElementRef;
@@ -82,6 +76,8 @@ export class DrawerComponent implements AfterViewInit {
   @ViewChild('lista', { read: ElementRef }) lista!: ElementRef;
   @ViewChild('profile', { read: ElementRef }) profile!: ElementRef;
   @ViewChild('recarga', { read: HomePage }) recarga!: HomePage;
+
+
   isOpen = true;
   openHeight = 0;
   isMiddle = true;
@@ -103,18 +99,22 @@ export class DrawerComponent implements AfterViewInit {
     sessionStorage.getItem('tokenUsuario') ||
     localStorage.getItem('tokenUsuario');
   urlFotoProducto = environment.base_url + '/uploads/fotoproducto/';
+
   @ViewChild(Malla) malla!: Malla;
+
+
   constructor(
     private plt: Platform,
     private gestureCtrl: GestureController,
     private productosService: ProductosService,
     private estadisticasService: EstadisticasService,
-    private rotacionService: RotacionService
+    private rotacionService: RotacionService,
+    @Inject(MotorService) private motorServicio: MotorService
   ) {
   
   }
 
-  borrarProductosCompradosEnServidor() {
+  async borrarProductosCompradosEnServidor() {
     const productosComprados = this.listaCompra.filter(producto => producto.comprado);
     productosComprados.forEach(producto => {
       this.productosService.deleteListaCompra(producto.id).subscribe(() => {
@@ -122,8 +122,14 @@ export class DrawerComponent implements AfterViewInit {
     });
   
     this.listaCompra = this.listaCompra.filter(producto => !producto.comprado);
-    this.Recarguita();
-    this.getListaCompraUsu();
+    //this.Recarguita();
+    try{
+      await this.getListaCompraUsu()
+      await this.motorServicio.getMotor().cargarNodosPines();
+    } catch (error) {
+      console.error('Error al recargar el modelo:', error);
+    }
+
     console.log('Productos comprados eliminados del servidor y local:', this.listaCompra);
   }
 
@@ -146,7 +152,6 @@ export class DrawerComponent implements AfterViewInit {
   }
 
   async ngAfterViewInit() {
-    console.log(this.motorComponent); 
     const drawer = this.drawer.nativeElement;
     this.openHeight = this.plt.height() / 100;
     const botonchatbot = this.botonchatbot.nativeElement;
@@ -234,12 +239,14 @@ export class DrawerComponent implements AfterViewInit {
       botonchatbot.style.display = 'flex';
     }
   }
+
   Recarguita() {
     const buttonElement = document.getElementById('Recargar');
     if (buttonElement) {
       buttonElement.dispatchEvent(new Event('click'));
     }
   }
+
   toggleDrawer() {
     const drawer = this.drawer.nativeElement;
     const botonchatbot = this.botonchatbot.nativeElement;
@@ -443,13 +450,13 @@ export class DrawerComponent implements AfterViewInit {
     }
   }
 
-  eliminar(producto: any) {
+  async eliminar(producto: any) {
     producto.enListaCompra = false;
-    this.borrarProd(producto.idLista);
+    await this.borrarProd(producto.idLista);
     //this.EliminarProductoSelect();
-    this.getProducto(producto.id);
+    //this.getProducto(producto.id);
     this.getListaCompraUsu();
-    this.Recarguita();
+    //this.Recarguita();
 
     //ESTADISTICAS
     let tipo = 'eliminado';
@@ -457,7 +464,7 @@ export class DrawerComponent implements AfterViewInit {
     this.estadistica(producto.id, tipo, fecha);
   }
 
-  anadirProducto(producto: any) {
+  async anadirProducto(producto: any) {
     //this.motorComponent.crearEscena();
     const fechaActual = new Date().toISOString().split('T')[0];
     const body = {
@@ -478,7 +485,13 @@ export class DrawerComponent implements AfterViewInit {
     let tipo = 'anadido';
     let fecha = new Date();
     this.estadistica(producto.id, tipo, fecha);
-    this.Recarguita();
+    //this.Recarguita();
+    try{
+      await this.getListaCompraUsu()
+      await this.motorServicio.getMotor().cargarNodosPines();
+    } catch (error) {
+      console.error('Error al recargar el modelo:', error);
+    }
   }
 
   getBusquedaProducto(event: any) {
@@ -490,7 +503,7 @@ export class DrawerComponent implements AfterViewInit {
     });
   }
 
-  getListaCompraUsu() {
+  async getListaCompraUsu() {
     this.productosService.getListaCompra(this.idUsu).subscribe((result) => {
       if (result.listacompra) {
         this.listaCompra = result.listacompra.map((item: ListaCompra) => ({
@@ -532,11 +545,18 @@ export class DrawerComponent implements AfterViewInit {
     });
   }
 
-  borrarProd(idLista: string) {
-    this.productosService.deleteListaCompra(idLista).subscribe((result) => {
+  async borrarProd(idLista: string) {
+    this.productosService.deleteListaCompra(idLista).subscribe(async (result) => {
       //this.getProductos(); //Recarga la lista de producto
       this.EliminarProductoSelect();
       this.getListaCompraUsu();
+      console.log("Elimino el producto");
+      try{
+        await this.getListaCompraUsu()
+        await this.motorServicio.getMotor().cargarNodosPines();
+      } catch (error) {
+        console.error('Error al recargar el modelo:', error);
+      }
     });
   }
 

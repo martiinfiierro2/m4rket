@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, Inject, ViewChild } from '@angular/core';
 import { ProductosService } from '../services/productos.service';
 import { DrawerComponent } from '../components/drawer/drawer.component';
 import { environment } from '../environments/environment';
@@ -21,6 +21,7 @@ import { ModeloService } from '../services/modelo.service';
 
 //Vainas de martin
 import { MotorComponent } from '../components/motor/motor.component';
+import { MotorService } from '../services/motor.service';
 
 export interface Producto {
   id: string;
@@ -134,7 +135,8 @@ export class HomePage {
   constructor(
     private productosService: ProductosService,
     private estadisticasService: EstadisticasService,
-    private ubicacionesService: UbicacionesService
+    private ubicacionesService: UbicacionesService,
+    @Inject(MotorService) private motorServicio: MotorService
   ) {
     this.scene = new THREE.Scene();
     this.primeravez = true;
@@ -142,8 +144,10 @@ export class HomePage {
 
   ngAfterViewInit(): void {
     //MARTIN
-    console.log(this.motorComponent)
+   console.log(this.motorComponent)
    this.motorComponent.crearEscena();
+   this.motorServicio.setMotor(this.motorComponent);
+
   }
 
   //VERSION ANTIGUA
