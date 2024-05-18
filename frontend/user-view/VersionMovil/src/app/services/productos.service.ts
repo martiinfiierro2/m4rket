@@ -12,6 +12,7 @@ export class ProductosService {
   private url: string = environment.base_url + '/productos';
   private urlLista: string = environment.base_url + '/listacompra';
   private urlPag: string = environment.base_url + '/allproductos';
+  private urlEnUbicacion: string = environment.base_url + '/enubicacion';
 
   private token: string | any;
   private cabeceras: any;
@@ -28,6 +29,12 @@ export class ProductosService {
     //console.log('La cabecera es: ' + this.cabeceras);
   }
 
+  getUbicaciondeProducto(idProd: any){
+    let urlCompleta = this.urlEnUbicacion + '?idProd=' + idProd;
+
+    return this.http.get(urlCompleta, { headers: this.cabeceras });
+  }
+
   buscarProductosPorNombre(nombre: string): Observable<any> {
     let urlCompleta = this.url + '?nombre=' + nombre;
 
@@ -42,6 +49,7 @@ export class ProductosService {
     return this.http.get(this.urlPag, { headers: this.cabeceras });
   }
 
+  
   getProductoId(idProd: string): Observable<any> {
     this.cargarCabeceras();
 

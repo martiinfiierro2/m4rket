@@ -41,7 +41,7 @@ export interface Producto {
   ingerdientes: string;
   foto: string;
   precio: Float32Array;
-  //Ubicacions: Ubicaciones[]
+  Ubicacions: Ubicacion[]
   //Promocions: Promociones[]
 
   cantidad: number;

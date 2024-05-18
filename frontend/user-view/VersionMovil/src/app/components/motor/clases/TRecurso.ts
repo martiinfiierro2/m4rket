@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export abstract class TRecurso {
 
-    private nombre:string;
+    private nombre: string;
 
     constructor(nombre: string) {
         this.nombre = nombre;

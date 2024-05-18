@@ -5,6 +5,7 @@ const { Ubicacion } = require('../models/ubicaciones');
 async function obtenerProductoUbicacion(req, res) {
     const id = req.query.id;
     const idUbi = req.query.idUbi;
+    const idProd = req.query.idProd;
 
     //Paginación 
     const desde = Number(req.query.desde) || 0; //Si no dan nada o no dan un numero es 0
@@ -20,6 +21,16 @@ async function obtenerProductoUbicacion(req, res) {
                     msg: 'El id de la relación producto-ubicación debe ser válido'
                 });
             }
+            res.json({
+                ok: true,
+                msg: 'getProductoUbicaciones',
+                prodUbi: prodUbi,
+                page: {
+                    desde,
+                    registropp,
+                    total
+                }
+            });
         }
         else if(idUbi){
             prodUbi = await Enubicacion.findAll({ where: { idUbi: idUbi } });
@@ -29,6 +40,36 @@ async function obtenerProductoUbicacion(req, res) {
                     msg: 'El id ubicacion de la relación producto-ubicación debe ser válido'
                 });
             }
+            res.json({
+                ok: true,
+                msg: 'getProductoUbicaciones',
+                prodUbi: prodUbi,
+                page: {
+                    desde,
+                    registropp,
+                    total
+                }
+            });
+        }
+        else if(idProd){
+            prodUbi = await Enubicacion.findAll({ where: { idProd: idProd } });
+            if (!prodUbi) {
+                return res.json({
+                    ok: false,
+                    msg: 'El id producto de la relación producto-ubicación debe ser válido'
+                });
+            }
+            const ubicaciones = prodUbi.map((ubicacion) => ubicacion.idUbi);
+            res.json({
+                ok: true,
+                msg: 'getProductoUbicaciones',
+                prodUbi: ubicaciones,
+                page: {
+                    desde,
+                    registropp,
+                    total
+                }
+            });
         }
         else {
             [prodUbi, total] = await Promise.all([
@@ -38,17 +79,17 @@ async function obtenerProductoUbicacion(req, res) {
                 }),
                 Enubicacion.count()
             ]);
+            res.json({
+                ok: true,
+                msg: 'getProductoUbicaciones',
+                prodUbi: prodUbi,
+                page: {
+                    desde,
+                    registropp,
+                    total
+                }
+            });
         }
-        res.json({
-            ok: true,
-            msg: 'getProductoUbicaciones',
-            prodUbi: prodUbi,
-            page: {
-                desde,
-                registropp,
-                total
-            }
-        });
     } catch (error) {
         return res.status(400).json({
             ok: false,

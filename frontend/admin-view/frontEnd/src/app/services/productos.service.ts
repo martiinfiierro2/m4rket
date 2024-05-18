@@ -102,6 +102,13 @@ export class ProductosService {
   getFotoProducto( nombreFoto: string): Observable<any>{
     return this.http.get(environment.base_url + '/uploads/fotoproducto/' + nombreFoto, {headers: this.cabeceras})
   }
-  
+
+  getListaCompra(idUsu: string): Observable<any> {
+    this.cargarCabeceras();
+    let urlLista = environment.base_url + '/listacompra';
+    let urlCompleta = urlLista + '?id=' + idUsu;
+
+    return this.http.get(urlCompleta, { headers: this.cabeceras });
+  }
 
 }

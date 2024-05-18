@@ -3,7 +3,7 @@ import { GestureController, Platform } from '@ionic/angular';
 import { ProductosService } from 'src/app/services/productos.service';
 import { EstadisticasService } from 'src/app/services/estadisticas.service';
 import { ModeloService } from 'src/app/services/modelo.service';
-import { MotorComponent } from '../motor/motor.component';
+import { MotorComponent, motor } from '../motor/motor.component';
 import { TRecursoMalla } from '../motor/clases/TRecursoMalla';
 
 
@@ -15,6 +15,10 @@ import { Malla } from '../motor/clases/Malla';
 import { RotacionService } from 'src/app/services/rotacion.service';
 import { MotorService } from 'src/app/services/motor.service';
 
+interface lista{
+  id: string,
+  estado: boolean
+}
 interface Stats {
   nombre: string;
   idProd: number;
@@ -104,6 +108,8 @@ export class DrawerComponent implements AfterViewInit {
   //MODELO
   modeloService = new ModeloService();
 
+  //Para crearPines
+  nuevoPin!:lista[];
 
 
   //Más buscados
@@ -154,7 +160,6 @@ export class DrawerComponent implements AfterViewInit {
     if(this.fechaFin !== "" && this.fechaInicio !== ""){
       try {
         const res = await this.estadisticasService.getCountBuscadosFecha(this.fechaInicio, this.fechaFin, this.idUsu).toPromise();
-        console.log(res);
         
         for (let index = 0; index < res.datosContadores.length; index++) {
           let contador = new DatosContadores();
@@ -203,12 +208,11 @@ export class DrawerComponent implements AfterViewInit {
     //this.Recarguita();
     try{
       await this.getListaCompraUsu()
-      await this.motorServicio.getMotor().cargarNodosPines();
+      //await this.motorServicio.getMotor().cargarNodosPines(1);
     } catch (error) {
       console.error('Error al recargar el modelo:', error);
     }
 
-    console.log('Productos comprados eliminados del servidor y local:', this.listaCompra);
   }
 
   borrarTodaLaLista() {
@@ -220,10 +224,8 @@ export class DrawerComponent implements AfterViewInit {
         });
   
         Promise.all(deletePromises).then(() => {
-          console.log('Todas las listas de compra han sido eliminadas exitosamente.');
           this.getListaCompraUsu();
         }).catch((error) => {
-          console.error('Error al intentar borrar todas las listas de compra:', error);
         });
       }
     });
@@ -534,10 +536,9 @@ export class DrawerComponent implements AfterViewInit {
   async eliminar(producto: any) {
     producto.enListaCompra = false;
     await this.borrarProd(producto.idLista);
-    //this.EliminarProductoSelect();
-    //this.getProducto(producto.id);
     this.getListaCompraUsu();
-    //this.Recarguita();
+    console.log(producto.id)
+    await this.motorServicio.getMotor().eliminarPines(producto.id);
 
     //ESTADISTICAS
     let tipo = 'eliminado';
@@ -546,7 +547,7 @@ export class DrawerComponent implements AfterViewInit {
   }
 
   async anadirProducto(producto: any) {
-    //this.motorComponent.crearEscena();
+    this.nuevoPin = [];
     const fechaActual = new Date().toISOString().split('T')[0];
     const body = {
       idUsu: this.idUsu,
@@ -559,7 +560,6 @@ export class DrawerComponent implements AfterViewInit {
       producto.enListaCompra = true;
       producto.cantidad = 1;
       this.getListaCompraUsu();
-      //this.getProducto(producto.id);
     });
     this.compararListaBusqueda();
     producto.enListaCompra = true;
@@ -569,7 +569,8 @@ export class DrawerComponent implements AfterViewInit {
     //this.Recarguita();
     try{
       await this.getListaCompraUsu()
-      await this.motorServicio.getMotor().cargarNodosPines();
+      this.nuevoPin.push({id:producto.id, estado: producto.estado});
+      await this.motorServicio.getMotor().crearPines(this.nuevoPin)
     } catch (error) {
       console.error('Error al recargar el modelo:', error);
     }
@@ -588,7 +589,6 @@ export class DrawerComponent implements AfterViewInit {
   mostrarBusqueda: boolean = false;
   borrarBusqueda(){
     this.mostrarBusqueda = false;
-    console.log("Pase");
   }
   async getListaCompraUsu() {
     this.productosService.getListaCompra(this.idUsu).subscribe((result) => {
@@ -613,7 +613,6 @@ export class DrawerComponent implements AfterViewInit {
           a.innerHTML =
         '<p>' + this.totalComprados + '/' + this.totalProductos + '<i style="margin-left: 10px; font-size: 16px;" class="fa-solid fa-cart-shopping"></i></p>';
       }
-      console.log(this.listaCompra);
     });
   }
 
@@ -639,10 +638,9 @@ export class DrawerComponent implements AfterViewInit {
       //this.getProductos(); //Recarga la lista de producto
       this.EliminarProductoSelect();
       this.getListaCompraUsu();
-      console.log("Elimino el producto");
       try{
         await this.getListaCompraUsu()
-        await this.motorServicio.getMotor().cargarNodosPines();
+        //await this.motorServicio.getMotor().cargarNodosPines(1);
       } catch (error) {
         console.error('Error al recargar el modelo:', error);
       }

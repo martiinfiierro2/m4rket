@@ -2,8 +2,6 @@ import * as glMatrix from 'gl-matrix';
 import { TEntidad } from "../clases/TEntidad";
 import { text } from 'express';
 
-
-
 export class TNodo{
 
     private entidad: any;
@@ -23,7 +21,7 @@ export class TNodo{
     }
 
     // Método para eliminar un hijo
-    eliminarHijo(nodoHijo: TNodo) {
+    async eliminarHijo(nodoHijo: TNodo) {
         const index = this.hijos.indexOf(nodoHijo);
         if (index > -1) {
             this.hijos.splice(index, 1);
@@ -38,7 +36,7 @@ export class TNodo{
             this.actualizarMatriz = false;
         }
     
-        if (this.getEntidad() != null && this.getDibujar() != false) {
+        if (this.getEntidad() != null) {
             this.entidad.dibujar(this.matrizTransf);
         }
     

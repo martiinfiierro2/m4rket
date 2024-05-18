@@ -3,8 +3,8 @@ import { TRecursoTextura } from "./TRecursoTextura";
 
 export class EModelo {
 
-    private recursoMalla = new TRecursoMalla("Mallas");
-    private recursoTextura = new TRecursoTextura("Texturas");
+    private recursoMalla!: TRecursoMalla;
+    private recursoTextura!: TRecursoTextura;
 
     constructor(recursoMalla: any, recursoTextura: any) {
         this.recursoMalla = recursoMalla;

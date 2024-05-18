@@ -12,25 +12,26 @@ export class TRecursoMalla extends TRecurso {
     async cargarFicheroAPI(nombre: string): Promise<any>{}
 
     override cargarFichero(filename: string): Promise<void> {
-        return new Promise((resolve, reject) => {
-            fetch(`../../assets/motor/objetos/${filename}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    const archivo = data;
-                    const _malla: Malla = new Malla(archivo, filename);// añadir malla y material
-                    this.mallas.push(_malla);
-                    resolve();
-                })
-                .catch(error => {
-                    console.error("Error al cargar el archivo:", error);
-                    reject(error);
-                });
-        });
+            return new Promise((resolve, reject) => {
+                fetch(`../../assets/motor/objetos/${filename}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.text();
+                    })
+                    .then(data => {
+                        const archivo = data;
+                        const _malla: Malla = new Malla(archivo, filename);// añadir malla y material
+                        this.mallas.push(_malla);
+                        resolve();
+                    })
+                    .catch(error => {
+                        console.error("Error al cargar el archivo:", error);
+                        reject(error);
+                    });
+            });
+        
     }
      
     draw(matTrans: any, textura: any): void{

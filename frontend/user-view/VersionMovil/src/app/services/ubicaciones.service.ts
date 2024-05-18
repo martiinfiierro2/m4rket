@@ -24,6 +24,12 @@ export class UbicacionesService {
       });
     }
 
+    getUbicacion(id: any){
+      this.cargarCabeceras();
+      let urlCompleta = this.url + '?id=' + id;
+      return this.http.get(urlCompleta, {headers: this.cabeceras});
+    }
+
     getIdUbicacion(referencia: any, posicion: any): Observable<any> {
       this.cargarCabeceras();
       let urlCompleta = this.url + '?referencia=' + referencia + '&posicion=' + posicion;

@@ -8,9 +8,9 @@ export class Malla {
     private lastTouchY: number = 0;
     private isRightTouchDown: boolean = false;
 
-  private translationX: number = 0;
-  private translationY: number = 0;
-  private translationSpeed!: number;
+    private translationX: number = 0;
+    private translationY: number = 0;
+    private translationSpeed!: number;
 
     private zoomFactor: number = 1;
     private zoomSpeed!: number;
@@ -55,7 +55,6 @@ export class Malla {
     setRotacion(valor: number){
         console.log(valor);
     }
-
 
     async dibujar(textura: any, matTrans: any) {
 
@@ -256,7 +255,6 @@ export class Malla {
     
         // Aplica el desplazamiento a la matriz de vista
         mat4.translate(this.viewMatrix, this.viewMatrix, [-this.translationX, -this.translationY, 0]);
-        
 
         // Aplicar la rotación en torno al eje Y
         mat4.rotate(this.viewMatrix, this.viewMatrix, this.rotation*(Math.PI / 180), [0, 1, 0]);
@@ -264,7 +262,7 @@ export class Malla {
         // Aplica el zoom a la matriz de proyección
         mat4.scale(this.projectionMatrix, this.projectionMatrix, [1, 1, this.zoomFactor]);  
         
-        const modelViewMatrix = mat4.create();
+        let modelViewMatrix = mat4.create();
         mat4.multiply(modelViewMatrix, this.viewMatrix, modelMatrix);
 
         //Crear matriz normales
@@ -280,17 +278,17 @@ export class Malla {
             this.projectionMatrix
         );
 
-    this.gl!.uniformMatrix4fv(
-      InfoPrograma.uniformLocations.viewMatrix,
-      false,
-      this.viewMatrix
-    );
+        this.gl!.uniformMatrix4fv(
+            InfoPrograma.uniformLocations.viewMatrix,
+            false,
+            this.viewMatrix
+        );
 
-    this.gl!.uniformMatrix4fv(
-      InfoPrograma.uniformLocations.modelMatrix,
-      false,
-      modelMatrix
-    );
+        this.gl!.uniformMatrix4fv(
+            InfoPrograma.uniformLocations.modelMatrix,
+            false,
+            modelMatrix
+        );
 
         this.gl!.uniformMatrix4fv(
             InfoPrograma.uniformLocations.normalMatrix,
@@ -304,7 +302,7 @@ export class Malla {
             modelViewMatrix
         );
 
-    
+        
         // Tell the shader we bound the texture to texture unit 0
         this.gl!.uniform1i(InfoPrograma.uniformLocations.uSampler, 0);
         this.gl!.viewport(0, 0, this.gl!.canvas.width, this.gl!.canvas.height);
@@ -312,7 +310,7 @@ export class Malla {
         // Bind de la textura
         this.gl!.activeTexture(this.gl!.TEXTURE0);
         this.gl!.bindTexture(this.gl!.TEXTURE_2D, this.texture);
-        
+            
         // Dibujar los elementos
         this.gl!.drawElements(
             this.gl!.TRIANGLES,
