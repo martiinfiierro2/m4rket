@@ -13,13 +13,15 @@ export class TNodo{
     private matrizTransf: glMatrix.mat4 = glMatrix.mat4.create();
     private actualizarMatriz: Boolean = false;
     private dibujar: Boolean = false;
-
+    public posicion: number[];
     // Método para agregar un hijo
     async agregarHijo(nodoHijo: TNodo) {
         this.hijos.push(nodoHijo);
         nodoHijo.padre = this;
     }
-
+    constructor() {
+        this.posicion = [0, 0]; // Initialize posicion with default coordinates or adjust accordingly
+    }
     // Método para eliminar un hijo
     async eliminarHijo(nodoHijo: TNodo) {
         const index = this.hijos.indexOf(nodoHijo);
