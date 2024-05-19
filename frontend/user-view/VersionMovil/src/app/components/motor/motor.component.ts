@@ -260,3 +260,5 @@ export class MotorComponent implements AfterViewInit{
     return numero;
   }
 }
+
+
