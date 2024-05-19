@@ -11,9 +11,10 @@ export class TNodo{
     private rotacion: glMatrix.vec3 = glMatrix.vec3.create();
     private escalado: glMatrix.vec3 = glMatrix.vec3.create();
     private matrizTransf: glMatrix.mat4 = glMatrix.mat4.create();
+    private matAcum: glMatrix.mat4 = glMatrix.mat4.create();
     private actualizarMatriz: Boolean = false;
-    private dibujar: Boolean = false;
-    public posicion: number[];
+    private dibujar: Boolean = true;
+
     // Método para agregar un hijo
     async agregarHijo(nodoHijo: TNodo) {
         this.hijos.push(nodoHijo);
@@ -24,10 +25,15 @@ export class TNodo{
     }
     // Método para eliminar un hijo
     async eliminarHijo(nodoHijo: TNodo) {
-        const index = this.hijos.indexOf(nodoHijo);
-        if (index > -1) {
-            this.hijos.splice(index, 1);
-            nodoHijo.padre = null;
+        const nodoBorrar = this.hijos.find(nodo => nodo === nodoHijo);
+        if (nodoBorrar) {
+            // Encuentra el índice del elemento a eliminar en la matriz
+            const index = this.hijos.indexOf(nodoBorrar);
+        
+            // Elimina el elemento de la matriz
+            if (index !== -1) {
+                this.hijos.splice(index, 1);
+            }
         }
     }
 
@@ -40,6 +46,9 @@ export class TNodo{
     
         if (this.getEntidad() != null) {
             this.entidad.dibujar(this.matrizTransf);
+            if(this.getEntidad().recursoMalla.nombre == 'pin.obj'){
+                console.log(this.entidad);
+            }
         }
     
         // Esperar a que todas las llamadas recursivas se completen

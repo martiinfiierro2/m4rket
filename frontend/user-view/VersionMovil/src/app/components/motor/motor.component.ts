@@ -666,7 +666,8 @@ export class MotorComponent implements AfterViewInit {
       });
     }
 
-    await this.crearPines(this.listaCompra);
+    await this.crearPines(this.listaCompra, 1);
+    await this.mercado.recorrer(glMatrix.mat4.identity(glMatrix.mat4.create()));
   }
   
 
@@ -719,25 +720,19 @@ export class MotorComponent implements AfterViewInit {
     return idUsu;
   }
 
-  async eliminarPines(idProd: number) {
-    try {
-      const pinBorrar = this.pines.find((pin) => pin.idProd === idProd);
-      motor.eliminarNodo(pinBorrar!.padre, pinBorrar!.nodo);
-    } catch (error) {
-      console.log('Error:' + error);
-    }
-
-    await this.mercado.recorrer(glMatrix.mat4.identity(glMatrix.mat4.create()));
+  async eliminarPines(idProd: number){
+    let pinBorrar = this.pines.find(pin => pin.idProd === idProd);
+    const entidad = pinBorrar!.nodo.setEntidad(null);
+    await pinBorrar!.padre.eliminarHijo(pinBorrar!.nodo);
+    await this.mercado.recorrer(pinBorrar!.padre.getMatrizTransf());
   }
 
-  async crearPines(lista: lista[]) {
-    for (let i = 0; i < lista.length; i++) {
-      let valor!: number;
-      let nameMalla = 'pin.obj';
-
-      const producto: any = await this.productosService
-        .getProductoId(lista[i].id)
-        .toPromise();
+  async crearPines(lista: lista[], number: number){
+    let valor !: number;
+    for(let i = 0; i < lista.length; i++){
+      let nameMalla = 'pin.obj'; 
+      
+      const producto: any = await this.productosService.getProductoId(lista[i].id).toPromise();
 
       await producto.productos.Ubicacions.forEach((ubicacion: any) => {
         valor = this.letraANumero(ubicacion.referencia) + ubicacion.posicion;
@@ -802,7 +797,11 @@ export class MotorComponent implements AfterViewInit {
         recText: producto.productos.foto,
       });
     }
-    await this.mercado.recorrer(glMatrix.mat4.identity(glMatrix.mat4.create()));
+
+    //Para que solo recorra los nodos necesarios cuando se añade un producto SOLAMENTE
+    if(number == 0){
+      await this.ubicaciones[valor].recorrer(this.ubicaciones[valor].getMatrizTransf());
+    }
   }
 
   letraANumero(letra: string): number {
