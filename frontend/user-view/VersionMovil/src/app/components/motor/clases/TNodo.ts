@@ -7,7 +7,7 @@ export class TNodo{
     private entidad: any;
     private hijos: TNodo[] = [];
     private padre!: TNodo | null;
-    private traslacion: glMatrix.vec3 = glMatrix.vec3.create();
+    public traslacion: glMatrix.vec3 = glMatrix.vec3.create();
     private rotacion: glMatrix.vec3 = glMatrix.vec3.create();
     private escalado: glMatrix.vec3 = glMatrix.vec3.create();
     private matrizTransf: glMatrix.mat4 = glMatrix.mat4.create();
