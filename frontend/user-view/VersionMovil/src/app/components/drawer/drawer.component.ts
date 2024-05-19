@@ -534,6 +534,7 @@ export class DrawerComponent implements AfterViewInit {
   }
 
   async eliminar(producto: any) {
+    console.log(producto, producto.idLista)
     producto.enListaCompra = false;
     await this.borrarProd(producto.idLista);
     this.getListaCompraUsu();
@@ -570,7 +571,7 @@ export class DrawerComponent implements AfterViewInit {
     try{
       await this.getListaCompraUsu()
       this.nuevoPin.push({id:producto.id, estado: producto.estado});
-      await this.motorServicio.getMotor().crearPines(this.nuevoPin)
+      await this.motorServicio.getMotor().crearPines(this.nuevoPin, 0)
     } catch (error) {
       console.error('Error al recargar el modelo:', error);
     }

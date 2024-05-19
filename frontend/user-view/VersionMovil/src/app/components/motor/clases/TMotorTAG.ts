@@ -173,6 +173,9 @@ export class TMotorTAG {
         this.raiz = nodoRaiz;
     }
 
+    async setFalse(nodo: TNodo){
+        nodo.setDibujar(false);
+    }
     
     async eliminarNodo(padre: TNodo, hijo: TNodo){
         await padre.eliminarHijo(hijo);

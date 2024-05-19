@@ -142,7 +142,8 @@ export class MotorComponent implements AfterViewInit{
       this.listaCompra.push({id: res.listacompra[j].idProd, estado: res.listacompra[j].comprado});
     }
 
-    await this.crearPines(this.listaCompra);
+    await this.crearPines(this.listaCompra, 1);
+    await this.mercado.recorrer(glMatrix.mat4.identity(glMatrix.mat4.create()));
   }
 
   async getUsuarioLog() {
@@ -157,19 +158,15 @@ export class MotorComponent implements AfterViewInit{
   }
 
   async eliminarPines(idProd: number){
-    try{
-      const pinBorrar = this.pines.find(pin => pin.idProd === idProd);
-      motor.eliminarNodo(pinBorrar!.padre, pinBorrar!.nodo);
-    }catch(error){
-      console.log("Error:" + error);
-    }
-    
-    await this.mercado.recorrer(glMatrix.mat4.identity(glMatrix.mat4.create()));
+    let pinBorrar = this.pines.find(pin => pin.idProd === idProd);
+    const entidad = pinBorrar!.nodo.setEntidad(null);
+    await pinBorrar!.padre.eliminarHijo(pinBorrar!.nodo);
+    await this.mercado.recorrer(pinBorrar!.padre.getMatrizTransf());
   }
 
-  async crearPines(lista: lista[]){
+  async crearPines(lista: lista[], number: number){
+    let valor !: number;
     for(let i = 0; i < lista.length; i++){
-      let valor !: number;
       let nameMalla = 'pin.obj'; 
       
       const producto: any = await this.productosService.getProductoId(lista[i].id).toPromise();
@@ -236,7 +233,11 @@ export class MotorComponent implements AfterViewInit{
       }
       this.pines.push({idProd: producto.productos.id, nodo: pin, padre: this.ubicaciones[valor], recText: producto.productos.foto})
     }
-    await this.mercado.recorrer(glMatrix.mat4.identity(glMatrix.mat4.create()));
+
+    //Para que solo recorra los nodos necesarios cuando se añade un producto SOLAMENTE
+    if(number == 0){
+      await this.ubicaciones[valor].recorrer(this.ubicaciones[valor].getMatrizTransf());
+    }
   }
 
   letraANumero(letra: string): number {
