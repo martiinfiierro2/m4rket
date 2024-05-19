@@ -20,9 +20,7 @@ export class TNodo{
         this.hijos.push(nodoHijo);
         nodoHijo.padre = this;
     }
-    constructor() {
-        this.posicion = [0, 0]; // Initialize posicion with default coordinates or adjust accordingly
-    }
+
     // Método para eliminar un hijo
     async eliminarHijo(nodoHijo: TNodo) {
         const nodoBorrar = this.hijos.find(nodo => nodo === nodoHijo);

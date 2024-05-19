@@ -41,13 +41,7 @@ export class MotorComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
-    this.canvas = document.getElementById('mercado') as HTMLCanvasElement;
-    if (this.canvas) {
-      this.crearEscena();
-      this.canvas.addEventListener('touchstart', this.canvasTouch.bind(this));
-    } else {
-      console.error("No se encontró el elemento canvas con el ID 'mercado'.");
-    }
+
   }
 
   async crearEscena() {
@@ -671,41 +665,6 @@ export class MotorComponent implements AfterViewInit {
   }
   
 
-  canvasTouch(event: TouchEvent) {
-    console.clear()
-    console.log('Canvas touched');
-    console.log('Touch X:', event.touches[0].clientX);
-    console.log('Touch Y:', event.touches[0].clientY);
-    if (!this.canvas) {
-      console.error("El elemento canvas no está definido.");
-      return;
-    }
-  
-    let rect = this.canvas.getBoundingClientRect();
-    const x = event.touches[0].clientX - rect.left;
-    const y = event.touches[0].clientY - rect.top;
-  
-    const TAMAÑO_DEL_PIN_X = 1; // Definir el tamaño del pin en X
-    const TAMAÑO_DEL_PIN_Y = 1; // Definir el tamaño del pin en Y
-  
-    for (const pin of this.pines) {
-      if (!pin.nodo || !pin.nodo.posicion) {
-        console.error("Las coordenadas del pin no están definidas.");
-        continue;
-      }
-  
-      // Aquí verificamos si el toque está dentro del área del pin
-      if (
-        x > pin.nodo.posicion[0] - TAMAÑO_DEL_PIN_X / 2 &&
-        x < pin.nodo.posicion[0] + TAMAÑO_DEL_PIN_X / 2 &&
-        y > pin.nodo.posicion[1] - TAMAÑO_DEL_PIN_Y / 2 &&
-        y < pin.nodo.posicion[1] + TAMAÑO_DEL_PIN_Y / 2
-      ) {
-        console.log('Información del Pin:', pin);
-        break; // Termina el bucle una vez que encuentres el primer pin tocado
-      }
-    }
-  }
 
 
 
