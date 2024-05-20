@@ -44,9 +44,6 @@ export class TNodo{
     
         if (this.getEntidad() != null) {
             this.entidad.dibujar(this.matrizTransf);
-            if(this.getEntidad().recursoMalla.nombre == 'pin.obj'){
-                console.log(this.entidad);
-            }
         }
     
         // Esperar a que todas las llamadas recursivas se completen
