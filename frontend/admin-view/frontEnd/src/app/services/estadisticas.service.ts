@@ -76,6 +76,20 @@ export class EstadisticasService {
     return this.http.get(urlCompleta, {headers: this.cabeceras});
   }
 
+  getCountMediaTiempo(inicio: string, fin: string): Observable<any>{
+    const fechaInicioCodificada = encodeURIComponent(inicio);
+    const fechaFinCodificada = encodeURIComponent(fin);
+    let urlCompleta = this.url + '?nombre=mediatiempo&inicio=' + fechaInicioCodificada + '&fin=' + fechaFinCodificada;
+    return this.http.get(urlCompleta, {headers: this.cabeceras});
+  }
+
+  getUsuarioUnico(inicio: string, fin: string): Observable<any>{
+    const fechaInicioCodificada = encodeURIComponent(inicio);
+    const fechaFinCodificada = encodeURIComponent(fin);
+    let urlCompleta = this.url + '?nombre=usuariounico&inicio=' + fechaInicioCodificada + '&fin=' + fechaFinCodificada;
+    return this.http.get(urlCompleta, {headers: this.cabeceras});
+  }
+
   postContador(dataForm: any){
     return this.http.post(this.url, dataForm, {headers: this.cabeceras});
   }

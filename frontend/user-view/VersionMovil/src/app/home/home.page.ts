@@ -23,6 +23,11 @@ import { ModeloService } from '../services/modelo.service';
 import { MotorComponent } from '../components/motor/motor.component';
 import { MotorService } from '../services/motor.service';
 
+
+//Imports para tiempo de uso:
+import { Platform } from '@ionic/angular';
+
+
 export interface Producto {
   id: string;
   nombre: string;
@@ -70,6 +75,7 @@ interface Stats {
   idProd: number;
   fecha: Date;
   id_usuario: string;
+  tiempo_uso: number;
 }
 
 export interface Ubicacion {
@@ -112,6 +118,9 @@ export class HomePage {
   @ViewChild(MotorComponent) motorComponent!: MotorComponent;
   @ViewChild(DrawerComponent) drawerComponent!: DrawerComponent;
 
+
+  startTime: number = 0; 
+
   llamarFuncionDrawer(idProd: string) {
     // Llama a la función del componente Drawer
     //this.drawerComponent.getProducto(producto);
@@ -136,10 +145,14 @@ export class HomePage {
     private productosService: ProductosService,
     private estadisticasService: EstadisticasService,
     private ubicacionesService: UbicacionesService,
-    @Inject(MotorService) private motorServicio: MotorService
+    @Inject(MotorService) private motorServicio: MotorService,
+
+    //TIempo de uso
+    private platform: Platform,
   ) {
     this.scene = new THREE.Scene();
     this.primeravez = true;
+    this.initializeApp();
   }
 
   ngAfterViewInit(): void {
@@ -168,13 +181,59 @@ export class HomePage {
   }
   //ESTADISTICAS
   //ABRE LA APP
-  ionViewDidEnter() {
+  /*
+ async ionViewDidEnter() {
     console.log('HOLA HE ABIERTO LA APP');
-    let tipo = 'eliminado';
+    let tipo = 'activo';
     let fecha = new Date();
     let producto = 0;
-    //this.estadistica(producto, tipo, fecha);
+    this.estadistica(producto, tipo, fecha);
+    }
+    */
+    initializeApp() {
+      this.platform.ready().then(() => {
+
+        this.platform.resume.subscribe(() => {
+          this.startTimer();
+        });
+  
+        this.platform.pause.subscribe(() => {
+          this.stopTimer();
+        });
+  
+        this.startTimer();
+      });
+    }
+  
+    startTimer() {
+      this.startTime = Date.now();
+    }
+  
+    stopTimer(): Promise<void> {
+      return new Promise<void>((resolve) => {
+          const endTime = Date.now();
+          const timeSpent = Math.floor((endTime - this.startTime) / 1000); // Tiempo en segundos
+          console.log(`Tiempo de uso: ${timeSpent} segundos`);
+          this.tiempoDeUso(timeSpent).then(() => {
+              resolve();
+          });
+      });
   }
+  
+  async tiempoDeUso(time: number): Promise<void> {
+      let tipo = 'activo';
+      let fecha = new Date();
+      const post: Stats = {
+          nombre: tipo,
+          idProd: 66,
+          fecha: fecha,
+          id_usuario: this.idUsu,
+          tiempo_uso: time,
+      };
+      await this.estadisticasService.postContador(post);
+  }
+  
+
   
 
   //Funciones para sacar el valor de los productos a partit de la ubicacion del motor gráfico
@@ -215,6 +274,7 @@ export class HomePage {
       idProd: id,
       fecha: fecha,
       id_usuario: this.idUsu,
+      tiempo_uso: 0,
     };
     this.estadisticasService.postContador(post);
   }

@@ -24,6 +24,7 @@ interface Stats {
   idProd: number;
   fecha: Date;
   id_usuario: string;
+  tiempo_uso: number;
 }
 export interface Producto {
   id: string;
@@ -192,6 +193,7 @@ export class DrawerComponent implements AfterViewInit {
     private productosService: ProductosService,
     private estadisticasService: EstadisticasService,
     private rotacionService: RotacionService,
+    private homeService: HomePage,
     @Inject(MotorService) private motorServicio: MotorService
   ) {
   
@@ -494,16 +496,18 @@ export class DrawerComponent implements AfterViewInit {
     this.getListaCompraUsu();
     let tipo = 'anadido';
     let fecha = new Date();
-    this.estadistica(productoDetalle.id, tipo, fecha);
+    let tiempo = 0;
+    this.estadistica(productoDetalle.id, tipo, fecha, tiempo);
   }
 
   //Estadisticas
-  estadistica(id: any, tipo: any, fecha: any) {
+  estadistica(id: any, tipo: any, fecha: any, tiempo: any) {
     const post: Stats = {
       nombre: tipo,
       idProd: id,
       fecha: fecha,
       id_usuario: this.idUsu,
+      tiempo_uso: tiempo,
     };
     this.estadisticasService.postContador(post);
   }
@@ -529,7 +533,8 @@ export class DrawerComponent implements AfterViewInit {
       );
       let tipo = 'eliminado';
       let fecha = new Date();
-      this.estadistica(productoDetalle.id, tipo, fecha);
+      let tiempo = 0;
+      this.estadistica(productoDetalle.id, tipo, fecha, tiempo);
     }
   }
 
@@ -544,7 +549,8 @@ export class DrawerComponent implements AfterViewInit {
     //ESTADISTICAS
     let tipo = 'eliminado';
     let fecha = new Date();
-    this.estadistica(producto.id, tipo, fecha);
+    let tiempo = 0;
+    this.estadistica(producto.id, tipo, fecha, tiempo);
   }
 
   async anadirProducto(producto: any) {
@@ -566,7 +572,8 @@ export class DrawerComponent implements AfterViewInit {
     producto.enListaCompra = true;
     let tipo = 'anadido';
     let fecha = new Date();
-    this.estadistica(producto.id, tipo, fecha);
+    let tiempo = 0;
+    this.estadistica(producto.id, tipo, fecha, tiempo);
     //this.Recarguita();
     try{
       await this.getListaCompraUsu()
@@ -689,7 +696,8 @@ export class DrawerComponent implements AfterViewInit {
     );
     let tipo = "comprado";
     let fecha = new Date()
-    this.estadistica(producto.id, tipo, fecha );
+    let tiempo = 0;
+    this.estadistica(producto.id, tipo, fecha, tiempo );
     //this.motorComponent.cargarNodosPines();
   }
 
@@ -752,9 +760,13 @@ export class DrawerComponent implements AfterViewInit {
 
   abrirPerfil() {}
 
-   logoutAndRedirectToLogin(): void {
-    localStorage.clear();
-    window.location.href = '/login'; // Reemplaza '/login' con la URL real de tu página de inicio de sesión
+  logoutAndRedirectToLogin(): void {
+    this.homeService.stopTimer().then(() => {
+        setTimeout(() => {
+            localStorage.clear();
+            window.location.href = '/login';
+        }, 100);
+    });
 }
   //CHATBOT
   //!Chatbot!!!
@@ -769,7 +781,8 @@ export class DrawerComponent implements AfterViewInit {
   buscado(producto: any){
     let tipo = 'buscado';
     let fecha = new Date();
-    this.estadistica(producto.id, tipo, fecha);
+    let tiempo = 0;
+    this.estadistica(producto.id, tipo, fecha, tiempo);
   }
 }
 
