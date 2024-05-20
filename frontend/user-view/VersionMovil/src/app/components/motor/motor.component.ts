@@ -19,6 +19,7 @@ interface pin {
   x: number;
   y: number;
   z: number;
+  color:string;
 
 }
 interface lista {
@@ -689,6 +690,23 @@ export class MotorComponent implements AfterViewInit {
     await this.mercado.recorrer(pinBorrar!.padre.getMatrizTransf());
   }
 
+  letraANumero(letra: string): number {
+    let numero!: number;
+    if (letra == 'A') {
+      numero = 0;
+    } else if (letra == 'B') {
+      numero = 10;
+    } else if (letra == 'C') {
+      numero = 20;
+    } else if (letra == 'D') {
+      numero = 30;
+    } else if (letra == 'E') {
+      numero = 40;
+    }
+
+    return numero;
+  }
+
   async crearPines(lista: lista[], number: number) {
     const canvas = document.querySelector("#mercado") as HTMLCanvasElement;
 
@@ -764,7 +782,10 @@ export class MotorComponent implements AfterViewInit {
         const x = traslacion[0];
         const y = traslacion[1];
         const z = traslacion[2];
-
+        let idHex = ('0000' + producto.productos.id.toString()).padStart(6, '0');
+        let color = '#' + idHex;
+        
+        
         this.pines.push({
             idProd: producto.productos.id,
             nodo: pin,
@@ -772,61 +793,87 @@ export class MotorComponent implements AfterViewInit {
             recText: producto.productos.foto,
             x: x,
             y: y,
-            z:z
+            z: z,
+            color: color
         });
-
     }
-
+    console.log(this.pines);
     canvas.addEventListener('touchstart', this.detectarToque);
 
-    //Para que solo recorra los nodos necesarios cuando se añade un producto SOLAMENTE
+    // Para que solo recorra los nodos necesarios cuando se añade un producto SOLAMENTE
     if (number == 0) {
         await this.ubicaciones[valor].recorrer(this.ubicaciones[valor].getMatrizTransf());
     }
 }
 
+colorPick(x: number, y: number): string {
+    console.log("Color picking en:", x, y);
 
+    // Obtener el tamaño del viewport
+    const viewport = motor.gl.getParameter(motor.gl.VIEWPORT);
+    const width = viewport[2];
+    const height = viewport[3];
 
-detectarToque = (event: TouchEvent) => {
-  const canvas = document.querySelector("#mercado") as HTMLCanvasElement;
-  const rect = canvas.getBoundingClientRect();
+    // Crear un buffer para almacenar los valores de color
+    const pixelBuffer = new Uint8Array(4);
 
-  // Obtener las coordenadas del evento de clic/táctil en relación con el lienzo
-  const x = event.touches[0].clientX - rect.left;
-  const y = event.touches[0].clientY - rect.top;
+    // Leer el color del píxel en las coordenadas (x, y)
+    motor.gl.readPixels(x, height - y, 1, 1, motor.gl.RGBA, motor.gl.UNSIGNED_BYTE, pixelBuffer);
 
-  // Aplicar la inversa de cualquier transformación de vista
-  // Si has aplicado un zoom y desplazamiento, necesitarás aplicar la inversa de estas transformaciones aquí
-  console.log(x, y);
-  // Utilizar las coordenadas del mundo para determinar la intersección con los objetos en el lienzo
-  for (const pin of this.pines) {
-    if (this.pinContieneCoordenadas(pin, x, y)) {
-      console.log('Clic/táctil detectado en el pin con id:', pin.idProd);
-      return;
-    }else{
-      console.log('nada')
-    }
-  }
+    // Convertir los valores de color a hexadecimal
+    const r = pixelBuffer[0];
+    const g = pixelBuffer[1];
+    const b = pixelBuffer[2];
+    const a = pixelBuffer[3] / 255;
+    const hexColor = this.rgbToHex(r, g, b, a);
+
+    console.log("Color obtenido:", hexColor);
+    return hexColor;
 }
 
+rgbToHex(r: number, g: number, b: number, a: number): string {
+    return `#${this.componentToHex(r)}${this.componentToHex(g)}${this.componentToHex(b)}`;
+}
 
+componentToHex(c: number): string {
+    const hex = c.toString(16);
+    return hex.length === 1 ? '0' + hex : hex;
+}
 
-  letraANumero(letra: string): number {
-    let numero!: number;
-    if (letra == 'A') {
-      numero = 0;
-    } else if (letra == 'B') {
-      numero = 10;
-    } else if (letra == 'C') {
-      numero = 20;
-    } else if (letra == 'D') {
-      numero = 30;
-    } else if (letra == 'E') {
-      numero = 40;
+detectarToque = async (event: TouchEvent) => {
+    console.log("Detectar toque");
+    const canvas = document.querySelector("#mercado") as HTMLCanvasElement;
+    const rect = canvas.getBoundingClientRect();
+    const touch = event.touches[0];
+    const x = touch.clientX - rect.left;
+    const y = touch.clientY - rect.top;
+
+    const selectedColor = this.colorPick(x, y);
+    console.log("Color seleccionado:", selectedColor);
+
+    this.updatePinColor(selectedColor);
+}
+
+updatePinColor(color: string) {
+    console.log("Actualizando color del pin con color:", color);
+    let selectedPin = null;
+
+    // Buscar el pin con el color seleccionado
+    for (const pin of this.pines) {
+        if (pin.color === color) {
+            selectedPin = pin;
+            break; // Si se encuentra el pin, salir del bucle
+        }
     }
 
-    return numero;
-  }
+    if (selectedPin) {
+        console.log("Pin seleccionado encontrado:", selectedPin);
+        // Hacer lo que quieras con el pin seleccionado
+    } else {
+        console.log("No se encontró ningún pin con el color seleccionado");
+    }
+}
+
   
   pinContieneCoordenadas(pin: any, x: number, y: number) {
     // Supongamos que el pin tiene un atributo de radio para definir su área
@@ -838,11 +885,6 @@ detectarToque = (event: TouchEvent) => {
     // Si la distancia al centro es menor o igual al radio, el clic está dentro del área del pin
     return distanciaAlCentro <= radio;
 }
-
-
-
-  
-
 
 
 }
