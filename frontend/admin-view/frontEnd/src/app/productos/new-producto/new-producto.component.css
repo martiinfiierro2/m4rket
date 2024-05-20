@@ -115,6 +115,10 @@ form{
                 margin: 0em .5em 0em 0em;
             }
 
+            #tituloInfoBasica:hover , #tituloValoresNut:hover, #tituloImagen:hover {
+                cursor: pointer;
+            }
+
 
         #contenidoInfoBasica, #contenidoValoresNut, #contenidoImagen{
             display: flex;
@@ -156,6 +160,7 @@ form{
                 background-color: white;
                 padding: 0 .5em;
             }
+
         
             .divCampo input {
                 padding: .7em .7em;
