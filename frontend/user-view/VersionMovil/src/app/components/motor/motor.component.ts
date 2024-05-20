@@ -15,7 +15,8 @@ interface pin{
   idProd: number,
   nodo: TNodo,
   padre: TNodo,
-  recText: TRecursoTextura
+  recText: TRecursoTextura,
+  estado: boolean
 }
 interface lista{
   id: string,
@@ -157,6 +158,36 @@ export class MotorComponent implements AfterViewInit{
     return idUsu;
   }
 
+  async marcarComprado(idProd: number){
+    const pinCambiar = this.pines.find(pin => pin.idProd === idProd);
+    pinCambiar!.estado = true;
+  }
+
+  async eliminarComprados(){
+    for(let i = 0; i < this.pines.length; i++){
+      if(this.pines[i].estado == true){
+        console.log("hola")  
+        const entidad = this.pines[i].nodo.getEntidad();
+        const malla = entidad.recursoMalla;
+        await malla.mallas.forEach((malla: any) => {
+          let vertexBuffer = malla.vertexBuffer;
+          motor.gl.deleteBuffer(vertexBuffer);
+
+          let normalBuffer = malla.normalBuffer;
+          motor.gl.deleteBuffer(normalBuffer);
+
+          let indexBuffer = malla.indexBuffer;
+          motor.gl.deleteBuffer(indexBuffer);
+
+          let textureBuffer = malla.tetxureBuffer;
+          motor.gl.deleteBuffer(textureBuffer);
+        });
+        //Eliminar del array de pines
+        this.pines.splice(i, 1);
+      }
+    }
+  }
+
   async eliminarTodosPines(){
     for(let i = 0; i < this.pines.length; i++){
       const entidad = this.pines[i].nodo.getEntidad();
@@ -174,11 +205,13 @@ export class MotorComponent implements AfterViewInit{
         let textureBuffer = malla.tetxureBuffer;
         motor.gl.deleteBuffer(textureBuffer);
       });
+      //Eliminar del array de pines
+      this.pines.splice(i, 1);
     }
   }
 
   async eliminarPines(idProd: number){
-    let pinBorrar = this.pines.find(pin => pin.idProd === idProd);  
+    let pinBorrar = this.pines.find(pin => pin.idProd === idProd);
     const entidad = pinBorrar!.nodo.getEntidad();
     const malla = entidad.recursoMalla;
     await malla.mallas.forEach((malla: any) => {
@@ -263,7 +296,7 @@ export class MotorComponent implements AfterViewInit{
           producto.productos.foto
         );
       }
-      this.pines.push({idProd: producto.productos.id, nodo: pin, padre: this.ubicaciones[valor], recText: producto.productos.foto});
+      this.pines.push({idProd: producto.productos.id, nodo: pin, padre: this.ubicaciones[valor], recText: producto.productos.foto, estado: false});
       //Para que solo recorra los nodos necesarios cuando se añade un producto SOLAMENTE
       if(number == 0){
         await this.ubicaciones[valor].recorrer(glMatrix.mat4.identity(glMatrix.mat4.create()));

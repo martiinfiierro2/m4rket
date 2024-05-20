@@ -198,6 +198,7 @@ export class DrawerComponent implements AfterViewInit {
   }
 
   async borrarProductosCompradosEnServidor() {
+    this.motorServicio.getMotor().eliminarComprados();
     const productosComprados = this.listaCompra.filter(producto => producto.comprado);
     productosComprados.forEach(producto => {
       this.productosService.deleteListaCompra(producto.id).subscribe(() => {
@@ -208,7 +209,6 @@ export class DrawerComponent implements AfterViewInit {
     //this.Recarguita();
     try{
       await this.getListaCompraUsu()
-      //await this.motorServicio.getMotor().cargarNodosPines(1);
     } catch (error) {
       console.error('Error al recargar el modelo:', error);
     }
@@ -681,6 +681,7 @@ export class DrawerComponent implements AfterViewInit {
 
   //MARCAR COMO COMPRADO
   marcarComprado(producto: any) {
+    this.motorServicio.getMotor().marcarComprado(producto.id);
     producto.comprado = true;
     this.actualizarCantidad(
       producto.id,
