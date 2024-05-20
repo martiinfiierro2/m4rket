@@ -150,26 +150,15 @@ export class MotorComponent implements AfterViewInit{
           this.listaCompra.push(res.listacompra[j].idProd, res.listacompra[j].comprado);
         }
       });
-<<<<<<< HEAD
-      
-=======
 
       //Para cada producto existente
->>>>>>> experimental
       const res: any = await this.productosService.getAllProdSinPag().toPromise();
 
       for (let index = 0; index < res.productos.length; index++) {
 
         let pin!: TNodo;
         this.pins.push(pin);
-<<<<<<< HEAD
-      }
 
-      
-      for (let index = 0; index < res.productos.length; index++) {
-=======
-
->>>>>>> experimental
         const producto: Producto = res.productos[index];
         let estado: boolean = false;
         let compradoTextura: string = producto.foto;
@@ -246,13 +235,11 @@ export class MotorComponent implements AfterViewInit{
           );
         }
       }
-<<<<<<< HEAD
 
       console.log("Lista de la compra al final: " + this.listaCompra.length);
       //recorrer y dibujarCanti
-=======
+      await this.mercado.recorrer(glMatrix.mat4.identity(glMatrix.mat4.create()));
       //recorrer y dibujar
->>>>>>> experimental
       await this.mercado.recorrer(glMatrix.mat4.identity(glMatrix.mat4.create()));
     } catch (error) {
       console.error('Error al cargar los nodos de pines:', error);
