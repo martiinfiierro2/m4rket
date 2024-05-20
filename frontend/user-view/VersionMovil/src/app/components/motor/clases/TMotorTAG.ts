@@ -102,7 +102,7 @@ export class TMotorTAG {
         if (auxVertex instanceof TRecursoShader) {
             vertexShaderSource = auxVertex.valor;
         }
-
+        const auxVertexColor = await this.gestorRecursos.getRecurso("vertexColor.glsl", "shader");
         const auxFragment = await this.gestorRecursos.getRecurso("fragmentShader.glsl", "shader");
 
         if (auxFragment instanceof TRecursoShader) {

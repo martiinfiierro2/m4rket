@@ -20,8 +20,8 @@ interface pin {
   y: number;
   z: number;
   color:string;
-
 }
+
 interface lista {
   id: string;
   estado: boolean;
