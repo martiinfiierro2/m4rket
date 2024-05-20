@@ -3,6 +3,12 @@ import * as OBJ from 'webgl-obj-loader';
 import { motor } from '../motor.component';
 import { glMatrix } from 'gl-matrix';
 export class Malla {
+    //BUFFERS
+    private vertexBuffer: any;
+    private normalBuffer: any;
+    private indexBuffer: any;
+    private textureBuffer: any;
+    
     private rotation: number = 0;
     private lastTouchX: number = 0;
     private lastTouchY: number = 0;
@@ -72,28 +78,28 @@ export class Malla {
         const handleRightDragMobile = (event: TouchEvent) => {
             event.preventDefault();
 
-      const touch = event.touches[0];
-      const touchX = touch.clientX;
-      const touchY = touch.clientY;
+            const touch = event.touches[0];
+            const touchX = touch.clientX;
+            const touchY = touch.clientY;
 
-      if (this.isRightTouchDown) {
-        const deltaTouchX = touchX - this.lastTouchX;
-        const deltaTouchY = touchY - this.lastTouchY;
+            if (this.isRightTouchDown) {
+                const deltaTouchX = touchX - this.lastTouchX;
+                const deltaTouchY = touchY - this.lastTouchY;
 
-        this.translationSpeed = 0.1; // Velocidad de rotación
+                this.translationSpeed = 0.1; // Velocidad de rotación
 
-        // Rotación alrededor del eje Y
-        this.translationX += deltaTouchX * this.translationSpeed;
+                // Rotación alrededor del eje Y
+                this.translationX += deltaTouchX * this.translationSpeed;
 
-        // Rotación alrededor del eje X
-        this.translationY += deltaTouchY * this.translationSpeed;
+                // Rotación alrededor del eje X
+                this.translationY += deltaTouchY * this.translationSpeed;
 
-        //this.dibujarMalla(gl, programInfo, buffers);
-      }
+                //this.dibujarMalla(gl, programInfo, buffers);
+            }
 
-      this.lastTouchX = touchX;
-      this.lastTouchY = touchY;
-    };
+            this.lastTouchX = touchX;
+            this.lastTouchY = touchY;
+        };
 
         const handlePinch = (event: TouchEvent) => {
             event.preventDefault();
@@ -172,6 +178,7 @@ export class Malla {
                 handlePinchEnd(event);
             }
         });
+
         const draw = () => {
             // Llamada recursiva para renderizar de forma continua
             this.dibujarBucle(InfoPrograma, mesh);
@@ -202,23 +209,27 @@ export class Malla {
         // Enlazar el buffer de vértices
         this.gl!.enableVertexAttribArray(InfoPrograma.attribLocations.vertexPosition);
         this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, mesh.vertexBuffer);
+        this.vertexBuffer = mesh.vertexBuffer;
         //this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(mesh.vertices), this.gl!.STATIC_DRAW);
         this.gl!.vertexAttribPointer(InfoPrograma.attribLocations.vertexPosition, mesh.vertexBuffer.itemSize, this.gl!.FLOAT, false, 0, 0);
     
         // Enlazar el buffer de texturas
         this.gl!.enableVertexAttribArray(InfoPrograma.attribLocations.textureCoord);
         this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, mesh.textureBuffer);
+        this.textureBuffer = mesh.textureBuffer;
         //this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(mesh.textures), this.gl!.STATIC_DRAW);
         this.gl!.vertexAttribPointer(InfoPrograma.attribLocations.textureCoord, mesh.textureBuffer.itemSize, this.gl!.FLOAT, false, 0, 0);
         
         // Enlazar el buffer de normales
         this.gl!.enableVertexAttribArray(InfoPrograma.attribLocations.normalCoord);
         this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, mesh.normalBuffer);
+        this.normalBuffer = mesh.normalBuffer;
         //this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(mesh.vertexNormals), this.gl!.STATIC_DRAW);
         this.gl!.vertexAttribPointer(InfoPrograma.attribLocations.normalCoord, mesh.normalBuffer.itemSize, this.gl!.FLOAT, false, 0, 0);
     
         // Enlazar el buffer de índices
         this.gl!.bindBuffer(this.gl!.ELEMENT_ARRAY_BUFFER, mesh.indexBuffer);
+        this.indexBuffer = mesh.indexBuffer;
     
         // Crear una nueva matriz de transformación para este objeto
         const modelMatrix = mat4.create();
@@ -252,15 +263,21 @@ export class Malla {
         this.viewMatrix = mat4.create();
     
         mat4.lookAt(this.viewMatrix, cameraPosition, target, up);
-    
+
+        // Aplica el zoom a la matriz de proyección
+        if(this.zoomFactor >= 0.1){
+            mat4.scale(this.projectionMatrix, this.projectionMatrix, [1, 1, this.zoomFactor]);
+        }
+        else{
+            mat4.scale(this.projectionMatrix, this.projectionMatrix, [1, 1, 0.1]);
+        }
+
         // Aplica el desplazamiento a la matriz de vista
         mat4.translate(this.viewMatrix, this.viewMatrix, [-this.translationX, -this.translationY, 0]);
 
         // Aplicar la rotación en torno al eje Y
         mat4.rotate(this.viewMatrix, this.viewMatrix, this.rotation*(Math.PI / 180), [0, 1, 0]);
 
-        // Aplica el zoom a la matriz de proyección
-        mat4.scale(this.projectionMatrix, this.projectionMatrix, [1, 1, this.zoomFactor]);  
         
         let modelViewMatrix = mat4.create();
         mat4.multiply(modelViewMatrix, this.viewMatrix, modelMatrix);

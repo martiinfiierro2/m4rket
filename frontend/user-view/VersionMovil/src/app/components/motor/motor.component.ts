@@ -55,7 +55,7 @@ export class MotorComponent implements AfterViewInit{
     await motor.setCamara(camara);
  
     //asignar luces
-    const luzTop: TNodo = await motor.crearLuz(null, glMatrix.vec3.fromValues(200, 200, 200), glMatrix.vec3.fromValues(0, 0, 0), glMatrix.vec3.fromValues(0, 0, 0), glMatrix.vec3.fromValues(1.0,1.0,1.0), "Direccional", glMatrix.vec4.fromValues(20,20,20,1));
+    const luzTop: TNodo = await motor.crearLuz(null, glMatrix.vec3.fromValues(200, 200, 200), glMatrix.vec3.fromValues(0, 0, 0), glMatrix.vec3.fromValues(0.425,0.425,0.425), glMatrix.vec3.fromValues(1.0,1.0,1.0), "Direccional", glMatrix.vec4.fromValues(20,20,20,1));
     await motor.registrarLuz(luzTop);
     await motor.setLuz(luzTop);
   
@@ -157,11 +157,43 @@ export class MotorComponent implements AfterViewInit{
     return idUsu;
   }
 
+  async eliminarTodosPines(){
+    for(let i = 0; i < this.pines.length; i++){
+      const entidad = this.pines[i].nodo.getEntidad();
+      const malla = entidad.recursoMalla;
+      await malla.mallas.forEach((malla: any) => {
+        let vertexBuffer = malla.vertexBuffer;
+        motor.gl.deleteBuffer(vertexBuffer);
+
+        let normalBuffer = malla.normalBuffer;
+        motor.gl.deleteBuffer(normalBuffer);
+
+        let indexBuffer = malla.indexBuffer;
+        motor.gl.deleteBuffer(indexBuffer);
+
+        let textureBuffer = malla.tetxureBuffer;
+        motor.gl.deleteBuffer(textureBuffer);
+      });
+    }
+  }
+
   async eliminarPines(idProd: number){
-    let pinBorrar = this.pines.find(pin => pin.idProd === idProd);
-    const entidad = pinBorrar!.nodo.setEntidad(null);
-    await pinBorrar!.padre.eliminarHijo(pinBorrar!.nodo);
-    await this.mercado.recorrer(pinBorrar!.padre.getMatrizTransf());
+    let pinBorrar = this.pines.find(pin => pin.idProd === idProd);  
+    const entidad = pinBorrar!.nodo.getEntidad();
+    const malla = entidad.recursoMalla;
+    await malla.mallas.forEach((malla: any) => {
+      let vertexBuffer = malla.vertexBuffer;
+      motor.gl.deleteBuffer(vertexBuffer);
+
+      let normalBuffer = malla.normalBuffer;
+      motor.gl.deleteBuffer(normalBuffer);
+
+      let indexBuffer = malla.indexBuffer;
+      motor.gl.deleteBuffer(indexBuffer);
+
+      let textureBuffer = malla.tetxureBuffer;
+      motor.gl.deleteBuffer(textureBuffer);
+    });
   }
 
   async crearPines(lista: lista[], number: number){
@@ -231,12 +263,12 @@ export class MotorComponent implements AfterViewInit{
           producto.productos.foto
         );
       }
-      this.pines.push({idProd: producto.productos.id, nodo: pin, padre: this.ubicaciones[valor], recText: producto.productos.foto})
-    }
-
-    //Para que solo recorra los nodos necesarios cuando se añade un producto SOLAMENTE
-    if(number == 0){
-      await this.ubicaciones[valor].recorrer(this.ubicaciones[valor].getMatrizTransf());
+      this.pines.push({idProd: producto.productos.id, nodo: pin, padre: this.ubicaciones[valor], recText: producto.productos.foto});
+      //Para que solo recorra los nodos necesarios cuando se añade un producto SOLAMENTE
+      if(number == 0){
+        await this.ubicaciones[valor].recorrer(glMatrix.mat4.identity(glMatrix.mat4.create()));
+        break;
+      }
     }
   }
 

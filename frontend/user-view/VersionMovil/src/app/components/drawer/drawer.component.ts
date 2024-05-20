@@ -216,6 +216,7 @@ export class DrawerComponent implements AfterViewInit {
   }
 
   borrarTodaLaLista() {
+    this.motorServicio.getMotor().eliminarTodosPines();
     this.productosService.getListaCompra(this.idUsu).subscribe((result) => {
       if (result.listacompra) {
         const listasCompra = result.listacompra;
