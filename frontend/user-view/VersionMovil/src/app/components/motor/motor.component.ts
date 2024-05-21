@@ -683,11 +683,43 @@ export class MotorComponent implements AfterViewInit {
     return idUsu;
   }
 
+  async eliminarTodosPines(){
+    for(let i = 0; i < this.pines.length; i++){
+      const entidad = this.pines[i].nodo.getEntidad();
+      const malla = entidad.recursoMalla;
+      await malla.mallas.forEach((malla: any) => {
+        let vertexBuffer = malla.vertexBuffer;
+        motor.gl.deleteBuffer(vertexBuffer);
+
+        let normalBuffer = malla.normalBuffer;
+        motor.gl.deleteBuffer(normalBuffer);
+
+        let indexBuffer = malla.indexBuffer;
+        motor.gl.deleteBuffer(indexBuffer);
+
+        let textureBuffer = malla.tetxureBuffer;
+        motor.gl.deleteBuffer(textureBuffer);
+      });
+    }
+  }
+
   async eliminarPines(idProd: number){
-    let pinBorrar = this.pines.find(pin => pin.idProd === idProd);
-    const entidad = pinBorrar!.nodo.setEntidad(null);
-    await pinBorrar!.padre.eliminarHijo(pinBorrar!.nodo);
-    await this.mercado.recorrer(pinBorrar!.padre.getMatrizTransf());
+    let pinBorrar = this.pines.find(pin => pin.idProd === idProd);  
+    const entidad = pinBorrar!.nodo.getEntidad();
+    const malla = entidad.recursoMalla;
+    await malla.mallas.forEach((malla: any) => {
+      let vertexBuffer = malla.vertexBuffer;
+      motor.gl.deleteBuffer(vertexBuffer);
+
+      let normalBuffer = malla.normalBuffer;
+      motor.gl.deleteBuffer(normalBuffer);
+
+      let indexBuffer = malla.indexBuffer;
+      motor.gl.deleteBuffer(indexBuffer);
+
+      let textureBuffer = malla.tetxureBuffer;
+      motor.gl.deleteBuffer(textureBuffer);
+    });
   }
 
   letraANumero(letra: string): number {

@@ -74,7 +74,7 @@ export class TMotorTAG {
             return;
         }
         this.gl = gl;
-        
+
         this.gl.clearColor(1.0, 1.0, 1.0, 1.0);
         this.gl.clearDepth(1.0);
         this.gl.enable(this.gl.DEPTH_TEST);
@@ -82,7 +82,7 @@ export class TMotorTAG {
         
         // Limpiar canvas
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-
+        
         // Habilitar el culling
         this.gl.enable(this.gl.CULL_FACE);
 

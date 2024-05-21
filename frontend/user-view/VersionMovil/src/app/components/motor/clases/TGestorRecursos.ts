@@ -36,29 +36,19 @@ export class TGestorRecursos{
     }
 
     async borrarRecursos(malla: string, textura: string){
-        let indiceEliminar = -1;
         for (let i = 0; i < this.recursos.length; i++) {
-            if (this.recursos[i].getNombre() === malla) {
-                indiceEliminar = i;
+            if (this.recursos[i].getNombre() !== malla) {
+                this.recursos.splice(i, 1);
                 break;
             }
         }
-
-        if (indiceEliminar !== -1) {
-            this.recursos.splice(indiceEliminar, 1);
-        }
-
-        let indiceEliminar2 = -1;
         for (let i = 0; i < this.recursos.length; i++) {
-            if (this.recursos[i].getNombre() === textura) {
-                indiceEliminar2 = i;
+            if (this.recursos[i].getNombre() !== textura) {
+                this.recursos.splice(i, 1);
                 break;
             }
         }
-
-        if (indiceEliminar2 !== -1) {
-            this.recursos.splice(indiceEliminar2, 1);
-        }
+        return this.recursos;
     }
 
     async getRecurso( nombre: string, tipo: string ){

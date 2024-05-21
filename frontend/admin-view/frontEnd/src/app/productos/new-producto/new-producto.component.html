@@ -42,7 +42,7 @@
             <div id="divInfoBasica">
                 <div id="tituloInfoBasica" (click)="desplegarCampo('infoBasica')">
                     <p>Información básica</p>
-                    <i class="fa-solid fa-angle-down"></i>
+                    <i id="iconoDesplegableInfo" class="fa-solid fa-angle-down"></i>
                 </div>
                 <div id="contenidoInfoBasica" *ngIf="infoBasicaDesplegada">
                     <div class="divCampo">
@@ -70,7 +70,7 @@
             <div id="divImagen">
                 <div id="tituloImagen" (click)="desplegarCampo('imagenProducto')">
                     <p>Imagen del producto</p>
-                    <i class="fa-solid fa-angle-down"></i>
+                    <i id="iconoDesplegableImagen" class="fa-solid fa-angle-down"></i>
                 </div>
                 <div id="contenidoImagen" *ngIf="imagenProducto">
                     <img [src]="srcImagen" alt="foto del producto" style="display: none" id="previewImagen">
@@ -81,7 +81,7 @@
             <div id="divValoresNutri">
                 <div id="tituloValoresNut" (click)="desplegarCampo('valoresNut')">
                     <p>Valores nutricionales</p>
-                    <i class="fa-solid fa-angle-down"></i>
+                    <i id="iconoDesplegableNutri" class="fa-solid fa-angle-down"></i>
                 </div>
                 <div id="contenidoValoresNut" *ngIf="valoresNutDesplegados">
                     <div class="divCampo">
