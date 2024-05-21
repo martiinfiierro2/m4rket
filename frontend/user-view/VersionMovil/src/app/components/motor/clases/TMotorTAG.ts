@@ -22,6 +22,7 @@ export class TMotorTAG {
     public gestorRecursos!: TGestorRecursos;
     public gl!: WebGL2RenderingContext;
     public program!: WebGLProgram;
+    public programColor!: WebGLProgram;
     public nodos: TNodo[] = [];
     
     public gestorCamaras: TNodo[] = [];
@@ -107,20 +108,20 @@ export class TMotorTAG {
         return canvas;
     }
 
-    async iniciarPrograma(){
+    async iniciarPrograma(vertex: any, fragment: any){
         //Calculamos la matriz de vista como la inversa de la matriz de la cámara activa
         let matrizCamara = this.camaraActiva.getMatrizTransf();
         let viewMatrix = glMatrix.mat4.create();
         glMatrix.mat4.invert(viewMatrix, matrizCamara);
 
-        const auxVertex= await this.gestorRecursos.getRecurso("vertexShader.glsl", "shader");
+        const auxVertex= await this.gestorRecursos.getRecurso(vertex, "shader");
         let vertexShaderSource: any, fragmentShaderSource: any;
 
         if (auxVertex instanceof TRecursoShader) {
             vertexShaderSource = auxVertex.valor;
         }
-        const auxVertexColor = await this.gestorRecursos.getRecurso("vertexColor.glsl", "shader");
-        const auxFragment = await this.gestorRecursos.getRecurso("fragmentShader.glsl", "shader");
+
+        const auxFragment = await this.gestorRecursos.getRecurso(fragment, "shader");
 
         if (auxFragment instanceof TRecursoShader) {
             fragmentShaderSource = auxFragment.valor;
@@ -131,11 +132,15 @@ export class TMotorTAG {
             return;
         }
         else{
-            await this.crearShaders(vertexShaderSource, fragmentShaderSource);
+            if(fragment == 'fragmentColorPicking.glsl'){
+                await this.crearShaders(vertexShaderSource, fragmentShaderSource, 0);
+            }else{
+                await this.crearShaders(vertexShaderSource, fragmentShaderSource, 1);
+            }
         }
     }
 
-    async crearShaders(vertexShaderSource: string, fragmentShaderSource: string){
+    async crearShaders(vertexShaderSource: string, fragmentShaderSource: string, number: number){
         const vertexShader = await this.createShader(this.gl!.VERTEX_SHADER, vertexShaderSource);
         const fragmentShader = await this.createShader(this.gl!.FRAGMENT_SHADER, fragmentShaderSource);
 
@@ -143,7 +148,7 @@ export class TMotorTAG {
             console.error('No se pudo crear uno o ambos shaders.');
             return;
         }
-        await this.createProgram(vertexShader, fragmentShader);
+        await this.createProgram(vertexShader, fragmentShader, number);
         if (!this.program) {
             console.error('No se pudo crear el programa Webthis.gl!.');
             return;
@@ -167,7 +172,7 @@ export class TMotorTAG {
         return shader;
     }
     
-    async createProgram(vertexShader: WebGLShader, fragmentShader: WebGLShader) {
+    async createProgram(vertexShader: WebGLShader, fragmentShader: WebGLShader, number: number) {
         const program = this.gl!.createProgram();
         if (!program) {
             console.error('No se pudo crear el programa.');
@@ -182,7 +187,12 @@ export class TMotorTAG {
             const info = this.gl!.getProgramInfoLog(program);
             return null;
         }
-        this.program = program;
+
+        if(number == 1){
+            this.program = program;
+        }else{
+            this.programColor = program;
+        }
         return program;
     }
 
