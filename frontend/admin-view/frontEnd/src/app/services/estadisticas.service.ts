@@ -48,6 +48,13 @@ export class EstadisticasService {
     return this.http.get(urlCompleta, {headers: this.cabeceras});
   }
 
+  getCountMasBuscadosFecha(inicio: string, fin: string): Observable<any>{
+    const fechaInicioCodificada = encodeURIComponent(inicio);
+    const fechaFinCodificada = encodeURIComponent(fin);
+    let urlCompleta = this.url + '?nombre=masbuscado&inicio=' + fechaInicioCodificada + '&fin=' + fechaFinCodificada;
+    return this.http.get(urlCompleta, {headers: this.cabeceras});
+  }
+
   getCountListadosFecha(inicio: string, fin: string): Observable<any>{
     const fechaInicioCodificada = encodeURIComponent(inicio);
     const fechaFinCodificada = encodeURIComponent(fin);
