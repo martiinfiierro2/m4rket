@@ -8,18 +8,16 @@ import { MotorService } from '../../services/motor.service';
 import { Ubicacion } from 'src/app/home/home.page';
 import { UbicacionesService } from 'src/app/services/ubicaciones.service';
 import { TRecursoTextura } from './clases/TRecursoTextura';
+import { mat4 } from 'gl-matrix';
 
 export let motor: TMotorTAG;
 
-interface pin {
-  idProd: number;
-  nodo: TNodo;
-  padre: TNodo;
-  recText: TRecursoTextura;
-  x: number;
-  y: number;
-  z: number;
-  color:string;
+interface pin{
+  idProd: number,
+  nodo: TNodo,
+  padre: TNodo,
+  recText: TRecursoTextura,
+  estado: boolean
 }
 
 interface lista {
@@ -38,6 +36,22 @@ export class MotorComponent implements AfterViewInit {
   private listaCompra: lista[] = [];
   private pines: pin[] = [];
 
+  //Eventos
+  private rotation: any = 0;
+  private lastTouchX: number = 0;
+  private lastTouchY: number = 0;
+  private isRightTouchDown: boolean = false;
+
+  private translationX: number = 0;
+  private translationY: number = 0;
+  private translationSpeed: number = 0.1;
+
+  private zoomFactor: number = 1;
+  private zoomSpeed: number = 0.05;
+  private distancia: number = 0;
+  private lastPinchDistance: number = 0;
+  private isPinching: boolean = false;
+
   constructor(
     private productosService: ProductosService,
     private ubicacionService: UbicacionesService,
@@ -45,7 +59,10 @@ export class MotorComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
+  }
 
+  getMercado(){
+    return this.mercado;
   }
 
   async crearEscena() {
@@ -664,13 +681,116 @@ export class MotorComponent implements AfterViewInit {
     }
 
     await this.crearPines(this.listaCompra, 1);
-    await this.mercado.recorrer(glMatrix.mat4.identity(glMatrix.mat4.create()));
-  }
+    await this.mercado.recorrer(mat4.create());
+
+    //EVENTOS
+    const canvas = motor.gl.canvas;
+    const handleRightDragMobile = (event: TouchEvent) => {
+      event.preventDefault();
+      console.log(this.lastTouchX);
+
+      const touch = event.touches[0];
+      const touchX = touch.clientX;
+      const touchY = touch.clientY;
+
+      if(this.isRightTouchDown){
+
+        this.translationX += (this.lastTouchX - touchX) * this.translationSpeed;
+        this.translationY += (this.lastTouchY - touchY) * this.translationSpeed;
+        
+        motor.setTraslacion(this.translationX, this.translationY);
+      }
+      this.lastTouchX = touchX;
+      this.lastTouchY = touchY;
+    }
   
+    const handlePinch = (event: TouchEvent) => {
+        event.preventDefault();
+  
+        let oldFactor = this.zoomFactor;
+        const touch1 = event.touches[0];
+        const touch2 = event.touches[1];
+  
+        // Calcula la distancia entre los dos puntos de contacto
+        const deltaX = touch1.clientX - touch2.clientX;
+        const deltaY = touch1.clientY - touch2.clientY;
+        const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+  
+        // Calcula la diferencia de distancia desde el último pellizco
+        const deltaDistance = distance - this.lastPinchDistance;
+  
+        // Ajusta el factor de zoom en función de la diferencia de distancia
+        this.zoomSpeed = 0.05; // Velocidad de zoom
+        this.zoomFactor *= 1 + deltaDistance * this.zoomSpeed;
+  
+        // Actualiza la última distancia de pellizco
+        this.lastPinchDistance = distance;
+        if(this.zoomFactor < 0.2){
+          this.zoomFactor = oldFactor;
+        }
+        motor.setZoom(this.zoomFactor);
+    }
+  
+    // Método para manejar el evento de final de pellizco (pinch)
+    const handlePinchEnd = (event: TouchEvent) => {
+        event.preventDefault();
+  
+        this.isPinching = false;
+    };
+  
+    const handleMouseWheel = (event: WheelEvent) => {
+        const delta = event.deltaY;
+        let oldFactor = this.zoomFactor;
 
-
-
-
+        if(delta > 0){
+            this.zoomFactor += 0.01;
+        }
+        else if (delta < 0){
+            this.zoomFactor += -0.01;
+        }
+        if(this.zoomFactor < 0.2){
+          this.zoomFactor = oldFactor;
+        }
+        motor.setZoom(this.zoomFactor);
+    };
+        
+    // Agregar el evento de clic derecho al canvas
+    // Agrega un evento touchstart para detectar cuando se toca la pantalla
+    canvas.addEventListener('wheel', (event: any) => {
+        // Verificar si el evento es una rueda del ratón y no un toque
+        if (event.type === 'wheel') {
+            handleMouseWheel(event as WheelEvent);
+        }
+    });
+  
+    canvas.addEventListener('touchstart', (event: any) => {
+        const touch = event.touches[0];
+  
+        if (event.touches.length === 2) {
+            this.isPinching = true;
+        } else {
+            this.isRightTouchDown = true;
+        }
+    });
+  
+    canvas.addEventListener('touchmove', (event: any) => {
+      console.log("hola")
+      console.log(this.lastTouchX);
+      console.log("aqui")
+      if (event.touches.length === 2) {
+        handlePinch(event);
+      } else {
+        handleRightDragMobile(event);
+      }
+    });
+  
+    canvas.addEventListener('touchend', (event: any) => {
+        if (event.touches.length === 0) {
+            this.isRightTouchDown = false;
+            handlePinchEnd(event);
+        }
+    });
+  }
 
   async getUsuarioLog() {
     const idUsuario = localStorage.getItem('idUsuario');
@@ -683,8 +803,46 @@ export class MotorComponent implements AfterViewInit {
     return idUsu;
   }
 
-  async eliminarTodosPines(){
+  async marcarComprado(idProd: number){
+    const pinCambiar = this.pines.find(pin => pin.idProd === idProd);
+    pinCambiar!.estado = true;
+  }
+
+  async eliminarComprados(){
+    let borrar = [];
+
     for(let i = 0; i < this.pines.length; i++){
+      if(this.pines[i].estado == true){
+        borrar.push(this.pines[i]);
+        const entidad = this.pines[i].nodo.getEntidad();
+        const malla = entidad.recursoMalla;
+        await malla.mallas.forEach((malla: any) => {
+          let vertexBuffer = malla.vertexBuffer;
+          motor.gl.deleteBuffer(vertexBuffer);
+
+          let normalBuffer = malla.normalBuffer;
+          motor.gl.deleteBuffer(normalBuffer);
+
+          let indexBuffer = malla.indexBuffer;
+          motor.gl.deleteBuffer(indexBuffer);
+
+          let textureBuffer = malla.tetxureBuffer;
+          motor.gl.deleteBuffer(textureBuffer);
+        });
+      }
+    }
+    
+    for(let i = 0; i < this.pines.length; i++){
+      if(borrar[i] == this.pines[i]){
+        this.pines.slice(i, 1);
+      }
+    }
+  }
+
+  async eliminarTodosPines(){
+    console.log(this.pines.length)
+    for(let i = 0; i < this.pines.length; i++){
+      console.log(this.pines[i]);
       const entidad = this.pines[i].nodo.getEntidad();
       const malla = entidad.recursoMalla;
       await malla.mallas.forEach((malla: any) => {
@@ -701,12 +859,14 @@ export class MotorComponent implements AfterViewInit {
         motor.gl.deleteBuffer(textureBuffer);
       });
     }
+    this.pines = [];
   }
 
   async eliminarPines(idProd: number){
-    let pinBorrar = this.pines.find(pin => pin.idProd === idProd);  
+    let pinBorrar = this.pines.find(pin => pin.idProd === idProd);
     const entidad = pinBorrar!.nodo.getEntidad();
     const malla = entidad.recursoMalla;
+
     await malla.mallas.forEach((malla: any) => {
       let vertexBuffer = malla.vertexBuffer;
       motor.gl.deleteBuffer(vertexBuffer);
@@ -752,171 +912,91 @@ export class MotorComponent implements AfterViewInit {
             valor = this.letraANumero(ubicacion.referencia) + ubicacion.posicion;
         });
 
-        let pin;
-        if (valor <= 4) {
-            pin = await motor.crearModelo(
-                this.ubicaciones[valor],
-                glMatrix.vec3.fromValues(0, 0, 0),
-                glMatrix.vec3.fromValues(0, 45 * (Math.PI / 180), 0),
-                glMatrix.vec3.fromValues(1, 1, 1),
-                nameMalla,
-                'malla',
-                producto.productos.foto
-            );
-        } else if (valor > 4 && valor <= 30) {
-            pin = await motor.crearModelo(
-                this.ubicaciones[valor],
-                glMatrix.vec3.fromValues(0, 0, 0),
-                glMatrix.vec3.fromValues(0, -45 * (Math.PI / 180), 0),
-                glMatrix.vec3.fromValues(2.5, 2.5, 2.5),
-                nameMalla,
-                'malla',
-                producto.productos.foto
-            );
-        } else if (valor > 30 && valor <= 33) {
-            pin = await motor.crearModelo(
-                this.ubicaciones[valor],
-                glMatrix.vec3.fromValues(0, 2.5, 0),
-                glMatrix.vec3.fromValues(0, 45 * (Math.PI / 180), 0),
-                glMatrix.vec3.fromValues(1.5, 1.5, 1.5),
-                nameMalla,
-                'malla',
-                producto.productos.foto
-            );
-        } else if (valor > 33 && valor <= 37) {
-            pin = await motor.crearModelo(
-                this.ubicaciones[valor],
-                glMatrix.vec3.fromValues(0, 2.5, 0),
-                glMatrix.vec3.fromValues(0, 45 * (Math.PI / 180), 0),
-                glMatrix.vec3.fromValues(1.5, 1.5, 1.5),
-                nameMalla,
-                'malla',
-                producto.productos.foto
-            );
-        } else if (valor > 37 && valor <= 40) {
-            pin = await motor.crearModelo(
-                this.ubicaciones[valor],
-                glMatrix.vec3.fromValues(0, 1, 0),
-                glMatrix.vec3.fromValues(0, 45 * (Math.PI / 180), 0),
-                glMatrix.vec3.fromValues(1, 1, 1),
-                nameMalla,
-                'malla',
-                producto.productos.foto
-            );
-        }
-
-        const nodo = this.ubicaciones[valor];
-
-        // Obtener las coordenadas de traslación (x, y, z)
-        const traslacion = nodo.traslacion;
-        
-        // Suponiendo que traslacion es un arreglo de tamaño 3
-        const x = traslacion[0];
-        const y = traslacion[1];
-        const z = traslacion[2];
-        let idHex = ('0000' + producto.productos.id.toString()).padStart(6, '0');
-        let color = '#' + idHex;
-        
-        
-        this.pines.push({
-            idProd: producto.productos.id,
-            nodo: pin,
-            padre: this.ubicaciones[valor],
-            recText: producto.productos.foto,
-            x: x,
-            y: y,
-            z: z,
-            color: color
-        });
+      let pin;
+      if(valor <= 4){
+        pin = await motor.crearModelo(
+          this.ubicaciones[valor],
+          glMatrix.vec3.fromValues(0, 0, 0),
+          glMatrix.vec3.fromValues(0, 45*(Math.PI / 180), 0),
+          glMatrix.vec3.fromValues(1, 1, 1),
+          nameMalla,
+          'malla',
+          producto.productos.foto
+        );
+      }
+      else if(valor > 4 && valor <= 30){
+        pin = await motor.crearModelo(
+          this.ubicaciones[valor],
+          glMatrix.vec3.fromValues(0, 0, 0),
+          glMatrix.vec3.fromValues(0, -45*(Math.PI / 180), 0),
+          glMatrix.vec3.fromValues(2.5, 2.5, 2.5),
+          nameMalla,
+          'malla',
+          producto.productos.foto
+        );
+      }
+      else if(valor > 30 && valor <= 33){
+        pin = await motor.crearModelo(
+          this.ubicaciones[valor],
+          glMatrix.vec3.fromValues(0, 2.5, 0),
+          glMatrix.vec3.fromValues(0, 45*(Math.PI / 180), 0),
+          glMatrix.vec3.fromValues(1.5, 1.5, 1.5),
+          nameMalla,
+          'malla',
+          producto.productos.foto
+        );
+      }
+      else if(valor > 33 && valor <= 37){
+        pin = await motor.crearModelo(
+          this.ubicaciones[valor],
+          glMatrix.vec3.fromValues(0, 2.5, 0),
+          glMatrix.vec3.fromValues(0, 45*(Math.PI / 180), 0),
+          glMatrix.vec3.fromValues(1.5, 1.5, 1.5),
+          nameMalla,
+          'malla',
+          producto.productos.foto
+        );
+      }
+      else if(valor > 37 && valor <= 40){
+        pin = await motor.crearModelo(
+          this.ubicaciones[valor],
+          glMatrix.vec3.fromValues(0, 1, 0),
+          glMatrix.vec3.fromValues(0, 45*(Math.PI / 180), 0),
+          glMatrix.vec3.fromValues(1, 1, 1),
+          nameMalla,
+          'malla',
+          producto.productos.foto
+        );
+      }
+      this.pines.push({idProd: producto.productos.id, nodo: pin, padre: this.ubicaciones[valor], recText: producto.productos.foto, estado: false});
+      //Para que solo recorra los nodos necesarios cuando se añade un producto SOLAMENTE
+      if(number == 0){
+        await this.ubicaciones[valor].recorrer(glMatrix.mat4.identity(glMatrix.mat4.create()));
+        break;
+      }
     }
-    console.log(this.pines);
-    canvas.addEventListener('touchstart', this.detectarToque);
+  }
 
-    // Para que solo recorra los nodos necesarios cuando se añade un producto SOLAMENTE
-    if (number == 0) {
-        await this.ubicaciones[valor].recorrer(this.ubicaciones[valor].getMatrizTransf());
+  letraANumero(letra: string): number {
+    let numero!: number;
+    if(letra == 'A'){
+      numero = 0;
     }
-}
-
-colorPick(x: number, y: number): string {
-    console.log("Color picking en:", x, y);
-
-    // Obtener el tamaño del viewport
-    const viewport = motor.gl.getParameter(motor.gl.VIEWPORT);
-    const width = viewport[2];
-    const height = viewport[3];
-
-    // Crear un buffer para almacenar los valores de color
-    const pixelBuffer = new Uint8Array(4);
-
-    // Leer el color del píxel en las coordenadas (x, y)
-    motor.gl.readPixels(x, height - y, 1, 1, motor.gl.RGBA, motor.gl.UNSIGNED_BYTE, pixelBuffer);
-
-    // Convertir los valores de color a hexadecimal
-    const r = pixelBuffer[0];
-    const g = pixelBuffer[1];
-    const b = pixelBuffer[2];
-    const a = pixelBuffer[3] / 255;
-    const hexColor = this.rgbToHex(r, g, b, a);
-
-    console.log("Color obtenido:", hexColor);
-    return hexColor;
-}
-
-rgbToHex(r: number, g: number, b: number, a: number): string {
-    return `#${this.componentToHex(r)}${this.componentToHex(g)}${this.componentToHex(b)}`;
-}
-
-componentToHex(c: number): string {
-    const hex = c.toString(16);
-    return hex.length === 1 ? '0' + hex : hex;
-}
-
-detectarToque = async (event: TouchEvent) => {
-    console.log("Detectar toque");
-    const canvas = document.querySelector("#mercado") as HTMLCanvasElement;
-    const rect = canvas.getBoundingClientRect();
-    const touch = event.touches[0];
-    const x = touch.clientX - rect.left;
-    const y = touch.clientY - rect.top;
-
-    const selectedColor = this.colorPick(x, y);
-    console.log("Color seleccionado:", selectedColor);
-
-    this.updatePinColor(selectedColor);
-}
-
-updatePinColor(color: string) {
-    console.log("Actualizando color del pin con color:", color);
-    let selectedPin = null;
-
-    // Buscar el pin con el color seleccionado
-    for (const pin of this.pines) {
-        if (pin.color === color) {
-            selectedPin = pin;
-            break; // Si se encuentra el pin, salir del bucle
-        }
+    else if(letra == 'B'){
+      numero = 10;
+    }
+    else if(letra == 'C'){
+      numero = 20;
+    }
+    else if(letra == 'D'){
+      numero = 30;
+    }
+    else if(letra == 'E'){
+      numero = 40;
     }
 
-    if (selectedPin) {
-        console.log("Pin seleccionado encontrado:", selectedPin);
-        // Hacer lo que quieras con el pin seleccionado
-    } else {
-        console.log("No se encontró ningún pin con el color seleccionado");
-    }
-}
-
-  
-  pinContieneCoordenadas(pin: any, x: number, y: number) {
-    // Supongamos que el pin tiene un atributo de radio para definir su área
-    const radio = 10; // Puedes ajustar este valor según el tamaño de los pines
-    console.log(pin);
-    // Calcula la distancia entre el punto de clic y el centro del pin
-    const distanciaAlCentro = Math.sqrt((x - pin.x) ** 2 + (y - pin.y) ** 2);
-
-    // Si la distancia al centro es menor o igual al radio, el clic está dentro del área del pin
-    return distanciaAlCentro <= radio;
+    return numero;
+  }
 }
 
 
-}

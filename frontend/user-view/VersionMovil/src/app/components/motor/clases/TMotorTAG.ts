@@ -6,7 +6,7 @@ import { TGestorRecursos } from "./TGestorRecursos";
 import { TRecursoShader } from './TRecrusoShader';
 import * as glMatrix from 'gl-matrix';
 import { RotacionService } from '../../../services/rotacion.service';
-
+import { vec3 } from 'gl-matrix';
 interface Viewport{
     x: number, 
     y: number,
@@ -30,7 +30,23 @@ export class TMotorTAG {
     public camaraActiva!: TNodo;
     public viewportActivo!: number;
     public lucesActivas: TNodo[] = [];
+    public traslacionX: number = 0;
+    public traslacionY: number = 0;
+    public rotacion: number = 0;
+    public zoomFactor: number = 1;
 
+    async setRotacion(rotacion: number){
+        this.rotacion = rotacion;
+    }
+
+    async setTraslacion(traslacionX: number, traslacionY: number){
+        this.traslacionX = traslacionX;
+        this.traslacionY = traslacionY;
+    }
+
+    async setZoom(zoom: number){
+        this.zoomFactor = zoom;
+    }
 
     async registrarCamara(nodoCamara: TNodo) {
         this.gestorCamaras.push(nodoCamara);
@@ -68,7 +84,7 @@ export class TMotorTAG {
     async iniciarGL(){
         const canvas = document.querySelector("#mercado") as HTMLCanvasElement;
 
-        let gl = canvas.getContext("webgl2") as WebGL2RenderingContext | null;
+        let gl = canvas.getContext("webgl2") as WebGL2RenderingContext;
         if (!gl) {
             console.error('No se pudo obtener el contexto Webthis.gl!.');
             return;
@@ -88,6 +104,7 @@ export class TMotorTAG {
 
         // Especificar qué caras cullar (en este caso, cullar las caras traseras)
         this.gl.cullFace(this.gl.BACK);
+        return canvas;
     }
 
     async iniciarPrograma(){
