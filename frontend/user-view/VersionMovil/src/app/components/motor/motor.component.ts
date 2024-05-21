@@ -882,23 +882,6 @@ export class MotorComponent implements AfterViewInit {
     });
   }
 
-  letraANumero(letra: string): number {
-    let numero!: number;
-    if (letra == 'A') {
-      numero = 0;
-    } else if (letra == 'B') {
-      numero = 10;
-    } else if (letra == 'C') {
-      numero = 20;
-    } else if (letra == 'D') {
-      numero = 30;
-    } else if (letra == 'E') {
-      numero = 40;
-    }
-
-    return numero;
-  }
-
   async crearPines(lista: lista[], number: number) {
     const canvas = document.querySelector("#mercado") as HTMLCanvasElement;
 
