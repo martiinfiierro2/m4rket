@@ -199,20 +199,14 @@ export class DrawerComponent implements AfterViewInit {
 
   async borrarProductosCompradosEnServidor() {
     this.motorServicio.getMotor().eliminarComprados();
-    const productosComprados = this.listaCompra.filter(producto => producto.comprado);
+    const productosComprados = await this.listaCompra.filter(producto => producto.comprado);
     productosComprados.forEach(producto => {
       this.productosService.deleteListaCompra(producto.id).subscribe(() => {
       });
     });
   
-    this.listaCompra = this.listaCompra.filter(producto => !producto.comprado);
-    //this.Recarguita();
-    try{
-      await this.getListaCompraUsu()
-    } catch (error) {
-      console.error('Error al recargar el modelo:', error);
-    }
-
+    this.listaCompra = await this.listaCompra.filter(producto => !producto.comprado);
+    await this.getListaCompraUsu();
   }
 
   borrarTodaLaLista() {
@@ -231,6 +225,12 @@ export class DrawerComponent implements AfterViewInit {
       }
     });
   }
+
+  onInputChange(event: Event) {
+    const valorRotacion = document.querySelector<HTMLInputElement>('#rotacion');
+    const rotation = parseInt(valorRotacion!.value);
+    motor.setRotacion(rotation);
+  }
 
   async ngAfterViewInit() {
     const drawer = this.drawer.nativeElement;

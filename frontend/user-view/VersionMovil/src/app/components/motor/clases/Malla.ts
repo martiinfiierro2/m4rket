@@ -58,10 +58,6 @@ export class Malla {
         return programInfo;
     }
 
-    setRotacion(valor: number){
-        console.log(valor);
-    }
-
     async dibujar(textura: any, matTrans: any) {
 
         this.matTrans = matTrans;
@@ -92,9 +88,7 @@ export class Malla {
                 this.translationX += deltaTouchX * this.translationSpeed;
 
                 // Rotación alrededor del eje X
-                this.translationY += deltaTouchY * this.translationSpeed;
-
-                //this.dibujarMalla(gl, programInfo, buffers);
+                this.translationY += deltaTouchY * this.translationSpeed; 
             }
 
             this.lastTouchX = touchX;
@@ -188,11 +182,6 @@ export class Malla {
     }
 
     dibujarBucle(InfoPrograma: any, mesh: any) {
-        const valorRotacion = document.querySelector<HTMLInputElement>('#rotacion');
-        if(valorRotacion){
-            this.rotation = parseInt(valorRotacion.value);
-        }
-
         this.gl!.viewport(0, 0, this.gl!.canvas.width/2, this.gl!.canvas.height/2)
         const camara = motor.camaraActiva.getEntidad();
 
@@ -265,19 +254,14 @@ export class Malla {
         mat4.lookAt(this.viewMatrix, cameraPosition, target, up);
 
         // Aplica el zoom a la matriz de proyección
-        if(this.zoomFactor >= 0.1){
-            mat4.scale(this.projectionMatrix, this.projectionMatrix, [1, 1, this.zoomFactor]);
-        }
-        else{
-            mat4.scale(this.projectionMatrix, this.projectionMatrix, [1, 1, 0.1]);
-        }
+        mat4.scale(this.projectionMatrix, this.projectionMatrix, [1, 1, motor.zoomFactor]);
 
         // Aplica el desplazamiento a la matriz de vista
-        mat4.translate(this.viewMatrix, this.viewMatrix, [-this.translationX, -this.translationY, 0]);
+        mat4.translate(this.viewMatrix, this.viewMatrix, [motor.traslacionX, motor.traslacionY, 0]);
 
         // Aplicar la rotación en torno al eje Y
-        mat4.rotate(this.viewMatrix, this.viewMatrix, this.rotation*(Math.PI / 180), [0, 1, 0]);
-
+        mat4.rotate(this.viewMatrix, this.viewMatrix, motor.rotacion*(Math.PI / 180), [0, 1, 0]);
+        
         
         let modelViewMatrix = mat4.create();
         mat4.multiply(modelViewMatrix, this.viewMatrix, modelMatrix);

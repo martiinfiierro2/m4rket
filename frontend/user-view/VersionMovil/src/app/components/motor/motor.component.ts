@@ -8,6 +8,7 @@ import { MotorService } from "../../services/motor.service";
 import { Ubicacion } from 'src/app/home/home.page';
 import { UbicacionesService } from 'src/app/services/ubicaciones.service';
 import { TRecursoTextura } from './clases/TRecursoTextura';
+import { mat4 } from 'gl-matrix';
 
 export let motor: TMotorTAG;
 
@@ -35,6 +36,22 @@ export class MotorComponent implements AfterViewInit{
   private listaCompra: lista[] = [];
   private pines: pin[] = [];
 
+  //Eventos
+  private rotation: any = 0;
+  private lastTouchX: number = 0;
+  private lastTouchY: number = 0;
+  private isRightTouchDown: boolean = false;
+
+  private translationX: number = 0;
+  private translationY: number = 0;
+  private translationSpeed: number = 0.1;
+
+  private zoomFactor: number = 1;
+  private zoomSpeed: number = 0.05;
+  private distancia: number = 0;
+  private lastPinchDistance: number = 0;
+  private isPinching: boolean = false;
+
   constructor(
     private productosService: ProductosService,
     private ubicacionService: UbicacionesService,
@@ -42,6 +59,10 @@ export class MotorComponent implements AfterViewInit{
   ) { }
 
   ngAfterViewInit(): void {
+  }
+
+  getMercado(){
+    return this.mercado;
   }
 
   async crearEscena(){
@@ -144,7 +165,115 @@ export class MotorComponent implements AfterViewInit{
     }
 
     await this.crearPines(this.listaCompra, 1);
-    await this.mercado.recorrer(glMatrix.mat4.identity(glMatrix.mat4.create()));
+    await this.mercado.recorrer(mat4.create());
+
+    //EVENTOS
+    const canvas = motor.gl.canvas;
+    const handleRightDragMobile = (event: TouchEvent) => {
+      event.preventDefault();
+      console.log(this.lastTouchX);
+
+      const touch = event.touches[0];
+      const touchX = touch.clientX;
+      const touchY = touch.clientY;
+
+      if(this.isRightTouchDown){
+
+        this.translationX += (this.lastTouchX - touchX) * this.translationSpeed;
+        this.translationY += (this.lastTouchY - touchY) * this.translationSpeed;
+        
+        motor.setTraslacion(this.translationX, this.translationY);
+      }
+      this.lastTouchX = touchX;
+      this.lastTouchY = touchY;
+    }
+  
+    const handlePinch = (event: TouchEvent) => {
+        event.preventDefault();
+  
+        let oldFactor = this.zoomFactor;
+        const touch1 = event.touches[0];
+        const touch2 = event.touches[1];
+  
+        // Calcula la distancia entre los dos puntos de contacto
+        const deltaX = touch1.clientX - touch2.clientX;
+        const deltaY = touch1.clientY - touch2.clientY;
+        const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+  
+        // Calcula la diferencia de distancia desde el último pellizco
+        const deltaDistance = distance - this.lastPinchDistance;
+  
+        // Ajusta el factor de zoom en función de la diferencia de distancia
+        this.zoomSpeed = 0.05; // Velocidad de zoom
+        this.zoomFactor *= 1 + deltaDistance * this.zoomSpeed;
+  
+        // Actualiza la última distancia de pellizco
+        this.lastPinchDistance = distance;
+        if(this.zoomFactor < 0.2){
+          this.zoomFactor = oldFactor;
+        }
+        motor.setZoom(this.zoomFactor);
+    }
+  
+    // Método para manejar el evento de final de pellizco (pinch)
+    const handlePinchEnd = (event: TouchEvent) => {
+        event.preventDefault();
+  
+        this.isPinching = false;
+    };
+  
+    const handleMouseWheel = (event: WheelEvent) => {
+        const delta = event.deltaY;
+        let oldFactor = this.zoomFactor;
+
+        if(delta > 0){
+            this.zoomFactor += 0.01;
+        }
+        else if (delta < 0){
+            this.zoomFactor += -0.01;
+        }
+        if(this.zoomFactor < 0.2){
+          this.zoomFactor = oldFactor;
+        }
+        motor.setZoom(this.zoomFactor);
+    };
+        
+    // Agregar el evento de clic derecho al canvas
+    // Agrega un evento touchstart para detectar cuando se toca la pantalla
+    canvas.addEventListener('wheel', (event: any) => {
+        // Verificar si el evento es una rueda del ratón y no un toque
+        if (event.type === 'wheel') {
+            handleMouseWheel(event as WheelEvent);
+        }
+    });
+  
+    canvas.addEventListener('touchstart', (event: any) => {
+        const touch = event.touches[0];
+  
+        if (event.touches.length === 2) {
+            this.isPinching = true;
+        } else {
+            this.isRightTouchDown = true;
+        }
+    });
+  
+    canvas.addEventListener('touchmove', (event: any) => {
+      console.log("hola")
+      console.log(this.lastTouchX);
+      console.log("aqui")
+      if (event.touches.length === 2) {
+        handlePinch(event);
+      } else {
+        handleRightDragMobile(event);
+      }
+    });
+  
+    canvas.addEventListener('touchend', (event: any) => {
+        if (event.touches.length === 0) {
+            this.isRightTouchDown = false;
+            handlePinchEnd(event);
+        }
+    });
   }
 
   async getUsuarioLog() {
@@ -164,9 +293,11 @@ export class MotorComponent implements AfterViewInit{
   }
 
   async eliminarComprados(){
+    let borrar = [];
+
     for(let i = 0; i < this.pines.length; i++){
       if(this.pines[i].estado == true){
-        console.log("hola")  
+        borrar.push(this.pines[i]);
         const entidad = this.pines[i].nodo.getEntidad();
         const malla = entidad.recursoMalla;
         await malla.mallas.forEach((malla: any) => {
@@ -182,14 +313,20 @@ export class MotorComponent implements AfterViewInit{
           let textureBuffer = malla.tetxureBuffer;
           motor.gl.deleteBuffer(textureBuffer);
         });
-        //Eliminar del array de pines
-        this.pines.splice(i, 1);
+      }
+    }
+    
+    for(let i = 0; i < this.pines.length; i++){
+      if(borrar[i] == this.pines[i]){
+        this.pines.slice(i, 1);
       }
     }
   }
 
   async eliminarTodosPines(){
+    console.log(this.pines.length)
     for(let i = 0; i < this.pines.length; i++){
+      console.log(this.pines[i]);
       const entidad = this.pines[i].nodo.getEntidad();
       const malla = entidad.recursoMalla;
       await malla.mallas.forEach((malla: any) => {
@@ -205,15 +342,15 @@ export class MotorComponent implements AfterViewInit{
         let textureBuffer = malla.tetxureBuffer;
         motor.gl.deleteBuffer(textureBuffer);
       });
-      //Eliminar del array de pines
-      this.pines.splice(i, 1);
     }
+    this.pines = [];
   }
 
   async eliminarPines(idProd: number){
     let pinBorrar = this.pines.find(pin => pin.idProd === idProd);
     const entidad = pinBorrar!.nodo.getEntidad();
     const malla = entidad.recursoMalla;
+
     await malla.mallas.forEach((malla: any) => {
       let vertexBuffer = malla.vertexBuffer;
       motor.gl.deleteBuffer(vertexBuffer);
@@ -326,3 +463,5 @@ export class MotorComponent implements AfterViewInit{
     return numero;
   }
 }
+
+
