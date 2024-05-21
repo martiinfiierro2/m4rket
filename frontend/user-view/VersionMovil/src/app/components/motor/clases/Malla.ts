@@ -2,6 +2,8 @@ import { mat4, mat3, vec3 } from 'gl-matrix';
 import * as OBJ from 'webgl-obj-loader';
 import { motor } from '../motor.component';
 import { glMatrix } from 'gl-matrix';
+import { catchError, retry } from 'rxjs/operators';
+
 export class Malla {
     //BUFFERS
     private vertexBuffer: any;

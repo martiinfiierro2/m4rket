@@ -7,6 +7,8 @@ import { EstadisticasService } from '../services/estadisticas.service';
 import { UbicacionesService } from '../services/ubicaciones.service';
 import { json } from 'express';
 import { forkJoin } from 'rxjs';
+import { catchError, retry } from 'rxjs/operators';
+
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 
