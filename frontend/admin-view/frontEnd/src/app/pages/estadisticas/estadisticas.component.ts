@@ -49,6 +49,7 @@ export class EstadisticasComponent {
   anadidos: DatosContadores[] = [];
   buscados: DatosContadores[] = [];
   comprados: DatosContadores[] = [];
+  mediaActivos: DatosContadores[] = [];
   prodMasAnadido: Producto;
   prodMasEliminado: Producto;
   eliminados: DatosContadores[] = [];
@@ -80,6 +81,9 @@ export class EstadisticasComponent {
   totalComprados: number = 0;
   totalBuscados: number = 0;
   porcentaje: number = 0;
+  media: number = 0;
+  totalMedia: number = 0;
+  usuariosUnicos: number = 0;
 
 
   //VARIABLES TENDENCIA 
@@ -138,6 +142,8 @@ export class EstadisticasComponent {
     this.getContadoresActivos(opcion);
     this.getContadoresComprados(opcion);
     this.getContadoresListados(opcion);
+    this.getMedia();
+    this.getUsuariosUnicos();
   }
 
   async obtenerFechasRangoSeleccionado(opcion: string) {
@@ -192,6 +198,8 @@ export class EstadisticasComponent {
     this.getContadoresActivos('7d');
     this.getContadoresComprados('7d');
     this.getContadoresListados('7d');
+    this.getMedia();
+    this.getUsuariosUnicos();
     //this.pruebaGrafico();
     
   }
@@ -422,7 +430,7 @@ export class EstadisticasComponent {
     this.totalEliminados = 0;
       try {
         const res = await this.estadisticasService.getCountEliminadosFecha(this.fechaInicio, this.fechaFin).toPromise();
-        console.log(res);
+        //console.log(res);
               
        // await this.procesarDatos(opcion, res);
        await this.graficoEliminados(opcion, res);
@@ -450,6 +458,27 @@ export class EstadisticasComponent {
       const res = await this.estadisticasService.getCountActivosFecha(this.fechaInicio, this.fechaFin).toPromise();
       //console.log(res);
       await this.pruebaGrafico(opcion, res);
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async getMedia() {
+    this.mediaActivos = [];
+    this.media = 0;
+    try {
+      const res = await this.estadisticasService.getCountMediaTiempo(this.fechaInicio, this.fechaFin).toPromise();
+      //console.log(res);
+      for (let index = 0; index < res.datosContadores.length; index++) {
+        let contador = new DatosContadores();
+  
+        const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
+        //contador.name = res2.productos.nombre;
+        contador.value = res.datosContadores[index].media_tiempo_uso;
+        this.mediaActivos.push(contador);
+        this.media += parseInt(contador.value);
+      }
 
     } catch (error) {
       console.error(error);
@@ -485,7 +514,7 @@ export class EstadisticasComponent {
     this.totalAnadidos = 0;
     try {
       const res = await this.estadisticasService.getCountListadosFecha(this.fechaInicio, this.fechaFin).toPromise();
-      console.log(res);
+      //console.log(res);
       await this.graficoListados(opcion, res);
 
       for (let index = 0; index < res.datosContadores.length; index++) {
@@ -508,6 +537,24 @@ export class EstadisticasComponent {
     this.porcentaje = 0;
     if(this.totalComprados && this.totalAnadidos){
       this.porcentaje = parseFloat((this.totalComprados * 100 / this.totalAnadidos).toFixed(2));
+    }
+  }
+
+  async getUsuariosUnicos(){
+   this.usuariosUnicos = 0;
+    try {
+      const res = await this.estadisticasService.getUsuarioUnico(this.fechaInicio, this.fechaFin).toPromise();
+      console.log(res);
+      
+      for (let index = 0; index < res.datosContadores.length; index++) {
+        let contador = new DatosContadores();
+        contador.value = res.datosContadores[index].total_usuarios;
+        this.usuariosUnicos += parseInt(contador.value);
+        console.log(this.usuariosUnicos);
+      }
+
+    } catch (error) {
+      console.error(error);
     }
   }
 
