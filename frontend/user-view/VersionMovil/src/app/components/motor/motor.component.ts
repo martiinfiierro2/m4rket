@@ -171,7 +171,6 @@ export class MotorComponent implements AfterViewInit{
     const canvas = motor.gl.canvas;
     const handleRightDragMobile = (event: TouchEvent) => {
       event.preventDefault();
-      console.log(this.lastTouchX);
 
       const touch = event.touches[0];
       const touchX = touch.clientX;
@@ -212,6 +211,9 @@ export class MotorComponent implements AfterViewInit{
         if(this.zoomFactor < 0.2){
           this.zoomFactor = oldFactor;
         }
+        else if (this.zoomFactor > 1.5){
+          this.zoomFactor = oldFactor;
+        }
         motor.setZoom(this.zoomFactor);
     }
   
@@ -235,6 +237,9 @@ export class MotorComponent implements AfterViewInit{
         if(this.zoomFactor < 0.2){
           this.zoomFactor = oldFactor;
         }
+        else if (this.zoomFactor > 1.5){
+          this.zoomFactor = oldFactor;
+        }
         motor.setZoom(this.zoomFactor);
     };
         
@@ -246,21 +251,23 @@ export class MotorComponent implements AfterViewInit{
             handleMouseWheel(event as WheelEvent);
         }
     });
-  
+
     canvas.addEventListener('touchstart', (event: any) => {
+      if (event.touches.length === 2) {
+        this.isPinching = true;
+        this.lastPinchDistance = Math.sqrt(
+          Math.pow(event.touches[0].clientX - event.touches[1].clientX, 2) +
+          Math.pow(event.touches[0].clientY - event.touches[1].clientY, 2)
+        );
+      } else {
+        this.isRightTouchDown = true;
         const touch = event.touches[0];
-  
-        if (event.touches.length === 2) {
-            this.isPinching = true;
-        } else {
-            this.isRightTouchDown = true;
-        }
+        this.lastTouchX = touch.clientX;
+        this.lastTouchY = touch.clientY;
+      }
     });
   
     canvas.addEventListener('touchmove', (event: any) => {
-      console.log("hola")
-      console.log(this.lastTouchX);
-      console.log("aqui")
       if (event.touches.length === 2) {
         handlePinch(event);
       } else {
@@ -324,7 +331,6 @@ export class MotorComponent implements AfterViewInit{
   }
 
   async eliminarTodosPines(){
-    console.log(this.pines.length)
     for(let i = 0; i < this.pines.length; i++){
       console.log(this.pines[i]);
       const entidad = this.pines[i].nodo.getEntidad();
