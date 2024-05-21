@@ -83,7 +83,8 @@ export class MotorComponent implements AfterViewInit{
   
     //Iniciamos GL y Programa
     await motor.iniciarGL();
-    await motor.iniciarPrograma();
+    await motor.iniciarPrograma("vertexShader.glsl", "fragmentShader.glsl");
+    await motor.iniciarPrograma("vertexColorPicking.glsl", "fragmentColorPicking.glsl");
 
     this.suelo = await motor.crearModelo( this.mercado, glMatrix.vec3.fromValues(0,0,0), glMatrix.vec3.fromValues(0,215*(Math.PI / 180),0), glMatrix.vec3.fromValues(0.425,0.425,0.425), 'suelo.obj', 'malla', 'gris.jpg');
 
