@@ -22,6 +22,10 @@ const DatosContadores = sequelize.define('datos_contadores', {
     id_usuario: {
         type: DataTypes.STRING,
         allowNull: true,
+    }, 
+    tiempo_uso: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
     }
 }, {
     tableName: 'datos_contadores',

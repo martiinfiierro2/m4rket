@@ -48,6 +48,13 @@ export class EstadisticasService {
     return this.http.get(urlCompleta, {headers: this.cabeceras});
   }
 
+  getCountMasBuscadosFecha(inicio: string, fin: string): Observable<any>{
+    const fechaInicioCodificada = encodeURIComponent(inicio);
+    const fechaFinCodificada = encodeURIComponent(fin);
+    let urlCompleta = this.url + '?nombre=masbuscado&inicio=' + fechaInicioCodificada + '&fin=' + fechaFinCodificada;
+    return this.http.get(urlCompleta, {headers: this.cabeceras});
+  }
+
   getCountListadosFecha(inicio: string, fin: string): Observable<any>{
     const fechaInicioCodificada = encodeURIComponent(inicio);
     const fechaFinCodificada = encodeURIComponent(fin);
@@ -73,6 +80,20 @@ export class EstadisticasService {
     const fechaInicioCodificada = encodeURIComponent(inicio);
     const fechaFinCodificada = encodeURIComponent(fin);
     let urlCompleta = this.url + '?nombre=comprado&inicio=' + fechaInicioCodificada + '&fin=' + fechaFinCodificada;
+    return this.http.get(urlCompleta, {headers: this.cabeceras});
+  }
+
+  getCountMediaTiempo(inicio: string, fin: string): Observable<any>{
+    const fechaInicioCodificada = encodeURIComponent(inicio);
+    const fechaFinCodificada = encodeURIComponent(fin);
+    let urlCompleta = this.url + '?nombre=mediatiempo&inicio=' + fechaInicioCodificada + '&fin=' + fechaFinCodificada;
+    return this.http.get(urlCompleta, {headers: this.cabeceras});
+  }
+
+  getUsuarioUnico(inicio: string, fin: string): Observable<any>{
+    const fechaInicioCodificada = encodeURIComponent(inicio);
+    const fechaFinCodificada = encodeURIComponent(fin);
+    let urlCompleta = this.url + '?nombre=usuariounico&inicio=' + fechaInicioCodificada + '&fin=' + fechaFinCodificada;
     return this.http.get(urlCompleta, {headers: this.cabeceras});
   }
 

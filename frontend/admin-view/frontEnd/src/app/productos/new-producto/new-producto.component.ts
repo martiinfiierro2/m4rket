@@ -100,33 +100,45 @@ export class NewProductoComponent {
 
   desplegarCampo( campo ){
 
+    let icono;
+
     switch (campo) {
       case 'infoBasica':
+        icono = document.querySelector('#iconoDesplegableInfo');
         if (this.infoBasicaDesplegada) {
           this.infoBasicaDesplegada = false;
+          icono.classList.remove("fa-angle-up");
+          icono.classList.add("fa-angle-down");
         }
         else{
           this.infoBasicaDesplegada = true;
+          icono.classList.remove("fa-angle-down");
+          icono.classList.add("fa-angle-up");
         }
         
         break;
       case 'valoresNut':
+        icono = document.querySelector('#iconoDesplegableNutri');
         if (this.valoresNutDesplegados) {
           this.valoresNutDesplegados = false;
+          icono.classList.remove("fa-angle-up");
+          icono.classList.add("fa-angle-down");
         }
         else{
           this.valoresNutDesplegados = true;
+          icono.classList.remove("fa-angle-down");
+          icono.classList.add("fa-angle-up");
         }
 
         break;
       case 'imagenProducto':
-        if (this.imagenProducto) {
-          this.imagenProducto = false;
-        }
-        else{
+        icono = document.querySelector('#iconoDesplegableImagen');
+        if (!this.imagenProducto) {
           this.imagenProducto = true;
+          icono.classList.remove("fa-angle-down");
+          icono.classList.add("fa-angle-up");
         }
-
+      
         break;
     }
   }

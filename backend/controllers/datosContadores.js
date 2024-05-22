@@ -66,6 +66,36 @@ async function obtenerDatosContadores(req, res) {
             });
             
         }
+        else if(nombre === "mediatiempos") {
+            datosContadores = await DatosContadores.findAll({
+                attributes: [
+                    'id_usuario',
+                    [Sequelize.literal('AVG(tiempo_uso)'), 'media_tiempo_uso'] 
+                ],
+                where: {
+                    nombre: 'activo',
+                    fecha: {
+                        [Sequelize.Op.between]: [inicio, fin]
+                    },
+                    tiempo_uso: {
+                        [Sequelize.Op.not]: null
+                    }
+                },
+                group: ['id_usuario']
+            });
+        }else if (nombre === "usuariounico") {
+            datosContadores = await DatosContadores.findAll({
+                attributes: [
+                    [Sequelize.literal('COUNT(DISTINCT id_usuario)'), 'total_usuarios'] 
+                ],
+                where: {
+                    nombre: 'activo',
+                    fecha: {
+                        [Sequelize.Op.between]: [inicio, fin]
+                    }
+                }
+            });
+        }
         
         res.json({
             ok: true,
