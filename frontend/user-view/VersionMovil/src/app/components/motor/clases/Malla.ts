@@ -38,13 +38,14 @@ export class Malla {
                 modelMatrix: this.gl!.getUniformLocation(program, "uModelMatrix"),
                 uSampler: this.gl!.getUniformLocation(program, "uSampler"),
                 normalMatrix: this.gl!.getUniformLocation(program, "uNormalMatrix"),
-                modelViewMatrix: this.gl!.getUniformLocation(program, "uModelViewMatrix")
+                modelViewMatrix: this.gl!.getUniformLocation(program, "uModelViewMatrix"),
+                uColor: this.gl!.getUniformLocation(programColor, "uColor")
             }
         };
         return programInfo;
     }
 
-    async dibujar(textura: any, matTrans: any) {
+    async dibujar(id: number, textura: any, matTrans: any) {
 
         this.matTrans = matTrans;
         this.gl = motor.gl;
@@ -64,7 +65,7 @@ export class Malla {
     }
 
     dibujarBucle(InfoPrograma: any, mesh: any) {
-        this.gl!.viewport(0, 0, this.gl!.canvas.width/2, this.gl!.canvas.height/2)
+        this.gl!.viewport(0, 0, this.gl!.canvas.width, this.gl!.canvas.height)
         const camara = motor.camaraActiva.getEntidad();
 
         this.projectionMatrix = mat4.create();
@@ -197,12 +198,16 @@ export class Malla {
 
         
         // Tell the shader we bound the texture to texture unit 0
-        this.gl!.uniform1i(InfoPrograma.uniformLocations.uSampler, 0);
-        this.gl!.viewport(0, 0, this.gl!.canvas.width, this.gl!.canvas.height);
-
-        // Bind de la textura
-        this.gl!.activeTexture(this.gl!.TEXTURE0);
-        this.gl!.bindTexture(this.gl!.TEXTURE_2D, this.texture);
+        if(motor.cambiarPrograma == false){
+            this.gl!.uniform1i(InfoPrograma.uniformLocations.uSampler, 0);
+            // Bind de la textura
+            this.gl!.activeTexture(this.gl!.TEXTURE0);
+            this.gl!.bindTexture(this.gl!.TEXTURE_2D, this.texture);
+        }else{
+            let colorLocation = InfoPrograma.uColor;
+            console.log(colorLocation);
+            motor.cambiarPrograma = false;
+        }
             
         // Dibujar los elementos
         this.gl!.drawElements(

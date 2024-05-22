@@ -35,6 +35,7 @@ export class TMotorTAG {
     public traslacionY: number = 0;
     public rotacion: number = 0;
     public zoomFactor: number = 1;
+    public cambiarPrograma: boolean = false;
 
     async setRotacion(rotacion: number){
         this.rotacion = rotacion;
@@ -105,6 +106,7 @@ export class TMotorTAG {
 
         // Especificar qué caras cullar (en este caso, cullar las caras traseras)
         this.gl.cullFace(this.gl.BACK);
+        
         return canvas;
     }
 
@@ -266,7 +268,7 @@ export class TMotorTAG {
         return nodoCreado;
     }
 
-    async crearModelo( padre: TNodo|null, trasl: glMatrix.vec3, rot: glMatrix.vec3, esc: glMatrix.vec3, nombreFichero: string | undefined, tipo: string, textura: any){
+    async crearModelo( padre: TNodo|null, trasl: glMatrix.vec3, rot: glMatrix.vec3, esc: glMatrix.vec3, nombreFichero: string | undefined, tipo: string, textura: any, id: number){
         let nodoCreado: any, recursoMalla: any, recursoTextura: any, entidadModelo: any;
         
         nodoCreado = new TNodo();
@@ -283,6 +285,7 @@ export class TMotorTAG {
             }
         }
         entidadModelo = new EModelo(recursoMalla, recursoTextura);
+        await nodoCreado.setID(id);
         await nodoCreado.setEntidad(entidadModelo);
         await nodoCreado.setTraslacion(trasl);
         await nodoCreado.setRotacion(rot);
