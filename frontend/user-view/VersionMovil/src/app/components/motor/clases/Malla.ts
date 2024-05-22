@@ -23,9 +23,10 @@ export class Malla {
         this.nombre = filename;
     }
 
-    async getProgramInfo(gl: any, program: any){
+    async getProgramInfo(gl: any, program: any, programColor: any){
         const programInfo = {
             program: program,
+            programColor: programColor,
             attribLocations: {
                 vertexPosition: this.gl!.getAttribLocation(program, "aVertexPosition"),
                 textureCoord: this.gl!.getAttribLocation(program, "aTextureCoord"),
@@ -47,8 +48,7 @@ export class Malla {
 
         this.matTrans = matTrans;
         this.gl = motor.gl;
-        this.program = motor.program;
-        const InfoPrograma = await this.getProgramInfo(this.gl, this.program);
+        const InfoPrograma = await this.getProgramInfo(this.gl, motor.program, motor.programColor);
     
         let mesh = OBJ.initMeshBuffers(this.gl as WebGL2RenderingContext, new OBJ.Mesh(this.OBJfile));
 

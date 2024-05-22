@@ -52,6 +52,11 @@ export class MotorComponent implements AfterViewInit{
   private lastPinchDistance: number = 0;
   private isPinching: boolean = false;
 
+  
+  private touchStartTime!: number;
+  private touchEndTime!: number;
+  private touchMoved: boolean = false;
+
   constructor(
     private productosService: ProductosService,
     private ubicacionService: UbicacionesService,
@@ -172,6 +177,7 @@ export class MotorComponent implements AfterViewInit{
     const canvas = motor.gl.canvas;
     const handleRightDragMobile = (event: TouchEvent) => {
       event.preventDefault();
+      console.log('Arrastre');
 
       const touch = event.touches[0];
       const touchX = touch.clientX;
@@ -243,6 +249,10 @@ export class MotorComponent implements AfterViewInit{
         }
         motor.setZoom(this.zoomFactor);
     };
+
+    const handleClick = (event: MouseEvent) => {
+      console.log('Click');
+    };
         
     // Agregar el evento de clic derecho al canvas
     // Agrega un evento touchstart para detectar cuando se toca la pantalla
@@ -254,6 +264,7 @@ export class MotorComponent implements AfterViewInit{
     });
 
     canvas.addEventListener('touchstart', (event: any) => {
+      this.touchStartTime = new Date().getTime();
       if (event.touches.length === 2) {
         this.isPinching = true;
         this.lastPinchDistance = Math.sqrt(
@@ -277,10 +288,16 @@ export class MotorComponent implements AfterViewInit{
     });
   
     canvas.addEventListener('touchend', (event: any) => {
-        if (event.touches.length === 0) {
-            this.isRightTouchDown = false;
-            handlePinchEnd(event);
-        }
+      this.touchEndTime = new Date().getTime();
+
+      if (event.touches.length === 0) {
+        this.isRightTouchDown = false;
+        handlePinchEnd(event);
+      }
+    
+      if (!this.touchMoved && (this.touchEndTime - this.touchStartTime) < 200) {
+        handleClick(event);
+      }
     });
   }
 
