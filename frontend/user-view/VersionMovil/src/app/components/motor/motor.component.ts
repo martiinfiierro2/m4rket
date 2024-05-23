@@ -871,7 +871,7 @@ export class MotorComponent implements AfterViewInit {
         pinchTimeout = setTimeout(() => {
             this.isRightTouchDown = false;
             isWaitingForSingleTouch = false;
-        }, 200); // 200 ms es un ejemplo de tiempo de espera
+        }, 500); // 200 ms es un ejemplo de tiempo de espera
     } else if (event.touches.length === 1 && this.isPinching) {
         // Set a flag and timeout to wait for potential single touch event
         isWaitingForSingleTouch = true;
