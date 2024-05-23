@@ -110,6 +110,23 @@ export class TMotorTAG {
         return canvas;
     }
 
+    useProgramMain(gl: WebGL2RenderingContext): void {
+        if (gl && this.program) {
+            gl.useProgram(this.program);
+        } else {
+            console.error('No se puede usar el programa principal de shaders porque no se ha inicializado.');
+        }
+    }
+
+    useProgramColor(gl: WebGL2RenderingContext): void {
+        if (gl && this.programColor) {
+            gl.useProgram(this.programColor);
+        } else {
+            console.error('No se puede usar el programa principal de shaders porque no se ha inicializado.');
+        }
+    }
+
+
     async iniciarPrograma(vertex: any, fragment: any){
         //Calculamos la matriz de vista como la inversa de la matriz de la cámara activa
         let matrizCamara = this.camaraActiva.getMatrizTransf();
@@ -192,6 +209,7 @@ export class TMotorTAG {
 
         if(number == 1){
             this.program = program;
+            this.gl.useProgram(program);
         }else{
             this.programColor = program;
         }
