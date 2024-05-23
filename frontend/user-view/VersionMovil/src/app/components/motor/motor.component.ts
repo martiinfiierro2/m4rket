@@ -749,41 +749,39 @@ export class MotorComponent implements AfterViewInit {
     const handleRightDragMobile = (event: TouchEvent) => {
       event.preventDefault();
       console.log('Arrastre');
-
+    
       const touch = event.touches[0];
       const touchX = touch.clientX;
       const touchY = touch.clientY;
-
+    
       if(this.isRightTouchDown){
-
         this.translationX += (this.lastTouchX - touchX) * this.translationSpeed;
         this.translationY += (this.lastTouchY - touchY) * this.translationSpeed;
-        
         motor.setTraslacion(this.translationX, this.translationY);
       }
       this.lastTouchX = touchX;
       this.lastTouchY = touchY;
-    }
-  
+    };
+    
     const handlePinch = (event: TouchEvent) => {
         event.preventDefault();
-  
+    
         let oldFactor = this.zoomFactor;
         const touch1 = event.touches[0];
         const touch2 = event.touches[1];
-  
+    
         // Calcula la distancia entre los dos puntos de contacto
         const deltaX = touch1.clientX - touch2.clientX;
         const deltaY = touch1.clientY - touch2.clientY;
         const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-  
+    
         // Calcula la diferencia de distancia desde el último pellizco
         const deltaDistance = this.lastPinchDistance - distance;
-  
+    
         // Ajusta el factor de zoom en función de la diferencia de distancia
         this.zoomSpeed = 0.05; // Velocidad de zoom
         this.zoomFactor *= 1 + deltaDistance * this.zoomSpeed;
-  
+    
         // Actualiza la última distancia de pellizco
         this.lastPinchDistance = distance;
         if(this.zoomFactor < 0.2){
@@ -793,51 +791,39 @@ export class MotorComponent implements AfterViewInit {
           this.zoomFactor = oldFactor;
         }
         motor.setZoom(this.zoomFactor);
-    }
-  
+    };
+    
     // Método para manejar el evento de final de pellizco (pinch)
     const handlePinchEnd = (event: TouchEvent) => {
         event.preventDefault();
-  
+    
         this.isPinching = false;
     };
-  
-    const handleMouseWheel = (event: WheelEvent) => {
-        const delta = event.deltaY;
-        let oldFactor = this.zoomFactor;
-
-        if(delta > 0){
-            this.zoomFactor += 0.01;
-        }
-        else if (delta < 0){
-            this.zoomFactor += -0.01;
-        }
-        if(this.zoomFactor < 0.2){
-          this.zoomFactor = oldFactor;
-        }
-        else if (this.zoomFactor > 1.5){
-          this.zoomFactor = oldFactor;
-        }
-        motor.setZoom(this.zoomFactor);
-    };
-
-    const handleClick = (event: MouseEvent) => {
+    
+    // Manejar el evento de clic/touch
+    const handleClick = (event: TouchEvent) => {
       motor.cambiarPrograma = true;
       motor.gl.clear(motor.gl.COLOR_BUFFER_BIT | motor.gl.DEPTH_BUFFER_BIT);
-      this.mercado.recorrer(glMatrix.mat4.identity(glMatrix.mat4.create()));
+      // Obtener la primera posición de contacto
+      let touch = event.touches[0];
+      console.log(touch)
+      // Obtener coordenadas X e Y 
+      let x = touch.clientX;
+      let y = touch.clientY;
+      console.log(x, y);
+    
+      requestAnimationFrame(() => {
+        const pixel = new Uint8Array(4);
+        motor.gl.readPixels(x, y, 1, 1, motor.gl.RGBA, motor.gl.UNSIGNED_BYTE, pixel);
+        var id = (pixel[0] << 24) | (pixel[1] << 16) | (pixel[2] << 8) | pixel[3];
+        console.log(id)
+      })
     };
-        
-    // Agregar el evento de clic derecho al canvas
-    // Agrega un evento touchstart para detectar cuando se toca la pantalla
-    canvas.addEventListener('wheel', (event: any) => {
-        // Verificar si el evento es una rueda del ratón y no un toque
-        if (event.type === 'wheel') {
-            handleMouseWheel(event as WheelEvent);
-        }
-    });
-
+    
+    // Agregar listeners de eventos táctiles al canvas
     canvas.addEventListener('touchstart', (event: any) => {
       this.touchStartTime = new Date().getTime();
+    
       if (event.touches.length === 2) {
         this.isPinching = true;
         this.lastPinchDistance = Math.sqrt(
@@ -850,8 +836,11 @@ export class MotorComponent implements AfterViewInit {
         this.lastTouchX = touch.clientX;
         this.lastTouchY = touch.clientY;
       }
+    
+      // Manejar el clic/touch dentro del evento 'touchstart'
+      handleClick(event);
     });
-  
+    
     canvas.addEventListener('touchmove', (event: any) => {
       if (event.touches.length === 2) {
         handlePinch(event);
@@ -861,33 +850,30 @@ export class MotorComponent implements AfterViewInit {
     });
     
     canvas.addEventListener('touchend', (event: any) => {
-    this.touchEndTime = new Date().getTime();
-
-    if (event.touches.length === 0) {
+      this.touchEndTime = new Date().getTime();
+    
+      if (event.touches.length === 0) {
         this.isRightTouchDown = false;
         handlePinchEnd(event);
-
+    
         // Esperar un corto tiempo antes de manejar posibles eventos de arrastre
         pinchTimeout = setTimeout(() => {
-            this.isRightTouchDown = false;
-            isWaitingForSingleTouch = false;
+          this.isRightTouchDown = false;
+          isWaitingForSingleTouch = false;
         }, 200); // 200 ms es un ejemplo de tiempo de espera
-    } else if (event.touches.length === 1 && this.isPinching) {
+      } else if (event.touches.length === 1 && this.isPinching) {
         // Set a flag and timeout to wait for potential single touch event
         isWaitingForSingleTouch = true;
         touchMoveTimeout = setTimeout(() => {
-            if (isWaitingForSingleTouch) {
-                this.isRightTouchDown = true;
-                isWaitingForSingleTouch = false;
-            }
-        }, 200); // Adjust the time as necessary
-    }
-
-    if (!this.touchMoved && (this.touchEndTime - this.touchStartTime) < 200) {
-        handleClick(event);
-    }
-});
-  }
+          if (isWaitingForSingleTouch) {
+            this.isRightTouchDown = true;
+            isWaitingForSingleTouch = false;
+          }
+        }, 200); // Ajusta el tiempo según sea necesario
+      }
+    });
+    
+}
 
   async getUsuarioLog() {
     const idUsuario = localStorage.getItem('idUsuario');

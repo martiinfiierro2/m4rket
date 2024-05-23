@@ -17,6 +17,8 @@ export class Malla {
     private texture: WebGLTexture | null = null;
     private projectionMatrix!: mat4;
     private viewMatrix!: mat4;
+    private color!: Float32Array;
+    private id!: number;
 
     constructor(malla: string, filename: string) {
         this.OBJfile = malla;
@@ -46,9 +48,10 @@ export class Malla {
     }
 
     async dibujar(id: number, textura: any, matTrans: any) {
-
         this.matTrans = matTrans;
         this.gl = motor.gl;
+        this.color = this.crearColor(id);
+        this.id = id;
         const InfoPrograma = await this.getProgramInfo(this.gl, motor.program, motor.programColor);
     
         let mesh = OBJ.initMeshBuffers(this.gl as WebGL2RenderingContext, new OBJ.Mesh(this.OBJfile));
@@ -77,28 +80,6 @@ export class Malla {
             camara.cercano,
             camara.lejano
         );
-
-        // Enlazar el buffer de vértices
-        this.gl!.enableVertexAttribArray(InfoPrograma.attribLocations.vertexPosition);
-        this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, mesh.vertexBuffer);
-        this.vertexBuffer = mesh.vertexBuffer;
-        //this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(mesh.vertices), this.gl!.STATIC_DRAW);
-        this.gl!.vertexAttribPointer(InfoPrograma.attribLocations.vertexPosition, mesh.vertexBuffer.itemSize, this.gl!.FLOAT, false, 0, 0);
-    
-        // Enlazar el buffer de texturas
-        this.gl!.enableVertexAttribArray(InfoPrograma.attribLocations.textureCoord);
-        this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, mesh.textureBuffer);
-        this.textureBuffer = mesh.textureBuffer;
-        //this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(mesh.textures), this.gl!.STATIC_DRAW);
-        this.gl!.vertexAttribPointer(InfoPrograma.attribLocations.textureCoord, mesh.textureBuffer.itemSize, this.gl!.FLOAT, false, 0, 0);
-        
-        // Enlazar el buffer de normales
-        this.gl!.enableVertexAttribArray(InfoPrograma.attribLocations.normalCoord);
-        this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, mesh.normalBuffer);
-        this.normalBuffer = mesh.normalBuffer;
-        //this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(mesh.vertexNormals), this.gl!.STATIC_DRAW);
-        this.gl!.vertexAttribPointer(InfoPrograma.attribLocations.normalCoord, mesh.normalBuffer.itemSize, this.gl!.FLOAT, false, 0, 0);
-    
         // Enlazar el buffer de índices
         this.gl!.bindBuffer(this.gl!.ELEMENT_ARRAY_BUFFER, mesh.indexBuffer);
         this.indexBuffer = mesh.indexBuffer;
@@ -199,13 +180,16 @@ export class Malla {
         
         // Tell the shader we bound the texture to texture unit 0
         if(motor.cambiarPrograma == false){
+            this.iniciarBuffers(InfoPrograma, mesh);
             this.gl!.uniform1i(InfoPrograma.uniformLocations.uSampler, 0);
             // Bind de la textura
             this.gl!.activeTexture(this.gl!.TEXTURE0);
             this.gl!.bindTexture(this.gl!.TEXTURE_2D, this.texture);
         }else{
-            let colorLocation = InfoPrograma.uColor;
-            console.log(colorLocation);
+            this.iniciarBuffersColor(mesh);
+            console.log(this.id);
+            let colorLocation = this.gl.getUniformLocation(motor.programColor, 'uColor');
+            this.gl.uniform4fv(colorLocation, this.color);
             motor.cambiarPrograma = false;
         }
             
@@ -216,6 +200,38 @@ export class Malla {
             this.gl!.UNSIGNED_SHORT,
             0
         );
+    }
+
+    iniciarBuffersColor(mesh: any){
+        this.gl!.enableVertexAttribArray(0);
+        this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, mesh.vertexBuffer);
+        this.vertexBuffer = mesh.vertexBuffer;
+        //this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(mesh.vertices), this.gl!.STATIC_DRAW);
+        this.gl!.vertexAttribPointer(0, mesh.vertexBuffer.itemSize, this.gl!.FLOAT, false, 0, 0);
+    }
+
+    iniciarBuffers(InfoPrograma: any, mesh: any){ 
+        // Enlazar el buffer de vértices
+        this.gl!.enableVertexAttribArray(InfoPrograma.attribLocations.vertexPosition);
+        this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, mesh.vertexBuffer);
+        this.vertexBuffer = mesh.vertexBuffer;
+        //this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(mesh.vertices), this.gl!.STATIC_DRAW);
+        this.gl!.vertexAttribPointer(InfoPrograma.attribLocations.vertexPosition, mesh.vertexBuffer.itemSize, this.gl!.FLOAT, false, 0, 0);
+    
+        // Enlazar el buffer de texturas
+        this.gl!.enableVertexAttribArray(InfoPrograma.attribLocations.textureCoord);
+        this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, mesh.textureBuffer);
+        this.textureBuffer = mesh.textureBuffer;
+        //this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(mesh.textures), this.gl!.STATIC_DRAW);
+        this.gl!.vertexAttribPointer(InfoPrograma.attribLocations.textureCoord, mesh.textureBuffer.itemSize, this.gl!.FLOAT, false, 0, 0);
+        
+        // Enlazar el buffer de normales
+        this.gl!.enableVertexAttribArray(InfoPrograma.attribLocations.normalCoord);
+        this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, mesh.normalBuffer);
+        this.normalBuffer = mesh.normalBuffer;
+        //this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(mesh.vertexNormals), this.gl!.STATIC_DRAW);
+        this.gl!.vertexAttribPointer(InfoPrograma.attribLocations.normalCoord, mesh.normalBuffer.itemSize, this.gl!.FLOAT, false, 0, 0);
+    
     }
 
     calculateBoundingBox(mesh: any) {
@@ -317,6 +333,17 @@ export class Malla {
             return false;
         }
         return true;
+    }
+
+    crearColor(number: number) {
+        // Extraer los componentes R, G, B y A del número
+        var r = ((number >> 24) & 0xFF) / 255.0;
+        var g = ((number >> 16) & 0xFF) / 255.0;
+        var b = ((number >> 8) & 0xFF) / 255.0;
+        var a = (number & 0xFF) / 255.0;
+        
+        // Devolver un Float32Array con los componentes R, G, B y A
+        return new Float32Array([r, g, b, a]);
     }
     
 
