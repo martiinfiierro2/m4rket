@@ -22,6 +22,7 @@ export class TMotorTAG {
     public gestorRecursos!: TGestorRecursos;
     public gl!: WebGL2RenderingContext;
     public program!: WebGLProgram;
+    public programColor!: WebGLProgram;
     public nodos: TNodo[] = [];
     
     public gestorCamaras: TNodo[] = [];
@@ -34,6 +35,7 @@ export class TMotorTAG {
     public traslacionY: number = 0;
     public rotacion: number = 0;
     public zoomFactor: number = 1;
+    public cambiarPrograma: boolean = false;
 
     async setRotacion(rotacion: number){
         this.rotacion = rotacion;
@@ -104,23 +106,24 @@ export class TMotorTAG {
 
         // Especificar qué caras cullar (en este caso, cullar las caras traseras)
         this.gl.cullFace(this.gl.BACK);
+        
         return canvas;
     }
 
-    async iniciarPrograma(){
+    async iniciarPrograma(vertex: any, fragment: any){
         //Calculamos la matriz de vista como la inversa de la matriz de la cámara activa
         let matrizCamara = this.camaraActiva.getMatrizTransf();
         let viewMatrix = glMatrix.mat4.create();
         glMatrix.mat4.invert(viewMatrix, matrizCamara);
 
-        const auxVertex= await this.gestorRecursos.getRecurso("vertexShader.glsl", "shader");
+        const auxVertex= await this.gestorRecursos.getRecurso(vertex, "shader");
         let vertexShaderSource: any, fragmentShaderSource: any;
 
         if (auxVertex instanceof TRecursoShader) {
             vertexShaderSource = auxVertex.valor;
         }
-        const auxVertexColor = await this.gestorRecursos.getRecurso("vertexColor.glsl", "shader");
-        const auxFragment = await this.gestorRecursos.getRecurso("fragmentShader.glsl", "shader");
+
+        const auxFragment = await this.gestorRecursos.getRecurso(fragment, "shader");
 
         if (auxFragment instanceof TRecursoShader) {
             fragmentShaderSource = auxFragment.valor;
@@ -131,11 +134,15 @@ export class TMotorTAG {
             return;
         }
         else{
-            await this.crearShaders(vertexShaderSource, fragmentShaderSource);
+            if(fragment == 'fragmentColorPicking.glsl'){
+                await this.crearShaders(vertexShaderSource, fragmentShaderSource, 0);
+            }else{
+                await this.crearShaders(vertexShaderSource, fragmentShaderSource, 1);
+            }
         }
     }
 
-    async crearShaders(vertexShaderSource: string, fragmentShaderSource: string){
+    async crearShaders(vertexShaderSource: string, fragmentShaderSource: string, number: number){
         const vertexShader = await this.createShader(this.gl!.VERTEX_SHADER, vertexShaderSource);
         const fragmentShader = await this.createShader(this.gl!.FRAGMENT_SHADER, fragmentShaderSource);
 
@@ -143,7 +150,7 @@ export class TMotorTAG {
             console.error('No se pudo crear uno o ambos shaders.');
             return;
         }
-        await this.createProgram(vertexShader, fragmentShader);
+        await this.createProgram(vertexShader, fragmentShader, number);
         if (!this.program) {
             console.error('No se pudo crear el programa Webthis.gl!.');
             return;
@@ -167,7 +174,7 @@ export class TMotorTAG {
         return shader;
     }
     
-    async createProgram(vertexShader: WebGLShader, fragmentShader: WebGLShader) {
+    async createProgram(vertexShader: WebGLShader, fragmentShader: WebGLShader, number: number) {
         const program = this.gl!.createProgram();
         if (!program) {
             console.error('No se pudo crear el programa.');
@@ -182,7 +189,12 @@ export class TMotorTAG {
             const info = this.gl!.getProgramInfoLog(program);
             return null;
         }
-        this.program = program;
+
+        if(number == 1){
+            this.program = program;
+        }else{
+            this.programColor = program;
+        }
         return program;
     }
 
@@ -256,7 +268,7 @@ export class TMotorTAG {
         return nodoCreado;
     }
 
-    async crearModelo( padre: TNodo|null, trasl: glMatrix.vec3, rot: glMatrix.vec3, esc: glMatrix.vec3, nombreFichero: string | undefined, tipo: string, textura: any){
+    async crearModelo( padre: TNodo|null, trasl: glMatrix.vec3, rot: glMatrix.vec3, esc: glMatrix.vec3, nombreFichero: string | undefined, tipo: string, textura: any, id: number){
         let nodoCreado: any, recursoMalla: any, recursoTextura: any, entidadModelo: any;
         
         nodoCreado = new TNodo();
@@ -273,6 +285,7 @@ export class TMotorTAG {
             }
         }
         entidadModelo = new EModelo(recursoMalla, recursoTextura);
+        await nodoCreado.setID(id);
         await nodoCreado.setEntidad(entidadModelo);
         await nodoCreado.setTraslacion(trasl);
         await nodoCreado.setRotacion(rot);

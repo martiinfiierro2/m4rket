@@ -8,7 +8,6 @@ varying vec2 TextureCoord;
 
 uniform sampler2D uSampler;
 
-
 void main () { 
     //VALORES PROVISIONALES
     highp vec4 LightPosition = vec4(40, 40, 40, 1);     

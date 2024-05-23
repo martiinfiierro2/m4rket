@@ -136,6 +136,8 @@ export class EstadisticasComponent {
 
     this.tendenciaFechaFin = fechaInicio.toISOString().split('T')[0];
     this.tendenciaFechaInicio = fechaTendenciaInicio.toISOString().split('T')[0];
+
+    console.log('Fechas tendencia iniciales: ' + this.tendenciaFechaInicio +  'al ' + this.tendenciaFechaFin);
   }
 
   async actualizarDatos(opcion: string){
@@ -159,8 +161,8 @@ export class EstadisticasComponent {
     switch (opcion) {
       case '7d':
         fechaInicio.setDate(fechaInicio.getDate() - 7);
-        fechaTendenciaInicio.setDate(fechaInicio.getDate() - 14);
-        fechaTendenciaFin.setDate(fechaInicio.getDate() - 7);
+        fechaTendenciaInicio.setDate(fechaFin.getDate() - 14);
+        fechaTendenciaFin.setDate(fechaFin.getDate() - 7);
         break;
       case '1m':
         fechaInicio.setDate(fechaInicio.getDate() - 30);
@@ -183,7 +185,7 @@ export class EstadisticasComponent {
     this.tendenciaFechaFin = fechaTendenciaFin.toISOString().split('T')[0];
     this.tendenciaFechaInicio = fechaTendenciaInicio.toISOString().split('T')[0];
 
-    //console.log('Fecha inicio tendencia: ' + this.tendenciaFechaInicio + 'al ' + this.tendenciaFechaFin);
+    console.log('Fecha inicio tendencia: calculadas' + this.tendenciaFechaInicio + 'al ' + this.tendenciaFechaFin);
 
     this.actualizarDatos(opcion);
   
@@ -295,14 +297,14 @@ export class EstadisticasComponent {
     const chartElement = document.getElementById('graf-comp');
     
     const datos = await this.procesarDatos(opcion, respuesta);
-  
+    let colorVariable;
     if (chartElement && chartElement.clientWidth > 0 && chartElement.clientHeight > 0) {
       echarts.dispose(chartElement);
   
       const myChart = echarts.init(chartElement);
-  
+
       const option: any = {
-        color:'rgba(81, 135, 122, 1)' ,
+        color: 'rgba(81, 135, 122, 1)',
         xAxis: {
           type: 'category',
           data: this.xAxisData,
@@ -663,6 +665,8 @@ export class EstadisticasComponent {
       this.pAnadidos = parseFloat((((this.totalAnadidos - this.tendenciaAnadidos) / this.tendenciaAnadidos) * 100).toFixed(2));
       if(this.pAnadidos < 0){
         this.cAnadidos = false;
+      }else{
+        this.cAnadidos = true;
       }
     }
     
@@ -683,13 +687,16 @@ export class EstadisticasComponent {
         console.error(error);
       }
       if(this.totalEliminados){
+        console.log('Tendencia Eliminados: totalEliminados = ' + this.totalEliminados + ' totalAnterior: ' + this.tendenciaEliminados );
         this.pEliminados = parseFloat((((this.totalEliminados - this.tendenciaEliminados) / this.tendenciaEliminados) * 100).toFixed(2));
-        if(this.tendenciaEliminados = 0){
-          this.pEliminados = 0;
+        console.log('Tendencia Eliminados: ' + this.pEliminados);    
+
           if(this.pEliminados < 0){
+            this.cEliminados = true;
+          }else{
             this.cEliminados = false;
           }
-        }
+    
       }
   }
 
@@ -707,9 +714,13 @@ export class EstadisticasComponent {
       console.error(error);
     }
     if(this.totalComprados){
+      console.log('Tendencia comprados: totalcomprados = ' + this.totalComprados + ' totalAnterior: ' + this.tendenciaComprados );
       this.pComprados = parseFloat((((this.totalComprados - this.tendenciaComprados) / this.tendenciaComprados) * 100).toFixed(2));
+      console.log('Tendencia comprados: ' + this.pComprados);
       if(this.pComprados < 0){
         this.cComprados = false;
+      }else {
+        this.cComprados = true;
       }
     }
   }
@@ -728,9 +739,13 @@ export class EstadisticasComponent {
       console.error(error);
     }
     if(this.totalBuscados){
+      console.log('Tendencia buscados: totalbuscados = ' + this.totalBuscados + ' totalAnterior: ' + this.tendenciaBuscados );
       this.pBuscados = parseFloat((((this.totalBuscados - this.tendenciaBuscados) / this.tendenciaBuscados) * 100).toFixed(2));
+      console.log('Tendencia Buscados: ' + this.pBuscados);
       if(this.pBuscados < 0){
         this.cBuscados = false;
+      }else{
+        this.cBuscados = true;
       }
     }
   }

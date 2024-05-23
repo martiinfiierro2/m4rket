@@ -52,6 +52,11 @@ export class MotorComponent implements AfterViewInit {
   private lastPinchDistance: number = 0;
   private isPinching: boolean = false;
 
+  
+  private touchStartTime!: number;
+  private touchEndTime!: number;
+  private touchMoved: boolean = false;
+
   constructor(
     private productosService: ProductosService,
     private ubicacionService: UbicacionesService,
@@ -104,7 +109,8 @@ export class MotorComponent implements AfterViewInit {
 
     //Iniciamos GL y Programa
     await motor.iniciarGL();
-    await motor.iniciarPrograma();
+    await motor.iniciarPrograma("vertexShader.glsl", "fragmentShader.glsl");
+    await motor.iniciarPrograma("vertexColorPicking.glsl", "fragmentColorPicking.glsl");
 
     this.suelo = await motor.crearModelo(
       this.mercado,
@@ -113,7 +119,8 @@ export class MotorComponent implements AfterViewInit {
       glMatrix.vec3.fromValues(0.425, 0.425, 0.425),
       'suelo.obj',
       'malla',
-      'gris.jpg'
+      'gris.jpg',
+      -1,
     );
 
     const puerta: TNodo = await motor.crearModelo(
@@ -123,7 +130,8 @@ export class MotorComponent implements AfterViewInit {
       glMatrix.vec3.fromValues(1, 1, 1),
       'puerta.obj',
       'malla',
-      'grisclaro.jpeg'
+      'grisclaro.jpeg',
+      -1
     );
 
     //Fruta
@@ -135,7 +143,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(2.5, 2.5, 2.5),
         'mueblefrutas.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
     this.ubicaciones.push(
@@ -146,7 +155,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(2.5, 2.5, 2.5),
         'mueblefrutas.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
     this.ubicaciones.push(
@@ -157,7 +167,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(2.5, 2.5, 2.5),
         'mueblefrutas.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
     this.ubicaciones.push(
@@ -168,7 +179,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(2.5, 2.5, 2.5),
         'mueblefrutas.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
     this.ubicaciones.push(
@@ -179,7 +191,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(2.5, 2.5, 2.5),
         'mueblefrutas.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
 
@@ -192,7 +205,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(1, 1, 1),
         'estanteria.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
     this.ubicaciones.push(
@@ -203,7 +217,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(1, 1, 1),
         'estanteria.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
     this.ubicaciones.push(
@@ -214,7 +229,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(1, 1, 1),
         'estanteria.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
     this.ubicaciones.push(
@@ -225,7 +241,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(1, 1, 1),
         'estanteria.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
     this.ubicaciones.push(
@@ -236,7 +253,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(1, 1, 1),
         'estanteria.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
     this.ubicaciones.push(
@@ -247,7 +265,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(1, 1, 1),
         'estanteria.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
 
@@ -260,7 +279,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(1, 1, 1),
         'estanteria.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
     this.ubicaciones.push(
@@ -271,7 +291,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(1, 1, 1),
         'estanteria.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
     this.ubicaciones.push(
@@ -282,7 +303,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(1, 1, 1),
         'estanteria.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
     this.ubicaciones.push(
@@ -293,7 +315,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(1, 1, 1),
         'estanteria.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
     this.ubicaciones.push(
@@ -304,7 +327,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(1, 1, 1),
         'estanteria.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
     this.ubicaciones.push(
@@ -315,7 +339,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(1, 1, 1),
         'estanteria.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
 
@@ -328,7 +353,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(1, 1, 1),
         'estanteria.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
     this.ubicaciones.push(
@@ -339,7 +365,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(1, 1, 1),
         'estanteria.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
     this.ubicaciones.push(
@@ -350,7 +377,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(1, 1, 1),
         'estanteria.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
     this.ubicaciones.push(
@@ -361,7 +389,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(1, 1, 1),
         'estanteria.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
     this.ubicaciones.push(
@@ -372,7 +401,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(1, 1, 1),
         'estanteria.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
     this.ubicaciones.push(
@@ -383,7 +413,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(1, 1, 1),
         'estanteria.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
 
@@ -396,7 +427,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(1, 1, 1),
         'estanteria.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
     this.ubicaciones.push(
@@ -407,7 +439,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(1, 1, 1),
         'estanteria.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
     this.ubicaciones.push(
@@ -418,7 +451,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(1, 1, 1),
         'estanteria.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
     this.ubicaciones.push(
@@ -429,7 +463,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(1, 1, 1),
         'estanteria.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
 
@@ -441,7 +476,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(1, 1, 1),
         'estanteria.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
     this.ubicaciones.push(
@@ -452,7 +488,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(1, 1, 1),
         'estanteria.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
     this.ubicaciones.push(
@@ -463,7 +500,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(1, 1, 1),
         'estanteria.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
     this.ubicaciones.push(
@@ -474,7 +512,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(1, 1, 1),
         'estanteria.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
 
@@ -487,7 +526,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(2, 2, 2),
         'armario.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
     this.ubicaciones.push(
@@ -498,7 +538,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(2, 2, 2),
         'armario.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
     this.ubicaciones.push(
@@ -509,7 +550,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(2, 2, 2),
         'armario.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
 
@@ -522,7 +564,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(2, 2, 2),
         'frigo.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
     this.ubicaciones.push(
@@ -533,7 +576,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(2, 2, 2),
         'frigo.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
     this.ubicaciones.push(
@@ -544,7 +588,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(2, 2, 2),
         'frigo.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
     this.ubicaciones.push(
@@ -555,7 +600,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(2, 2, 2),
         'frigo.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
 
@@ -568,7 +614,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(3.3, 3.3, 3.3),
         'muebledoble.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
     this.ubicaciones.push(
@@ -579,7 +626,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(3.3, 3.3, 3.3),
         'muebledoble.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
     this.ubicaciones.push(
@@ -590,7 +638,8 @@ export class MotorComponent implements AfterViewInit {
         glMatrix.vec3.fromValues(3.3, 3.3, 3.3),
         'muebledoble.obj',
         'malla',
-        'grisclaro.jpeg'
+        'grisclaro.jpeg',
+        -1
       )
     );
 
@@ -602,7 +651,8 @@ export class MotorComponent implements AfterViewInit {
       glMatrix.vec3.fromValues(4, 4, 4),
       'cajaregistradora.obj',
       'malla',
-      'blanco.jpeg'
+      'blanco.jpeg',
+      -1
     );
     const caja2: TNodo = await motor.crearModelo(
       this.suelo,
@@ -611,7 +661,8 @@ export class MotorComponent implements AfterViewInit {
       glMatrix.vec3.fromValues(4, 4, 4),
       'cajaregistradora.obj',
       'malla',
-      'blanco.jpeg'
+      'blanco.jpeg',
+      -1
     );
     const caja3: TNodo = await motor.crearModelo(
       this.suelo,
@@ -620,7 +671,8 @@ export class MotorComponent implements AfterViewInit {
       glMatrix.vec3.fromValues(4, 4, 4),
       'cajaregistradora.obj',
       'malla',
-      'blanco.jpeg'
+      'blanco.jpeg',
+      -1
     );
     const caja4: TNodo = await motor.crearModelo(
       this.suelo,
@@ -629,7 +681,8 @@ export class MotorComponent implements AfterViewInit {
       glMatrix.vec3.fromValues(4, 4, 4),
       'cajaregistradora.obj',
       'malla',
-      'blanco.jpeg'
+      'blanco.jpeg',
+      -1
     );
     const pantalla1: TNodo = await motor.crearModelo(
       caja1,
@@ -638,7 +691,8 @@ export class MotorComponent implements AfterViewInit {
       glMatrix.vec3.fromValues(2, 2, 2),
       'ladrilloregistrador.obj',
       'malla',
-      'blanco.jpeg'
+      'blanco.jpeg',
+      -1
     );
     const pantalla2: TNodo = await motor.crearModelo(
       caja2,
@@ -647,7 +701,8 @@ export class MotorComponent implements AfterViewInit {
       glMatrix.vec3.fromValues(2, 2, 2),
       'ladrilloregistrador.obj',
       'malla',
-      'blanco.jpeg'
+      'blanco.jpeg',
+      -1
     );
     const pantalla3: TNodo = await motor.crearModelo(
       caja3,
@@ -656,7 +711,8 @@ export class MotorComponent implements AfterViewInit {
       glMatrix.vec3.fromValues(2, 2, 2),
       'ladrilloregistrador.obj',
       'malla',
-      'blanco.jpeg'
+      'blanco.jpeg',
+      -1
     );
     const pantalla4: TNodo = await motor.crearModelo(
       caja4,
@@ -665,7 +721,8 @@ export class MotorComponent implements AfterViewInit {
       glMatrix.vec3.fromValues(2, 2, 2),
       'ladrilloregistrador.obj',
       'malla',
-      'blanco.jpeg'
+      'blanco.jpeg',
+      -1
     );
 
     const idUsu: string = await this.getUsuarioLog();
@@ -687,7 +744,7 @@ export class MotorComponent implements AfterViewInit {
     const canvas = motor.gl.canvas;
     const handleRightDragMobile = (event: TouchEvent) => {
       event.preventDefault();
-      console.log(this.lastTouchX);
+      console.log('Arrastre');
 
       const touch = event.touches[0];
       const touchX = touch.clientX;
@@ -728,6 +785,9 @@ export class MotorComponent implements AfterViewInit {
         if(this.zoomFactor < 0.2){
           this.zoomFactor = oldFactor;
         }
+        else if (this.zoomFactor > 1.5){
+          this.zoomFactor = oldFactor;
+        }
         motor.setZoom(this.zoomFactor);
     }
   
@@ -751,7 +811,16 @@ export class MotorComponent implements AfterViewInit {
         if(this.zoomFactor < 0.2){
           this.zoomFactor = oldFactor;
         }
+        else if (this.zoomFactor > 1.5){
+          this.zoomFactor = oldFactor;
+        }
         motor.setZoom(this.zoomFactor);
+    };
+
+    const handleClick = (event: MouseEvent) => {
+      motor.cambiarPrograma = true;
+      motor.gl.clear(motor.gl.COLOR_BUFFER_BIT | motor.gl.DEPTH_BUFFER_BIT);
+      this.mercado.recorrer(glMatrix.mat4.identity(glMatrix.mat4.create()));
     };
         
     // Agregar el evento de clic derecho al canvas
@@ -762,21 +831,24 @@ export class MotorComponent implements AfterViewInit {
             handleMouseWheel(event as WheelEvent);
         }
     });
-  
+
     canvas.addEventListener('touchstart', (event: any) => {
+      this.touchStartTime = new Date().getTime();
+      if (event.touches.length === 2) {
+        this.isPinching = true;
+        this.lastPinchDistance = Math.sqrt(
+          Math.pow(event.touches[0].clientX - event.touches[1].clientX, 2) +
+          Math.pow(event.touches[0].clientY - event.touches[1].clientY, 2)
+        );
+      } else {
+        this.isRightTouchDown = true;
         const touch = event.touches[0];
-  
-        if (event.touches.length === 2) {
-            this.isPinching = true;
-        } else {
-            this.isRightTouchDown = true;
-        }
+        this.lastTouchX = touch.clientX;
+        this.lastTouchY = touch.clientY;
+      }
     });
   
     canvas.addEventListener('touchmove', (event: any) => {
-      console.log("hola")
-      console.log(this.lastTouchX);
-      console.log("aqui")
       if (event.touches.length === 2) {
         handlePinch(event);
       } else {
@@ -785,10 +857,16 @@ export class MotorComponent implements AfterViewInit {
     });
   
     canvas.addEventListener('touchend', (event: any) => {
-        if (event.touches.length === 0) {
-            this.isRightTouchDown = false;
-            handlePinchEnd(event);
-        }
+      this.touchEndTime = new Date().getTime();
+
+      if (event.touches.length === 0) {
+        this.isRightTouchDown = false;
+        handlePinchEnd(event);
+      }
+    
+      if (!this.touchMoved && (this.touchEndTime - this.touchStartTime) < 200) {
+        handleClick(event);
+      }
     });
   }
 
@@ -829,18 +907,18 @@ export class MotorComponent implements AfterViewInit {
           let textureBuffer = malla.tetxureBuffer;
           motor.gl.deleteBuffer(textureBuffer);
         });
+        await this.pines[i].nodo.setEntidad(null);
       }
     }
     
     for(let i = 0; i < this.pines.length; i++){
       if(borrar[i] == this.pines[i]){
-        this.pines.slice(i, 1);
+        this.pines.splice(i, 1);
       }
     }
   }
 
   async eliminarTodosPines(){
-    console.log(this.pines.length)
     for(let i = 0; i < this.pines.length; i++){
       console.log(this.pines[i]);
       const entidad = this.pines[i].nodo.getEntidad();
@@ -858,6 +936,7 @@ export class MotorComponent implements AfterViewInit {
         let textureBuffer = malla.tetxureBuffer;
         motor.gl.deleteBuffer(textureBuffer);
       });
+      await this.pines[i].nodo.setEntidad(null);
     }
     this.pines = [];
   }
@@ -880,6 +959,13 @@ export class MotorComponent implements AfterViewInit {
       let textureBuffer = malla.tetxureBuffer;
       motor.gl.deleteBuffer(textureBuffer);
     });
+    
+    for(let i = 0; i < this.pines.length; i++){
+      if(this.pines[i] == pinBorrar){
+        this.pines.splice(i, 1);
+      }
+    }
+    console.log(this.pines)
   }
 
   async crearPines(lista: lista[], number: number) {
@@ -904,7 +990,8 @@ export class MotorComponent implements AfterViewInit {
           glMatrix.vec3.fromValues(1, 1, 1),
           nameMalla,
           'malla',
-          producto.productos.foto
+          producto.productos.foto,
+          producto.productos.id
         );
       }
       else if(valor > 4 && valor <= 30){
@@ -915,7 +1002,8 @@ export class MotorComponent implements AfterViewInit {
           glMatrix.vec3.fromValues(2.5, 2.5, 2.5),
           nameMalla,
           'malla',
-          producto.productos.foto
+          producto.productos.foto,
+          producto.productos.id
         );
       }
       else if(valor > 30 && valor <= 33){
@@ -926,7 +1014,8 @@ export class MotorComponent implements AfterViewInit {
           glMatrix.vec3.fromValues(1.5, 1.5, 1.5),
           nameMalla,
           'malla',
-          producto.productos.foto
+          producto.productos.foto,
+          producto.productos.id
         );
       }
       else if(valor > 33 && valor <= 37){
@@ -937,7 +1026,8 @@ export class MotorComponent implements AfterViewInit {
           glMatrix.vec3.fromValues(1.5, 1.5, 1.5),
           nameMalla,
           'malla',
-          producto.productos.foto
+          producto.productos.foto,
+          producto.productos.id
         );
       }
       else if(valor > 37 && valor <= 40){
@@ -948,12 +1038,14 @@ export class MotorComponent implements AfterViewInit {
           glMatrix.vec3.fromValues(1, 1, 1),
           nameMalla,
           'malla',
-          producto.productos.foto
+          producto.productos.foto,
+          producto.productos.id
         );
       }
       this.pines.push({idProd: producto.productos.id, nodo: pin, padre: this.ubicaciones[valor], recText: producto.productos.foto, estado: false});
       //Para que solo recorra los nodos necesarios cuando se añade un producto SOLAMENTE
       if(number == 0){
+        console.log(this.pines);
         await this.ubicaciones[valor].recorrer(glMatrix.mat4.identity(glMatrix.mat4.create()));
         break;
       }
