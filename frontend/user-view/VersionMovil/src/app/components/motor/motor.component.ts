@@ -748,7 +748,6 @@ export class MotorComponent implements AfterViewInit {
 
     const handleRightDragMobile = (event: TouchEvent) => {
       event.preventDefault();
-      console.log('Arrastre');
     
       const touch = event.touches[0];
       const touchX = touch.clientX;
@@ -799,26 +798,63 @@ export class MotorComponent implements AfterViewInit {
     
         this.isPinching = false;
     };
+
+    const handleMouseWheel = (event: WheelEvent) => {
+      const delta = event.deltaY;
+      let oldFactor = this.zoomFactor;
+
+      if(delta > 0){
+          this.zoomFactor += 0.01;
+      }
+      else if (delta < 0){
+          this.zoomFactor += -0.01;
+      }
+      if(this.zoomFactor < 0.2){
+        this.zoomFactor = oldFactor;
+      }
+      else if (this.zoomFactor > 1.5){
+        this.zoomFactor = oldFactor;
+      }
+      motor.setZoom(this.zoomFactor);
+  };
     
     // Manejar el evento de clic/touch
     const handleClick = (event: TouchEvent) => {
-      motor.cambiarPrograma = true;
       motor.gl.clear(motor.gl.COLOR_BUFFER_BIT | motor.gl.DEPTH_BUFFER_BIT);
+      motor.useProgramColor(motor.gl);
       // Obtener la primera posición de contacto
+      const canvas = document.querySelector("#mercado") as HTMLCanvasElement;
+      const rect = canvas.getBoundingClientRect();
       let touch = event.touches[0];
-      console.log(touch)
       // Obtener coordenadas X e Y 
-      let x = touch.clientX;
-      let y = touch.clientY;
-      console.log(x, y);
-    
+      let x = touch.clientX - rect.left;;
+      let y = touch.clientY - rect.top;;
+      let ejeY = canvas.clientHeight - y;
+      let ejeX = x;
       requestAnimationFrame(() => {
         const pixel = new Uint8Array(4);
-        motor.gl.readPixels(x, y, 1, 1, motor.gl.RGBA, motor.gl.UNSIGNED_BYTE, pixel);
-        var id = (pixel[0] << 24) | (pixel[1] << 16) | (pixel[2] << 8) | pixel[3];
-        console.log(id)
-      })
+        motor.gl.readPixels(ejeX, ejeY, 1, 1, motor.gl.RGBA, motor.gl.UNSIGNED_BYTE, pixel);
+        // Convertir los valores de 0-255 a 0-1
+        const color = new Float32Array([
+            pixel[0] / 255,
+            pixel[1] / 255,
+            pixel[2] / 255,
+            pixel[3] / 255
+        ]);
+        var id = this.colorToID(color);
+        console.log(id);
+      });
+      motor.useProgramMain(motor.gl);
     };
+  
+    // Agregar el evento de clic derecho al canvas
+    // Agrega un evento touchstart para detectar cuando se toca la pantalla
+    canvas.addEventListener('wheel', (event: any) => {
+        // Verificar si el evento es una rueda del ratón y no un toque
+        if (event.type === 'wheel') {
+            handleMouseWheel(event as WheelEvent);
+        }
+    });
     
     // Agregar listeners de eventos táctiles al canvas
     canvas.addEventListener('touchstart', (event: any) => {
@@ -925,7 +961,6 @@ export class MotorComponent implements AfterViewInit {
 
   async eliminarTodosPines(){
     for(let i = 0; i < this.pines.length; i++){
-      console.log(this.pines[i]);
       const entidad = this.pines[i].nodo.getEntidad();
       const malla = entidad.recursoMalla;
       await malla.mallas.forEach((malla: any) => {
@@ -970,7 +1005,6 @@ export class MotorComponent implements AfterViewInit {
         this.pines.splice(i, 1);
       }
     }
-    console.log(this.pines)
   }
 
   async crearPines(lista: lista[], number: number) {
@@ -1050,7 +1084,6 @@ export class MotorComponent implements AfterViewInit {
       this.pines.push({idProd: producto.productos.id, nodo: pin, padre: this.ubicaciones[valor], recText: producto.productos.foto, estado: false});
       //Para que solo recorra los nodos necesarios cuando se añade un producto SOLAMENTE
       if(number == 0){
-        console.log(this.pines);
         await this.ubicaciones[valor].recorrer(glMatrix.mat4.identity(glMatrix.mat4.create()));
         break;
       }
@@ -1077,6 +1110,30 @@ export class MotorComponent implements AfterViewInit {
 
     return numero;
   }
+
+  colorToID(color: Float32Array): number {
+    // Obtener la cantidad de bits para cada componente del color
+    const redBits = motor.gl.getParameter(motor.gl.RED_BITS);
+    const greenBits = motor.gl.getParameter(motor.gl.GREEN_BITS);
+    const blueBits = motor.gl.getParameter(motor.gl.BLUE_BITS);
+    const alphaBits = motor.gl.getParameter(motor.gl.ALPHA_BITS);
+
+    // Convertir los componentes del color de 0-1 a 0-255
+    const r = Math.round(color[0] * ((1 << redBits) - 1));
+    const g = Math.round(color[1] * ((1 << greenBits) - 1));
+    const b = Math.round(color[2] * ((1 << blueBits) - 1));
+    const a = Math.round(color[3] * ((1 << alphaBits) - 1));
+
+    // Calcular los desplazamientos para combinar los componentes en un solo número
+    const greenShift = blueBits + alphaBits;
+    const redShift = greenShift + greenBits;
+    
+    // Combinar los componentes en un solo número
+    const id = (r << redShift) | (g << greenShift) | (b << alphaBits) | a;
+
+    return id;
+  }
+
 }
 
 

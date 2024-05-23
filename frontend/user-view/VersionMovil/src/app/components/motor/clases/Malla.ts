@@ -3,12 +3,8 @@ import * as OBJ from 'webgl-obj-loader';
 import { motor } from '../motor.component';
 import { glMatrix } from 'gl-matrix';
 export class Malla {
-    //BUFFERS
-    private vertexBuffer: any;
-    private normalBuffer: any;
-    private indexBuffer: any;
-    private textureBuffer: any;
-
+    //mesh
+    private buffers: any;
     private matTrans!: any;
     private gl!: WebGL2RenderingContext;
     private program!: WebGLProgram;
@@ -23,28 +19,7 @@ export class Malla {
     constructor(malla: string, filename: string) {
         this.OBJfile = malla;
         this.nombre = filename;
-    }
-
-    async getProgramInfo(gl: any, program: any, programColor: any){
-        const programInfo = {
-            program: program,
-            programColor: programColor,
-            attribLocations: {
-                vertexPosition: this.gl!.getAttribLocation(program, "aVertexPosition"),
-                textureCoord: this.gl!.getAttribLocation(program, "aTextureCoord"),
-                normalCoord: this.gl!.getAttribLocation(program, "aVertexNormal")
-            },
-            uniformLocations: {
-                projectionMatrix: this.gl!.getUniformLocation(program,"uProjectionMatrix"),
-                viewMatrix: this.gl!.getUniformLocation(program, "uViewMatrix"),
-                modelMatrix: this.gl!.getUniformLocation(program, "uModelMatrix"),
-                uSampler: this.gl!.getUniformLocation(program, "uSampler"),
-                normalMatrix: this.gl!.getUniformLocation(program, "uNormalMatrix"),
-                modelViewMatrix: this.gl!.getUniformLocation(program, "uModelViewMatrix"),
-                uColor: this.gl!.getUniformLocation(programColor, "uColor")
-            }
-        };
-        return programInfo;
+        this.buffers = new OBJ.Mesh(this.OBJfile);
     }
 
     async dibujar(id: number, textura: any, matTrans: any) {
@@ -52,22 +27,19 @@ export class Malla {
         this.gl = motor.gl;
         this.color = this.crearColor(id);
         this.id = id;
-        const InfoPrograma = await this.getProgramInfo(this.gl, motor.program, motor.programColor);
-    
-        let mesh = OBJ.initMeshBuffers(this.gl as WebGL2RenderingContext, new OBJ.Mesh(this.OBJfile));
 
         // Cargar textura
         this.texture = await this.loadTexture(textura);
 
         const draw = () => {
             // Llamada recursiva para renderizar de forma continua
-            this.dibujarBucle(InfoPrograma, mesh);
+            this.dibujarBucle();
             requestAnimationFrame(draw);
         };
         draw();
     }
 
-    dibujarBucle(InfoPrograma: any, mesh: any) {
+    dibujarBucle() {
         this.gl!.viewport(0, 0, this.gl!.canvas.width, this.gl!.canvas.height)
         const camara = motor.camaraActiva.getEntidad();
 
@@ -80,9 +52,6 @@ export class Malla {
             camara.cercano,
             camara.lejano
         );
-        // Enlazar el buffer de índices
-        this.gl!.bindBuffer(this.gl!.ELEMENT_ARRAY_BUFFER, mesh.indexBuffer);
-        this.indexBuffer = mesh.indexBuffer;
     
         // Crear una nueva matriz de transformación para este objeto
         const modelMatrix = mat4.create();
@@ -145,93 +114,111 @@ export class Malla {
         mat4.invert(normalMatrix, modelViewMatrix);
         mat4.transpose(normalMatrix, normalMatrix);
    
-        // Usar el programa de shaders
-        this.gl!.useProgram(InfoPrograma.program);
+        //Usar el programa de shaders
+        let shader = this.gl.getParameter(this.gl.CURRENT_PROGRAM);
+
         this.gl!.uniformMatrix4fv(
-            InfoPrograma.uniformLocations.projectionMatrix,
+            this.gl.getUniformLocation(shader, 'uProjectionMatrix'),
             false,
             this.projectionMatrix
         );
 
         this.gl!.uniformMatrix4fv(
-            InfoPrograma.uniformLocations.viewMatrix,
+            this.gl.getUniformLocation(shader, 'uViewMatrix'),
             false,
             this.viewMatrix
         );
 
         this.gl!.uniformMatrix4fv(
-            InfoPrograma.uniformLocations.modelMatrix,
-            false,
-            modelMatrix
-        );
-
-        this.gl!.uniformMatrix4fv(
-            InfoPrograma.uniformLocations.normalMatrix,
-            false,
-            normalMatrix
-        );
-
-        this.gl!.uniformMatrix4fv(
-            InfoPrograma.uniformLocations.modelViewMatrix,
+            this.gl.getUniformLocation(shader, 'uModelMatrix'),
             false,
             modelViewMatrix
         );
 
         
         // Tell the shader we bound the texture to texture unit 0
-        if(motor.cambiarPrograma == false){
-            this.iniciarBuffers(InfoPrograma, mesh);
-            this.gl!.uniform1i(InfoPrograma.uniformLocations.uSampler, 0);
+        if(shader == motor.program){
+            this.iniciarmesh(this.buffers);
+            this.gl!.uniform1i(this.gl.getUniformLocation(shader, 'uSampler'), 0);
             // Bind de la textura
             this.gl!.activeTexture(this.gl!.TEXTURE0);
             this.gl!.bindTexture(this.gl!.TEXTURE_2D, this.texture);
-        }else{
-            this.iniciarBuffersColor(mesh);
-            console.log(this.id);
+        }else if(shader == motor.programColor){
+            this.iniciarmeshColor(this.buffers);
             let colorLocation = this.gl.getUniformLocation(motor.programColor, 'uColor');
             this.gl.uniform4fv(colorLocation, this.color);
-            motor.cambiarPrograma = false;
         }
             
         // Dibujar los elementos
         this.gl!.drawElements(
             this.gl!.TRIANGLES,
-            mesh.indexBuffer.numItems,
+            this.buffers.indexBuffer.numItems,
             this.gl!.UNSIGNED_SHORT,
             0
         );
     }
 
-    iniciarBuffersColor(mesh: any){
-        this.gl!.enableVertexAttribArray(0);
-        this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, mesh.vertexBuffer);
-        this.vertexBuffer = mesh.vertexBuffer;
-        //this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(mesh.vertices), this.gl!.STATIC_DRAW);
-        this.gl!.vertexAttribPointer(0, mesh.vertexBuffer.itemSize, this.gl!.FLOAT, false, 0, 0);
+    iniciarmeshColor(buffers: any){
+        if(!buffers){
+            return
+        }
+        OBJ.initMeshBuffers(this.gl, buffers);
+        let vertexPositionAttributeLocation = 0;
+
+        this.gl!.enableVertexAttribArray(vertexPositionAttributeLocation);
+        this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, buffers.vertexBuffer);
+        this.gl!.vertexAttribPointer(vertexPositionAttributeLocation, buffers.vertexBuffer.itemSize, this.gl!.FLOAT, false, 0, 0);
+
+        
+        this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, buffers.indexBuffer);
+        return buffers;
     }
 
-    iniciarBuffers(InfoPrograma: any, mesh: any){ 
-        // Enlazar el buffer de vértices
-        this.gl!.enableVertexAttribArray(InfoPrograma.attribLocations.vertexPosition);
-        this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, mesh.vertexBuffer);
-        this.vertexBuffer = mesh.vertexBuffer;
-        //this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(mesh.vertices), this.gl!.STATIC_DRAW);
-        this.gl!.vertexAttribPointer(InfoPrograma.attribLocations.vertexPosition, mesh.vertexBuffer.itemSize, this.gl!.FLOAT, false, 0, 0);
-    
-        // Enlazar el buffer de texturas
-        this.gl!.enableVertexAttribArray(InfoPrograma.attribLocations.textureCoord);
-        this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, mesh.textureBuffer);
-        this.textureBuffer = mesh.textureBuffer;
-        //this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(mesh.textures), this.gl!.STATIC_DRAW);
-        this.gl!.vertexAttribPointer(InfoPrograma.attribLocations.textureCoord, mesh.textureBuffer.itemSize, this.gl!.FLOAT, false, 0, 0);
-        
-        // Enlazar el buffer de normales
-        this.gl!.enableVertexAttribArray(InfoPrograma.attribLocations.normalCoord);
-        this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, mesh.normalBuffer);
-        this.normalBuffer = mesh.normalBuffer;
-        //this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(mesh.vertexNormals), this.gl!.STATIC_DRAW);
-        this.gl!.vertexAttribPointer(InfoPrograma.attribLocations.normalCoord, mesh.normalBuffer.itemSize, this.gl!.FLOAT, false, 0, 0);
-    
+    iniciarmesh(buffers: any){ 
+        if(!buffers){
+            return
+        }
+        OBJ.initMeshBuffers(this.gl, buffers);
+        let shaderProgram = this.gl.getParameter(this.gl.CURRENT_PROGRAM);
+        let vertexPositionAttributeLocation = this.gl.getAttribLocation(shaderProgram, "aVertexPosition");
+        let textureCoordAttributeLocation = this.gl.getAttribLocation(shaderProgram, "aTextureCoord");
+        let normalCoordAttributeLocation = this.gl.getAttribLocation(shaderProgram, "aNormalCoord");
+
+        this.gl.enableVertexAttribArray(vertexPositionAttributeLocation);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffers.vertexBuffer);
+        this.gl.vertexAttribPointer(
+            vertexPositionAttributeLocation,
+            buffers.vertexBuffer.itemSize,
+            this.gl.FLOAT,
+            false,
+            0,
+            0
+        );
+
+        this.gl.enableVertexAttribArray(textureCoordAttributeLocation);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffers.textureBuffer);
+        this.gl.vertexAttribPointer(
+            textureCoordAttributeLocation,
+            buffers.textureBuffer.itemSize,
+            this.gl.FLOAT,
+            false,
+            0,
+            0
+        );
+
+        this.gl.enableVertexAttribArray(normalCoordAttributeLocation);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffers.normalBuffer);
+        this.gl.vertexAttribPointer(
+            normalCoordAttributeLocation,
+            buffers.normalBuffer.itemSize,
+            this.gl.FLOAT,
+            false,
+            0,
+            0
+        );
+
+        this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, buffers.indexBuffer);
+        return buffers;
     }
 
     calculateBoundingBox(mesh: any) {
@@ -335,15 +322,33 @@ export class Malla {
         return true;
     }
 
-    crearColor(number: number) {
-        // Extraer los componentes R, G, B y A del número
-        var r = ((number >> 24) & 0xFF) / 255.0;
-        var g = ((number >> 16) & 0xFF) / 255.0;
-        var b = ((number >> 8) & 0xFF) / 255.0;
-        var a = (number & 0xFF) / 255.0;
-        
-        // Devolver un Float32Array con los componentes R, G, B y A
-        return new Float32Array([r, g, b, a]);
+    crearColor(id: any) {
+        const red_bits = this.gl.getParameter(this.gl.RED_BITS);
+        const green_bits = this.gl.getParameter(this.gl.GREEN_BITS);
+        const blue_bits = this.gl.getParameter(this.gl.BLUE_BITS);
+        const alpha_bits = this.gl.getParameter(this.gl.ALPHA_BITS);
+    
+        const red_scale = Math.pow(2, red_bits) - 1;
+        const green_scale = Math.pow(2, green_bits) - 1;
+        const blue_scale = Math.pow(2, blue_bits) - 1;
+        const alpha_scale = Math.pow(2, alpha_bits) - 1;
+    
+        const red_shift = green_bits + blue_bits + alpha_bits;
+        const green_shift = blue_bits + alpha_bits;
+        const blue_shift = alpha_bits;
+    
+        let r = (id >> red_shift) & red_scale;
+        let g = (id >> green_shift) & green_scale;
+        let b = (id >> blue_shift) & blue_scale;
+        let a = id & alpha_scale;
+    
+        const color = new Float32Array(4);
+        color[0] = r / red_scale;
+        color[1] = g / green_scale;
+        color[2] = b / blue_scale;
+        color[3] = a / alpha_scale;
+    
+        return color;
     }
     
 
