@@ -742,6 +742,10 @@ export class MotorComponent implements AfterViewInit {
 
     //EVENTOS
     const canvas = motor.gl.canvas;
+    let pinchTimeout: any;
+    let touchMoveTimeout: any;
+    let isWaitingForSingleTouch = false;
+
     const handleRightDragMobile = (event: TouchEvent) => {
       event.preventDefault();
       console.log('Arrastre');
@@ -774,7 +778,7 @@ export class MotorComponent implements AfterViewInit {
         const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
   
         // Calcula la diferencia de distancia desde el último pellizco
-        const deltaDistance = distance - this.lastPinchDistance;
+        const deltaDistance = this.lastPinchDistance - distance;
   
         // Ajusta el factor de zoom en función de la diferencia de distancia
         this.zoomSpeed = 0.05; // Velocidad de zoom
@@ -855,19 +859,34 @@ export class MotorComponent implements AfterViewInit {
         handleRightDragMobile(event);
       }
     });
-  
+    
     canvas.addEventListener('touchend', (event: any) => {
-      this.touchEndTime = new Date().getTime();
+    this.touchEndTime = new Date().getTime();
 
-      if (event.touches.length === 0) {
+    if (event.touches.length === 0) {
         this.isRightTouchDown = false;
         handlePinchEnd(event);
-      }
-    
-      if (!this.touchMoved && (this.touchEndTime - this.touchStartTime) < 200) {
+
+        // Esperar un corto tiempo antes de manejar posibles eventos de arrastre
+        pinchTimeout = setTimeout(() => {
+            this.isRightTouchDown = false;
+            isWaitingForSingleTouch = false;
+        }, 200); // 200 ms es un ejemplo de tiempo de espera
+    } else if (event.touches.length === 1 && this.isPinching) {
+        // Set a flag and timeout to wait for potential single touch event
+        isWaitingForSingleTouch = true;
+        touchMoveTimeout = setTimeout(() => {
+            if (isWaitingForSingleTouch) {
+                this.isRightTouchDown = true;
+                isWaitingForSingleTouch = false;
+            }
+        }, 200); // Adjust the time as necessary
+    }
+
+    if (!this.touchMoved && (this.touchEndTime - this.touchStartTime) < 200) {
         handleClick(event);
-      }
-    });
+    }
+});
   }
 
   async getUsuarioLog() {
