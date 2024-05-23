@@ -30,7 +30,7 @@ export class Malla {
             attribLocations: {
                 vertexPosition: this.gl!.getAttribLocation(program, "aVertexPosition"),
                 textureCoord: this.gl!.getAttribLocation(program, "aTextureCoord"),
-                normalCoord: this.gl!.getAttribLocation(program, "aVertexNormal")
+                normalCoord: this.gl!.getAttribLocation(program, "aNormal") // Corrección aquí
             },
             uniformLocations: {
                 projectionMatrix: this.gl!.getUniformLocation(program,"uProjectionMatrix"),
@@ -44,6 +44,7 @@ export class Malla {
         };
         return programInfo;
     }
+    
 
     async dibujar(id: number, textura: any, matTrans: any) {
 
@@ -65,11 +66,12 @@ export class Malla {
     }
 
     dibujarBucle(InfoPrograma: any, mesh: any) {
-        this.gl!.viewport(0, 0, this.gl!.canvas.width, this.gl!.canvas.height)
-        const camara = motor.camaraActiva.getEntidad();
-
-        this.projectionMatrix = mat4.create();
+        // Establecer el viewport
+        this.gl!.viewport(0, 0, this.gl!.canvas.width, this.gl!.canvas.height);
         
+        const camara = motor.camaraActiva.getEntidad();
+    
+        this.projectionMatrix = mat4.create();
         mat4.perspective(
             this.projectionMatrix,
             (45 * Math.PI) / 180,
@@ -77,55 +79,57 @@ export class Malla {
             camara.cercano,
             camara.lejano
         );
-
+    
         // Enlazar el buffer de vértices
+        console.log('vertexPosition index:', InfoPrograma.attribLocations.vertexPosition);
         this.gl!.enableVertexAttribArray(InfoPrograma.attribLocations.vertexPosition);
         this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, mesh.vertexBuffer);
         this.vertexBuffer = mesh.vertexBuffer;
-        //this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(mesh.vertices), this.gl!.STATIC_DRAW);
+        console.log('vertexBuffer itemSize:', mesh.vertexBuffer.itemSize);
         this.gl!.vertexAttribPointer(InfoPrograma.attribLocations.vertexPosition, mesh.vertexBuffer.itemSize, this.gl!.FLOAT, false, 0, 0);
     
         // Enlazar el buffer de texturas
+        console.log('textureCoord index:', InfoPrograma.attribLocations.textureCoord);
         this.gl!.enableVertexAttribArray(InfoPrograma.attribLocations.textureCoord);
         this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, mesh.textureBuffer);
         this.textureBuffer = mesh.textureBuffer;
-        //this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(mesh.textures), this.gl!.STATIC_DRAW);
+        console.log('textureBuffer itemSize:', mesh.textureBuffer.itemSize);
         this.gl!.vertexAttribPointer(InfoPrograma.attribLocations.textureCoord, mesh.textureBuffer.itemSize, this.gl!.FLOAT, false, 0, 0);
-        
+    
         // Enlazar el buffer de normales
+        console.log('normalCoord index:', InfoPrograma.attribLocations.normalCoord);
         this.gl!.enableVertexAttribArray(InfoPrograma.attribLocations.normalCoord);
         this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, mesh.normalBuffer);
         this.normalBuffer = mesh.normalBuffer;
-        //this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(mesh.vertexNormals), this.gl!.STATIC_DRAW);
+        console.log('normalBuffer itemSize:', mesh.normalBuffer.itemSize);
         this.gl!.vertexAttribPointer(InfoPrograma.attribLocations.normalCoord, mesh.normalBuffer.itemSize, this.gl!.FLOAT, false, 0, 0);
     
         // Enlazar el buffer de índices
+        console.log('indexBuffer numItems:', mesh.indexBuffer.numItems);
         this.gl!.bindBuffer(this.gl!.ELEMENT_ARRAY_BUFFER, mesh.indexBuffer);
         this.indexBuffer = mesh.indexBuffer;
     
         // Crear una nueva matriz de transformación para este objeto
         const modelMatrix = mat4.create();
-
-        // Aplicar la matriz de transformación proporcionada
         mat4.copy(modelMatrix, this.matTrans);
     
         let MatrizCamara = motor.camaraActiva.getMatrizTransf();
     
-        // Extraer la posición de la cámara (los primeros tres elementos de la cuarta columna)
+        // Extraer la posición de la cámara
         let cameraPosition = vec3.fromValues(
             MatrizCamara[12],
             MatrizCamara[13],
             MatrizCamara[14]
         );
     
-        // Extraer el "target" (los primeros tres elementos de la primera fila)
+        // Extraer el "target"
         let target = vec3.fromValues(
             MatrizCamara[12] + MatrizCamara[8],
             MatrizCamara[13] + MatrizCamara[9],
             MatrizCamara[14] + MatrizCamara[10]
         );
     
-        // Extraer el vector "up" (los siguientes tres elementos de la primera fila)
+        // Extraer el vector "up"
         let up = vec3.fromValues(
             MatrizCamara[4],
             MatrizCamara[5],
@@ -133,90 +137,52 @@ export class Malla {
         );
     
         this.viewMatrix = mat4.create();
-    
         mat4.lookAt(this.viewMatrix, cameraPosition, target, up);
-
+    
         // Aplica el zoom a la matriz de proyección
         mat4.scale(this.projectionMatrix, this.projectionMatrix, [1, 1, motor.zoomFactor]);
-
+    
         // Aplica el desplazamiento a la matriz de vista
         mat4.translate(this.viewMatrix, this.viewMatrix, [motor.traslacionX, motor.traslacionY, 0]);
-
+    
         // Aplicar la rotación en torno al eje Y
         mat4.rotate(this.viewMatrix, this.viewMatrix, motor.rotacion*(Math.PI / 180), [0, 1, 0]);
-        
-        /*const frustum = this.extractFrustumPlanes(this.projectionMatrix, this.viewMatrix);
-
-        // Definir las coordenadas mínimas y máximas de la caja de contención del objeto (AABB)
-        let meshBounding = this.calculateBoundingBox(mesh);
     
-        // Verificar si la AABB del objeto está dentro del frustum
-        if (!this.isBoxInFrustum(frustum, meshBounding.min, meshBounding.max)) {
-            // Si el objeto no está dentro del frustum, no se renderiza
-            return;
-        }*/
-
+        // Crear matriz modelo-vista
         let modelViewMatrix = mat4.create();
         mat4.multiply(modelViewMatrix, this.viewMatrix, modelMatrix);
-
-        //Crear matriz normales
+    
+        // Crear matriz normales
         const normalMatrix = mat4.create();
         mat4.invert(normalMatrix, modelViewMatrix);
         mat4.transpose(normalMatrix, normalMatrix);
-   
+    
         // Usar el programa de shaders
         this.gl!.useProgram(InfoPrograma.program);
-        this.gl!.uniformMatrix4fv(
-            InfoPrograma.uniformLocations.projectionMatrix,
-            false,
-            this.projectionMatrix
-        );
-
-        this.gl!.uniformMatrix4fv(
-            InfoPrograma.uniformLocations.viewMatrix,
-            false,
-            this.viewMatrix
-        );
-
-        this.gl!.uniformMatrix4fv(
-            InfoPrograma.uniformLocations.modelMatrix,
-            false,
-            modelMatrix
-        );
-
-        this.gl!.uniformMatrix4fv(
-            InfoPrograma.uniformLocations.normalMatrix,
-            false,
-            normalMatrix
-        );
-
-        this.gl!.uniformMatrix4fv(
-            InfoPrograma.uniformLocations.modelViewMatrix,
-            false,
-            modelViewMatrix
-        );
-
-        
-        // Tell the shader we bound the texture to texture unit 0
-        if(motor.cambiarPrograma == false){
+    
+        // Configurar matrices uniformes
+        this.gl!.uniformMatrix4fv(InfoPrograma.uniformLocations.projectionMatrix, false, this.projectionMatrix);
+        this.gl!.uniformMatrix4fv(InfoPrograma.uniformLocations.viewMatrix, false, this.viewMatrix);
+        this.gl!.uniformMatrix4fv(InfoPrograma.uniformLocations.modelMatrix, false, modelMatrix);
+        this.gl!.uniformMatrix4fv(InfoPrograma.uniformLocations.normalMatrix, false, normalMatrix);
+        this.gl!.uniformMatrix4fv(InfoPrograma.uniformLocations.modelViewMatrix, false, modelViewMatrix);
+    
+        // Configurar textura
+        if (motor.cambiarPrograma == false) {
             this.gl!.uniform1i(InfoPrograma.uniformLocations.uSampler, 0);
-            // Bind de la textura
             this.gl!.activeTexture(this.gl!.TEXTURE0);
             this.gl!.bindTexture(this.gl!.TEXTURE_2D, this.texture);
-        }else{
+        } else {
             let colorLocation = InfoPrograma.uColor;
             console.log(colorLocation);
             motor.cambiarPrograma = false;
         }
-            
+    
         // Dibujar los elementos
-        this.gl!.drawElements(
-            this.gl!.TRIANGLES,
-            mesh.indexBuffer.numItems,
-            this.gl!.UNSIGNED_SHORT,
-            0
-        );
+        console.log('Drawing elements');
+        this.gl!.drawElements(this.gl!.TRIANGLES, mesh.indexBuffer.numItems, this.gl!.UNSIGNED_SHORT, 0);
     }
+    
 
     calculateBoundingBox(mesh: any) {
         let minX = Infinity, minY = Infinity, minZ = Infinity;
