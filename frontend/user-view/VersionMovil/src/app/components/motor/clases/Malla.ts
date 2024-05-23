@@ -1,4 +1,4 @@
-import { mat4, mat3, vec3 } from 'gl-matrix';
+import { mat4, mat3, vec3, vec4 } from 'gl-matrix';
 import * as OBJ from 'webgl-obj-loader';
 import { motor } from '../motor.component';
 import { glMatrix } from 'gl-matrix';
@@ -8,21 +8,6 @@ export class Malla {
     private normalBuffer: any;
     private indexBuffer: any;
     private textureBuffer: any;
-    
-    private rotation: number = 0;
-    private lastTouchX: number = 0;
-    private lastTouchY: number = 0;
-    private isRightTouchDown: boolean = false;
-
-    private translationX: number = 0;
-    private translationY: number = 0;
-    private translationSpeed!: number;
-
-    private zoomFactor: number = 1;
-    private zoomSpeed!: number;
-    private distancia: number = 0;
-    private lastPinchDistance: number = 0;
-    private isPinching: boolean = false;
 
     private matTrans!: any;
     private gl!: WebGL2RenderingContext;
@@ -38,9 +23,10 @@ export class Malla {
         this.nombre = filename;
     }
 
-    async getProgramInfo(gl: any, program: any){
+    async getProgramInfo(gl: any, program: any, programColor: any){
         const programInfo = {
             program: program,
+            programColor: programColor,
             attribLocations: {
                 vertexPosition: this.gl!.getAttribLocation(program, "aVertexPosition"),
                 textureCoord: this.gl!.getAttribLocation(program, "aTextureCoord"),
@@ -52,132 +38,23 @@ export class Malla {
                 modelMatrix: this.gl!.getUniformLocation(program, "uModelMatrix"),
                 uSampler: this.gl!.getUniformLocation(program, "uSampler"),
                 normalMatrix: this.gl!.getUniformLocation(program, "uNormalMatrix"),
-                modelViewMatrix: this.gl!.getUniformLocation(program, "uModelViewMatrix")
+                modelViewMatrix: this.gl!.getUniformLocation(program, "uModelViewMatrix"),
+                uColor: this.gl!.getUniformLocation(programColor, "uColor")
             }
         };
         return programInfo;
     }
 
-    setRotacion(valor: number){
-        console.log(valor);
-    }
-
-    async dibujar(textura: any, matTrans: any) {
+    async dibujar(id: number, textura: any, matTrans: any) {
 
         this.matTrans = matTrans;
         this.gl = motor.gl;
-        this.program = motor.program;
-        const InfoPrograma = await this.getProgramInfo(this.gl, this.program);
+        const InfoPrograma = await this.getProgramInfo(this.gl, motor.program, motor.programColor);
     
         let mesh = OBJ.initMeshBuffers(this.gl as WebGL2RenderingContext, new OBJ.Mesh(this.OBJfile));
 
         // Cargar textura
         this.texture = await this.loadTexture(textura);
-        
-        // Función para manejar el evento de arrastre con clic derecho
-        const handleRightDragMobile = (event: TouchEvent) => {
-            event.preventDefault();
-
-            const touch = event.touches[0];
-            const touchX = touch.clientX;
-            const touchY = touch.clientY;
-
-            if (this.isRightTouchDown) {
-                const deltaTouchX = touchX - this.lastTouchX;
-                const deltaTouchY = touchY - this.lastTouchY;
-
-                this.translationSpeed = 0.1; // Velocidad de rotación
-
-                // Rotación alrededor del eje Y
-                this.translationX += deltaTouchX * this.translationSpeed;
-
-                // Rotación alrededor del eje X
-                this.translationY += deltaTouchY * this.translationSpeed;
-
-                //this.dibujarMalla(gl, programInfo, buffers);
-            }
-
-            this.lastTouchX = touchX;
-            this.lastTouchY = touchY;
-        };
-
-        const handlePinch = (event: TouchEvent) => {
-            event.preventDefault();
-    
-            const touch1 = event.touches[0];
-            const touch2 = event.touches[1];
-        
-            // Calcula la distancia entre los dos puntos de contacto
-            const deltaX = touch1.clientX - touch2.clientX;
-            const deltaY = touch1.clientY - touch2.clientY;
-            const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-        
-            // Calcula la diferencia de distancia desde el último pellizco
-            const deltaDistance = distance - this.lastPinchDistance;
-
-            // Ajusta el factor de zoom en función de la diferencia de distancia
-            this.zoomSpeed = 0.05; // Velocidad de zoom
-            this.zoomFactor *= 1 + deltaDistance * this.zoomSpeed;
-
-            // Actualiza la última distancia de pellizco
-            this.lastPinchDistance = distance;
-        }
-    
-        // Método para manejar el evento de final de pellizco (pinch)
-        const handlePinchEnd = (event: TouchEvent) => {
-            event.preventDefault();
-    
-            this.isPinching = false;
-        };
-
-        const handleMouseWheel = (event: WheelEvent) => {
-            const delta = event.deltaY;
-            if(delta > 0){
-                this.zoomFactor += 0.01;
-            }
-            else if (delta < 0){
-                this.zoomFactor += -0.01;
-            }
-        };
-            
-        // Agregar el evento de clic derecho al canvas
-        // Agrega un evento touchstart para detectar cuando se toca la pantalla
-        const canvas = this.gl!.canvas as HTMLCanvasElement;
-        canvas.addEventListener('wheel', (event) => {
-            // Verificar si el evento es una rueda del ratón y no un toque
-            if (event.type === 'wheel') {
-                handleMouseWheel(event as WheelEvent);
-            }
-        });
-
-        canvas.addEventListener('touchstart', (event) => {
-            const touch = event.touches[0];
-            this.lastTouchX = touch.clientX;
-            this.lastTouchY = touch.clientY;
-    
-            if (event.touches.length === 2) {
-                this.isPinching = true;
-            } else {
-                this.isRightTouchDown = true;
-            }
-        });
-    
-        canvas.addEventListener('touchmove', (event) => {
-            //const pinchInterval = setInterval(() => {
-                if (event.touches.length === 2) {
-                    handlePinch(event);
-                } else {
-                    handleRightDragMobile(event);
-                }
-            //}, 100);
-        });
-    
-        canvas.addEventListener('touchend', (event) => {
-            if (event.touches.length === 0) {
-                this.isRightTouchDown = false;
-                handlePinchEnd(event);
-            }
-        });
 
         const draw = () => {
             // Llamada recursiva para renderizar de forma continua
@@ -188,12 +65,7 @@ export class Malla {
     }
 
     dibujarBucle(InfoPrograma: any, mesh: any) {
-        const valorRotacion = document.querySelector<HTMLInputElement>('#rotacion');
-        if(valorRotacion){
-            this.rotation = parseInt(valorRotacion.value);
-        }
-
-        this.gl!.viewport(0, 0, this.gl!.canvas.width/2, this.gl!.canvas.height/2)
+        this.gl!.viewport(0, 0, this.gl!.canvas.width, this.gl!.canvas.height)
         const camara = motor.camaraActiva.getEntidad();
 
         this.projectionMatrix = mat4.create();
@@ -265,20 +137,25 @@ export class Malla {
         mat4.lookAt(this.viewMatrix, cameraPosition, target, up);
 
         // Aplica el zoom a la matriz de proyección
-        if(this.zoomFactor >= 0.1){
-            mat4.scale(this.projectionMatrix, this.projectionMatrix, [1, 1, this.zoomFactor]);
-        }
-        else{
-            mat4.scale(this.projectionMatrix, this.projectionMatrix, [1, 1, 0.1]);
-        }
+        mat4.scale(this.projectionMatrix, this.projectionMatrix, [1, 1, motor.zoomFactor]);
 
         // Aplica el desplazamiento a la matriz de vista
-        mat4.translate(this.viewMatrix, this.viewMatrix, [-this.translationX, -this.translationY, 0]);
+        mat4.translate(this.viewMatrix, this.viewMatrix, [motor.traslacionX, motor.traslacionY, 0]);
 
         // Aplicar la rotación en torno al eje Y
-        mat4.rotate(this.viewMatrix, this.viewMatrix, this.rotation*(Math.PI / 180), [0, 1, 0]);
-
+        mat4.rotate(this.viewMatrix, this.viewMatrix, motor.rotacion*(Math.PI / 180), [0, 1, 0]);
         
+        /*const frustum = this.extractFrustumPlanes(this.projectionMatrix, this.viewMatrix);
+
+        // Definir las coordenadas mínimas y máximas de la caja de contención del objeto (AABB)
+        let meshBounding = this.calculateBoundingBox(mesh);
+    
+        // Verificar si la AABB del objeto está dentro del frustum
+        if (!this.isBoxInFrustum(frustum, meshBounding.min, meshBounding.max)) {
+            // Si el objeto no está dentro del frustum, no se renderiza
+            return;
+        }*/
+
         let modelViewMatrix = mat4.create();
         mat4.multiply(modelViewMatrix, this.viewMatrix, modelMatrix);
 
@@ -321,12 +198,16 @@ export class Malla {
 
         
         // Tell the shader we bound the texture to texture unit 0
-        this.gl!.uniform1i(InfoPrograma.uniformLocations.uSampler, 0);
-        this.gl!.viewport(0, 0, this.gl!.canvas.width, this.gl!.canvas.height);
-
-        // Bind de la textura
-        this.gl!.activeTexture(this.gl!.TEXTURE0);
-        this.gl!.bindTexture(this.gl!.TEXTURE_2D, this.texture);
+        if(motor.cambiarPrograma == false){
+            this.gl!.uniform1i(InfoPrograma.uniformLocations.uSampler, 0);
+            // Bind de la textura
+            this.gl!.activeTexture(this.gl!.TEXTURE0);
+            this.gl!.bindTexture(this.gl!.TEXTURE_2D, this.texture);
+        }else{
+            let colorLocation = InfoPrograma.uColor;
+            console.log(colorLocation);
+            motor.cambiarPrograma = false;
+        }
             
         // Dibujar los elementos
         this.gl!.drawElements(
@@ -336,6 +217,108 @@ export class Malla {
             0
         );
     }
+
+    calculateBoundingBox(mesh: any) {
+        let minX = Infinity, minY = Infinity, minZ = Infinity;
+        let maxX = -Infinity, maxY = -Infinity, maxZ = -Infinity;
+    
+        const vertices = mesh.vertices;
+    
+        for (let i = 0; i < vertices.length; i += 3) {
+            const x = vertices[i];
+            const y = vertices[i + 1];
+            const z = vertices[i + 2];
+    
+            if (x < minX) minX = x;
+            if (y < minY) minY = y;
+            if (z < minZ) minZ = z;
+    
+            if (x > maxX) maxX = x;
+            if (y > maxY) maxY = y;
+            if (z > maxZ) maxZ = z;
+        }
+    
+        return {
+            min: [minX, minY, minZ],
+            max: [maxX, maxY, maxZ]
+        };
+    }
+
+    async extractFrustumPlanes(projectionMatrix: any, viewMatrix: any) {
+        const frustum = [];
+        const clipMatrix = mat4.create();
+        mat4.multiply(clipMatrix, projectionMatrix, viewMatrix);
+    
+        for (let i = 0; i < 6; i++) {
+            frustum.push(vec4.create());
+        }
+    
+        // Right plane
+        frustum[0][0] = clipMatrix[3] - clipMatrix[0];
+        frustum[0][1] = clipMatrix[7] - clipMatrix[4];
+        frustum[0][2] = clipMatrix[11] - clipMatrix[8];
+        frustum[0][3] = clipMatrix[15] - clipMatrix[12];
+    
+        // Left plane
+        frustum[1][0] = clipMatrix[3] + clipMatrix[0];
+        frustum[1][1] = clipMatrix[7] + clipMatrix[4];
+        frustum[1][2] = clipMatrix[11] + clipMatrix[8];
+        frustum[1][3] = clipMatrix[15] + clipMatrix[12];
+    
+        // Bottom plane
+        frustum[2][0] = clipMatrix[3] + clipMatrix[1];
+        frustum[2][1] = clipMatrix[7] + clipMatrix[5];
+        frustum[2][2] = clipMatrix[11] + clipMatrix[9];
+        frustum[2][3] = clipMatrix[15] + clipMatrix[13];
+    
+        // Top plane
+        frustum[3][0] = clipMatrix[3] - clipMatrix[1];
+        frustum[3][1] = clipMatrix[7] - clipMatrix[5];
+        frustum[3][2] = clipMatrix[11] - clipMatrix[9];
+        frustum[3][3] = clipMatrix[15] - clipMatrix[13];
+    
+        // Far plane
+        frustum[4][0] = clipMatrix[3] - clipMatrix[2];
+        frustum[4][1] = clipMatrix[7] - clipMatrix[6];
+        frustum[4][2] = clipMatrix[11] - clipMatrix[10];
+        frustum[4][3] = clipMatrix[15] - clipMatrix[14];
+    
+        // Near plane
+        frustum[5][0] = clipMatrix[3] + clipMatrix[2];
+        frustum[5][1] = clipMatrix[7] + clipMatrix[6];
+        frustum[5][2] = clipMatrix[11] + clipMatrix[10];
+        frustum[5][3] = clipMatrix[15] + clipMatrix[14];
+    
+        // Normalize planes
+        for (let i = 0; i < 6; i++) {
+            const length = Math.sqrt(frustum[i][0] * frustum[i][0] +
+                                     frustum[i][1] * frustum[i][1] +
+                                     frustum[i][2] * frustum[i][2]);
+            for (let j = 0; j < 4; j++) {
+                frustum[i][j] /= length;
+            }
+        }
+    
+        return frustum;
+    }
+    
+
+    async isBoxInFrustum(frustum: any, min: any, max: any) {
+        for (let i = 0; i < 6; i++) {
+            if (frustum[i][0] * min[0] + frustum[i][1] * min[1] + frustum[i][2] * min[2] + frustum[i][3] > 0) continue;
+            if (frustum[i][0] * max[0] + frustum[i][1] * max[1] + frustum[i][2] * max[2] + frustum[i][3] > 0) continue;
+            if (frustum[i][0] * min[0] + frustum[i][1] * max[1] + frustum[i][2] * min[2] + frustum[i][3] > 0) continue;
+            if (frustum[i][0] * max[0] + frustum[i][1] * min[1] + frustum[i][2] * min[2] + frustum[i][3] > 0) continue;
+            if (frustum[i][0] * min[0] + frustum[i][1] * min[1] + frustum[i][2] * max[2] + frustum[i][3] > 0) continue;
+            if (frustum[i][0] * max[0] + frustum[i][1] * max[1] + frustum[i][2] * max[2] + frustum[i][3] > 0) continue;
+            if (frustum[i][0] * min[0] + frustum[i][1] * max[1] + frustum[i][2] * max[2] + frustum[i][3] > 0) continue;
+            if (frustum[i][0] * max[0] + frustum[i][1] * min[1] + frustum[i][2] * max[2] + frustum[i][3] > 0) continue;
+    
+            return false;
+        }
+        return true;
+    }
+    
 
   async loadTexture(nomTextura: any) {
     let textura = await motor.gestorRecursos.getRecurso(nomTextura, 'textura');

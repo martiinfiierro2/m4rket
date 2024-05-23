@@ -101,6 +101,8 @@ export class EstadisticasComponent {
   cEliminados: boolean = true;
   pComprados: number = 0;
   cComprados: boolean = true;
+  pBuscados: number = 0;
+  cBuscados: boolean = true;
 
 
   //variables para mostrar foto
@@ -134,6 +136,8 @@ export class EstadisticasComponent {
 
     this.tendenciaFechaFin = fechaInicio.toISOString().split('T')[0];
     this.tendenciaFechaInicio = fechaTendenciaInicio.toISOString().split('T')[0];
+
+    console.log('Fechas tendencia iniciales: ' + this.tendenciaFechaInicio +  'al ' + this.tendenciaFechaFin);
   }
 
   async actualizarDatos(opcion: string){
@@ -142,6 +146,7 @@ export class EstadisticasComponent {
     this.getContadoresActivos(opcion);
     this.getContadoresComprados(opcion);
     this.getContadoresListados(opcion);
+    this.getContadoresBuscados(opcion);
     this.getMedia();
     this.getUsuariosUnicos();
   }
@@ -156,8 +161,8 @@ export class EstadisticasComponent {
     switch (opcion) {
       case '7d':
         fechaInicio.setDate(fechaInicio.getDate() - 7);
-        fechaTendenciaInicio.setDate(fechaInicio.getDate() - 14);
-        fechaTendenciaFin.setDate(fechaInicio.getDate() - 7);
+        fechaTendenciaInicio.setDate(fechaFin.getDate() - 14);
+        fechaTendenciaFin.setDate(fechaFin.getDate() - 7);
         break;
       case '1m':
         fechaInicio.setDate(fechaInicio.getDate() - 30);
@@ -180,7 +185,7 @@ export class EstadisticasComponent {
     this.tendenciaFechaFin = fechaTendenciaFin.toISOString().split('T')[0];
     this.tendenciaFechaInicio = fechaTendenciaInicio.toISOString().split('T')[0];
 
-    console.log('Fecha inicio tendencia: ' + this.tendenciaFechaInicio + 'al ' + this.tendenciaFechaFin);
+    console.log('Fecha inicio tendencia: calculadas' + this.tendenciaFechaInicio + 'al ' + this.tendenciaFechaFin);
 
     this.actualizarDatos(opcion);
   
@@ -198,6 +203,7 @@ export class EstadisticasComponent {
     this.getContadoresActivos('7d');
     this.getContadoresComprados('7d');
     this.getContadoresListados('7d');
+    this.getContadoresBuscados('7d')
     this.getMedia();
     this.getUsuariosUnicos();
     //this.pruebaGrafico();
@@ -291,6 +297,48 @@ export class EstadisticasComponent {
     const chartElement = document.getElementById('graf-comp');
     
     const datos = await this.procesarDatos(opcion, respuesta);
+    let colorVariable;
+    if (chartElement && chartElement.clientWidth > 0 && chartElement.clientHeight > 0) {
+      echarts.dispose(chartElement);
+  
+      const myChart = echarts.init(chartElement);
+
+      const option: any = {
+        color: 'rgba(81, 135, 122, 1)',
+        xAxis: {
+          type: 'category',
+          data: this.xAxisData,
+          show: false,
+        },
+        yAxis: {
+          type: 'value',
+          show: false
+        },
+        series: [
+          {
+            name: 'Nutrientes',
+            type: 'line',
+            avoidLabelOverlap: false,
+            label: {
+              show: false,
+              position: 'top'
+            },
+            data:datos,
+            smooth: true,
+          }
+        ]
+      };
+  
+      myChart.setOption(option);
+    } else {
+      console.warn('El elemento "grafico" no tiene un tamaño válido para mostrar el gráfico.');
+    }
+  }
+
+  async graficoBuscados(opcion: any, respuesta: any) {
+    const chartElement = document.getElementById('graf-busc');
+    
+    const datos = await this.procesarDatos(opcion, respuesta);
   
     if (chartElement && chartElement.clientWidth > 0 && chartElement.clientHeight > 0) {
       echarts.dispose(chartElement);
@@ -371,6 +419,7 @@ export class EstadisticasComponent {
     }
   }
   
+  
   obtenerNombreDiaSemana(fecha: Date): string {
     const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
     return diasSemana[fecha.getDay()];
@@ -383,9 +432,8 @@ export class EstadisticasComponent {
     this.totalBuscados = 0;
     if(this.fechaFin !== "" && this.fechaInicio !== ""){
       try {
-        const res = await this.estadisticasService.getCountBuscadosFecha(this.fechaInicio, this.fechaFin).toPromise();
+        const res = await this.estadisticasService.getCountMasBuscadosFecha(this.fechaInicio, this.fechaFin).toPromise();
         //console.log(res);
-        
         for (let index = 0; index < 7; index++) {
           let contador = new DatosContadores();
     
@@ -394,7 +442,7 @@ export class EstadisticasComponent {
           contador.value = res.datosContadores[index].totalCount;
           contador.foto = res2.productos.foto;
           this.buscados.push(contador);
-          this.totalBuscados += parseInt(contador.value);
+          //this.totalBuscados += parseInt(contador.value);
         }
       } catch (error) {
         console.error(error);
@@ -418,13 +466,32 @@ export class EstadisticasComponent {
       }
     }
   }
-/*
-  getUsuariosActivos(){
-    let res = this.estadisticasService.getUsuariosActivos().subscribe( res => {
-      this.usuariosActivos = res.usuariosActivos;
-    });
+
+  async getContadoresBuscados(opcion:string) {
+    //this.buscados = [];
+    this.totalBuscados = 0;
+      try {
+        const res = await this.estadisticasService.getCountBuscadosFecha(this.fechaInicio, this.fechaFin).toPromise();
+        //console.log(res);
+              
+       await this.graficoBuscados(opcion, res);
+
+        for (let index = 0; index < res.datosContadores.length; index++) {
+          let contador = new DatosContadores();
+    
+          const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
+          //contador.name = res2.productos.nombre;
+          contador.value = res.datosContadores[index].totalCount;
+          //this.buscados.push(contador);
+          this.totalBuscados += parseInt(contador.value);
+        }
+      await this.getTendenciaBuscados();
+      } catch (error) {
+        console.error(error);
+      }
+    
   }
-*/
+
   async getContadoresMasEliminados(opcion:string) {
     this.eliminados = [];
     this.totalEliminados = 0;
@@ -514,7 +581,7 @@ export class EstadisticasComponent {
     this.totalAnadidos = 0;
     try {
       const res = await this.estadisticasService.getCountListadosFecha(this.fechaInicio, this.fechaFin).toPromise();
-      //console.log(res);
+      console.log(res);
       await this.graficoListados(opcion, res);
 
       for (let index = 0; index < res.datosContadores.length; index++) {
@@ -526,7 +593,9 @@ export class EstadisticasComponent {
         this.anadidos.push(contador);
         this.totalAnadidos += parseInt(contador.value);
       }
+      //console.log(this.totalAnadidos);
       await this.getTendenciaListados();
+      await this.getPorcentajeComprados();
     } catch (error) {
       console.error(error);
     }
@@ -534,6 +603,7 @@ export class EstadisticasComponent {
   
   async getPorcentajeComprados(){
     await Promise.all([this.totalComprados, this.totalAnadidos]);
+    //console.log('Estoy calculando el porcentaje con: ' + this.totalComprados + 'y: ' +  this.totalAnadidos);
     this.porcentaje = 0;
     if(this.totalComprados && this.totalAnadidos){
       this.porcentaje = parseFloat((this.totalComprados * 100 / this.totalAnadidos).toFixed(2));
@@ -544,7 +614,7 @@ export class EstadisticasComponent {
    this.usuariosUnicos = 0;
     try {
       const res = await this.estadisticasService.getUsuarioUnico(this.fechaInicio, this.fechaFin).toPromise();
-      console.log(res);
+      //console.log(res);
       
       for (let index = 0; index < res.datosContadores.length; index++) {
         let contador = new DatosContadores();
@@ -595,6 +665,8 @@ export class EstadisticasComponent {
       this.pAnadidos = parseFloat((((this.totalAnadidos - this.tendenciaAnadidos) / this.tendenciaAnadidos) * 100).toFixed(2));
       if(this.pAnadidos < 0){
         this.cAnadidos = false;
+      }else{
+        this.cAnadidos = true;
       }
     }
     
@@ -615,13 +687,16 @@ export class EstadisticasComponent {
         console.error(error);
       }
       if(this.totalEliminados){
+        console.log('Tendencia Eliminados: totalEliminados = ' + this.totalEliminados + ' totalAnterior: ' + this.tendenciaEliminados );
         this.pEliminados = parseFloat((((this.totalEliminados - this.tendenciaEliminados) / this.tendenciaEliminados) * 100).toFixed(2));
-        if(this.tendenciaEliminados = 0){
-          this.pEliminados = 0;
+        console.log('Tendencia Eliminados: ' + this.pEliminados);    
+
           if(this.pEliminados < 0){
+            this.cEliminados = true;
+          }else{
             this.cEliminados = false;
           }
-        }
+    
       }
   }
 
@@ -634,15 +709,43 @@ export class EstadisticasComponent {
         let contador = new DatosContadores();
         contador.value = res.datosContadores[index].totalCount;
         this.tendenciaComprados += parseInt(contador.value);
-        await this.getPorcentajeComprados();
       }
     } catch (error) {
       console.error(error);
     }
     if(this.totalComprados){
+      console.log('Tendencia comprados: totalcomprados = ' + this.totalComprados + ' totalAnterior: ' + this.tendenciaComprados );
       this.pComprados = parseFloat((((this.totalComprados - this.tendenciaComprados) / this.tendenciaComprados) * 100).toFixed(2));
+      console.log('Tendencia comprados: ' + this.pComprados);
       if(this.pComprados < 0){
         this.cComprados = false;
+      }else {
+        this.cComprados = true;
+      }
+    }
+  }
+
+  async getTendenciaBuscados() {
+    this.tendenciaBuscados = 0;
+    this.pBuscados = 0;
+    try {
+      const res = await this.estadisticasService.getCountBuscadosFecha(this.tendenciaFechaInicio, this.tendenciaFechaFin).toPromise();
+      for (let index = 0; index < res.datosContadores.length; index++) {
+        let contador = new DatosContadores();
+        contador.value = res.datosContadores[index].totalCount;
+        this.tendenciaBuscados += parseInt(contador.value);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    if(this.totalBuscados){
+      console.log('Tendencia buscados: totalbuscados = ' + this.totalBuscados + ' totalAnterior: ' + this.tendenciaBuscados );
+      this.pBuscados = parseFloat((((this.totalBuscados - this.tendenciaBuscados) / this.tendenciaBuscados) * 100).toFixed(2));
+      console.log('Tendencia Buscados: ' + this.pBuscados);
+      if(this.pBuscados < 0){
+        this.cBuscados = false;
+      }else{
+        this.cBuscados = true;
       }
     }
   }

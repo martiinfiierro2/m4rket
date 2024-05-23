@@ -14,6 +14,7 @@ export class TNodo{
     private matAcum: glMatrix.mat4 = glMatrix.mat4.create();
     private actualizarMatriz: Boolean = false;
     private dibujar: Boolean = true;
+    private id!: number;
 
     // Método para agregar un hijo
     async agregarHijo(nodoHijo: TNodo) {
@@ -43,7 +44,7 @@ export class TNodo{
         }
     
         if (this.getEntidad() != null) {
-            this.entidad.dibujar(this.matrizTransf);
+            this.entidad.dibujar(this.matrizTransf, this.getID());
         }
     
         // Esperar a que todas las llamadas recursivas se completen
@@ -152,6 +153,10 @@ export class TNodo{
         this.actualizarMatriz = true;
     }
 
+    async setID(id: number){
+        this.id = id;
+    }
+
     async setEntidad( entidadAnyadir: any ){
         this.entidad = entidadAnyadir;
     }
@@ -161,6 +166,10 @@ export class TNodo{
     }
 
     //Métodos GET
+    getID(){
+        return this.id;
+    }
+
     getTraslacion(){
         return this.traslacion;
     }

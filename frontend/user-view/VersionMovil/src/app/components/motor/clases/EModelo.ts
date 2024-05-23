@@ -14,7 +14,7 @@ export class EModelo {
     cargarFichero( fichero: any ){
     }
 
-    async dibujar(matTrans: any): Promise<void>{
+    async dibujar(matTrans: any, id: number): Promise<void>{
         await new Promise<void>(resolve => {
             if(this.recursoMalla) {
                 resolve();
@@ -30,7 +30,7 @@ export class EModelo {
         })
 
         if(this.recursoMalla) {
-            this.recursoMalla.draw(matTrans, this.recursoTextura.getNombre());
+            this.recursoMalla.draw(id, matTrans, this.recursoTextura.getNombre());
         }
         else {
             console.log("Fallo dibujando la malla");
