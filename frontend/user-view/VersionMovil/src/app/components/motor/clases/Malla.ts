@@ -18,6 +18,25 @@ export class Malla {
         this.OBJfile = malla;
         this.nombre = filename;
         this.mesh = new OBJ.Mesh(this.OBJfile);
+        this.gl = motor.gl;
+    }
+    
+    public deleteBuffers(){
+        if (this.mesh) {
+            if (this.mesh.vertexBuffer) {
+                this.gl.deleteBuffer(this.mesh.vertexBuffer);
+            }
+            if (this.mesh.textureBuffer) {
+                this.gl.deleteBuffer(this.mesh.textureBuffer);
+            }
+            if (this.mesh.normalBuffer) {
+                this.gl.deleteBuffer(this.mesh.normalBuffer);
+            }
+            if (this.mesh.indexBuffer) {
+                this.gl.deleteBuffer(this.mesh.indexBuffer);
+            }
+            this.mesh = null; // Establecer buffers a null después de limpiarlos
+        }
     }
     
     getGL(){
@@ -31,7 +50,6 @@ export class Malla {
 
     async dibujar(id: number, textura: any, matTrans: any) {
         this.matTrans = matTrans;
-        this.gl = motor.gl;
         this.color = this.crearColor(id);
         this.id = id;
 
@@ -39,9 +57,10 @@ export class Malla {
         this.texture = await this.loadTexture(textura);
 
         const draw = () => {
-            // Llamada recursiva para renderizar de forma continua
-            this.dibujarBucle();
-            requestAnimationFrame(draw);
+            if(this.mesh){
+                this.dibujarBucle();
+                requestAnimationFrame(draw);
+            }
         };
         draw();
     }

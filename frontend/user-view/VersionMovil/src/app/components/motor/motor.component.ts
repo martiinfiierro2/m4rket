@@ -928,14 +928,7 @@ export class MotorComponent implements AfterViewInit {
 
       if(recMalla.getNombre() == 'pin.obj'){
         for(let i = 0; i < recMalla.mallas.length; i++){
-          var buffers = recMalla.mallas[i].getBuffers();
-
-          recMalla.mallas[i].mesh.vertexBuffer = 0;
-          recMalla.mallas[i].mesh.normalxBuffer = 0;
-          recMalla.mallas[i].mesh.textureBuffer = 0;
-          recMalla.mallas[i].mesh.indexBuffer = 0;
-          recMalla.mallas[i].texture = null;
-          recMalla.mallas[i].mesh = null;
+          recMalla.mallas[i].deleteBuffers();
           motor.gestorRecursos.borrarRecursos(recMalla, recMalla.mallas, entidad.recursoMalla.getNombre(), entidad.recursoTextura.getNombre());
         }
           
@@ -948,22 +941,14 @@ export class MotorComponent implements AfterViewInit {
   eliminarPin(idProd: number){
     //Get Nodo
     const nodo = motor.nodos.find(nodo => nodo.getID() === idProd);
+    nodo!.getPadre()!.eliminarHijo(nodo);
     const entidad = nodo!.getEntidad();
     const recMalla = entidad!.getRecursoMalla();
 
     for(let i = 0; i < recMalla.mallas.length; i++){
-      var buffers = recMalla.mallas[i].getBuffers();
-
-      recMalla.mallas[i].mesh.vertexBuffer = 0;
-      recMalla.mallas[i].mesh.normalxBuffer = 0;
-      recMalla.mallas[i].mesh.textureBuffer = 0;
-      recMalla.mallas[i].mesh.indexBuffer = 0;
-      recMalla.mallas[i].texture = null;
-      recMalla.mallas[i].mesh = null;
+      recMalla.mallas[i].deleteBuffers();
       motor.gestorRecursos.borrarRecursos(recMalla, recMalla.mallas, entidad.recursoMalla.getNombre(), entidad.recursoTextura.getNombre());
-
     }
-    nodo!.getPadre()!.eliminarHijo(nodo);
     this.mercado.recorrer(mat4.create());
   }
 
@@ -1046,6 +1031,7 @@ export class MotorComponent implements AfterViewInit {
         break;
       }
     }
+    console.log(motor.gestorRecursos)
   }
 
   letraANumero(letra: string): number {
