@@ -3,12 +3,11 @@ import * as glMatrix from 'gl-matrix';
 import { TMotorTAG } from './clases/TMotorTAG';
 import { TNodo } from './clases/TNodo';
 import { ProductosService } from 'src/app/services/productos.service';
-import { Producto, ListaCompra } from '../drawer/drawer.component';
 import { MotorService } from '../../services/motor.service';
-import { Ubicacion } from 'src/app/home/home.page';
 import { UbicacionesService } from 'src/app/services/ubicaciones.service';
 import { TRecursoTextura } from './clases/TRecursoTextura';
 import { mat4 } from 'gl-matrix';
+import { Malla } from './clases/Malla';
 
 export let motor: TMotorTAG;
 
@@ -34,7 +33,6 @@ export class MotorComponent implements AfterViewInit {
   private mercado!: TNodo;
   private ubicaciones: TNodo[] = [];
   private listaCompra: lista[] = [];
-  private pines: pin[] = [];
 
   //Eventos
   private rotation: any = 0;
@@ -842,7 +840,9 @@ export class MotorComponent implements AfterViewInit {
         ]);
         var id = this.colorToID(color);
         var idString = id.toString();
-        this.motorServicio.getDrawer().getProducto(idString);
+        if(id != -1){
+          this.motorServicio.getDrawer().getProducto(idString);
+        }
         motor.useProgramMain(motor.gl);
       });
     };
@@ -921,90 +921,50 @@ export class MotorComponent implements AfterViewInit {
     return idUsu;
   }
 
-  async marcarComprado(idProd: number){
-    const pinCambiar = this.pines.find(pin => pin.idProd === idProd);
-    pinCambiar!.estado = true;
+  eliminarTodosPines(){
+    for(let i = 3; i  < motor.nodos.length; i++){
+      const entidad = motor.nodos[i]!.getEntidad();
+      const recMalla = entidad!.getRecursoMalla();
+
+      if(recMalla.getNombre() == 'pin.obj'){
+        for(let i = 0; i < recMalla.mallas.length; i++){
+          var buffers = recMalla.mallas[i].getBuffers();
+
+          recMalla.mallas[i].mesh.vertexBuffer = 0;
+          recMalla.mallas[i].mesh.normalxBuffer = 0;
+          recMalla.mallas[i].mesh.textureBuffer = 0;
+          recMalla.mallas[i].mesh.indexBuffer = 0;
+          recMalla.mallas[i].texture = null;
+          recMalla.mallas[i].mesh = null;
+          motor.gestorRecursos.borrarRecursos(recMalla, recMalla.mallas, entidad.recursoMalla.getNombre(), entidad.recursoTextura.getNombre());
+        }
+          
+      }
+      motor.nodos[i]!.getPadre()!.eliminarHijo(motor.nodos[i]);
+    }
+    this.mercado.recorrer(mat4.create());
   }
 
-  async eliminarComprados(){
-    let borrar = [];
+  eliminarPin(idProd: number){
+    //Get Nodo
+    const nodo = motor.nodos.find(nodo => nodo.getID() === idProd);
+    const entidad = nodo!.getEntidad();
+    const recMalla = entidad!.getRecursoMalla();
 
-    for(let i = 0; i < this.pines.length; i++){
-      if(this.pines[i].estado == true){
-        borrar.push(this.pines[i]);
-        const entidad = this.pines[i].nodo.getEntidad();
-        const malla = entidad.recursoMalla;
-        await malla.mallas.forEach((malla: any) => {
-          let vertexBuffer = malla.vertexBuffer;
-          motor.gl.deleteBuffer(vertexBuffer);
+    for(let i = 0; i < recMalla.mallas.length; i++){
+      var buffers = recMalla.mallas[i].getBuffers();
 
-          let normalBuffer = malla.normalBuffer;
-          motor.gl.deleteBuffer(normalBuffer);
+      recMalla.mallas[i].mesh.vertexBuffer = 0;
+      recMalla.mallas[i].mesh.normalxBuffer = 0;
+      recMalla.mallas[i].mesh.textureBuffer = 0;
+      recMalla.mallas[i].mesh.indexBuffer = 0;
+      recMalla.mallas[i].texture = null;
+      recMalla.mallas[i].mesh = null;
+      motor.gestorRecursos.borrarRecursos(recMalla, recMalla.mallas, entidad.recursoMalla.getNombre(), entidad.recursoTextura.getNombre());
 
-          let indexBuffer = malla.indexBuffer;
-          motor.gl.deleteBuffer(indexBuffer);
-
-          let textureBuffer = malla.tetxureBuffer;
-          motor.gl.deleteBuffer(textureBuffer);
-        });
-        await this.pines[i].nodo.setEntidad(null);
-      }
     }
-    
-    for(let i = 0; i < this.pines.length; i++){
-      if(borrar[i] == this.pines[i]){
-        this.pines.splice(i, 1);
-      }
-    }
-  }
-
-  async eliminarTodosPines(){
-    for(let i = 0; i < this.pines.length; i++){
-      const entidad = this.pines[i].nodo.getEntidad();
-      const malla = entidad.recursoMalla;
-      await malla.mallas.forEach((malla: any) => {
-        let vertexBuffer = malla.vertexBuffer;
-        motor.gl.deleteBuffer(vertexBuffer);
-
-        let normalBuffer = malla.normalBuffer;
-        motor.gl.deleteBuffer(normalBuffer);
-
-        let indexBuffer = malla.indexBuffer;
-        motor.gl.deleteBuffer(indexBuffer);
-
-        let textureBuffer = malla.tetxureBuffer;
-        motor.gl.deleteBuffer(textureBuffer);
-      });
-      await this.pines[i].nodo.setEntidad(null);
-    }
-    this.pines = [];
-  }
-
-  async eliminarPines(idProd: number){
-    let pinBorrar = this.pines.find(pin => pin.idProd === idProd);
-    const entidad = pinBorrar!.nodo.getEntidad();
-    pinBorrar!.nodo.setEntidad(null)
-    const malla = entidad.recursoMalla;
-
-    await malla.mallas.forEach((malla: any) => {
-      var buffers = malla.getBuffers();
-      var gl = malla.getGL();
-      if(gl && buffers){
-        console.log(gl.deleteBuffer(buffers.vertexBuffer));
-        console.log(gl.deleteBuffer(buffers.normalBuffer));
-        console.log(gl.deleteBuffer(buffers.textureBuffer));
-        console.log(gl.deleteBuffer(buffers.indexBuffer));
-      } else {
-        console.log("WebGL context or buffers not available.");
-      }
-    });
-    
-    for(let i = 0; i < this.pines.length; i++){
-      if(this.pines[i] == pinBorrar){
-        this.pines.splice(i, 1);
-      }
-    }
-    await this.mercado.recorrer(mat4.create());
+    nodo!.getPadre()!.eliminarHijo(nodo);
+    this.mercado.recorrer(mat4.create());
   }
 
   async crearPines(lista: lista[], number: number) {
@@ -1081,8 +1041,6 @@ export class MotorComponent implements AfterViewInit {
           producto.productos.id
         );
       }
-      this.pines.push({idProd: producto.productos.id, nodo: pin, padre: this.ubicaciones[valor], recText: producto.productos.foto, estado: false});
-      //Para que solo recorra los nodos necesarios cuando se añade un producto SOLAMENTE
       if(number == 0){
         await this.ubicaciones[valor].recorrer(glMatrix.mat4.identity(glMatrix.mat4.create()));
         break;

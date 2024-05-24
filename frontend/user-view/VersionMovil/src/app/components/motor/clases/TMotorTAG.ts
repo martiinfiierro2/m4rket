@@ -263,6 +263,8 @@ export class TMotorTAG {
         nodoCreado.setTraslacion(trasl);
         nodoCreado.setRotacion(rot);
         nodoCreado.setEscalado(esc);
+
+        this.nodos.push(nodoCreado);
         
         return nodoCreado;
     }
@@ -282,6 +284,8 @@ export class TMotorTAG {
         nodoCreado.setTraslacion(trasl);
         nodoCreado.setRotacion(rot);
         nodoCreado.setEscalado(esc);
+        
+        this.nodos.push(nodoCreado);
 
         return nodoCreado;
     }
@@ -308,6 +312,8 @@ export class TMotorTAG {
         await nodoCreado.setTraslacion(trasl);
         await nodoCreado.setRotacion(rot);
         await nodoCreado.setEscalado(esc);
+        
+        this.nodos.push(nodoCreado);
 
         return nodoCreado;
     }
