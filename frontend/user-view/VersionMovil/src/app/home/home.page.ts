@@ -160,6 +160,7 @@ export class HomePage {
    console.log(this.motorComponent)
    this.motorComponent.crearEscena();
    this.motorServicio.setMotor(this.motorComponent);
+   this.motorServicio.setDrawer(this.drawerComponent);
 
   }
 

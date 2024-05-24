@@ -842,9 +842,10 @@ export class MotorComponent implements AfterViewInit {
             pixel[3] / 255
         ]);
         var id = this.colorToID(color);
-        console.log(id);
+        var idString = id.toString();
+        this.motorServicio.getDrawer().getProducto(idString);
+        motor.useProgramMain(motor.gl);
       });
-      motor.useProgramMain(motor.gl);
     };
   
     // Agregar el evento de clic derecho al canvas
