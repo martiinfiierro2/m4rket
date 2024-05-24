@@ -162,11 +162,11 @@ export class ProductosComponent {
   //cambio de color según el stock
   colorStock(disponibilidad: number): any{
     if (disponibilidad < 50) {
-      return { 'background-color': 'rgb(255, 167, 167)','color': 'red' };
+      return { 'background-color': 'rgb(253, 212, 212)','color': 'rgb(172, 22, 22)' };
     } else if (disponibilidad >= 50 && disponibilidad <= 100) {
-      return { 'background-color': 'rgb(255, 255, 162)', 'color': 'rgb(172, 172, 0)'  };
+      return { 'background-color': 'rgb(250, 253, 212)', 'color': 'rgb(172, 157, 22)'  };
     } else {
-      return { 'background-color': 'rgb(110, 181, 110)', 'color': 'green'  };
+      return { 'background-color': 'rgb(220, 253, 212)', 'color': 'rgb(79, 172, 22)'  };
     }
   }
 
