@@ -33,7 +33,7 @@ body{
 
     .btnPrimario:hover{
         cursor: pointer;
-        transform: scale(1.1);
+        /*transform: scale(1.1);*/
     }
 
 .btnSecundario{
@@ -47,7 +47,7 @@ body{
 
     .btnSecundario:hover{
         cursor: pointer;
-        transform: scale(1.1);
+        /*transform: scale(1.1);*/
     }
     
 html, body { height: 100%; }

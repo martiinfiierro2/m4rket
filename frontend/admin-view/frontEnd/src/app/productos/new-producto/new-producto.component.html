@@ -1,129 +1,133 @@
-<!--<div id="divAdd">
-    <div id="titulo"><h2>Añadir producto</h2></div>
-    <form (ngSubmit)="newProducto()" [formGroup]="productoForm">
-        <div class="col">
-            <label for="nombre">Nombre*<input type="text" name="nombre" id="nombre" required formControlName="nombre"></label>
-            <label for="marca">Marca*<input type="text" name="marca" id="marca" required formControlName="marca"></label>
-            <label for="precio">Precio*<input type="number" name="precio" id="precio" required formControlName="precio" min="0" step="0.10"></label>
-            <label for="precio/kg">Precio el kg<input type="number" name="precio/kg" id="precio/kg" formControlName="precio_kg" min="0" step="0,10"></label>
-            <label for="stock">Stock disponible*<input type="number" name="stock" id="stock" required formControlName="stock" min="0"></label>
-            <label for="ingredientes">Ingredientes<textarea name="ingredientes" id="ingredientes" cols="10" rows="10" formControlName="ingredientes"></textarea></label>
-            <label for="categoria">Categoría*<input type="text" name="categoria" id="categoria" required formControlName="categoria"></label>
-        </div>
-        <div class="col">
-            <label for="valor_energ">Valor energético(kcal)<input type="number" name="valor_energ" id="valor_energ" formControlName="valor_energetico" min="0"></label>
-            <label for="grasas">Grasas(g)<input type="number" name="grasas" id="grasas" formControlName="grasas" min="0"></label>
-            <label for="saturadas">Grasas saturadas(g)<input type="number" name="saturadas" id="saturadas" formControlName="grasas_saturadas" min="0"></label>
-            <label for="hidratos">Hidratos de carbono(g)<input type="number" name="hidratos" id="hidratos" formControlName="hidratos_carbono" min="0"></label>
-            <label for="azucares">Azúcares(g)<input type="number" name="azucares" id="azucares" formControlName="azucares" min="0"></label>
-            <label for="fibra">Fibra alimentaria(g)<input type="number" name="fibra" id="fibra" formControlName="fibra" min="0"></label>
-            <label for="proteinas">Proteínas(g)<input type="number" name="proteinas" id="proteinas" formControlName="proteina" min="0"></label>
-            <label for="sal">Sales(g)<input type="number" name="sal" id="sal" formControlName="sal" min="0"></label>
-            <label for="foto">Imagen del producto* 
-                <img [src]="srcImagen" alt="foto del producto" style="display: none" id="previewImagen">
-                <input type="file" accept="image/png" name="foto" id="foto" formControlName="foto" (change)="cambioImagen( $event )">
-            </label>
-            <div id="buttons">
-                <input type="submit" value="Añadir" class="btnPrimario">
-                <input type="button" value="Cancelar" (click)="atras()" class="btnSecundario">
+<body>
+    <div id="todo">
+        <div id="titulo">
+            <h2>Añadir producto</h2>
+            <div class="steps" *ngIf="currentStep === 1">
+                <span class="circle active">1</span>
+                <p class="paso_activo">Información básica</p>
+                <span class="circle">2</span>
+                <hr>
+                <span class="circle">3</span>
+                <div class="progress-bar">
+                    <span class="indicator"></span>
+                </div>
+            </div>
+            <div class="steps" *ngIf="currentStep === 2">
+                <span class="circle done">1</span>
+                <hr class="done">
+                <span class="circle active">2</span>
+                <p class="paso_activo">Foto de producto</p>
+                <span class="circle">3</span>
+                <div class="progress-bar">
+                    <span class="indicator"></span>
+                </div>
+            </div>
+            <div class="steps" *ngIf="currentStep === 3">
+                <span class="circle done">1</span>
+                <hr class="done">
+                <span class="circle done">2</span>
+                <hr class="done">
+                <span class="circle active">3</span>
+                <p class="paso_activo">Información nutricional</p>
+                <div class="progress-bar">
+                    <span class="indicator"></span>
+                </div>
             </div>
         </div>
-    </form>
-</div>
--->
-
-
-<div id="todo">
-    <div id="titiulo">
-        <h2>Añadir producto</h2>
+        <div id="formulario">
+            <form (ngSubmit)="newProducto()" [formGroup]="productoForm">
+                <!-- Información básica -->
+                <div id="divInfoBasica" *ngIf="currentStep === 1">
+                    <div id="contenidoInfoBasica">
+                        <div class="divCampo">
+                            <label for="nombre">Nombre</label>
+                            <input type="text" name="nombre" id="nombre" required formControlName="nombre">
+                        </div>
+                        <div class="divCampo">
+                            <label for="marca">Marca</label>
+                            <input type="text" name="marca" id="marca" required formControlName="marca">
+                        </div>
+                        <div class="divCampo">
+                            <label for="precio">Precio</label>
+                            <input type="number" name="precio" id="precio" required formControlName="precio" min="0" step="0.10">
+                        </div>
+                        <div class="divCampo">
+                            <label for="precio/kg">Precio por peso</label>
+                            <input type="number" name="precio/kg" id="precio/kg" required formControlName="precio_kg" min="0" step="0.10">
+                        </div>
+    
+                        <div class="divCampo">
+                            <label for="stock">Stock</label>
+                            <input type="number" name="stock" id="stock" required formControlName="stock" min="0">
+                        </div>
+                        <div class="divCampo">
+                            <label for="categoria">Categoría</label>
+                            <input type="text" name="categoria" id="categoria" required formControlName="categoria">
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Imagen del producto -->
+                <div id="divImagen" *ngIf="currentStep === 2">
+                    <div id="contenidoImagen">
+                        <img [src]="srcImagen" alt="foto del producto" style="display: none" id="previewImagen">
+                        <input type="file" accept="image/png" name="foto" style="display: none;" id="foto" formControlName="foto" (change)="cambioImagen($event)">
+                        <label for="foto" id="btnFoto">Subir imagen
+                            <span class="icono_foto"><svg viewBox="0 0 24 24" width="20px" height="20px"fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M7 11C8.10457 11 9 10.1046 9 9C9 7.89543 8.10457 7 7 7C5.89543 7 5 7.89543 5 9C5 10.1046 5.89543 11 7 11Z" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M5.56055 21C11.1305 11.1 15.7605 9.35991 21.0005 15.7899" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M12.28 3H5C3.93913 3 2.92172 3.42136 2.17157 4.17151C1.42142 4.92165 1 5.93913 1 7V17C1 18.0609 1.42142 19.0782 2.17157 19.8284C2.92172 20.5785 3.93913 21 5 21H17C18.0609 21 19.0783 20.5785 19.8284 19.8284C20.5786 19.0782 21 18.0609 21 17V12" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M18.75 8.82996V0.829956" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M15.5508 4.02996L18.7508 0.829956L21.9508 4.02996" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg></span>
+                        </label>
+                    </div>
+                </div>
+    
+                <!-- Valores nutricionales -->
+                <div id="divValoresNutri" *ngIf="currentStep === 3">
+                    <div id="contenidoValoresNut">
+                        <div class="divCampo">
+                            <label for="valor_energ">Valor energético(kcal)</label>
+                            <input type="number" name="valor_energ" id="valor_energ" formControlName="valor_energetico" min="0">
+                        </div>
+                        <div class="divCampo">
+                            <label for="grasas">Grasas(g)</label>
+                            <input type="number" name="grasas" id="grasas" formControlName="grasas" min="0">
+                        </div>
+                        <div class="divCampo">
+                            <label for="saturadas">Grasas saturadas(g)</label>
+                            <input type="number" name="saturadas" id="saturadas" formControlName="grasas_saturadas" min="0">
+                        </div>
+                        <div class="divCampo">
+                            <label for="hidratos">Hidratos de carbono(g)</label>
+                            <input type="number" name="hidratos" id="hidratos" formControlName="hidratos_carbono" min="0">
+                        </div>
+                        <div class="divCampo">
+                            <label for="azucares">Azúcares(g)</label>
+                            <input type="number" name="azucares" id="azucares" formControlName="azucares" min="0">
+                        </div>
+                        <div class="divCampo">
+                            <label for="fibra">Fibra alimentaria(g)</label>
+                            <input type="number" name="fibra" id="fibra" formControlName="fibra" min="0">
+                        </div>
+                        <div class="divCampo">
+                            <label for="proteinas">Proteínas(g)</label>
+                            <input type="number" name="proteinas" id="proteinas" formControlName="proteina" min="0">
+                        </div>
+                        <div class="divCampo">
+                            <label for="sal">Sales(g)</label>
+                            <input type="number" name="sal" id="sal" formControlName="sal" min="0">
+                        </div>
+                    </div>
+                    <div class="divCampo ingredientes">
+                        <label for="ingredientes">Ingredientes</label>
+                        <textarea name="ingredientes" id="ingredientes" cols="10" rows="10" formControlName="ingredientes"></textarea>
+                    </div>
+                </div>
+    
+                <div class="botones">
+                    <input type="button" *ngIf="currentStep > 1" value="Anterior" (click)="currentStep = currentStep - 1" class="btnSecundario">
+                    <input type="button" *ngIf="currentStep < 3" value="Siguiente" (click)="currentStep = currentStep + 1" class="btnPrimario" [disabled]="!canProceedToNextStep()">
+                    <input type="submit" *ngIf="currentStep === 3" value="Añadir" class="btnPrimario">
+                    <input type="button" value="Cancelar" (click)="atras()" class="btnSecundario">
+                </div>
+            </form>
+        </div>
     </div>
-    <div id="formulario">
-        <form (ngSubmit)="newProducto()" [formGroup]="productoForm">
-            <div id="divInfoBasica">
-                <div id="tituloInfoBasica" (click)="desplegarCampo('infoBasica')">
-                    <p>Información básica</p>
-                    <i id="iconoDesplegableInfo" class="fa-solid fa-angle-down"></i>
-                </div>
-                <div id="contenidoInfoBasica" *ngIf="infoBasicaDesplegada">
-                    <div class="divCampo">
-                        <label for="nombre">Nombre</label>
-                        <input type="text" name="nombre" id="nombre" required formControlName="nombre">
-                    </div>
-                    <div class="divCampo">
-                        <label for="marca">Marca</label>
-                        <input type="text" name="marca" id="marca" required formControlName="marca">
-                    </div>
-                    <div class="divCampo">
-                        <label for="precio">Precio</label>
-                        <input type="number" name="precio" id="precio" required formControlName="precio" min="0" step="0.10">
-                    </div>
-                    <div class="divCampo">
-                        <label for="stock">Stock</label>
-                        <input type="number" name="stock" id="stock" required formControlName="stock" min="0">
-                    </div>
-                    <div class="divCampo">
-                        <label for="categoria">Categoría</label>
-                        <input type="text" name="categoria" id="categoria" required formControlName="categoria">
-                    </div>
-                </div>
-            </div>
-            <div id="divImagen">
-                <div id="tituloImagen" (click)="desplegarCampo('imagenProducto')">
-                    <p>Imagen del producto</p>
-                    <i id="iconoDesplegableImagen" class="fa-solid fa-angle-down"></i>
-                </div>
-                <div id="contenidoImagen" *ngIf="imagenProducto">
-                    <img [src]="srcImagen" alt="foto del producto" style="display: none" id="previewImagen">
-                    <input type="file" accept="image/png" name="foto" style="display: none;" id="foto" formControlName="foto" (change)="cambioImagen( $event )">
-                    <label for="foto" id="btnFoto">Subir imagen</label>
-                </div>
-            </div>
-            <div id="divValoresNutri">
-                <div id="tituloValoresNut" (click)="desplegarCampo('valoresNut')">
-                    <p>Valores nutricionales</p>
-                    <i id="iconoDesplegableNutri" class="fa-solid fa-angle-down"></i>
-                </div>
-                <div id="contenidoValoresNut" *ngIf="valoresNutDesplegados">
-                    <div class="divCampo">
-                        <label for="valor_energ">Valor energético(kcal)</label>
-                        <input type="number" name="valor_energ" id="valor_energ" formControlName="valor_energetico" min="0">
-                    </div>
-                    <div class="divCampo">
-                        <label for="grasas">Grasas(g)</label>
-                        <input type="number" name="grasas" id="grasas" formControlName="grasas" min="0">
-                    </div>
-                    <div class="divCampo">
-                        <label for="saturadas">Grasas saturadas(g)</label>
-                        <input type="number" name="saturadas" id="saturadas" formControlName="grasas_saturadas" min="0">
-                    </div>
-                    <div class="divCampo">
-                        <label for="hidratos">Hidratos de carbono(g)</label>
-                        <input type="number" name="hidratos" id="hidratos" formControlName="hidratos_carbono" min="0">
-                    </div>
-                    <div class="divCampo">
-                        <label for="azucares">Azúcares(g)</label>
-                        <input type="number" name="azucares" id="azucares" formControlName="azucares" min="0">
-                    </div>
-                    <div class="divCampo">
-                        <label for="fibra">Fibra alimentaria(g)</label>
-                        <input type="number" name="fibra" id="fibra" formControlName="fibra" min="0">
-                    </div>
-                    <div class="divCampo">
-                        <label for="proteinas">Proteínas(g)</label>
-                        <input type="number" name="proteinas" id="proteinas" formControlName="proteina" min="0">
-                    </div>
-                    <div class="divCampo">
-                        <label for="sal">Sales(g)</label>
-                        <input type="number" name="sal" id="sal" formControlName="sal" min="0">
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div id="botones">
-        <input type="submit" value="Añadir" class="btnPrimario">
-        <input type="button" value="Cancelar" (click)="atras()" class="btnSecundario">
-    </div>
-</div>
-
-
+    
+</body>
