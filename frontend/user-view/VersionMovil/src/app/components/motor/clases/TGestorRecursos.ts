@@ -35,20 +35,20 @@ export class TGestorRecursos{
         return res;
     }
 
-    async borrarRecursos(malla: string, textura: string){
+    async borrarRecursos(recMalla: TRecursoMalla, mallaBorrar: any, malla: string, textura: string){
+        recMalla.eliminarMalla(mallaBorrar);
         for (let i = 0; i < this.recursos.length; i++) {
-            if (this.recursos[i].getNombre() !== malla) {
+            if (this.recursos[i].getNombre() == malla) {
                 this.recursos.splice(i, 1);
                 break;
             }
         }
         for (let i = 0; i < this.recursos.length; i++) {
-            if (this.recursos[i].getNombre() !== textura) {
+            if (this.recursos[i].getNombre() == textura) {
                 this.recursos.splice(i, 1);
                 break;
             }
         }
-        return this.recursos;
     }
 
     async getRecurso( nombre: string, tipo: string ){

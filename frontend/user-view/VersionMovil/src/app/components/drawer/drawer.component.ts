@@ -200,7 +200,6 @@ export class DrawerComponent implements AfterViewInit {
   }
 
   async borrarProductosCompradosEnServidor() {
-    this.motorServicio.getMotor().eliminarComprados();
     const productosComprados = await this.listaCompra.filter(producto => producto.comprado);
     productosComprados.forEach(producto => {
       this.productosService.deleteListaCompra(producto.id).subscribe(() => {
@@ -540,12 +539,10 @@ export class DrawerComponent implements AfterViewInit {
   }
 
   async eliminar(producto: any) {
-    console.log(producto, producto.idLista)
     producto.enListaCompra = false;
     await this.borrarProd(producto.idLista);
     this.getListaCompraUsu();
-    console.log(producto.id)
-    await this.motorServicio.getMotor().eliminarPines(producto.id);
+    this.motorServicio.getMotor().eliminarPin(producto.id);
 
     //ESTADISTICAS
     let tipo = 'eliminado';
@@ -688,7 +685,6 @@ export class DrawerComponent implements AfterViewInit {
 
   //MARCAR COMO COMPRADO
   marcarComprado(producto: any) {
-    this.motorServicio.getMotor().marcarComprado(producto.id);
     producto.comprado = true;
     this.actualizarCantidad(
       producto.id,

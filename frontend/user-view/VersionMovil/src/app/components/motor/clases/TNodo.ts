@@ -23,7 +23,7 @@ export class TNodo{
     }
 
     // Método para eliminar un hijo
-    async eliminarHijo(nodoHijo: TNodo) {
+    async eliminarHijo(nodoHijo: TNodo | undefined) {
         const nodoBorrar = this.hijos.find(nodo => nodo === nodoHijo);
         if (nodoBorrar) {
             // Encuentra el índice del elemento a eliminar en la matriz
@@ -103,7 +103,7 @@ export class TNodo{
         glMatrix.mat4.rotateX(this.matrizTransf, this.matrizTransf, this.rotacion[0]);
         glMatrix.mat4.rotateY(this.matrizTransf, this.matrizTransf, this.rotacion[1]);
         glMatrix.mat4.rotateZ(this.matrizTransf, this.matrizTransf, this.rotacion[2]);
-        console.log(this.rotacion);
+        
         this.actualizarMatriz = true;
     }
 

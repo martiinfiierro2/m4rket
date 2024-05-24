@@ -1,9 +1,7 @@
-import { mat4, mat3, vec3, vec4 } from 'gl-matrix';
+import { mat4, vec3, vec4 } from 'gl-matrix';
 import * as OBJ from 'webgl-obj-loader';
 import { motor } from '../motor.component';
-import { glMatrix } from 'gl-matrix';
 export class Malla {
-    //mesh
     private mesh: any;
     private matTrans!: any;
     private gl!: WebGL2RenderingContext;
@@ -21,7 +19,7 @@ export class Malla {
         this.nombre = filename;
         this.mesh = new OBJ.Mesh(this.OBJfile);
     }
-
+    
     getGL(){
         return this.gl;
     }
@@ -99,8 +97,18 @@ export class Malla {
     
         // Aplicar la rotación en torno al eje Y
         mat4.rotate(this.viewMatrix, this.viewMatrix, motor.rotacion*(Math.PI / 180), [0, 1, 0]);
+        
+        /*const frustum = this.extractFrustumPlanes(this.projectionMatrix, this.viewMatrix);
+
+        // Definir las coordenadas mínimas y máximas de la caja de contención del objeto (AABB)
+        let this.meshBounding = this.calculateBoundingBox();
     
-        // Crear matriz modelo-vista
+        // Verificar si la AABB del objeto está dentro del frustum
+        if (!this.isBoxInFrustum(frustum, this.meshBounding.min, this.meshBounding.max)) {
+            // Si el objeto no está dentro del frustum, no se renderiza
+            return;
+        }*/
+
         let modelViewMatrix = mat4.create();
         mat4.multiply(modelViewMatrix, this.viewMatrix, modelMatrix);
     
@@ -133,13 +141,13 @@ export class Malla {
         
         // Tell the infoPrgram we bound the texture to texture unit 0
         if(infoPrgram == motor.program){
-            this.iniciarmesh(this.mesh);
+            this.iniciarmesh();
             this.gl!.uniform1i(this.gl.getUniformLocation(infoPrgram, 'uSampler'), 0);
             // Bind de la textura
             this.gl!.activeTexture(this.gl!.TEXTURE0);
             this.gl!.bindTexture(this.gl!.TEXTURE_2D, this.texture);
         }else if(infoPrgram == motor.programColor){
-            this.iniciarmeshColor(this.mesh);
+            this.iniciarmeshColor();
             let location = this.gl.getUniformLocation(motor.programColor, 'uColor');
             this.gl.uniform4fv(location, this.color);
         }
@@ -153,53 +161,53 @@ export class Malla {
         );
     }
 
-    iniciarmeshColor(mesh: any){
-        if(!mesh){
+    iniciarmeshColor(){
+        if(!this.mesh){
             return
         }
-        OBJ.initMeshBuffers(this.gl, mesh);
+        OBJ.initMeshBuffers(this.gl, this.mesh);
         let vertexPositionAttributeLocation = 0;
 
         this.gl!.enableVertexAttribArray(vertexPositionAttributeLocation);
-        this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, mesh.vertexBuffer);
-        this.gl!.vertexAttribPointer(vertexPositionAttributeLocation, mesh.vertexBuffer.itemSize, this.gl!.FLOAT, false, 0, 0);
+        this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, this.mesh.vertexBuffer);
+        this.gl!.vertexAttribPointer(vertexPositionAttributeLocation, this.mesh.vertexBuffer.itemSize, this.gl!.FLOAT, false, 0, 0);
 
         
-        this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, mesh.indexBuffer);
-        return mesh;
+        this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.mesh.indexBuffer);
+        return this.mesh;
     }
 
-    iniciarmesh(mesh: any){ 
-        if(!mesh){
+    iniciarmesh(){ 
+        if(!this.mesh){
             return
         }
-        OBJ.initMeshBuffers(this.gl, mesh);
+        OBJ.initMeshBuffers(this.gl, this.mesh);
         let infoPrgramProgram = this.gl.getParameter(this.gl.CURRENT_PROGRAM);
         let vertexPositionAttributeLocation = this.gl.getAttribLocation(infoPrgramProgram, "aVertexPosition");
         let textureCoordAttributeLocation = this.gl.getAttribLocation(infoPrgramProgram, "aTextureCoord");
         let normalCoordAttributeLocation = this.gl.getAttribLocation(infoPrgramProgram, "aNormalCoord");
 
         this.gl.enableVertexAttribArray(vertexPositionAttributeLocation);
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, mesh.vertexBuffer);
-        this.gl.vertexAttribPointer(vertexPositionAttributeLocation, mesh.vertexBuffer.itemSize, this.gl.FLOAT, false, 0, 0);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.mesh.vertexBuffer);
+        this.gl.vertexAttribPointer(vertexPositionAttributeLocation, this.mesh.vertexBuffer.itemSize, this.gl.FLOAT, false, 0, 0);
 
         this.gl.enableVertexAttribArray(textureCoordAttributeLocation);
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, mesh.textureBuffer);
-        this.gl.vertexAttribPointer(textureCoordAttributeLocation, mesh.textureBuffer.itemSize, this.gl.FLOAT, false, 0, 0);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.mesh.textureBuffer);
+        this.gl.vertexAttribPointer(textureCoordAttributeLocation, this.mesh.textureBuffer.itemSize, this.gl.FLOAT, false, 0, 0);
 
         this.gl.enableVertexAttribArray(normalCoordAttributeLocation);
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, mesh.normalBuffer);
-        this.gl.vertexAttribPointer(normalCoordAttributeLocation, mesh.normalBuffer.itemSize, this.gl.FLOAT, false, 0, 0);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.mesh.normalBuffer);
+        this.gl.vertexAttribPointer(normalCoordAttributeLocation, this.mesh.normalBuffer.itemSize, this.gl.FLOAT, false, 0, 0);
 
-        this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, mesh.indexBuffer);
-        return mesh;
+        this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.mesh.indexBuffer);
+        return this.mesh;
     }
 
-    calculateBoundingBox(mesh: any) {
+    calculateBoundingBox() {
         let minX = Infinity, minY = Infinity, minZ = Infinity;
         let maxX = -Infinity, maxY = -Infinity, maxZ = -Infinity;
     
-        const vertices = mesh.vertices;
+        const vertices = this.mesh.vertices;
     
         for (let i = 0; i < vertices.length; i += 3) {
             const x = vertices[i];

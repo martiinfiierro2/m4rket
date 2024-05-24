@@ -14,6 +14,14 @@ export class EModelo {
     cargarFichero( fichero: any ){
     }
 
+    getRecursoMalla(){
+        return this.recursoMalla;
+    }
+
+    getRecursoTextura(){
+        return this.recursoTextura;
+    }
+
     async dibujar(matTrans: any, id: number): Promise<void>{
         await new Promise<void>(resolve => {
             if(this.recursoMalla) {

@@ -9,6 +9,16 @@ export class TRecursoMalla extends TRecurso {
         super(nombre);
     }
 
+    eliminarMalla(malla: Malla){
+        for(let i = 0; i < this.mallas.length; i++){
+            if(this.mallas[i] == malla){
+                console.log(this.mallas[i])
+                this.mallas.splice(i, 1);
+                break;
+            }
+        }
+    }
+
     async cargarFicheroAPI(nombre: string): Promise<any>{}
 
     override cargarFichero(filename: string): Promise<void> {
