@@ -907,9 +907,8 @@ export class MotorComponent implements AfterViewInit {
           }
         }, 200); // Ajusta el tiempo según sea necesario
       }
-    });
-    
-}
+    });  
+  }
 
   async getUsuarioLog() {
     const idUsuario = localStorage.getItem('idUsuario');
@@ -984,16 +983,20 @@ export class MotorComponent implements AfterViewInit {
   async eliminarPines(idProd: number){
     let pinBorrar = this.pines.find(pin => pin.idProd === idProd);
     const entidad = pinBorrar!.nodo.getEntidad();
+    pinBorrar!.nodo.setEntidad(null)
     const malla = entidad.recursoMalla;
 
     await malla.mallas.forEach((malla: any) => {
       var buffers = malla.getBuffers();
       var gl = malla.getGL();
-
-      gl.deleteBuffer(buffers.vertexBuffer);
-      gl.deleteBuffer(buffers.normalBuffer);
-      gl.deleteBuffer(buffers.textureBuffer);
-      gl.deleteBuffer(buffers.indexBuffer);
+      if(gl && buffers){
+        console.log(gl.deleteBuffer(buffers.vertexBuffer));
+        console.log(gl.deleteBuffer(buffers.normalBuffer));
+        console.log(gl.deleteBuffer(buffers.textureBuffer));
+        console.log(gl.deleteBuffer(buffers.indexBuffer));
+      } else {
+        console.log("WebGL context or buffers not available.");
+      }
     });
     
     for(let i = 0; i < this.pines.length; i++){
@@ -1001,6 +1004,7 @@ export class MotorComponent implements AfterViewInit {
         this.pines.splice(i, 1);
       }
     }
+    await this.mercado.recorrer(mat4.create());
   }
 
   async crearPines(lista: lista[], number: number) {
