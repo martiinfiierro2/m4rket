@@ -741,7 +741,6 @@ export class MotorComponent implements AfterViewInit {
     await this.mercado.recorrer(mat4.create());
 
     //EVENTOS
-    const canvas = motor.gl.canvas;
     let pinchTimeout: any;
     let touchMoveTimeout: any;
     let isWaitingForSingleTouch = false;
@@ -850,7 +849,7 @@ export class MotorComponent implements AfterViewInit {
   
     // Agregar el evento de clic derecho al canvas
     // Agrega un evento touchstart para detectar cuando se toca la pantalla
-    canvas.addEventListener('wheel', (event: any) => {
+    motor.gl.canvas.addEventListener('wheel', (event: any) => {
         // Verificar si el evento es una rueda del ratón y no un toque
         if (event.type === 'wheel') {
             handleMouseWheel(event as WheelEvent);
@@ -858,7 +857,7 @@ export class MotorComponent implements AfterViewInit {
     });
     
     // Agregar listeners de eventos táctiles al canvas
-    canvas.addEventListener('touchstart', (event: any) => {
+    motor.gl.canvas.addEventListener('touchstart', (event: any) => {
       this.touchStartTime = new Date().getTime();
     
       if (event.touches.length === 2) {
@@ -878,7 +877,7 @@ export class MotorComponent implements AfterViewInit {
       handleClick(event);
     });
     
-    canvas.addEventListener('touchmove', (event: any) => {
+    motor.gl.canvas.addEventListener('touchmove', (event: any) => {
       if (event.touches.length === 2) {
         handlePinch(event);
       } else {
@@ -886,7 +885,7 @@ export class MotorComponent implements AfterViewInit {
       }
     });
     
-    canvas.addEventListener('touchend', (event: any) => {
+    motor.gl.canvas.addEventListener('touchend', (event: any) => {
       this.touchEndTime = new Date().getTime();
     
       if (event.touches.length === 0) {
@@ -988,17 +987,13 @@ export class MotorComponent implements AfterViewInit {
     const malla = entidad.recursoMalla;
 
     await malla.mallas.forEach((malla: any) => {
-      let vertexBuffer = malla.vertexBuffer;
-      motor.gl.deleteBuffer(vertexBuffer);
+      var buffers = malla.getBuffers();
+      var gl = malla.getGL();
 
-      let normalBuffer = malla.normalBuffer;
-      motor.gl.deleteBuffer(normalBuffer);
-
-      let indexBuffer = malla.indexBuffer;
-      motor.gl.deleteBuffer(indexBuffer);
-
-      let textureBuffer = malla.tetxureBuffer;
-      motor.gl.deleteBuffer(textureBuffer);
+      gl.deleteBuffer(buffers.vertexBuffer);
+      gl.deleteBuffer(buffers.normalBuffer);
+      gl.deleteBuffer(buffers.textureBuffer);
+      gl.deleteBuffer(buffers.indexBuffer);
     });
     
     for(let i = 0; i < this.pines.length; i++){
