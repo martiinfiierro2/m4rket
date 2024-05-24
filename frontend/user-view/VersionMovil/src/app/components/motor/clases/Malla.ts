@@ -21,7 +21,6 @@ export class Malla {
         this.gl = motor.gl;
     }
     
-
     public deleteBuffers(){
         if (this.mesh) {
             if (this.mesh.vertexBuffer) {
