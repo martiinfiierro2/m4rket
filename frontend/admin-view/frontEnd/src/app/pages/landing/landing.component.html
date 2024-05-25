@@ -1,5 +1,6 @@
+
 <header>
-        <div id="logoTitulo">
+    <div id="logoTitulo">
             <img src="../../../assets/img/logoM4RKET.webp" alt="Logo de la aplicación de M4RKET" width="100" height="100">
             <h1>M4RKET</h1>
         </div>
@@ -8,13 +9,14 @@
             <button class="btnCerrar" (click)="cerrarMenu()">X</button>
             <ul class="nav-list">
                 <li><a href="/login">Panel administración</a></li>
+                <li>APP</li>
                 <li><a href="/corp">4AM</a></li>
                 <li><a href="/objetoAprendizaje">Tutoriales</a></li>
                 <li><a href="/dataset">Dataset</a></li>
                 <li>
                     <div id="redesSociales">
                         <a href="https://www.instagram.com/m4rketapp/" class="icon-instagram"></a>
-                        <a href="https://www.twitter.com/m4rketapp/"><img src="../../../assets/img/twitter.webp" alt="Logo Twitter" class="logos" width="30" height="30"></a>
+                        <a href="https://www.twitter.com/m4rketapp/"><i class="fa-brands fa-x-twitter"></i></a>
                     </div>
                 </li>
             </ul>
@@ -23,8 +25,17 @@
     
     <main>
         <section>
-            <h2>¿Qué es M4RKET?</h2>
-            <p>M4RKET es un aplicación movil creada por los integrantes de <a href="https://m4rket.ovh/corp">4AM</a>. La idea surge como una solución a la perdida de tiempo en los supermercados a la hora de realizar la compra y la mala experiencia de los usuarios para localizar ciertos productos.<br><br>Para ello hemos creado un sistema de localización de productos que falicitará al usuario encontrar los producots y por lo tanto, reducirá el tiempo que los trabajadores de las grandes superficies pierden en la atención al público, dando como resultado una eficacia mayor a la hora de realizar sus funciones principales. Otras funciones de la aplicación son:</p>
+            <div class="informacion presentacion_producto">
+                <div class="texto">
+                    <h2>M4RKET la revolución de hacer la compra</h2>
+                    <p>M4RKET es una aplicación móvil creada por los integrantes de <a href="https://m4rket.ovh/corp">4AM</a>. La idea surge como una solución a la pérdida de tiempo en los supermercados a la hora de realizar la compra y la mala experiencia de los usuarios para localizar ciertos productos.</p>
+                </div>
+                <div class="imagen">
+                    <img src="../../../assets/img/Main.png" alt="Imagen de la interfaz principal" width="500px">
+                </div>
+            </div>
+            
+               <!--
                 <div id="listadoFunciones">
                     <article>
                         <p>Lista de la compra</p>
@@ -39,42 +50,62 @@
                         <img src="../../../assets/img/chatbot.webp" alt="Imagen de un chat" width="180" height="200">
                     </article>
                 </div>
+                -->
         </section>
 
         <section>
-            <h2>¿Porque elegir M4RKET?</h2>
-            <div class="contenidoCentrado">
-                <p>Nuestra aplicación ofrece unas ventajas que las hacen destacar del resto de apps del mercado, tanto como si eres un comercio interesado en contactar nuestros servicios o como si eres un usuario interesado en probar los beneficio de la aplicación</p>
-                <div id="listadoMotivos">
-                    <article>
-                        <p>Como comercio</p>
-                        <ul>
-                            <li>Acceso a múltiples estádisticas</li>
-                            <li>Focalización del personal en sus tareas</li>
-                            <li>Gestión de stock de manera precisa</li>
-                            <li>Modernización de sus servicios</li>
-                        </ul>
-                    </article>
-                    <article>
-                        <p>Como usuario</p>
-                        <ul>
-                            <li>Lista de la compra interactiva</li>
-                            <li>Mapa de la ruta óptima</li>
-                            <li>Asistente virtual informativo</li>
-                            <li>Buscador con localización</li>
-                        </ul>
-                    </article>
+            <div class="informacion info-listacompra">
+                <div class="imagen">
+                    <img src="../../../assets/img/compralista.png" alt="Imagen ejemplo de lista de la compra" width="450px">
                 </div>
+                <div class="texto">
+                    <h2>Proporciona a tus clientes una increible experiencia de compra</h2>
+                    <h3>Interfaz 3D</h3>
+                    <p>Con M4RKET tus clientes podrán ver su lista de la compra en una interfaz 3D ahorrándoles mucho tiempo y permitiendo a los empleados dedicar tiempo a otras tareas.</p>
+                </div>
+            </div>
+            <div class="informacion info-fermin">
+                <div class="texto">
+                    <h3>Asistente virtual</h3>
+                    <p>Fermin, nuestro asistente virtual que guía a tus clientes hacia productos y ofertas. Simplifica la experiencia de compra, aumenta la satisfacción del cliente y maximiza las ventas</p>
+                </div>
+                <div class="imagen">
+                    <img src="../../../assets/img/ayuda-fermin.png" alt="Imagen del asistente virtual" width="450px">
+                </div>
+            </div>
+            <div class="informacion info-nutri">
+                <div class="imagen">
+                    <img src="../../../assets/img/info-nutri.png" alt="Imagen de la informacion nutricional" width="450px">
+                </div>
+                <div class="texto">
+                    <h3>Información de los productos</h3>
+                    <p>Al mostrar información detallada como disponibilidad, ingredientes y valores nutricionales, brindamos una experiencia de compra transparente y confiable. Esto ayuda a los clientes a tomar decisiones informadas, promueve una alimentación saludable y genera confianza en la calidad de nuestros productos.</p>
+                </div>
+            </div>        
+        </section>
+        <section>
+            <div class="informacion administrador">
+                <div class="texto">
+                    <h2>Panel de Control Integral</h2>
+                    <p>Nuestra interfaz de administrador ofrece un control completo y eficiente de tu negocio. Con secciones dedicadas al control de productos y stock, gestión de promociones y análisis detallado de estadísticas de uso, te proporcionamos las herramientas necesarias para optimizar tus operaciones.<br><br> Desde monitorear el stock hasta comprender el comportamiento del usuario, nuestra interfaz te brinda el poder de tomar decisiones estratégicas basadas en datos en tiempo real.</p>
+                </div>
+                <div class="imagen">
+                    <img src="../../../assets/img/stats.png" alt="Imagen de la informacion nutricional" width="500px">
+                </div>
+
             </div>
         </section>
 
-        <section id="comoUsar">
+        <section class="comoUsar">
             <h2>¿Como usar M4RKET?</h2>
             <div id="contenidoComoUsar">
                 <p>M4RKET tiene un funcionamiento muy sencillo e intuitivo para que todo tipo de usuarios puedan accedere y hacer uso de la aplicación, ya sean usuarios con conocimientos tecnológicos como usarios que no.</p>
                 <p>Para la gente que tenga alguna duda o quiera consultar más información sobre nuestra app y su temática, puede acceder a nuestro <a href="/objetoAprendizaje">objeto de aprendizaje</a> para nutrirse de conocimiento</p>
-                <a href="/objetoAprendizaje"><img src="../../../assets/img/ObjetoAprendizaje.webp" alt="Captura de pantalla del objeto de aprendizaje" width="800" height="500"></a>
             </div>
+            <div class="botonAprender"><a href="/objetoAprendizaje">
+                <div class="boton"> Aprende a usar M4RKET<i class="fa-solid fa-arrow-right"></i></div>
+            </a></div>
+            
         </section>
 
     </main>

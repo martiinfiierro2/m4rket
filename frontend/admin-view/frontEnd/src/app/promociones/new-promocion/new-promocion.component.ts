@@ -5,7 +5,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PromocionesService } from '../../services/promociones.service';
 import { tipoPromocion } from '../new-tipo-promocion/new-tipo-promocion.component';
-
+import { PromocionesComponent } from '../../pages/promociones/promociones.component';
 
 export interface NewPromocion{
   id: number,
@@ -42,11 +42,13 @@ export class NewPromocionComponent {
   
   constructor (private router: Router,
                private fb: FormBuilder,
-               private promocionService: PromocionesService){}
+               private promocionService: PromocionesService,
+              private promocionComponent: PromocionesComponent){}
 
 
   irAtras(){
-    this.router.navigate(['/promociones']);
+    //this.router.navigate(['/promociones']);
+   this.promocionComponent.cerrarModal();
   }
 
   getTipoPromociones(){
@@ -60,7 +62,9 @@ export class NewPromocionComponent {
     this.promocionService.postPromociones(this.promocionForm.value)
       .subscribe( res => {
         console.log(res);
-        this.router.navigate(['/promociones']);
+        //this.router.navigate(['/promociones']);
+        this.promocionComponent.getPromociones();
+        this.promocionComponent.cerrarModal();
       });
   }
 

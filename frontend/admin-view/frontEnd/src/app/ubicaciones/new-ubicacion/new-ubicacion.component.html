@@ -1,11 +1,20 @@
-<div id="editUbicacion">
-    <h2>Añadir ubicación</h2>
-    <form (ngSubmit)="anyadirUbi()" [formGroup]="ubiForm">
-        <label for="referencia">Referencia<input type="text" name="referencia" id="referencia" formControlName="referencia"></label>
-        <label for="posicion">Posición<input type="number" name="posicion" id="posicion" formControlName="posicion"></label>
-        <div id="buttons">
-            <input type="submit" value="Añadir" class="btnPrimario">
-            <input type="button" value="Cancelar" (click)="atras()" class="btnSecundario">
-        </div>
-    </form>
-</div>
+<body>
+    <div class="add">
+        <h2>Añadir ubicación</h2>
+        <form (ngSubmit)="anyadirUbi()" [formGroup]="ubiForm">
+            <div class="divCampo">
+                <label for="referencia">Referencia</label>
+                    <input type="text" name="referencia" id="referencia" formControlName="referencia">
+            </div>
+           <div class="divCampo">
+                <label for="posicion">Posición</label>
+                <input type="number" name="posicion" id="posicion" formControlName="posicion">
+           </div>
+            <div id="botones">
+                <input type="submit" value="Añadir" class="btnPrimario">
+                <input type="button" value="Cancelar" class="btnSecundario" (click)="atras()">
+            </div>
+        </form>
+    </div>
+</body>
+

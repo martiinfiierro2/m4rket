@@ -1,3 +1,4 @@
+
 h2{
     margin-left: 1em;
     margin-bottom: 1em;
@@ -23,6 +24,15 @@ h2{
             display: inline-block;
             margin-right: 5px;
             margin-left: 5px;
+            padding: .5em;
+        }
+
+        #botonesHeader button {
+          border-radius: 20px;
+          height: 30px;
+        }
+        #botonesHeader button i{
+          padding-right: .5em;
         }
     
         #divSearch{
@@ -78,6 +88,10 @@ h2{
 
   .enlace{
       cursor: pointer;
+  }
+
+  .enlace.nombre{
+    max-width: 300px;
   }
 
   .fa-x{
@@ -199,4 +213,10 @@ h2{
       color: rgb(99, 154, 243);
     }
 
-  
+  .anadir_ubi{
+    background-color: #51877A;
+    color: white;
+    border-radius: 25px;
+    border: none;
+    height: 25px;
+  }

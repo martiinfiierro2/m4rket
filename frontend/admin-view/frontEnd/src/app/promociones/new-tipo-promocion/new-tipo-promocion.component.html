@@ -1,13 +1,25 @@
-<div id="divAdd">
-    <h2>Crear tipo de promoción</h2>
-    <form (ngSubmit)="newTipoPromocion()" [formGroup]="tipoPromocionForm">
-        <label for="nombre">Nombre<input type="text" name="nombre" id="nombre" formControlName="nombre"></label>
-        <label for="descripcion">Descripción <textarea name="descripcion" id="descripcion" cols="17" rows="5" formControlName="descripcion"></textarea></label>
-        <label for="modificador">Modificador<input type="number" name="modificador" id="modificador" formControlName="modificador"></label>
-        <div id="buttons">
-            <input type="submit" value="Añadir" class="btnPrimario">
-            <input type="button" value="Cancelar" (click)="irAtras()" class="btnSecundario">
-        </div>
-    </form>
-</div>
+
+<body>
+    <div class="add">
+        <h2>Añadir tipo promoción</h2>
+        <form (ngSubmit)="newTipoPromocion()" [formGroup]="tipoPromocionForm">
+            <div class="divCampo">
+                <label for="nombre">Nombre</label>
+                <input type="text" name="nombre" id="nombre" formControlName="nombre">
+            </div>
+           <div class="divCampo descripcion">
+            <label for="descripcion">Descripción</label>
+                <textarea name="descripcion" id="descripcion" cols="17" rows="5" formControlName="descripcion"></textarea>
+           </div>
+           <div class="divCampo">
+            <label for="modificador">Modificador</label>
+                <input type="number" name="modificador" id="modificador" formControlName="modificador">
+           </div>
+            <div id="botones">
+                <input type="submit" value="Añadir" class="btnPrimario">
+                <input type="button" value="Cancelar" class="btnSecundario" (click)="irAtras()">
+            </div>
+        </form>
+    </div>
+</body>
 

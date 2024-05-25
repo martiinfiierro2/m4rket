@@ -20,7 +20,7 @@ hr{
   }
 
   .filtro .radio input:checked + .name {
-    color: #58677a;
+    color: #51877a;
     font-weight: 600;
   }
 

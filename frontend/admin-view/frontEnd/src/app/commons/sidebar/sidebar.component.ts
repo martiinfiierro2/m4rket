@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Renderer2 } from '@angular/core';
 import { UsuariosService } from "../../services/usuarios.service";
 import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -20,9 +20,13 @@ export class SidebarComponent {
   private usuario;
   clase = 'linea';
 
+  isSidebarSmall: boolean = false;
+  isNightMode: boolean = false;
 
+  
   constructor( private usuarioService: UsuariosService,
-               private route: Router){}
+               private route: Router,
+               private renderer: Renderer2){}
 
   ngOnInit(){
     this.getUsuario();
@@ -38,6 +42,27 @@ export class SidebarComponent {
       })
   }
   
+  toggleNightMode(): void {
+    this.isNightMode = true;
+    document.body.classList.toggle('dark-theme');
+  }
+
+  toggleDayMode(): void {
+    this.isNightMode = false;
+    document.body.classList.toggle('dark-theme');
+  }
+
+  
+  toggleSidebarSize(): void {
+    this.isSidebarSmall = !this.isSidebarSmall;
+    const sidebar = document.getElementById('sidebar_menu');
+    if (this.isSidebarSmall) {
+      sidebar.classList.remove('expanded');
+    } else {
+      sidebar.classList.add('expanded');
+    }
+  }
+
 
   logOut(){
     let email;

@@ -1,9 +1,8 @@
-#sidebar{
-    width: 15%;
-}
+
 
 #contenido{
-    width:85%;
+    width:100%;
+    height: 100vh;
     background-color: #efecec;
     
 }
@@ -11,5 +10,6 @@
 #divAll{
     display: flex;
     flex-direction: row;
+    overflow: hidden;
     /*background-color: rgb(174, 174, 174);*/
 }

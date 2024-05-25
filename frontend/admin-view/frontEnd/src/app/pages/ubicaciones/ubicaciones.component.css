@@ -1,3 +1,11 @@
+#botonesHeader button {
+  border-radius: 20px;
+  height: 30px;
+}
+#botonesHeader button i{
+  padding-right: .5em;
+}
+
 #header{
     display: flex;
     flex-direction: row;
@@ -125,4 +133,14 @@
   
     .modal button{
       width: 20%;
+    }
+
+    .anadir_ubi{
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
     }

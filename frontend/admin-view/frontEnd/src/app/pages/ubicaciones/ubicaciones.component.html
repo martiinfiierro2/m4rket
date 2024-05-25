@@ -1,32 +1,61 @@
 <div id="header">
     <div id="divSearch">
-        <input type="text" name="search" id="search" class="barraBusqueda" placeholder="Búsqueda">
+        <input type="text" name="search" id="search" class="barraBusqueda" placeholder="Buscar referencia">
     </div>
     <div id="botonesHeader">
-        <button (click)="newUbicacion()" class="btnPrimario">Añadir ubicación</button>
+        <button (click)="newUbicacion()" class="btnPrimario"><i class="fa-solid fa-plus"></i>Añadir ubicación</button>
     </div>
 </div>
 
 <div id="listadoUbicaciones">
     <table class="table">
         <thead>
-            <tr>
-                <th>Referencia</th>
-                <th>Posición</th>
-                <th>Acción</th>
-            </tr>
+          <tr>
+            <th>Referencia</th>
+            <th>Posición</th>
+            <th>Acción</th>
+          </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let ubicacion of ubicaciones">
-                <td> {{ ubicacion.referencia }}</td>
-                <td> {{ ubicacion.posicion }}</td>
-                <td>
-                    <button (click)="ejecutarAccion(ubicacion.id)" class="btnIcon" id="btnBorrar"><span class="iconoAccion fa-solid fa-trash"></span></button>
-                    <button (click)="editUbi(ubicacion.id)" class="btnIcon" id="btnEdit"><span class="iconoAccion fa-solid fa-pen"></span></button>
-                </td>
-            </tr>
+          <tr *ngFor="let ubicacion of ubicaciones">
+            <td>
+              <ng-container *ngIf="!ubicacion.isEdit; else editReferencia">
+                {{ ubicacion.referencia }}
+              </ng-container>
+              <ng-template #editReferencia>
+                <input type="text" [(ngModel)]="ubicacion.referencia" />
+              </ng-template>
+            </td>
+            <td>
+              <ng-container *ngIf="!ubicacion.isEdit; else editPosicion">
+                {{ ubicacion.posicion }}
+              </ng-container>
+              <ng-template #editPosicion>
+                <input type="text" [(ngModel)]="ubicacion.posicion" />
+              </ng-template>
+            </td>
+            <td>
+              <ng-container *ngIf="!ubicacion.isEdit; else editActions">
+                <button (click)="borrarUbicacion(ubicacion.id)" class="btnIcon" id="btnBorrar">
+                  <span class="iconoAccion fa-solid fa-trash"></span>
+                </button>
+                <button (click)="editUbi(ubicacion)" class="btnIcon" id="btnEdit">
+                  <span class="iconoAccion fa-solid fa-pen"></span>
+                </button>
+              </ng-container>
+              <ng-template #editActions>
+                <button (click)="saveUbi(ubicacion)" class="btnIcon" id="btnSave">
+                  <span class="iconoAccion fa-solid fa-check"></span>
+                </button>
+                <button (click)="cancelarEdit(ubicacion)" class="btnIcon" id="btnCancel">
+                  <span class="iconoAccion fa-solid fa-times"></span>
+                </button>
+              </ng-template>
+            </td>
+          </tr>
         </tbody>
-    </table>
+      </table>
+      
 
     <!-- Paginación -->
     <div class="d-flex justify-content-center">
@@ -35,11 +64,13 @@
     </div>
 
 </div>
+<div class="anadir_ubi"  [style]="visualizacionModalUbi"> 
+    <app-new-ubicacion></app-new-ubicacion>
+</div>
 
 
 
-
-<!-- Modal -->
+<!-- Modal
 <div class="modal" id="mensajeModal">
     <div class="modal-content">
       <span class="close" (click)="cerrarModal()">&times;</span>
@@ -48,4 +79,4 @@
         <button (click)="confirmarBorrado()">Confirmar</button>
       </div>
     </div>
-</div>
+</div> -->

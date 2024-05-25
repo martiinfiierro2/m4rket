@@ -4,6 +4,7 @@ import { PromocionesService } from '../../services/promociones.service';
 import { Router } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { PromocionesComponent } from '../../pages/promociones/promociones.component';
 
 
 export interface tipoPromocion{
@@ -34,17 +35,20 @@ export class NewTipoPromocionComponent {
   
   constructor( private fb: FormBuilder,
                private promocionService: PromocionesService,
-               private router: Router){}
+               private router: Router,
+               private promocionComponent: PromocionesComponent){}
 
 
   irAtras(){
-    this.router.navigate(['/promociones']);
+    //this.router.navigate(['/promociones']);
+    this.promocionComponent.cerrarModal();
   }
 
   newTipoPromocion(){
 
     console.log(this.tipoPromocionForm.value);
-    
+    this.promocionComponent.getPromociones();
+        this.promocionComponent.cerrarModal();
 
     if (!this.tipoPromocionForm.valid) {
       console.warn('errores formulario');

@@ -1,36 +1,83 @@
 <div id="header">
     <div id="divSearch">
-        <input type="text" name="search" id="search" class="barraBusqueda" placeholder="Búsqueda">
+        <input type="text" name="search" id="search" class="barraBusqueda" placeholder="Buscar promoción">
     </div>
     <div id="botonesHeader">
-        <button (click)="irNuevaPromo()" class="btnPrimario">Añadir promoción</button>
-        <button (click)="irNuevoTipoPromo()" class="btnSecundario">Añadir tipo promoción</button>
+        <!--
+        <button (click)="irNuevaPromo()" class="btnPrimario">Añadir promoción</button>-->
+        <button (click)="mostrarModal()" class="btnPrimario"><i class="fa-solid fa-plus"></i>Añadir promoción</button>
+        <button (click)="irNuevoTipoPromo()" class="btnSecundario"><i class="fa-solid fa-plus"></i>Añadir tipo promoción</button>
     </div>
 </div>
 <div id="listadoPromociones" *ngIf="promociones">
     <table class="table">
         <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Tipo</th>
-                <th>Fecha inicio</th>
-                <th>Fecha fin</th>
-                <th>Acción</th>
-            </tr>
+          <tr>
+            <th>Nombre</th>
+            <th>Tipo</th>
+            <th>Fecha inicio</th>
+            <th>Fecha fin</th>
+            <th>Acción</th>
+          </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let promocion of promociones">
-                <td> {{ promocion.nombre }} </td>
-                <td> {{ promocion.tipopromo.nombre }} </td>
-                <td> {{ promocion.fecha_ini }} </td>
-                <td> {{ promocion.fecha_fin }}</td>
-                <td>
-                    <button (click)="borrarPromo(promocion.id)" class="btnIcon" id="btnBorrar"><span class="iconoAccion fa-solid fa-trash"></span></button>
-                    <button (click)="irEditPromo(promocion.id)" class="btnIcon" id="btnEdit"><span class="iconoAccion fa-solid fa-pen"></span></button>
-                </td>
-            </tr>
+          <tr *ngFor="let promocion of promociones">
+            <td>
+              <ng-container *ngIf="!promocion.isEdit; else editNombre">
+                {{ promocion.nombre }}
+              </ng-container>
+              <ng-template #editNombre>
+                <input [(ngModel)]="promocion.nombre" />
+              </ng-template>
+            </td>
+            <td>
+                <ng-container *ngIf="!promocion.isEdit; else editTipo">
+                  {{ promocion.tipopromo.nombre }}
+                </ng-container>
+                <ng-template #editTipo>
+                  <select [(ngModel)]="promocion.id_tipoPromo">
+                    <option *ngFor="let tipoPromo of tipoPromos" [value]="tipoPromo.id">{{ tipoPromo.nombre }}</option>
+                  </select>
+                </ng-template>
+              </td>
+            <td>
+              <ng-container *ngIf="!promocion.isEdit; else editFechaIni">
+                {{ promocion.fecha_ini }}
+              </ng-container>
+              <ng-template #editFechaIni>
+                <input type="date" [(ngModel)]="promocion.fecha_ini" />
+              </ng-template>
+            </td>
+            <td>
+              <ng-container *ngIf="!promocion.isEdit; else editFechaFin">
+                {{ promocion.fecha_fin }}
+              </ng-container>
+              <ng-template #editFechaFin>
+                <input type="date" [(ngModel)]="promocion.fecha_fin" />
+              </ng-template>
+            </td>
+            <td>
+              <ng-container *ngIf="!promocion.isEdit; else editActions">
+                <button (click)="editPromo(promocion)" class="btnIcon" id="btnEdit">
+                  <span class="iconoAccion fa-solid fa-pen"></span>
+                </button>
+                <button (click)="borrarPromo(promocion.id)" class="btnIcon" id="btnBorrar">
+                  <span class="iconoAccion fa-solid fa-trash"></span>
+                </button>
+              </ng-container>
+              <ng-template #editActions>
+                <button (click)="savePromo(promocion)" class="btnIcon" id="btnSave">
+                  <span class="iconoAccion fa-solid fa-check"></span>
+                </button>
+                <button (click)="cancelarEdit(promocion)" class="btnIcon" id="btnCancel">
+                  <span class="iconoAccion fa-solid fa-times"></span>
+                </button>
+              </ng-template>
+            </td>
+          </tr>
         </tbody>
-    </table>
+      </table>
+      
 
     <!-- Paginación -->
     <div class="d-flex justify-content-center">
@@ -38,5 +85,12 @@
         </app-pagination>
     </div>
     
+   
+</div>
+<div class="anadir_promo"  [style]="visualizacionModalPromo"> 
+    <app-new-promocion></app-new-promocion>
+</div>
+<div class="tipo_promo"  [style]="visualizacionModalTipoPromo"> 
+    <app-new-tipo-promocion></app-new-tipo-promocion>
 </div>
 

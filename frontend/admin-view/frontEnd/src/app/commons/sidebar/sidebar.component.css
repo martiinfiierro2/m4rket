@@ -3,6 +3,7 @@ a{
     color: white;
 }
 
+
 *{
     color: white;
 }
@@ -15,12 +16,32 @@ a{
     background-color: #66ae9e;
 }
 
+
+.small-sidebar #menuContent > div > div > span:not(.icono) {
+    display: none;
+}
+
+.small-sidebar #head > h2 {
+    display: none;
+}
+
+.small-sidebar{
+    width: 80px;
+}
+
+#sidebar_menu.expanded {
+    width: 210px; 
+}
+
+
 #sidebar_menu{
     height: 100vh;
-    width: 100%;
     flex-direction: column;
     background-color: #51877A;
-    /*background-color: white;*/
+}
+
+body.dark-theme #sidebar_menu{
+    background-color: #66ae9e;
 }
 
     #head{
@@ -58,11 +79,18 @@ a{
 
     .icono{
         margin-right: 1em;
+        font-size: 20px;
     }
 
-    .linea{
+    .linea {
         padding-left: 1.5em;
         padding-top: .4em;
         padding-bottom: .4em;
         margin: .5em .3em;
+        border-radius: 10px;
+    }
+
+    .linea.minimizar{
+        display: flex;
+        align-items: baseline;
     }

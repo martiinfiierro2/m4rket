@@ -1,11 +1,11 @@
 <div id="header">
     <div id="divSearch">
-        <input type="text" name="search" id="search" placeholder="Búsqueda" [(ngModel)]="valueBusquedaInput" class="barraBusqueda">
+        <input type="text" name="search" id="search" placeholder="Buscar usuario" [(ngModel)]="valueBusquedaInput" class="barraBusqueda">
     </div>
     <div id="botonesHeader">
-        <button (click)="creacionUsuario = true" class="btnPrimario">Registar usuario</button>
+        <button (click)="creacionUsuario = true" class="btnPrimario">Registar administrador</button>
         <div id="desplegableFiltros" class="btnSecundario">
-            <span (click)="desplegarFiltros()">Filtros búsqueda</span>
+            <span (click)="desplegarFiltros()"><i class="fa-solid fa-filter"></i></span>
             <div id="contenido-desplegableFiltros" *ngIf="mostrarDesplegableFiltros">
                 <label *ngFor="let opcion of opciones">
                     <input type="checkbox" [value]="opcion.value" (change)="seleccionarOpcion(opcion)">
