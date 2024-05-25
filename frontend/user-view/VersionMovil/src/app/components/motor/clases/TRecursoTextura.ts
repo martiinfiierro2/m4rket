@@ -56,6 +56,7 @@ export class TRecursoTextura extends TRecurso {
             fetch(`../../assets/motor/texturas/${filename}`)
                 .then(response => {
                     if (!response.ok) {
+                        console.log(filename)
                         throw new Error('Network response was not ok');
                     }
                     return response.blob();

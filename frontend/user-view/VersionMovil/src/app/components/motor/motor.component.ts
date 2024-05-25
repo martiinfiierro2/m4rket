@@ -33,6 +33,7 @@ export class MotorComponent implements AfterViewInit {
   private mercado!: TNodo;
   private ubicaciones: TNodo[] = [];
   private listaCompra: lista[] = [];
+  private numero = 0;
 
   //Eventos
   private rotation: any = 0;
@@ -81,8 +82,8 @@ export class MotorComponent implements AfterViewInit {
     //asignar camara
     const camara: TNodo = await motor.crearCamara(
       this.mercado,
-      glMatrix.vec3.fromValues(-4.5, 12, -40),
-      glMatrix.vec3.fromValues(15 * (Math.PI / 180), 0, 0),
+      glMatrix.vec3.fromValues(-4.5, 20, -60),
+      glMatrix.vec3.fromValues(25 * (Math.PI / 180), 0, 0),
       glMatrix.vec3.fromValues(1, 1, 1),
       true,
       false,
@@ -119,6 +120,7 @@ export class MotorComponent implements AfterViewInit {
       'malla',
       'gris.jpg',
       -1,
+      null,
     );
 
     const puerta: TNodo = await motor.crearModelo(
@@ -129,7 +131,8 @@ export class MotorComponent implements AfterViewInit {
       'puerta.obj',
       'malla',
       'grisclaro.jpeg',
-      -1
+      -1,
+      null
     );
 
     //Fruta
@@ -142,7 +145,8 @@ export class MotorComponent implements AfterViewInit {
         'mueblefrutas.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
     this.ubicaciones.push(
@@ -154,7 +158,8 @@ export class MotorComponent implements AfterViewInit {
         'mueblefrutas.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
     this.ubicaciones.push(
@@ -166,7 +171,8 @@ export class MotorComponent implements AfterViewInit {
         'mueblefrutas.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
     this.ubicaciones.push(
@@ -178,7 +184,8 @@ export class MotorComponent implements AfterViewInit {
         'mueblefrutas.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
     this.ubicaciones.push(
@@ -190,7 +197,8 @@ export class MotorComponent implements AfterViewInit {
         'mueblefrutas.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
 
@@ -204,7 +212,8 @@ export class MotorComponent implements AfterViewInit {
         'estanteria.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
     this.ubicaciones.push(
@@ -216,7 +225,8 @@ export class MotorComponent implements AfterViewInit {
         'estanteria.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
     this.ubicaciones.push(
@@ -228,7 +238,8 @@ export class MotorComponent implements AfterViewInit {
         'estanteria.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
     this.ubicaciones.push(
@@ -240,7 +251,8 @@ export class MotorComponent implements AfterViewInit {
         'estanteria.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
     this.ubicaciones.push(
@@ -252,7 +264,8 @@ export class MotorComponent implements AfterViewInit {
         'estanteria.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
     this.ubicaciones.push(
@@ -264,7 +277,8 @@ export class MotorComponent implements AfterViewInit {
         'estanteria.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
 
@@ -278,7 +292,8 @@ export class MotorComponent implements AfterViewInit {
         'estanteria.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
     this.ubicaciones.push(
@@ -290,7 +305,8 @@ export class MotorComponent implements AfterViewInit {
         'estanteria.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
     this.ubicaciones.push(
@@ -302,7 +318,8 @@ export class MotorComponent implements AfterViewInit {
         'estanteria.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
     this.ubicaciones.push(
@@ -314,7 +331,8 @@ export class MotorComponent implements AfterViewInit {
         'estanteria.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
     this.ubicaciones.push(
@@ -326,7 +344,8 @@ export class MotorComponent implements AfterViewInit {
         'estanteria.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
     this.ubicaciones.push(
@@ -338,7 +357,8 @@ export class MotorComponent implements AfterViewInit {
         'estanteria.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
 
@@ -352,7 +372,8 @@ export class MotorComponent implements AfterViewInit {
         'estanteria.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
     this.ubicaciones.push(
@@ -364,7 +385,8 @@ export class MotorComponent implements AfterViewInit {
         'estanteria.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
     this.ubicaciones.push(
@@ -376,7 +398,8 @@ export class MotorComponent implements AfterViewInit {
         'estanteria.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
     this.ubicaciones.push(
@@ -388,7 +411,8 @@ export class MotorComponent implements AfterViewInit {
         'estanteria.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
     this.ubicaciones.push(
@@ -400,7 +424,8 @@ export class MotorComponent implements AfterViewInit {
         'estanteria.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
     this.ubicaciones.push(
@@ -412,7 +437,8 @@ export class MotorComponent implements AfterViewInit {
         'estanteria.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
 
@@ -426,7 +452,8 @@ export class MotorComponent implements AfterViewInit {
         'estanteria.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
     this.ubicaciones.push(
@@ -438,7 +465,8 @@ export class MotorComponent implements AfterViewInit {
         'estanteria.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
     this.ubicaciones.push(
@@ -450,7 +478,8 @@ export class MotorComponent implements AfterViewInit {
         'estanteria.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
     this.ubicaciones.push(
@@ -462,7 +491,8 @@ export class MotorComponent implements AfterViewInit {
         'estanteria.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
 
@@ -475,7 +505,8 @@ export class MotorComponent implements AfterViewInit {
         'estanteria.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
     this.ubicaciones.push(
@@ -487,7 +518,8 @@ export class MotorComponent implements AfterViewInit {
         'estanteria.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
     this.ubicaciones.push(
@@ -499,7 +531,8 @@ export class MotorComponent implements AfterViewInit {
         'estanteria.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
     this.ubicaciones.push(
@@ -511,7 +544,8 @@ export class MotorComponent implements AfterViewInit {
         'estanteria.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
 
@@ -525,7 +559,8 @@ export class MotorComponent implements AfterViewInit {
         'armario.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
     this.ubicaciones.push(
@@ -537,7 +572,8 @@ export class MotorComponent implements AfterViewInit {
         'armario.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
     this.ubicaciones.push(
@@ -549,7 +585,8 @@ export class MotorComponent implements AfterViewInit {
         'armario.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
 
@@ -563,7 +600,8 @@ export class MotorComponent implements AfterViewInit {
         'frigo.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
     this.ubicaciones.push(
@@ -575,7 +613,8 @@ export class MotorComponent implements AfterViewInit {
         'frigo.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
     this.ubicaciones.push(
@@ -587,7 +626,8 @@ export class MotorComponent implements AfterViewInit {
         'frigo.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
     this.ubicaciones.push(
@@ -599,7 +639,8 @@ export class MotorComponent implements AfterViewInit {
         'frigo.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
 
@@ -613,7 +654,8 @@ export class MotorComponent implements AfterViewInit {
         'muebledoble.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
     this.ubicaciones.push(
@@ -625,7 +667,8 @@ export class MotorComponent implements AfterViewInit {
         'muebledoble.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
     this.ubicaciones.push(
@@ -637,7 +680,8 @@ export class MotorComponent implements AfterViewInit {
         'muebledoble.obj',
         'malla',
         'grisclaro.jpeg',
-        -1
+        -1,
+        null
       )
     );
 
@@ -650,7 +694,8 @@ export class MotorComponent implements AfterViewInit {
       'cajaregistradora.obj',
       'malla',
       'blanco.jpeg',
-      -1
+      -1,
+      null
     );
     const caja2: TNodo = await motor.crearModelo(
       this.suelo,
@@ -660,7 +705,8 @@ export class MotorComponent implements AfterViewInit {
       'cajaregistradora.obj',
       'malla',
       'blanco.jpeg',
-      -1
+      -1,
+      null
     );
     const caja3: TNodo = await motor.crearModelo(
       this.suelo,
@@ -670,7 +716,8 @@ export class MotorComponent implements AfterViewInit {
       'cajaregistradora.obj',
       'malla',
       'blanco.jpeg',
-      -1
+      -1,
+      null
     );
     const caja4: TNodo = await motor.crearModelo(
       this.suelo,
@@ -680,7 +727,8 @@ export class MotorComponent implements AfterViewInit {
       'cajaregistradora.obj',
       'malla',
       'blanco.jpeg',
-      -1
+      -1,
+      null
     );
     const pantalla1: TNodo = await motor.crearModelo(
       caja1,
@@ -690,7 +738,8 @@ export class MotorComponent implements AfterViewInit {
       'ladrilloregistrador.obj',
       'malla',
       'blanco.jpeg',
-      -1
+      -1,
+      null
     );
     const pantalla2: TNodo = await motor.crearModelo(
       caja2,
@@ -700,7 +749,8 @@ export class MotorComponent implements AfterViewInit {
       'ladrilloregistrador.obj',
       'malla',
       'blanco.jpeg',
-      -1
+      -1,
+      null
     );
     const pantalla3: TNodo = await motor.crearModelo(
       caja3,
@@ -710,7 +760,8 @@ export class MotorComponent implements AfterViewInit {
       'ladrilloregistrador.obj',
       'malla',
       'blanco.jpeg',
-      -1
+      -1,
+      null
     );
     const pantalla4: TNodo = await motor.crearModelo(
       caja4,
@@ -720,7 +771,8 @@ export class MotorComponent implements AfterViewInit {
       'ladrilloregistrador.obj',
       'malla',
       'blanco.jpeg',
-      -1
+      -1,
+      null
     );
 
     const idUsu: string = await this.getUsuarioLog();
@@ -910,7 +962,7 @@ export class MotorComponent implements AfterViewInit {
     });  
   }
 
-  async getUsuarioLog() {
+  getUsuarioLog() {
     const idUsuario = localStorage.getItem('idUsuario');
     let idUsu = '';
     if (idUsuario !== null) {
@@ -926,7 +978,7 @@ export class MotorComponent implements AfterViewInit {
       const entidad = motor.nodos[i]!.getEntidad();
       const recMalla = entidad!.getRecursoMalla();
 
-      if(recMalla.getNombre() == 'pin.obj'){
+      if(recMalla.getNombre().startsWith('pin')){
         for(let i = 0; i < recMalla.mallas.length; i++){
           recMalla.mallas[i].deleteBuffers();
           motor.gestorRecursos.borrarRecursos(recMalla, recMalla.mallas, entidad.recursoMalla.getNombre(), entidad.recursoTextura.getNombre());
@@ -939,15 +991,61 @@ export class MotorComponent implements AfterViewInit {
   }
 
   eliminarPin(idProd: number){
-    //Get Nodo
-    const nodo = motor.nodos.find(nodo => nodo.getID() === idProd);
-    nodo!.getPadre()!.eliminarHijo(nodo);
-    const entidad = nodo!.getEntidad();
-    const recMalla = entidad!.getRecursoMalla();
+    for(let i = 3; i  < motor.nodos.length; i++){
+      if(motor.nodos[i].getID() == idProd){
+        var nodo = motor.nodos[i];
+        const entidad = motor.nodos[i].getEntidad();
+        const recMalla = entidad!.getRecursoMalla();
 
-    for(let i = 0; i < recMalla.mallas.length; i++){
-      recMalla.mallas[i].deleteBuffers();
-      motor.gestorRecursos.borrarRecursos(recMalla, recMalla.mallas, entidad.recursoMalla.getNombre(), entidad.recursoTextura.getNombre());
+        for(let i = 0; i < recMalla.mallas.length; i++){
+          recMalla.mallas[i].deleteBuffers();
+          motor.gestorRecursos.borrarRecursos(recMalla, recMalla.mallas, entidad.recursoMalla.getNombre(), entidad.recursoTextura.getNombre());
+          nodo!.getPadre()!.eliminarHijo(nodo);
+          for (let i = 0; i < motor.nodos.length; i++) {
+              if (motor.nodos[i].getID() == nodo!.getID()) {
+                  motor.nodos.splice(i, 1);
+                  return;
+              }
+          }
+        }
+        break;
+      }
+    }
+    this.mercado.recorrer(mat4.create());
+  }
+
+  crearPinObj(base: string, numero: number): string {
+    const [nombre, extension] = base.split('.');
+
+    const nuevoNombre = `${nombre}_${numero}.${extension}`;
+    return nuevoNombre;
+  }
+
+  marcarComoComprado(idProd: number){
+    for(let i = 0; i < motor.nodos.length; i++){
+      if(motor.nodos[i].getID() == idProd){
+        motor.nodos[i].setComprado(true);
+        console.log(motor.nodos[i], idProd)
+      }
+    }
+  }
+
+  eliminarPinesComprados(){
+    for(let i = 3; i  < motor.nodos.length; i++){
+      
+      if(motor.nodos[i].getComprado() == true){
+        const entidad = motor.nodos[i]!.getEntidad();
+        const recMalla = entidad!.getRecursoMalla();
+
+        if(recMalla.getNombre().startsWith('pin')){
+          for(let i = 0; i < recMalla.mallas.length; i++){
+            recMalla.mallas[i].deleteBuffers();
+            motor.gestorRecursos.borrarRecursos(recMalla, recMalla.mallas, entidad.recursoMalla.getNombre(), entidad.recursoTextura.getNombre());
+          }
+            
+        }
+      }
+      motor.nodos[i]!.getPadre()!.eliminarHijo(motor.nodos[i]);
     }
     this.mercado.recorrer(mat4.create());
   }
@@ -957,9 +1055,10 @@ export class MotorComponent implements AfterViewInit {
 
     let valor!: number;
     for (let i = 0; i < lista.length; i++) {
-        let nameMalla = 'pin.obj';
-
+        let nameMalla = this.crearPinObj('pin.obj', this.numero);
+        this.numero++;
         const producto: any = await this.productosService.getProductoId(lista[i].id).toPromise();
+
 
         await producto.productos.Ubicacions.forEach((ubicacion: any) => {
             valor = this.letraANumero(ubicacion.referencia) + ubicacion.posicion;
@@ -975,7 +1074,8 @@ export class MotorComponent implements AfterViewInit {
           nameMalla,
           'malla',
           producto.productos.foto,
-          producto.productos.id
+          producto.productos.id,
+          false
         );
       }
       else if(valor > 4 && valor <= 30){
@@ -987,7 +1087,8 @@ export class MotorComponent implements AfterViewInit {
           nameMalla,
           'malla',
           producto.productos.foto,
-          producto.productos.id
+          producto.productos.id,
+          false
         );
       }
       else if(valor > 30 && valor <= 33){
@@ -999,7 +1100,8 @@ export class MotorComponent implements AfterViewInit {
           nameMalla,
           'malla',
           producto.productos.foto,
-          producto.productos.id
+          producto.productos.id,
+          false
         );
       }
       else if(valor > 33 && valor <= 37){
@@ -1011,7 +1113,8 @@ export class MotorComponent implements AfterViewInit {
           nameMalla,
           'malla',
           producto.productos.foto,
-          producto.productos.id
+          producto.productos.id,
+          false
         );
       }
       else if(valor > 37 && valor <= 40){
@@ -1023,7 +1126,8 @@ export class MotorComponent implements AfterViewInit {
           nameMalla,
           'malla',
           producto.productos.foto,
-          producto.productos.id
+          producto.productos.id,
+          false
         );
       }
       if(number == 0){
@@ -1031,7 +1135,6 @@ export class MotorComponent implements AfterViewInit {
         break;
       }
     }
-    console.log(motor.gestorRecursos)
   }
 
   letraANumero(letra: string): number {
