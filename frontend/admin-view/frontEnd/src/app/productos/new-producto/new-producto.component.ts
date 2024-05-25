@@ -17,6 +17,8 @@ import Swal from 'sweetalert2'
 })
 export class NewProductoComponent {
 
+  
+
   public productoForm = this.fb.group({
     nombre: ['', [Validators.required]],
     marca: ['', [Validators.required]],
@@ -44,6 +46,8 @@ export class NewProductoComponent {
   valoresNutDesplegados = false;
   imagenProducto = false;
 
+
+    currentStep: number = 1; 
 
   constructor( private router: Router,
                 private fb: FormBuilder,
@@ -98,51 +102,6 @@ export class NewProductoComponent {
     })
   }
 
-  desplegarCampo( campo ){
-
-    let icono;
-
-    switch (campo) {
-      case 'infoBasica':
-        icono = document.querySelector('#iconoDesplegableInfo');
-        if (this.infoBasicaDesplegada) {
-          this.infoBasicaDesplegada = false;
-          icono.classList.remove("fa-angle-up");
-          icono.classList.add("fa-angle-down");
-        }
-        else{
-          this.infoBasicaDesplegada = true;
-          icono.classList.remove("fa-angle-down");
-          icono.classList.add("fa-angle-up");
-        }
-        
-        break;
-      case 'valoresNut':
-        icono = document.querySelector('#iconoDesplegableNutri');
-        if (this.valoresNutDesplegados) {
-          this.valoresNutDesplegados = false;
-          icono.classList.remove("fa-angle-up");
-          icono.classList.add("fa-angle-down");
-        }
-        else{
-          this.valoresNutDesplegados = true;
-          icono.classList.remove("fa-angle-down");
-          icono.classList.add("fa-angle-up");
-        }
-
-        break;
-      case 'imagenProducto':
-        icono = document.querySelector('#iconoDesplegableImagen');
-        if (!this.imagenProducto) {
-          this.imagenProducto = true;
-          icono.classList.remove("fa-angle-down");
-          icono.classList.add("fa-angle-up");
-        }
-      
-        break;
-    }
-  }
-
   newProducto(){
 
     let idProducto = '';
@@ -165,5 +124,26 @@ export class NewProductoComponent {
       })
     }
   }
+
+  canProceedToNextStep(): boolean {
+    if (this.currentStep === 1) {
+        return this.productoForm.get('nombre')!.valid &&
+            this.productoForm.get('marca')!.valid &&
+            this.productoForm.get('precio')!.valid &&
+            this.productoForm.get('precio_kg')!.valid &&
+            this.productoForm.get('stock')!.valid &&
+            this.productoForm.get('categoria')!.valid;
+    } else if (this.currentStep === 2) {
+        return this.productoForm.get('foto')!.valid;
+    }
+    return true;
+  }
+
+  nextStep() {
+    if (this.canProceedToNextStep()) {
+        this.currentStep += 1;
+    }
+  }   
+  
 
 }
