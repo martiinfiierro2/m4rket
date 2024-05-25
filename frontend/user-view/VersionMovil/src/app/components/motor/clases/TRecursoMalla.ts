@@ -9,39 +9,34 @@ export class TRecursoMalla extends TRecurso {
         super(nombre);
     }
 
-    eliminarMalla(malla: Malla){
-        for(let i = 0; i < this.mallas.length; i++){
-            if(this.mallas[i] == malla){
-                console.log(this.mallas[i])
-                this.mallas.splice(i, 1);
-                break;
-            }
-        }
-    }
-
     async cargarFicheroAPI(nombre: string): Promise<any>{}
 
     override cargarFichero(filename: string): Promise<void> {
-            return new Promise((resolve, reject) => {
-                fetch(`../../assets/motor/objetos/${filename}`)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.text();
-                    })
-                    .then(data => {
-                        const archivo = data;
-                        const _malla: Malla = new Malla(archivo, filename);// añadir malla y material
-                        this.mallas.push(_malla);
-                        resolve();
-                    })
-                    .catch(error => {
-                        console.error("Error al cargar el archivo:", error);
-                        reject(error);
-                    });
-            });
-        
+        let obj = '';
+        if(filename.startsWith('pin')){
+            obj = 'pin.obj';
+        } else {
+            obj = filename;
+        }
+        return new Promise((resolve, reject) => {
+            fetch(`../../assets/motor/objetos/${obj}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    const archivo = data;
+                    const _malla: Malla = new Malla(archivo, filename);// añadir malla y material
+                    this.mallas.push(_malla);
+                    resolve();
+                })
+                .catch(error => {
+                    console.error("Error al cargar el archivo:", error);
+                    reject(error);
+                });
+        });
     }
      
     draw(id: number, matTrans: any, textura: any): void{

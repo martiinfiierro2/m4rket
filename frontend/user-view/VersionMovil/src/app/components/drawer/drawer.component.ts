@@ -201,17 +201,19 @@ export class DrawerComponent implements AfterViewInit {
 
   async borrarProductosCompradosEnServidor() {
     const productosComprados = await this.listaCompra.filter(producto => producto.comprado);
-    productosComprados.forEach(producto => {
-      this.productosService.deleteListaCompra(producto.id).subscribe(() => {
-      });
+
+    for (const producto of productosComprados) {
+        await this.productosService.deleteListaCompra(producto.id).toPromise();
+    }
+
+    this.listaCompra = await new Promise((resolve) => {
+      resolve(this.listaCompra.filter(producto => !producto.comprado));
     });
-  
-    this.listaCompra = await this.listaCompra.filter(producto => !producto.comprado);
     await this.getListaCompraUsu();
+    this.motorServicio.getMotor().eliminarPinesComprados();
   }
 
   borrarTodaLaLista() {
-    this.motorServicio.getMotor().eliminarTodosPines();
     this.productosService.getListaCompra(this.idUsu).subscribe((result) => {
       if (result.listacompra) {
         const listasCompra = result.listacompra;
@@ -225,6 +227,7 @@ export class DrawerComponent implements AfterViewInit {
         });
       }
     });
+    this.motorServicio.getMotor().eliminarTodosPines();
   }
 
   onInputChange(event: Event) {
@@ -542,13 +545,13 @@ export class DrawerComponent implements AfterViewInit {
     producto.enListaCompra = false;
     await this.borrarProd(producto.idLista);
     this.getListaCompraUsu();
-    this.motorServicio.getMotor().eliminarPin(producto.id);
 
     //ESTADISTICAS
     let tipo = 'eliminado';
     let fecha = new Date();
     let tiempo = 0;
     this.estadistica(producto.id, tipo, fecha, tiempo);
+    this.motorServicio.getMotor().eliminarPin(producto.id);
   }
 
   async anadirProducto(producto: any) {
@@ -574,8 +577,8 @@ export class DrawerComponent implements AfterViewInit {
     this.estadistica(producto.id, tipo, fecha, tiempo);
     //this.Recarguita();
     try{
-      await this.getListaCompraUsu()
-      this.nuevoPin.push({id:producto.id, estado: producto.estado});
+      await this.getListaCompraUsu();
+      this.nuevoPin.push({id: producto.id, estado: producto.estado});
       await this.motorServicio.getMotor().crearPines(this.nuevoPin, 0)
     } catch (error) {
       console.error('Error al recargar el modelo:', error);
@@ -696,7 +699,7 @@ export class DrawerComponent implements AfterViewInit {
     let fecha = new Date()
     let tiempo = 0;
     this.estadistica(producto.id, tipo, fecha, tiempo );
-    //this.motorComponent.cargarNodosPines();
+    this.motorServicio.getMotor().marcarComoComprado(producto.id);
   }
 
   eliminarComprado(producto: any) {
