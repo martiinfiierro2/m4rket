@@ -88,7 +88,7 @@ export class MotorComponent implements AfterViewInit {
       true,
       false,
       0.1,
-      100
+      150
     );
     await motor.registrarCamara(camara);
     await motor.setCamara(camara);
