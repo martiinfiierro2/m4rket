@@ -21,7 +21,7 @@ export class EditPorductoComponent {
 
   productoForm: FormGroup; 
 
-
+  currentStep: number = 1; 
 
   tokenUsuario = sessionStorage.getItem('tokenUsuario') || localStorage.getItem('tokenUsuario');
   urlFotoProducto = environment.base_url + '/uploads/fotoproducto/';
@@ -113,13 +113,12 @@ export class EditPorductoComponent {
 
   modalPostCreacion(){
     Swal.fire({
-      title: 'Creado correctamente!',
+      title: 'Actualizado correctamente!',
       icon: 'success',
       confirmButtonText: 'Ver producto',
-      confirmButtonColor: '#3085d6',
       showCancelButton: true,
       cancelButtonText: 'Continuar',
-      cancelButtonColor: "#3085d6",
+      cancelButtonColor: "#51877a",
 
     }).then((result) =>{
       if (result.isConfirmed) {

@@ -1,73 +1,197 @@
 
-#divEdit{
-  margin: 2em 1em;
-  padding: 1.5em;
-  border-radius: 1em;
-  background-color: white;
-}
-
-    #titulo{
-        display: flex;
-        justify-content: center;
-    }
-
-    form{
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-
-        #contenidoForm{
-            display: flex;
-            flex-direction: row;
-            justify-content: space-around;
-        }
-            .col{
-                display: flex;
-                flex-direction: column;
-            }
-
-            .col label{
-                display: flex;
-                flex-direction: column;
-                margin: .3em 0;
-                font-size: small;
-
-            }
-
-            .col input, textarea{
-                margin-top: .4em;
-                width: 200px;
-            }
-
-            input[type='text'], input[type= 'number']{
-                border: 1px solid gray;
-                border-radius: 3%;
-            }
-        
-        
             #divImagen{
                 margin-top: .5em;
             }
                 #fotoProducto{
-                    height: 80px;
-                    width: 80px;
+                    height: 200px;
+                    width: 200px;
                 }
 
                 
-        #botonesForm{
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            margin-top: 1em;
-        }
 
-            #botonesForm > * {
-                margin: 0 .5em;
+
+
+
+            body{
+                display: flex;
+                justify-content: center;
+                align-items: center;
             }
-
-    
-
-    
-
-
+            #todo{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 60%;
+                height: fit-content;
+                min-height: 50%;
+                padding: 20px;
+            
+                background-color: white;
+                border-radius: 1em;
+                margin: 2em;
+                transition: all 200ms ease;
+                transition-delay: 0s;
+            }
+            
+            #titulo h2{
+                text-align: center;
+            }
+            
+            #previewImagen{
+                margin-top: 1em;
+                max-width: 150px;
+                max-height: 150px;
+            }
+            
+                .divCampo{
+                    margin-top: 2em;
+                    position: relative;
+                }
+            
+            
+                .divCampo label {
+                    display: block;
+                    position: absolute; 
+                    bottom: 82%;        
+                    font-size: .85em;
+                    margin-left: 4px;
+                    background-color: white;
+                    padding: 0 .2em;
+                }
+            
+                .divCampo.ingredientes label {
+                    display: block;
+                    position: absolute; 
+                    bottom: 95%;
+                    margin-left: 10px; 
+                    font-size: .85em;
+                    background-color: white;
+                    padding: 0 .5em;
+                }
+            
+            
+                .divCampo input {
+                    padding: .7em .7em;
+                    border: 1px solid #cccccc;
+                    border-radius: 5px;
+                    outline-width: 1px;
+                    outline-color: #51877a;
+                }
+            
+                .divCampo textarea {
+                    padding: .7em .7em;
+                    border: 1px solid #cccccc;
+                    border-radius: 5px;
+                    outline-color: #51877a;
+                }
+            #btnFoto{
+                width: fit-content;
+                border: 1px solid #cccccc;
+                border-radius: 10px;
+                background-color: #b6b6b6;
+                color: white;
+                margin: 5px;
+            
+                display: flex;
+                    justify-content: center;
+                    align-items: center;
+            }
+            
+            .icono_foto{
+                margin: 5px;
+            }
+            
+                #contenidoImagen{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+            
+            #contenidoValoresNut {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr); /* Dos columnas de igual ancho */
+                gap: 16px; /* Espacio entre las columnas y las filas */
+            }
+            
+            #contenidoInfoBasica{
+                display: grid;
+                grid-template-columns: repeat(2, 1fr); /* Dos columnas de igual ancho */
+                gap: 16px; /* Espacio entre las columnas y las filas */
+            }
+            
+            .divCampo {
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .steps {
+                display: flex;
+                width: 100%;
+                align-items: center;
+                justify-content: space-between;
+                position: relative;
+              }
+              .steps .circle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 25px;
+                width: 25px;
+                color: #999;
+                font-size: 18px;
+                font-weight: 500;
+                border-radius: 50%;
+                background: #fff;
+                border: 4px solid #e0e0e0;
+                transition: all 200ms ease;
+                transition-delay: 0s;
+                margin: 10px;
+              }
+              .steps .circle.active {
+                transition-delay: 100ms;
+                border-color: #51877a;
+                color: #51877a;
+              }
+            
+              .steps .circle.done {
+                transition-delay: 100ms;
+                border-color: #51877a;
+                background-color: #51877a;
+                color: #fff;
+              }
+            
+              .paso_activo{
+                color: #51877a;
+              }
+            
+              .steps hr{
+                width: 40px;
+                height: 3px;
+                border: none;
+                background-color: #e0e0e0;
+              }
+            
+              .steps hr.done{
+                width: 40px;
+                height: 3px;
+                border: none;
+                background-color: #51877a;
+              }
+            
+              .botones{
+                margin-top: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: space-around;
+              }
+            
+              .botones input{
+                margin: 20px
+              }
+            
+              .btnPrimario:disabled {
+                background-color: #e7e7e7; 
+                color: #d1d1d1; 
+                border-color:#e7e7e7 ;
+                cursor: not-allowed;
+            }

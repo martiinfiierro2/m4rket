@@ -1,26 +1,58 @@
-#editUbicacion{
+
+body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.add{
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: white;
+    padding: 30px;
+    border-radius: 15px;
+    width: 300px;
+    z-index: 2;
 }
 
+
+h2{
+    margin-bottom: 0px;
+}
 form{
     display: flex;
     flex-direction: column;
 }
 
-label{
-    display: flex;
-    flex-direction: column;
-    margin-bottom: .5em;
-}
 
-    label > input, select{
-        margin-top: .5em;
+
+    #botones{
+        display: flex;
+        justify-content: space-evenly;
+        margin-top: 5px;
     }
 
-#buttons{
-    display: flex;
-    justify-content: space-evenly;
-}
+    .divCampo{
+        margin-top: 2em;
+        position: relative;
+    }
 
+
+    .divCampo label {
+        display: block;
+        position: absolute; 
+        bottom: 82%;        
+        font-size: .85em;
+        margin-left: 4px;
+        background-color: white;
+        padding: 0 .2em;
+    }
+
+    .divCampo input {
+        padding: .7em .7em;
+        border: 1px solid #cccccc;
+        border-radius: 5px;
+        outline-width: 1px;
+        outline-color: #51877a;
+        width: 85%;
+    }

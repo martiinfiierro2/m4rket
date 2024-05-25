@@ -4,18 +4,20 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { PaginationComponent } from '../../pagination/pagination.component';
+import { NewUbicacionComponent } from '../../ubicaciones/new-ubicacion/new-ubicacion.component';
 
 export interface Ubicacion{
   id: number,
   referencia: string,
   posicion: number
+  isEdit: boolean;
 }
 
 
 @Component({
   selector: 'app-ubicaciones',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, PaginationComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, PaginationComponent, NewUbicacionComponent],
   templateUrl: './ubicaciones.component.html',
   styleUrl: './ubicaciones.component.css'
 })
@@ -36,6 +38,8 @@ export class UbicacionesComponent {
 
   private paginaUsada = 0;
 
+  visualizacionModalUbi = 'display: none';
+
 
   constructor ( private ubicacionesService: UbicacionesService,
                 private fb:FormBuilder ) {}
@@ -50,6 +54,32 @@ export class UbicacionesComponent {
     this.getUbicaciones();
   }
 
+  editUbi(ubicacion) {
+
+    ubicacion.isEdit = true;
+  }
+  
+  saveUbi(ubicacion) {
+    this.ubicacionesService.getUbicacionId(ubicacion.id).subscribe( res => {
+      ubicacion.isEdit = false;
+      console.log(res);
+    })
+  }
+  
+  cancelarEdit(ubicacion) {
+    ubicacion.isEdit = false;
+  }
+
+
+  mostrarModal(){
+
+    this.visualizacionModalUbi = 'display: block';
+
+}
+
+  cerrarModal() {
+      this.visualizacionModalUbi = 'display: none';
+  } 
   //FUNCIONES SELECT
   ejecutarAccion(idUbicacion: number){
     this.mostrarModal();
@@ -57,17 +87,19 @@ export class UbicacionesComponent {
   }
 
   newUbicacion(){
-    let url = 'ubicaciones/newUbicacion';
-    window.location.href = url;
+   /* let url = 'ubicaciones/newUbicacion';
+    window.location.href = url;*/
+    this.visualizacionModalUbi = 'display: block';
   }
-
+/*
   editUbi(idUbi){
     let url = 'ubicaciones/editUbicacion?id='+idUbi;
     window.location.href = url;
   }
-
+*/
 
   //MODAL
+  /*
   mostrarModal(){
     for (let i = 0; i < this.modals.length; i++) {
       this.modals[i].style.display = 'block';
@@ -84,13 +116,13 @@ export class UbicacionesComponent {
       selects[i].value = '';
     }
   } 
-
+/*
   confirmarBorrado() {
     this.cerrarModal();
     this.borrarUbicacion();
   }
 
-
+*/
 
   //PAGINACIÓN
   cambiarPagina( pagina:number ){
@@ -114,8 +146,8 @@ export class UbicacionesComponent {
       })
   }
 
-  borrarUbicacion(){
-    this.ubicacionesService.deleteUbicacion(this.idUbiSelected)
+  borrarUbicacion(idUbi){
+    this.ubicacionesService.deleteUbicacion(idUbi)
       .subscribe( res =>{
         console.log(res);
         window.location.reload();

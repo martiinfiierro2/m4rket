@@ -20,6 +20,10 @@ export class SidebarComponent {
   private usuario;
   clase = 'linea';
 
+  isSidebarSmall: boolean = false;
+  toggleSidebarSize(): void {
+    this.isSidebarSmall = !this.isSidebarSmall;
+  }
 
   constructor( private usuarioService: UsuariosService,
                private route: Router){}

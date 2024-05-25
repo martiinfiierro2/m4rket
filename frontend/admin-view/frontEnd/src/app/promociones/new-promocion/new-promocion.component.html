@@ -1,18 +1,31 @@
-<div class="add">
-    <h2>Añadir promoción</h2>
-    <form (ngSubmit)="newPromocion()" [formGroup]="promocionForm">
-        <label for="nombre">Nombre <input type="text" name="nombre" id="nombre" formControlName="nombre"></label>
-        <label for="fecha_ini">Fecha inicio <input type="date" name="fecha_ini" id="fecha_ini" formControlName="fecha_ini"></label>
-        <label for="fecha_fin">Fecha fin <input type="date" name="fecha_fin" id="fecha_fin" formControlName="fecha_fin"></label>
-        <label for="idTipoPromo">Tipo promoción
-            <select name="idTipoPromo" id="idTipoPromo" formControlName="id_tipoPromo">
-                <option value="default" selected></option>
-                <option *ngFor="let tipoPromo of tipoPromociones" value="{{tipoPromo.id}}">{{tipoPromo.nombre}}</option>
-            </select>
-        </label>
-        <div id="botones">
-            <input type="submit" value="Añadir" class="btnPrimario">
-            <input type="button" value="Cancelar" class="btnSecundario" (click)="irAtras()">
-        </div>
-    </form>
-</div>
+<body>
+    <div class="add">
+        <h2>Añadir promoción</h2>
+        <form (ngSubmit)="newPromocion()" [formGroup]="promocionForm">
+            <div class="divCampo">
+                <label for="nombre">Nombre</label>
+                <input type="text" name="nombre" id="nombre" formControlName="nombre">
+            </div>
+           <div class="divCampo">
+            <label for="fecha_ini">Fecha inicio</label>
+            <input type="date" name="fecha_ini" id="fecha_ini" formControlName="fecha_ini">
+           </div>
+           <div class="divCampo">
+            <label for="fecha_fin">Fecha fin</label>
+            <input type="date" name="fecha_fin" id="fecha_fin" formControlName="fecha_fin">
+           </div>
+           <div class="divCampo promo">
+            <label for="idTipoPromo">Tipo promoción</label>
+                <select name="idTipoPromo" id="idTipoPromo" formControlName="id_tipoPromo">
+                    <option value="default" selected></option>
+                    <option *ngFor="let tipoPromo of tipoPromociones" value="{{tipoPromo.id}}">{{tipoPromo.nombre}}</option>
+                </select>
+           </div>
+            <div id="botones">
+                <input type="submit" value="Añadir" class="btnPrimario">
+                <input type="button" value="Cancelar" class="btnSecundario" (click)="irAtras()">
+            </div>
+        </form>
+    </div>
+</body>
+

@@ -4,6 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PromocionesService } from '../../services/promociones.service';
 import { PaginationComponent } from '../../pagination/pagination.component';
+import { NewPromocionComponent } from '../../promociones/new-promocion/new-promocion.component';
+import { NewTipoPromocionComponent } from '../../promociones/new-tipo-promocion/new-tipo-promocion.component';
+import { tipoPromocion } from '../../promociones/new-tipo-promocion/new-tipo-promocion.component';
+
 
 
 export interface Promocion{
@@ -17,13 +21,14 @@ export interface Promocion{
     nombre: string,
     descripcion: string,
     modificador: number
-  }
+  },
+  isEdit: boolean
 }
 
 @Component({
   selector: 'app-promociones',
   standalone: true,
-  imports: [CommonModule, FormsModule, PaginationComponent],
+  imports: [CommonModule, FormsModule, PaginationComponent, NewPromocionComponent, NewTipoPromocionComponent],
   templateUrl: './promociones.component.html',
   styleUrl: './promociones.component.css'
 })
@@ -44,6 +49,11 @@ export class PromocionesComponent {
   private paginaUsada = 0;
 
 
+  visualizacionModalPromo = 'display: none';
+  visualizacionModalTipoPromo = 'display: none';
+
+  public tipoPromos: tipoPromocion[] = [];
+
   constructor ( private promocionesService: PromocionesService, 
                 private route: Router){}
 
@@ -52,43 +62,47 @@ export class PromocionesComponent {
     this.getPromociones();
   }
 
-  ejecutarAccion(idPromo: number){
+editPromo(promocion) {
+  this.getTipoPromos();
+  promocion.isEdit = true;
+}
+
+savePromo(promocion) {
+  this.promocionesService.editPromocion(promocion.id, promocion).subscribe(res => {
+    console.log(res);
+    promocion.isEdit = false; // salir del modo de edición
+    this.getPromociones();
+  }, error => {
+    console.error('Error al guardar la promoción', error);
+    // Manejar el error
+  });
+}
+
+cancelarEdit(promocion) {
+  promocion.isEdit = false;
+  this.getPromociones();
+}
+
+getTipoPromos(){
+  this.promocionesService.getAllTipoPromociones()
+    .subscribe( res => {
+      this.tipoPromos = res.tipopromociones;
+    })
+
+    console.log();
     
-    let selects = document.querySelectorAll('select');
+}
 
-    for (let i = 0; i < selects.length; i++) {
-      if (selects[i].value === 'borrar') {
-        this.mostrarModal();
-        this.idPromoSelected = ''+idPromo;
-
-      }
-      if(selects[i].value === 'editar') {
-        this.idPromoSelected = ''+idPromo;
-
-        let url = 'promociones/editPromocion?id='+idPromo;
-        window.location.href = url;
-      }
-    }
-  }
-
-
-
-  //MODAL
+  //MODALES
   mostrarModal(){
-    for (let i = 0; i < this.modals.length; i++) {
-      this.modals[i].style.display = 'block';
-    }
-  }
-  cerrarModal() {
-    // Oculta el modal al hacer clic en la 'X'
-    for (let i = 0; i < this.modals.length; i++) {
-      this.modals[i].style.display = 'none';
-    }
 
-    let selects = document.querySelectorAll('select');
-    for (let i = 0; i < selects.length; i++) {
-      selects[i].value = '';
-    }
+      this.visualizacionModalPromo = 'display: block';
+
+  }
+
+  cerrarModal() {
+      this.visualizacionModalPromo = 'display: none';
+      this.visualizacionModalTipoPromo = 'display: none';
   } 
 
   irNuevaPromo(){
@@ -96,7 +110,10 @@ export class PromocionesComponent {
   }
 
   irNuevoTipoPromo(){
+    /*
     this.route.navigate(['promociones/newTipoPromocion']);
+    */
+    this.visualizacionModalTipoPromo = 'display: block';
   }
 
   irEditPromo(idPromo){
@@ -131,7 +148,7 @@ export class PromocionesComponent {
   borrarPromo(idPromo){
     this.promocionesService.deletePromociones(idPromo).subscribe(res => {
       console.log(res);
-      window.location.reload();
+      this.getPromociones();
     })
   }
 

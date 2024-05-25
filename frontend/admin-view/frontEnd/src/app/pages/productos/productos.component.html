@@ -1,9 +1,9 @@
 <div id="header">
-    <div id="divSearch">
-        <input type="text" name="search" id="search" placeholder="Búsqueda" class="barraBusqueda" [(ngModel)]="valueBusquedaInput" (ngModelChange)="iniciarBusqueda()">
+    <div id="divSearch" class="search-container">
+        <input type="text" name="search" id="search" placeholder="Buscar producto" class="barraBusqueda" [(ngModel)]="valueBusquedaInput" (ngModelChange)="iniciarBusqueda()">
     </div>
     <div id="botonesHeader">
-        <button (click)="irNuevoProducto()" class="btnPrimario" >Añadir producto</button>
+        <button (click)="irNuevoProducto()" class="btnPrimario" ><i class="fa-solid fa-plus"></i>Añadir producto</button>
     </div>
 </div>
 <div id="listadoProductos" *ngIf="productos">
@@ -23,7 +23,7 @@
         <tbody>
             <tr *ngFor="let producto of productos; let i = index" [style.background-color]="producto.seleccionado ? '#e2e2e2' : 'transparent'">
                 <td (click)="irMostrarProducto(producto.id)" class="enlace" (mouseenter)="destacarFondo(true, producto.id)" (mouseleave)="destacarFondo(false, producto.id)"><img [src]="urlFotoProducto + producto.foto + '?token=' +tokenUsuario" alt="Imagen del producto"></td>
-                <td (click)="irMostrarProducto(producto.id)" class="enlace" (mouseenter)="destacarFondo(true, producto.id)" (mouseleave)="destacarFondo(false, producto.id)"> {{ producto.nombre }} </td>
+                <td (click)="irMostrarProducto(producto.id)" class="enlace nombre" (mouseenter)="destacarFondo(true, producto.id)" (mouseleave)="destacarFondo(false, producto.id)"> {{ producto.nombre }} </td>
                 <td (click)="irMostrarProducto(producto.id)" class="enlace" (mouseenter)="destacarFondo(true, producto.id)" (mouseleave)="destacarFondo(false, producto.id)"> {{ producto.marca }} </td>
                 <td (click)="irMostrarProducto(producto.id)" class="enlace" (mouseenter)="destacarFondo(true, producto.id)" (mouseleave)="destacarFondo(false, producto.id)"><div id="divStock" [ngStyle]="colorStock(producto.stock)"> {{ producto.stock }} </div></td>
                 <td *ngIf="producto.Promocions.length == 0 || producto.Promocions[0].en_promocion.precio == producto.precio" (click)="irMostrarProducto(producto.id)" class="enlace" (mouseenter)="destacarFondo(true, producto.id)" (mouseleave)="destacarFondo(false, producto.id)"> {{ producto.precio }} €</td>
@@ -89,7 +89,7 @@
                 <input type="date" name="fecha_fin" id="fecha_fin" [(ngModel)]="fechaFinUbicacionProducto">
             </div>
         </div>
-        <button (click)="anyadirUbicacion()">Añadir ubicacion</button>    
+        <button class="anadir_ubi" (click)="anyadirUbicacion()">Añadir ubicacion</button>    
       </div>
     </div>
 </div>

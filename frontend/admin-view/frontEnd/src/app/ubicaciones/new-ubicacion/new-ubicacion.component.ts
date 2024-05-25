@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { UbicacionesService } from '../../services/ubicaciones.service';
+import { UbicacionesComponent } from '../../pages/ubicaciones/ubicaciones.component';
 
 export interface Ubicacion{
   referencia: string,
@@ -21,7 +22,9 @@ export interface Ubicacion{
 export class NewUbicacionComponent {
   constructor(private fb: FormBuilder,
     private router: Router,
-    private ubicacionesService: UbicacionesService){}
+    private ubicacionesService: UbicacionesService,
+    private ubicacionesComponent: UbicacionesComponent
+    ){}
   
     public ubicacion: Ubicacion | undefined;
     public ubiForm = this.fb.group({
@@ -38,7 +41,8 @@ export class NewUbicacionComponent {
     }
 
     atras(){
-      this.router.navigate(['/ubicaciones']);
+      //this.router.navigate(['/ubicaciones']);
+      this.ubicacionesComponent.cerrarModal();
     }
 
 }
