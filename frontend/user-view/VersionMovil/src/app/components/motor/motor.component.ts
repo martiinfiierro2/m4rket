@@ -1068,8 +1068,8 @@ export class MotorComponent implements AfterViewInit {
       if(valor <= 4){
         pin = await motor.crearModelo(
           this.ubicaciones[valor],
-          glMatrix.vec3.fromValues(0, 0, 0),
-          glMatrix.vec3.fromValues(0, 45*(Math.PI / 180), 0),
+          glMatrix.vec3.fromValues(0, 2, 0),
+          glMatrix.vec3.fromValues(-90*(Math.PI / 180), 0, -45*(Math.PI / 180)),
           glMatrix.vec3.fromValues(1, 1, 1),
           nameMalla,
           'malla',
@@ -1081,8 +1081,8 @@ export class MotorComponent implements AfterViewInit {
       else if(valor > 4 && valor <= 30){
         pin = await motor.crearModelo(
           this.ubicaciones[valor],
-          glMatrix.vec3.fromValues(0, 0, 0),
-          glMatrix.vec3.fromValues(0, -45*(Math.PI / 180), 0),
+          glMatrix.vec3.fromValues(0, 5, 0),
+          glMatrix.vec3.fromValues(-90*(Math.PI / 180), 0, 45*(Math.PI / 180)),
           glMatrix.vec3.fromValues(2.5, 2.5, 2.5),
           nameMalla,
           'malla',
@@ -1094,8 +1094,8 @@ export class MotorComponent implements AfterViewInit {
       else if(valor > 30 && valor <= 33){
         pin = await motor.crearModelo(
           this.ubicaciones[valor],
-          glMatrix.vec3.fromValues(0, 2.5, 0),
-          glMatrix.vec3.fromValues(0, 45*(Math.PI / 180), 0),
+          glMatrix.vec3.fromValues(0, 6, 0),
+          glMatrix.vec3.fromValues(-90*(Math.PI / 180), 0, -45*(Math.PI / 180)),
           glMatrix.vec3.fromValues(1.5, 1.5, 1.5),
           nameMalla,
           'malla',
@@ -1107,8 +1107,8 @@ export class MotorComponent implements AfterViewInit {
       else if(valor > 33 && valor <= 37){
         pin = await motor.crearModelo(
           this.ubicaciones[valor],
-          glMatrix.vec3.fromValues(0, 2.5, 0),
-          glMatrix.vec3.fromValues(0, 45*(Math.PI / 180), 0),
+          glMatrix.vec3.fromValues(0, 5, 0),
+          glMatrix.vec3.fromValues(-90*(Math.PI / 180), 0, -30*(Math.PI / 180)),
           glMatrix.vec3.fromValues(1.5, 1.5, 1.5),
           nameMalla,
           'malla',
@@ -1120,8 +1120,8 @@ export class MotorComponent implements AfterViewInit {
       else if(valor > 37 && valor <= 40){
         pin = await motor.crearModelo(
           this.ubicaciones[valor],
-          glMatrix.vec3.fromValues(0, 1, 0),
-          glMatrix.vec3.fromValues(0, 45*(Math.PI / 180), 0),
+          glMatrix.vec3.fromValues(0, 2, 0),
+          glMatrix.vec3.fromValues(-90*(Math.PI / 180), 0, -30*(Math.PI / 180)),
           glMatrix.vec3.fromValues(1, 1, 1),
           nameMalla,
           'malla',
