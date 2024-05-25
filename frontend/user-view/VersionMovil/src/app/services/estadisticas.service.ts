@@ -1,3 +1,4 @@
+
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable } from 'rxjs';
@@ -81,7 +82,7 @@ export class EstadisticasService {
     this.cargarCabeceras();
     return this.http.post(this.url, body, {headers: this.cabeceras}).subscribe(
       (res) => {
-        console.log('Respuesta correcta:', res);
+        //console.log('Respuesta correcta:', res);
       },
       (error) => {
         console.error('Error en la solicitud Post: again', error);

@@ -36,7 +36,6 @@ export class TGestorRecursos{
     }
 
     async borrarRecursos(recMalla: TRecursoMalla, mallaBorrar: any, malla: string, textura: string){
-        recMalla.eliminarMalla(mallaBorrar);
         for (let i = 0; i < this.recursos.length; i++) {
             if (this.recursos[i].getNombre() == malla) {
                 this.recursos.splice(i, 1);

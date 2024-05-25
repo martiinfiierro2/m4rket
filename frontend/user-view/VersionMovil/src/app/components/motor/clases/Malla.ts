@@ -21,6 +21,7 @@ export class Malla {
         this.gl = motor.gl;
     }
     
+    
     public deleteBuffers(){
         if (this.mesh) {
             if (this.mesh.vertexBuffer) {
@@ -35,18 +36,9 @@ export class Malla {
             if (this.mesh.indexBuffer) {
                 this.gl.deleteBuffer(this.mesh.indexBuffer);
             }
-            this.mesh = null; // Establecer buffers a null después de limpiarlos
+            this.mesh = null;
         }
     }
-    
-    getGL(){
-        return this.gl;
-    }
-
-    getBuffers(){
-        return this.mesh;
-    }
-    
 
     async dibujar(id: number, textura: any, matTrans: any) {
         this.matTrans = matTrans;
@@ -55,6 +47,7 @@ export class Malla {
 
         // Cargar textura
         this.texture = await this.loadTexture(textura);
+
 
         const draw = () => {
             if(this.mesh){

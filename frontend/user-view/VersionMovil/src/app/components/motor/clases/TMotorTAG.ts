@@ -223,10 +223,6 @@ export class TMotorTAG {
     async setFalse(nodo: TNodo){
         nodo.setDibujar(false);
     }
-    
-    async eliminarNodo(padre: TNodo, hijo: TNodo){
-        await padre.eliminarHijo(hijo);
-    }
 
     async crearNodo( padre: TNodo|null, trasl: glMatrix.vec3, rot: glMatrix.vec3, esc: glMatrix.vec3 ){
         let nodoCreado: any;
@@ -290,7 +286,7 @@ export class TMotorTAG {
         return nodoCreado;
     }
 
-    async crearModelo( padre: TNodo|null, trasl: glMatrix.vec3, rot: glMatrix.vec3, esc: glMatrix.vec3, nombreFichero: string | undefined, tipo: string, textura: any, id: number){
+    async crearModelo( padre: TNodo|null, trasl: glMatrix.vec3, rot: glMatrix.vec3, esc: glMatrix.vec3, nombreFichero: string | undefined, tipo: string, textura: any, id: number, comprado: boolean | null){
         let nodoCreado: any, recursoMalla: any, recursoTextura: any, entidadModelo: any;
         
         nodoCreado = new TNodo();
@@ -300,7 +296,7 @@ export class TMotorTAG {
         await padre.agregarHijo(nodoCreado);
         if(nombreFichero != undefined){
             recursoMalla = await this.gestorRecursos.getRecurso(nombreFichero, tipo);
-            if(nombreFichero != 'pin.obj'){
+            if(!nombreFichero.startsWith('pin')){
                 recursoTextura = await this.gestorRecursos.getRecurso(textura, "textura")
             }else{
                 recursoTextura = await this.gestorRecursos.getRecursoAPI(textura, "textura")
@@ -308,6 +304,7 @@ export class TMotorTAG {
         }
         entidadModelo = new EModelo(recursoMalla, recursoTextura);
         await nodoCreado.setID(id);
+        await nodoCreado.setComprado(comprado);
         await nodoCreado.setEntidad(entidadModelo);
         await nodoCreado.setTraslacion(trasl);
         await nodoCreado.setRotacion(rot);
