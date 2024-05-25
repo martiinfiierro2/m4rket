@@ -200,21 +200,34 @@ export class TMotorTAG {
         this.gl!.attachShader(program, vertexShader);
         this.gl!.attachShader(program, fragmentShader);
         this.gl!.linkProgram(program);
+    
+        const vertexShaderCompileStatus = this.gl!.getShaderParameter(vertexShader, this.gl!.COMPILE_STATUS);
+        if (!vertexShaderCompileStatus) {
+            console.error('Error al compilar el vertex shader:', this.gl!.getShaderInfoLog(vertexShader));
+        }
+    
+        const fragmentShaderCompileStatus = this.gl!.getShaderParameter(fragmentShader, this.gl!.COMPILE_STATUS);
+        if (!fragmentShaderCompileStatus) {
+            console.error('Error al compilar el fragment shader:', this.gl!.getShaderInfoLog(fragmentShader));
+        }
+    
         const success = this.gl!.getProgramParameter(program, this.gl!.LINK_STATUS);
         if (!success) {
-            console.error('Error al enlazar el programa de shader.');
             const info = this.gl!.getProgramInfoLog(program);
+            console.error('Error al enlazar el programa de shader:', info);
             return null;
         }
-
-        if(number == 1){
+    
+        if (number == 1) {
             this.program = program;
             this.gl.useProgram(program);
-        }else{
+        } else {
             this.programColor = program;
         }
         return program;
     }
+    
+    
 
     async crearRaiz(nodoRaiz: TNodo){
         this.raiz = nodoRaiz;

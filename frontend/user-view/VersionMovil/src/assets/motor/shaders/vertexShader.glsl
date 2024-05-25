@@ -1,7 +1,7 @@
 attribute vec3 aVertexPosition;    // Vertex position attribute
-attribute vec3 aNormalCoord;           // Normal attribute
-attribute vec2 aTextureCoord;     //Coordenada de texturas 
-attribute vec2 uSampler;
+attribute vec3 aNormalCoord;       // Normal attribute
+attribute vec2 aTextureCoord;      // Coordenada de texturas 
+attribute vec2 aDifferentName;     // Cambiado de uSampler a aDifferentName para evitar conflicto
 
 uniform mat4 uModelMatrix;
 uniform mat4 uViewMatrix;
