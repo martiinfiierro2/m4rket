@@ -1,36 +1,21 @@
-*{
-    font-family: 'Amaranth', sans-serif;
-}
-
-
 
 h1{
     font-size: 3em;
+    margin: 0;
+    color: #51877A;
 }
 
 
-.contenidoCentrado{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-    .contenidoCentrado > p{
-        margin-left: 10%;
-        margin-right: 10%;
-        text-align: justify;
-    }
-
-
-/*header*/
 header{
     width: 100%;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    background-color: #51877A;
-    color: white;
+    background-color: #ffffff;
+    height: fit-content;
     margin: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
 }  
     
     #logoTitulo{
@@ -49,17 +34,16 @@ header{
 
 
 /*MENÚ*/
-    
+   
     .icono-burguer{
         cursor: pointer;
-        color: white;
+        color: #51877a;
         display: none;
     }
 
     .btnCerrar{
         display: none;
     }
-
     .nav-list{
         display: flex;
         flex-direction: row;
@@ -68,17 +52,19 @@ header{
     }
         .nav-list a{
             border-bottom: 1px solid white;
-            text-decoration: none;
-            color: white;
+            text-decoration: none !important;
+            color: #3c655d;
+            padding: 0.5em;
+            border-radius: 0.7em;
         }
 
         .nav-list a:hover{
-            color: rgb(162, 162, 162);
-            font-size: 1.1em;
+
+            background-color: #dcebe6;
         }
             #redesSociales > a{
                 margin: .3em;
-                color: white;
+                color: #3c655d;
                 text-decoration: none;
                 border-bottom: 0;
             }
@@ -95,6 +81,7 @@ header{
         display: flex;
         flex-direction: column;
         align-items: center;
+        margin-top: 100px;
     }
 
 
@@ -102,85 +89,94 @@ header{
         max-width: 1200px;
     }
 
-    main > section > h2{
-        padding-top: 2%;
-        padding-left: 2%;
-        font-size: 2em;
-    }
-
-    main > section > p{
-        margin-left: 10%;
-        margin-right: 10%;
-        text-align: justify;
-    }
-
-    #listadoFunciones{
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-evenly;
-        padding-top: 1%;
-    }
-
-        #listadoFunciones > article{
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-right: 1em;
-            padding: 0.5em;
-
-        }
-            #listadoFunciones > article  > p{
-                font-size: 1.6em;
-            }
-
-    #listadoMotivos{
-        display: flex;
-        width: 100%;
-        justify-content: space-evenly;
-        margin-top: 2em;
-    }
-
-        #listadoMotivos > article{
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: #51877A;
-            padding-right: 1.5em;
-            border-radius: 2em;
-            color: white;
-        }
-
-            #listadoMotivos > article > p{
-                font-size: 1.5em;
-                margin-bottom: 0;
-                border-bottom: 2px solid white;
-            }
+.informacion {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    width: 100%;
+    margin: 10px;
     
-        #contenidoComoUsar{
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
+}
 
-            #contenidoComoUsar > p{
-                margin-left: 10%;
-                margin-right: 10%;
-                text-align: justify;
-            }
+.texto {
+    flex: 1;
+    padding-right: 20px; 
+   
+}
+.texto h2{
+    font-size:60px;
+}
 
-            #contenidoComoUsar > a{
-                display: flex;
-                justify-content: center;
-            }
-            
-            #contenidoComoUsar > a > img{
-                max-width: 80%;
-                height: auto; 
-            }
+.texto h3{
+    font-size: 30px;
+}
 
+.texto p{
+    color: #8f9191;
+    font-size: 20px;
+}
+
+.texto a {
+    
+    color: #51877A;
+    text-decoration: none;
+}
+
+.imagen {
+    flex: 1;
+}
+
+
+.info-listacompra h2{
+    font-size: 45px;
+}
+
+.comoUsar{
+    margin-top: 40px;
+    width: 60%;
+    padding: 15px;
+    border-radius: 20px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+}
+
+.comoUsar h2{
+    margin-top: 0;
+}
+
+.comoUsar p{
+    color: #8f9191;
+}
+
+.comoUsar a{
+    text-decoration: none;
+    color:#51877A;
+}
+.botonAprender{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.boton{
+    width: 250px;
+    height: 50px;
+    font-size: 15px;
+    font-weight: 800;
+    color: #ffffff;
+    background-color: #51877A;
+    border: none;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.boton i{
+    margin-left: 10px;
+}
     footer{
-        background-color: #51877A;
-        margin-top: 1em;
+        background-color: #273a36;
+        margin-top: 5em;
         padding-top: 1.5em;
         padding-bottom: .8em;
     }
@@ -191,6 +187,7 @@ header{
         }
             #fila1 > a{
                 color: white;
+                text-decoration: none;
             }
 
         footer > #fila2{
@@ -201,10 +198,13 @@ header{
         }
             #fila2 > p > a{
                 color: white;
+                text-decoration: none;
             }
 
 
 /*MEDIA QUERIES*/
+
+
 @media screen and (max-width: 680px){
     
     .icono-burguer{
@@ -215,6 +215,7 @@ header{
     header{
         flex-direction: row-reverse;
         justify-content: space-between;
+        width: 100%;
     }
         #logoTitulo{
             padding-right: 1em;
@@ -242,7 +243,7 @@ header{
         left: 0;
         top: 0;
         bottom: 0;
-        height: 100%;
+        height: 100vh;
         background-color: #F4F9F7;
         box-shadow: 0 0 0 100vmax rgba(0, 0, 0, .5);
         padding-top: 2em;
@@ -259,7 +260,6 @@ header{
         justify-content: flex-start;
         padding: 2em;
         gap: 3em;
-        height: 100vh;
     }
 
         .nav-list a{
@@ -275,21 +275,42 @@ header{
             color: #679A8D;
             cursor: pointer;
         }
+
+        .informacion{
+            flex-direction: column;
+            margin: 10px;
+        }
+
+        main {
+            display: block;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+ 
+        .informacion .imagen{
+            margin: 15px;
+            padding: 30px;
+            width: 80%;
+        }
+
+        .texto {
+            order: 1;
+            padding: 0 10px; 
+            max-width: 100%; 
+        }
+
+        .imagen{
+            order: 2;
+        }
+
+        .imagen img{
+           padding: 5px;
+           width: 70%;
+        }
     
-    #listadoMotivos{
-        flex-direction: column;
-        align-items: center;
-        gap: 2em;
-    }
-    
-
-
-
-
+        footer{
+            width: 100%;
+        }
 }
         
-        
-        
-        
-
-    

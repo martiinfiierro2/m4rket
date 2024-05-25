@@ -3,6 +3,7 @@ a{
     color: white;
 }
 
+
 *{
     color: white;
 }
@@ -24,8 +25,12 @@ a{
     display: none;
 }
 
-.small-sidebar #menuContent > div > div > span.icono > a {
-    width: 50px;
+.small-sidebar{
+    width: 80px;
+}
+
+#sidebar_menu.expanded {
+    width: 210px; 
 }
 
 
@@ -33,6 +38,10 @@ a{
     height: 100vh;
     flex-direction: column;
     background-color: #51877A;
+}
+
+body.dark-theme #sidebar_menu{
+    background-color: #66ae9e;
 }
 
     #head{
@@ -70,4 +79,18 @@ a{
 
     .icono{
         margin-right: 1em;
+        font-size: 20px;
+    }
+
+    .linea {
+        padding-left: 1.5em;
+        padding-top: .4em;
+        padding-bottom: .4em;
+        margin: .5em .3em;
+        border-radius: 10px;
+    }
+
+    .linea.minimizar{
+        display: flex;
+        align-items: baseline;
     }
