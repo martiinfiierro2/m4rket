@@ -211,6 +211,8 @@ export class DrawerComponent implements AfterViewInit {
       resolve(this.listaCompra.filter(producto => !producto.comprado));
     });
     await this.getListaCompraUsu();
+    this.refrescarDrawer();
+
     this.motorServicio.getMotor().eliminarPinesComprados();
   }
 
@@ -224,6 +226,7 @@ export class DrawerComponent implements AfterViewInit {
   
         Promise.all(deletePromises).then(() => {
           this.getListaCompraUsu();
+          this.refrescarDrawer();
         }).catch((error) => {
         });
       }
@@ -568,6 +571,12 @@ export class DrawerComponent implements AfterViewInit {
 
   async anadirProducto(producto: any) {
     this.nuevoPin = [];
+    const productoEnLista = this.listaCompra.find(item => item.idProd === producto.id);
+    if (productoEnLista) {
+      console.log('El producto ya está en la lista de la compra.');
+      return; // No hace falta añadir el producto nuevamente
+    }
+
     const fechaActual = new Date().toISOString().split('T')[0];
     const body = {
       idUsu: this.idUsu,
@@ -578,7 +587,6 @@ export class DrawerComponent implements AfterViewInit {
     };
     this.productosService.postListaCompra(body).subscribe(async (result) => {
           this.getListaCompraUsu();
-          this.getProducto(producto.id);
       let tipo = 'anadido';
       let fecha = new Date();
       let tiempo = 0;
@@ -587,6 +595,10 @@ export class DrawerComponent implements AfterViewInit {
         await this.getListaCompraUsu();
         this.nuevoPin.push({id: producto.id, estado: producto.estado});
         await this.motorServicio.getMotor().crearPines(this.nuevoPin, 0)
+        this.refrescarDrawer();
+        this.EliminarProductoSelect();
+        this.borrarBusqueda();
+
       } catch (error) {
         console.error('Error al recargar el modelo:', error);
       }
@@ -796,6 +808,11 @@ export class DrawerComponent implements AfterViewInit {
     let fecha = new Date();
     let tiempo = 0;
     this.estadistica(producto.id, tipo, fecha, tiempo);
+  }
+
+  refrescarDrawer() {
+    this.favoritos = []; // Limpiar la lista actual de favoritos
+    this.getContadoresMasBuscados(); // Por ejemplo, recargar la lista de favoritos
   }
 }
 
