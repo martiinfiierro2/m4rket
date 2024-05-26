@@ -90,6 +90,10 @@ body.dark-theme #sidebar_menu{
         border-radius: 10px;
     }
 
+    .linea:hover{
+        cursor: pointer;
+    }
+
     .linea.minimizar{
         display: flex;
         align-items: baseline;
