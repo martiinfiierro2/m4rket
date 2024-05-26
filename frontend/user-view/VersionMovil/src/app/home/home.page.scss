@@ -47,12 +47,11 @@
 }
 .contador-productos {
   background-color: #e9e7e7;
-    color: #000000; /* Black text */
+  color: #282828;
   font-family: 'Arial', sans-serif;
   font-size: 18px;
   width: auto; /* Adjust width as needed */
   height: 30px;
-  border: 2px solid #000000;
   border-radius: 15px;
   cursor: pointer;
   padding: 5px 10px; /* Adjust padding for better spacing */
@@ -61,9 +60,9 @@
   justify-content: space-between; /* Distribute content horizontally */
 
   @media (prefers-color-scheme: dark) {
-    background-color: #282828;
+    background-color: #575757;
     color: #fff;
-    border: 2px solid white;
+    border: none;
 
   }
 }
@@ -147,6 +146,7 @@
 .boton-desplegar {
   width: 40px;
 }
+
 //ESTILOS ANTERIORES
 .contenedor {
   position: fixed;
@@ -346,23 +346,27 @@ label:after {
 
 .menu button {
   display: block;
-  width: 9em;
+  width: 11em;
   height: fit-content + 2em;
-  text-align: left;
+  text-align: center;
   border-radius: 5px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   font-size: 12px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  padding: 4px;
+  padding: 5px;
   background-color: #e9e7e7;
+  color: #282828;
   @media (prefers-color-scheme: dark) {
-    background-color: #282828;
+    background-color: #575757;
+    color: #ffffff;
   }
 }
 .menu > ul{
   padding: 0;
   display: relative;
+  margin-top: 3px;
+  margin-left: 15px;
 }
 
 .menu button:active {

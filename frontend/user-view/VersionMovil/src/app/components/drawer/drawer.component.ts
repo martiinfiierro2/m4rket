@@ -15,6 +15,7 @@ import { Malla } from '../motor/clases/Malla';
 import { RotacionService } from 'src/app/services/rotacion.service';
 import { MotorService } from 'src/app/services/motor.service';
 
+
 interface lista{
   id: string,
   estado: boolean
@@ -96,6 +97,7 @@ export class DrawerComponent implements AfterViewInit {
   isOpen = true;
   openHeight = 0;
   isMiddle = true;
+  position = 3;
 
 
   //PRODUCTO SELECCIONADO
@@ -116,6 +118,8 @@ export class DrawerComponent implements AfterViewInit {
   //Más buscados
   masBuscados: DatosContadores[] = [];
   buscados: DatosContadores[] = [];
+  favoritos: Producto[] = [];
+ 
 
   fechaInicio: string="";
   fechaFin: string="";
@@ -134,34 +138,11 @@ export class DrawerComponent implements AfterViewInit {
 
   }
 
-/*
   async getContadoresMasBuscados() {
     this.buscados = [];
     if(this.fechaFin !== "" && this.fechaInicio !== ""){
       try {
         const res = await this.estadisticasService.getCountBuscadosFecha(this.fechaInicio, this.fechaFin, this.idUsu).toPromise();
-        console.log(res);
-        
-        for (let index = 0; index < res.datosContadores.length; index++) {
-          let contador = new DatosContadores();
-    
-          const res2 = await this.productosService.getProductoId(res.datosContadores[index].idProd).toPromise();
-          contador.name = res2.productos.nombre;
-          contador.value = res.datosContadores[index].totalCount;
-          this.buscados.push(contador);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  }
-*/
-  async getContadoresMasBuscados() {
-    this.buscados = [];
-    if(this.fechaFin !== "" && this.fechaInicio !== ""){
-      try {
-        const res = await this.estadisticasService.getCountBuscadosFecha(this.fechaInicio, this.fechaFin, this.idUsu).toPromise();
-        
         for (let index = 0; index < res.datosContadores.length; index++) {
           let contador = new DatosContadores();
     
@@ -171,11 +152,31 @@ export class DrawerComponent implements AfterViewInit {
           contador.foto = res2.productos.foto;
           contador.id = res2.productos.id;
           this.buscados.push(contador);
+          this.favoritos.push(res2.productos);
         }
+        this.compararListaFavoritos();
       } catch (error) {
         console.error(error);
       }
     }
+  }
+  compararListaFavoritos() {
+    this.getListaCompraUsu();
+    
+    this.listaCompra.forEach((productoCompra) => {
+      const productoEncontrado = this.favoritos.find(
+        (producto) => productoCompra.idProd === parseInt(producto.id)
+      );
+      if (productoEncontrado) {
+        productoEncontrado.enListaCompra = true;
+        productoEncontrado.cantidad = productoCompra.cantidad;
+        productoEncontrado.idLista = productoCompra.id;
+        productoEncontrado.comprado = productoCompra.comprado;
+        //console.log(`Producto con id ${productoEncontrado.id} está en la lista y su cantidad es ${productoEncontrado.cantidad}`);
+      } else {
+        // console.log(`No se encontró el producto con idProd ${productoCompra.idProd} en la lista de productos`);
+      }
+    });
   }
 
   //VARIABLES FOTO
@@ -263,16 +264,19 @@ export class DrawerComponent implements AfterViewInit {
             this.isOpen = true;
             botonchatbot.style.display = 'none';
             profile.style.display = 'none';
+            this.position = 1;
           } else if (ev.deltaY > 50) {
             drawer.style.transition = '.4s ease-out';
             drawer.style.transform = `translateY(${this.openHeight * 84}px)`; // Ir a la posición inferior
             this.isMiddle = false;
             this.isOpen = false;
+            this.position = 3;
             botonchatbot.style.display = 'flex';
           } else {
             drawer.style.transition = '.4s ease-out';
             drawer.style.transform = `translateY(${this.openHeight * 60}px)`;
             botonchatbot.style.display = 'flex';
+            this.position = 2;
           }
         } else if (this.isOpen) {
           if (ev.deltaY > 50) {
@@ -280,6 +284,7 @@ export class DrawerComponent implements AfterViewInit {
             drawer.style.transform = `translateY(${this.openHeight * 60}px)`; // Ir a la posición media
             this.isOpen = false;
             this.isMiddle = true;
+            this.position = 2;
             botonchatbot.style.display = 'flex';
           }
         } else {
@@ -288,6 +293,7 @@ export class DrawerComponent implements AfterViewInit {
             drawer.style.transform = `translateY(${this.openHeight * 60}px)`; // Ir a la posición media
             this.isOpen = true;
             this.isMiddle = true;
+            this.position = 2;
             botonchatbot.style.display = 'flex';
           }
         }
@@ -307,6 +313,7 @@ export class DrawerComponent implements AfterViewInit {
       drawer.style.transform = `translateY(${this.openHeight * 3}px)`;
       this.isMiddle = false;
       this.isOpen = true;
+      this.position = 1;
       botonchatbot.style.display = 'none';
     }
     if (position == 2) {
@@ -314,6 +321,7 @@ export class DrawerComponent implements AfterViewInit {
       drawer.style.transform = `translateY(${this.openHeight * 60}px)`;
       this.isMiddle = true;
       this.isOpen = true;
+      this.position = 2;
       botonchatbot.style.display = 'flex';
     }
     if (position == 3) {
@@ -321,6 +329,7 @@ export class DrawerComponent implements AfterViewInit {
       drawer.style.transform = `translateY(${this.openHeight * 84}px)`;
       this.isMiddle = false;
       this.isOpen = false;
+      this.position = 3;
       botonchatbot.style.display = 'flex';
     }
   }
@@ -340,18 +349,21 @@ export class DrawerComponent implements AfterViewInit {
       drawer.style.transform = `translateY(${this.openHeight * 3}px)`;
       this.isMiddle = false;
       this.isOpen = true;
+      this.position = 1;
       botonchatbot.style.display = 'none';
     } else if (this.isOpen && !this.isMiddle) {
       drawer.style.transition = '.4s ease-out';
       drawer.style.transform = `translateY(${this.openHeight * 84}px)`;
       this.isMiddle = false;
       this.isOpen = false;
+      this.position = 3;
       botonchatbot.style.display = 'flex';
     } else if (!this.isOpen) {
       drawer.style.transition = '.4s ease-out';
       drawer.style.transform = `translateY(${this.openHeight * 60}px)`;
       this.isMiddle = true;
       this.isOpen = true;
+      this.position = 2;
       botonchatbot.style.display = 'flex';
     }
   }
@@ -455,7 +467,7 @@ export class DrawerComponent implements AfterViewInit {
   EliminarProductoSelect() {
     this.productoSelect = null;
     this.seleccionado = false;
-    //this.toggleDrawer2(2);
+    this.toggleDrawer2(3);
   }
 
   //FUNCIONES BUSCADOR
@@ -564,26 +576,25 @@ export class DrawerComponent implements AfterViewInit {
       cantidad: 1,
       comprado: false,
     };
-    this.productosService.postListaCompra(body).subscribe((result) => {
-      producto.enListaCompra = true;
-      producto.cantidad = 1;
-      this.getListaCompraUsu();
-    });
-    this.compararListaBusqueda();
-    producto.enListaCompra = true;
-    let tipo = 'anadido';
-    let fecha = new Date();
-    let tiempo = 0;
-    this.estadistica(producto.id, tipo, fecha, tiempo);
+    this.productosService.postListaCompra(body).subscribe(async (result) => {
+          this.getListaCompraUsu();
+          this.getProducto(producto.id);
+      let tipo = 'anadido';
+      let fecha = new Date();
+      let tiempo = 0;
+      this.estadistica(producto.id, tipo, fecha, tiempo);
+      try{
+        await this.getListaCompraUsu();
+        this.nuevoPin.push({id: producto.id, estado: producto.estado});
+        await this.motorServicio.getMotor().crearPines(this.nuevoPin, 0)
+      } catch (error) {
+        console.error('Error al recargar el modelo:', error);
+      }
+    });    
     //this.Recarguita();
-    try{
-      await this.getListaCompraUsu();
-      this.nuevoPin.push({id: producto.id, estado: producto.estado});
-      await this.motorServicio.getMotor().crearPines(this.nuevoPin, 0)
-    } catch (error) {
-      console.error('Error al recargar el modelo:', error);
-    }
+    
   }
+
 
   getBusquedaProducto(event: any) {
     const query = event.toLowerCase();
@@ -595,6 +606,7 @@ export class DrawerComponent implements AfterViewInit {
       this.compararListaBusqueda();
     });
   }
+
   mostrarBusqueda: boolean = false;
   borrarBusqueda(){
     this.mostrarBusqueda = false;

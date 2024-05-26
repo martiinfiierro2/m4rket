@@ -86,15 +86,25 @@ background: #fff;
 
 .buscador{
   width: 100%;
+  
+}
+ion-searchbar.buscador{
+  --border-radius: 20px;
 }
 .profile {
-  background: darkgray;
+  background: #e7e7e7;
   border-radius: 40px;
-  height: 30px;
-  width: 30px;
-  display: flex; /* Utilizamos flexbox para centrar los íconos */
-  justify-content: center; /* Centramos horizontalmente */
-  align-items: center; /* Centramos verticalmente */
+  height: 40px;
+  width: 40px;
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  color:#2c433f;
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #121212; 
+    color: #e7e7e7; // Cambia el color de fondo en modo oscuro
+  }
 }
 
 
@@ -440,5 +450,27 @@ opacity: 1;
   color: #51877a;
   @media (prefers-color-scheme: dark) {
     color: #9dbbb3;
+  }
+}
+input[type=range] {
+  margin-bottom: 10px;
+  -webkit-appearance: none;
+  appearance: none;
+  color: #51877a;
+  background-color: #e7e7e7;
+  @media (prefers-color-scheme: dark) {
+    background-color: #575757;
+  }
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px; 
+    height: 20px;
+    border-radius: 30px;
+    background-color: #51877a;
+    @media (prefers-color-scheme: dark) {
+      background-color: #8ebaad;
+    }
   }
 }
