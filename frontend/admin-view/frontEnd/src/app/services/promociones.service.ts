@@ -49,6 +49,18 @@ export class PromocionesService {
     return this.http.put(urlCompleta, datosFormulario, {headers: this.cabeceras});
   }
 
+  editTipoPromocion(idTipo: any, datosFormulario: any){
+    let urlCompleta = environment.base_url + '/tipopromo'+ '/' + idTipo;
+    console.log(urlCompleta);
+
+    return this.http.put(urlCompleta, datosFormulario, {headers: this.cabeceras});
+  }
+
+  deleteTipoPromocion(idTipo:string){
+    let urlCompleta = environment.base_url + '/tipopromo' + '/' + idTipo;
+  
+    return this.http.delete(urlCompleta, {headers: this.cabeceras});
+  }
 
 
   postTipoPromocion(datosFormulario: any){

@@ -1,9 +1,20 @@
+#botonesHeader{
+  display: flex;
+  justify-content: flex-end;
+}
 #botonesHeader button {
   border-radius: 20px;
   height: 30px;
 }
 #botonesHeader button i{
   padding-right: .5em;
+}
+
+.superior_tabla{
+  display:flex;
+  justify-content: flex-end;
+  align-items: center;
+  
 }
 
 h2{
@@ -17,7 +28,7 @@ h2{
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin: 3em 1em 2em 1em;
+  margin: 3em 0em 0em;
   padding: 0 1.5em;
   border-radius: 1em;
 } 
@@ -157,4 +168,20 @@ h2{
       width: 100%;
       height: 100%;
       background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .filtro{
+      margin-right: 1.5em;
+  }
+  
+  .filtro .radio .name{
+      margin: 7px;
+  }
+  .filtro .radio input {
+      display: none;
+    }
+  
+    .filtro .radio input:checked + .name {
+      color: #51877a;
+      font-weight: 600;
     }
