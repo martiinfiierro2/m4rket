@@ -25,6 +25,14 @@ export interface Promocion{
   isEdit: boolean
 }
 
+export interface TipoPromocion{
+  id: number,
+  nombre: string,
+  descripcion: string,
+  modificador: number,
+  isEdit: boolean,
+}
+
 @Component({
   selector: 'app-promociones',
   standalone: true,
@@ -35,6 +43,8 @@ export interface Promocion{
 export class PromocionesComponent {
 
   promociones: Promocion[] = [];
+
+  tiposPromocion: TipoPromocion[] = [];
 
   promocionSeleccionada: string = '';
   idPromoSelected: string = '';
@@ -54,12 +64,19 @@ export class PromocionesComponent {
 
   public tipoPromos: tipoPromocion[] = [];
 
+  opcionMostrar = "promo";
+
   constructor ( private promocionesService: PromocionesService, 
                 private route: Router){}
 
 
   ngOnInit(): void {
     this.getPromociones();
+    this.getTiposPromocion();
+  }
+
+  cambioOpcion(opcion: any){
+    this.opcionMostrar = opcion;
   }
 
 editPromo(promocion) {
@@ -81,6 +98,22 @@ savePromo(promocion) {
 cancelarEdit(promocion) {
   promocion.isEdit = false;
   this.getPromociones();
+}
+
+cancelarEditTipo(tipo) {
+  tipo.isEdit = false;
+  this.getTiposPromocion();
+}
+
+savePromoTipo(tipo) {
+  this.promocionesService.editTipoPromocion(tipo.id, tipo).subscribe(res => {
+    console.log(res);
+    tipo.isEdit = false; // salir del modo de edición
+    this.getTiposPromocion();
+  }, error => {
+    console.error('Error al guardar la promoción', error);
+    // Manejar el error
+  });
 }
 
 getTipoPromos(){
@@ -141,8 +174,17 @@ getTipoPromos(){
         //Paginacion
         this.totalregistros = res.page.total;
     })
+  }
 
-    
+  getTiposPromocion(){
+    this.promocionesService.getAllTipoPromociones()
+      .subscribe(res =>{
+        console.log(res);
+        this.tiposPromocion = res.tipopromociones;
+
+        //Paginacion
+        this.totalregistros = res.page.total;
+    })
   }
 
   borrarPromo(idPromo){
@@ -152,6 +194,12 @@ getTipoPromos(){
     })
   }
 
+  borrarTipo(idTipo){
+    this.promocionesService.deleteTipoPromocion(idTipo).subscribe(res => {
+      console.log(res);
+      this.getTiposPromocion();
+    })
+  }
 
 
 }

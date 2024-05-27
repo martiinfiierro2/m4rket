@@ -2,15 +2,92 @@
     <div id="divSearch">
         <input type="text" name="search" id="search" class="barraBusqueda" placeholder="Buscar promoción">
     </div>
-    <div id="botonesHeader">
-        <!--
-        <button (click)="irNuevaPromo()" class="btnPrimario">Añadir promoción</button>-->
-        <button (click)="mostrarModal()" class="btnPrimario"><i class="fa-solid fa-plus"></i>Añadir promoción</button>
-        <button (click)="irNuevoTipoPromo()" class="btnSecundario"><i class="fa-solid fa-plus"></i>Añadir tipo promoción</button>
-    </div>
 </div>
+<div class="superior_tabla">
+  <div id="botonesHeader">
+    <!--
+    <button (click)="irNuevaPromo()" class="btnPrimario">Añadir promoción</button>-->
+    <button *ngIf="opcionMostrar == 'promo'" (click)="mostrarModal()" class="btnPrimario"><i class="fa-solid fa-plus"></i>Añadir promoción</button>
+    <button *ngIf="opcionMostrar == 'tipo'" (click)="irNuevoTipoPromo()" class="btnSecundario"><i class="fa-solid fa-plus"></i>Añadir tipo promoción</button>
+    </div>
+  
+  <div class="filtro">
+    <label class="radio">
+      <input type="radio" name="radio" checked="" (click)="cambioOpcion('promo')">
+      <span class="name">Promociones</span>
+    </label>
+    <label class="radio">
+      <input type="radio" name="radio" (click)="cambioOpcion('tipo')">
+      <span class="name">Tipos de promoción</span>
+    </label>  
+    </div>
+    
+  </div>
+  
+
 <div id="listadoPromociones" *ngIf="promociones">
-    <table class="table">
+    <div *ngIf="opcionMostrar == 'tipo'">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Modificador</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let tipos of tiposPromocion">
+            <td>
+              <ng-container *ngIf="!tipos.isEdit; else editNombre">
+                {{ tipos.nombre }}
+              </ng-container>
+              <ng-template #editNombre>
+                <input [(ngModel)]="tipos.nombre" />
+              </ng-template>
+            </td>
+            <td>
+                <ng-container *ngIf="!tipos.isEdit; else editDescripcion">
+                  {{ tipos.descripcion }}
+                </ng-container>
+                <ng-template #editDescripcion>
+                  <input [(ngModel)]="tipos.descripcion" />
+                </ng-template>
+              </td>
+            <td>
+              <ng-container *ngIf="!tipos.isEdit; else editModificador">
+                {{ tipos.modificador }}
+              </ng-container>
+              <ng-template #editModificador>
+                <input [(ngModel)]="tipos.modificador" />            
+              </ng-template>
+            </td>
+            <td>
+              <ng-container *ngIf="!tipos.isEdit; else editActions">
+                <button (click)="editPromo(tipos)"class="btnIcon" id="btnEdit">
+                  <span class="iconoAccion fa-solid fa-pen"></span>
+                </button>
+                <button (click)="borrarTipo(tipos.id)" class="btnIcon" id="btnBorrar">
+                  <span class="iconoAccion fa-solid fa-trash"></span>
+                </button>
+              </ng-container>
+              <ng-template #editActions>
+                <button (click)="savePromoTipo(tipos)" class="btnIcon" id="btnSave">
+                  <span class="iconoAccion fa-solid fa-check"></span>
+                </button>
+                <button (click)="cancelarEditTipo(tipos)" class="btnIcon" id="btnCancel">
+                  <span class="iconoAccion fa-solid fa-times"></span>
+                </button>
+              </ng-template>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+    
+    <div *ngIf="opcionMostrar == 'promo'">
+  <table class="table">
         <thead>
           <tr>
             <th>Nombre</th>
@@ -77,7 +154,7 @@
           </tr>
         </tbody>
       </table>
-      
+    </div>
 
     <!-- Paginación -->
     <div class="d-flex justify-content-center">
