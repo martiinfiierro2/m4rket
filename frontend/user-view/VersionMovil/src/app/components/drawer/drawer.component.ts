@@ -788,7 +788,8 @@ export class DrawerComponent implements AfterViewInit {
   logoutAndRedirectToLogin(): void {
     this.homeService.stopTimer().then(() => {
         setTimeout(() => {
-            localStorage.clear();
+            localStorage.removeItem('tokenUsuario');
+            localStorage.removeItem('idUsuario');
             window.location.href = '/login';
         }, 100);
     });

@@ -34,11 +34,10 @@ export class LoginComponent {
   public loginForm = this.fb.group({
     email: [localStorage.getItem('email') || '', [Validators.required, Validators.email]],
     pwd: ['', Validators.required],
-    check:  [Validators.required]
+    check: [Validators.required]
   });
 
   
-
   constructor( private fb: FormBuilder,
                private usuarioService: UsuariosService,
                private route: Router){}
@@ -59,9 +58,8 @@ export class LoginComponent {
       this.usuarioService.login( this.loginForm.value)
       .subscribe( res =>{
 
-        console.log('Respuesta al suscribirse', res);
-    
-        
+        console.log(this.loginForm.value);
+         
         //Recordar sesion
         if (this.loginForm.value.check) {
           localStorage.setItem('tokenUsuario', res.token);
@@ -69,8 +67,10 @@ export class LoginComponent {
           localStorage.setItem('email', res.email);    
         }
         else{
-          localStorage.setItem('tokenUsuario', this.tokenUsuario);
-          localStorage.setItem('idUsuario', this.idUsuario);
+          localStorage.removeItem('email');
+          localStorage.setItem('tokenUsuario', res.token);
+          localStorage.setItem('idUsuario', res.idUsuario);
+
         }
 
         this.route.navigateByUrl('/home');

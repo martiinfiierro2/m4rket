@@ -18,22 +18,18 @@
             <label for="pwd" class="formulario">
                 <input type="password" name="pwd" formControlName="pwd" id="pwd" placeholder="Contraseña">
             </label>
-            <label for="recordarme">Recuérdame <input type="checkbox" formControlName="check" name="recordarme" id="recordarme" class="recuerdame"></label>
+            <label for="recordarme">Recuérdame <input type="checkbox" formControlName="check" name="recordarme" id="recordarme" class="recuerdame" checked></label>
+            
             <div id="avisos">
                 <p class="text-danger" *ngIf="!campoValido('email')">El usuario es obligatorio y debe ser un email</p>
                 <p class="text-danger" *ngIf="!campoValido('pwd')">El campo contraseña es obligatorio</p>
                 <p class="text-danger" *ngIf="avisoError">Campos incorrectos</p>
             </div>
             <button type="submit" [disabled]="esperando" ><i id="iconoCarga" class="fas fa-spinner fa-spin" *ngIf="esperando" ></i> Entrar</button>
-
         </form>  
         <div class="registro">
             <p>¿No tienes una cuenta todavía?</p>
             <p><a href="/registro">Regístrate aquí</a></p>
         </div>
-
-        
     </div>
-    
-    
 </body>
