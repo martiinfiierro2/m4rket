@@ -43,7 +43,7 @@ export class MotorComponent implements AfterViewInit {
 
   private translationX: number = 0;
   private translationY: number = 0;
-  private translationSpeed: number = 0.1;
+  private translationSpeed: number = 0.05;
 
   private zoomFactor: number = 1;
   private zoomSpeed: number = 0.05;
@@ -803,8 +803,8 @@ export class MotorComponent implements AfterViewInit {
       const touchY = touch.clientY;
     
       if(this.isRightTouchDown){
-        this.translationX += (this.lastTouchX - touchX) * this.zoomSpeed;
-        this.translationY += (this.lastTouchY - touchY) * this.zoomSpeed;
+        this.translationX += (this.lastTouchX - touchX) * this.translationSpeed;
+        this.translationY += (this.lastTouchY - touchY) * this.translationSpeed;
         motor.setTraslacion(this.translationX, this.translationY);
       }
       this.lastTouchX = touchX;
