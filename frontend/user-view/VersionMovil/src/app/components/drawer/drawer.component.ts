@@ -6,7 +6,6 @@ import { ModeloService } from 'src/app/services/modelo.service';
 import { MotorComponent, motor } from '../motor/motor.component';
 import { TRecursoMalla } from '../motor/clases/TRecursoMalla';
 
-
 import { trigger, transition, style, animate } from '@angular/animations';
 import { environment } from '../../environments/environment';
 import * as echarts from 'echarts';
@@ -15,6 +14,37 @@ import { Malla } from '../motor/clases/Malla';
 import { RotacionService } from 'src/app/services/rotacion.service';
 import { MotorService } from 'src/app/services/motor.service';
 
+export interface En_ubicacion{
+  id: number,
+  idProd: number,
+  idUbi: number,
+  fecha_ini: Date,
+  fecha_fin: Date
+}
+
+export interface Ubicaciones{
+  id: number,
+  referencia: string,
+  posicion: number,
+  en_ubicacion: En_ubicacion
+}
+
+export interface Promociones{
+  id: number,
+  nombre: string,
+  fecha_ini: Date,
+  fecha_fin: Date,
+  id_tipoPromo: number,
+  en_promocion: en_Promocion
+}
+
+export interface en_Promocion{
+  id: string,
+  fecha: string,
+  precio: Float32Array,
+  idPromo: number,
+  idProd: number
+}
 
 interface lista{
   id: string,
@@ -42,7 +72,7 @@ export interface Producto {
   proteina: Float32Array;
   sal: Float32Array;
   precio_kg: Float32Array;
-  ingerdientes: string;
+  ingredientes: string;
   foto: string;
   precio: Float32Array;
   enListaCompra: boolean;
@@ -50,7 +80,7 @@ export interface Producto {
   cantidad: number;
   comprado: boolean;
   //Ubicacions: Ubicaciones[]
-  //Promocions: Promociones[]
+  Promocions: Promociones[];
 }
 
 export interface ListaCompra {
@@ -101,7 +131,7 @@ export class DrawerComponent implements AfterViewInit {
 
 
   //PRODUCTO SELECCIONADO
-  productoSelect: any;
+  productoSelect: Producto | null = null;
   dispo: string = '';
   seleccionado: boolean = false;
   listaCompra: ListaCompra[] = [];
@@ -393,10 +423,10 @@ export class DrawerComponent implements AfterViewInit {
       (item) => item.idProd === Number(idProd)
     );
     if (productoEncontrado) {
-      this.productoSelect.cantidad = productoEncontrado.cantidad;
-      this.productoSelect.idLista = productoEncontrado.id;
-      this.productoSelect.enListaCompra = true;
-      this.productoSelect.comprado = productoEncontrado.comprado;
+      this.productoSelect!.cantidad = productoEncontrado.cantidad;
+      this.productoSelect!.idLista = productoEncontrado.id;
+      this.productoSelect!.enListaCompra = true;
+      this.productoSelect!.comprado = productoEncontrado.comprado;
       //console.log('Valores asignados:', this.productoSelect);
     } else {
       console.log('Producto no encontrado en listaCompra');
@@ -443,11 +473,11 @@ export class DrawerComponent implements AfterViewInit {
                     show: false
                 },
                 data: [
-                    {value: this.productoSelect.grasas, name: 'Grasas'},
-                    {value: this.productoSelect.hidratos_carbono, name: 'Hidratos de carbono'},
-                    {value: this.productoSelect.fibra, name: 'Fibra'},
-                    {value: this.productoSelect.proteina, name: 'Proteina'},
-                    {value: this.productoSelect.sal, name: 'Sal'}
+                    {value: this.productoSelect!.grasas, name: 'Grasas'},
+                    {value: this.productoSelect!.hidratos_carbono, name: 'Hidratos de carbono'},
+                    {value: this.productoSelect!.fibra, name: 'Fibra'},
+                    {value: this.productoSelect!.proteina, name: 'Proteina'},
+                    {value: this.productoSelect!.sal, name: 'Sal'}
                 ]
             }
         ]

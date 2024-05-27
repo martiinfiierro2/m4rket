@@ -160,8 +160,10 @@
                   <p class="dispo">{{dispo}}</p>
                 </div>
                 <div class="precio">
-                  <p class="precio_producto">{{ productoSelect.precio }}€</p>
-                  <p class="precio_kg_producto">{{ productoSelect.precio_kg }}€/kg</p>
+                  <p *ngIf="productoSelect.Promocions.length == 0 || productoSelect.Promocions[0].en_promocion.precio == productoSelect.precio" class="precio_producto">{{ productoSelect.precio }}€</p>
+                  <p *ngIf="productoSelect.Promocions.length == 0 || productoSelect.Promocions[0].en_promocion.precio == productoSelect.precio" class="precio_kg_producto">{{ productoSelect.precio }}€/kg</p>
+                  <p *ngIf="productoSelect.Promocions.length > 0 && productoSelect.Promocions[0].en_promocion.precio != productoSelect.precio" class="precio_kg_producto" class="precio_producto">{{ productoSelect.Promocions[0].en_promocion.precio }}€</p>
+                  <p *ngIf="productoSelect.Promocions.length > 0 && productoSelect.Promocions[0].en_promocion.precio != productoSelect.precio" style="text-decoration: line-through; color: gray;" >{{ productoSelect.precio }}€</p>
                 </div>
               </div>
                 <div class="cantidades" *ngIf="productoSelect.enListaCompra">
