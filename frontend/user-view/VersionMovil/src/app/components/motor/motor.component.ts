@@ -82,7 +82,7 @@ export class MotorComponent implements AfterViewInit {
     //asignar camara
     const camara: TNodo = await motor.crearCamara(
       this.mercado,
-      glMatrix.vec3.fromValues(-4.5, 20, -60),
+      glMatrix.vec3.fromValues(0, 20, -60),
       glMatrix.vec3.fromValues(25 * (Math.PI / 180), 0, 0),
       glMatrix.vec3.fromValues(1, 1, 1),
       true,
@@ -125,7 +125,7 @@ export class MotorComponent implements AfterViewInit {
 
     const puerta: TNodo = await motor.crearModelo(
       this.suelo,
-      glMatrix.vec3.fromValues(-25, 0, 43),
+      glMatrix.vec3.fromValues(-25, 0, 20),
       glMatrix.vec3.fromValues(0, 0, 0),
       glMatrix.vec3.fromValues(1, 1, 1),
       'puerta.obj',
@@ -139,7 +139,7 @@ export class MotorComponent implements AfterViewInit {
     this.ubicaciones.push(
       await motor.crearModelo(
         this.suelo,
-        glMatrix.vec3.fromValues(-8, 0, 38),
+        glMatrix.vec3.fromValues(-8, 0, 18),
         glMatrix.vec3.fromValues(0, 0, 0),
         glMatrix.vec3.fromValues(2.5, 2.5, 2.5),
         'mueblefrutas.obj',
@@ -152,7 +152,7 @@ export class MotorComponent implements AfterViewInit {
     this.ubicaciones.push(
       await motor.crearModelo(
         this.suelo,
-        glMatrix.vec3.fromValues(-1, 0, 38),
+        glMatrix.vec3.fromValues(-1, 0, 18),
         glMatrix.vec3.fromValues(0, 0, 0),
         glMatrix.vec3.fromValues(2.5, 2.5, 2.5),
         'mueblefrutas.obj',
@@ -165,7 +165,7 @@ export class MotorComponent implements AfterViewInit {
     this.ubicaciones.push(
       await motor.crearModelo(
         this.suelo,
-        glMatrix.vec3.fromValues(6, 0, 38),
+        glMatrix.vec3.fromValues(6, 0, 18),
         glMatrix.vec3.fromValues(0, 0, 0),
         glMatrix.vec3.fromValues(2.5, 2.5, 2.5),
         'mueblefrutas.obj',
@@ -178,7 +178,7 @@ export class MotorComponent implements AfterViewInit {
     this.ubicaciones.push(
       await motor.crearModelo(
         this.suelo,
-        glMatrix.vec3.fromValues(13, 0, 38),
+        glMatrix.vec3.fromValues(13, 0, 18),
         glMatrix.vec3.fromValues(0, 0, 0),
         glMatrix.vec3.fromValues(2.5, 2.5, 2.5),
         'mueblefrutas.obj',
@@ -191,7 +191,7 @@ export class MotorComponent implements AfterViewInit {
     this.ubicaciones.push(
       await motor.crearModelo(
         this.suelo,
-        glMatrix.vec3.fromValues(20, 0, 38),
+        glMatrix.vec3.fromValues(20, 0, 18),
         glMatrix.vec3.fromValues(0, 0, 0),
         glMatrix.vec3.fromValues(2.5, 2.5, 2.5),
         'mueblefrutas.obj',
@@ -203,166 +203,6 @@ export class MotorComponent implements AfterViewInit {
     );
 
     //Estanterias pasillo 1
-    this.ubicaciones.push(
-      await motor.crearModelo(
-        this.suelo,
-        glMatrix.vec3.fromValues(-14, 0, 27),
-        glMatrix.vec3.fromValues(0, 90 * (Math.PI / 180), 0),
-        glMatrix.vec3.fromValues(1, 1, 1),
-        'estanteria.obj',
-        'malla',
-        'grisclaro.jpeg',
-        -1,
-        null
-      )
-    );
-    this.ubicaciones.push(
-      await motor.crearModelo(
-        this.suelo,
-        glMatrix.vec3.fromValues(-8, 0, 27),
-        glMatrix.vec3.fromValues(0, 90 * (Math.PI / 180), 0),
-        glMatrix.vec3.fromValues(1, 1, 1),
-        'estanteria.obj',
-        'malla',
-        'grisclaro.jpeg',
-        -1,
-        null
-      )
-    );
-    this.ubicaciones.push(
-      await motor.crearModelo(
-        this.suelo,
-        glMatrix.vec3.fromValues(-2, 0, 27),
-        glMatrix.vec3.fromValues(0, 90 * (Math.PI / 180), 0),
-        glMatrix.vec3.fromValues(1, 1, 1),
-        'estanteria.obj',
-        'malla',
-        'grisclaro.jpeg',
-        -1,
-        null
-      )
-    );
-    this.ubicaciones.push(
-      await motor.crearModelo(
-        this.suelo,
-        glMatrix.vec3.fromValues(-14, 0, 24),
-        glMatrix.vec3.fromValues(0, 90 * (Math.PI / 180), 0),
-        glMatrix.vec3.fromValues(1, 1, 1),
-        'estanteria.obj',
-        'malla',
-        'grisclaro.jpeg',
-        -1,
-        null
-      )
-    );
-    this.ubicaciones.push(
-      await motor.crearModelo(
-        this.suelo,
-        glMatrix.vec3.fromValues(-8, 0, 24),
-        glMatrix.vec3.fromValues(0, 90 * (Math.PI / 180), 0),
-        glMatrix.vec3.fromValues(1, 1, 1),
-        'estanteria.obj',
-        'malla',
-        'grisclaro.jpeg',
-        -1,
-        null
-      )
-    );
-    this.ubicaciones.push(
-      await motor.crearModelo(
-        this.suelo,
-        glMatrix.vec3.fromValues(-2, 0, 24),
-        glMatrix.vec3.fromValues(0, 90 * (Math.PI / 180), 0),
-        glMatrix.vec3.fromValues(1, 1, 1),
-        'estanteria.obj',
-        'malla',
-        'grisclaro.jpeg',
-        -1,
-        null
-      )
-    );
-
-    //Estanterias pasillo 2
-    this.ubicaciones.push(
-      await motor.crearModelo(
-        this.suelo,
-        glMatrix.vec3.fromValues(-14, 0, 17),
-        glMatrix.vec3.fromValues(0, 90 * (Math.PI / 180), 0),
-        glMatrix.vec3.fromValues(1, 1, 1),
-        'estanteria.obj',
-        'malla',
-        'grisclaro.jpeg',
-        -1,
-        null
-      )
-    );
-    this.ubicaciones.push(
-      await motor.crearModelo(
-        this.suelo,
-        glMatrix.vec3.fromValues(-8, 0, 17),
-        glMatrix.vec3.fromValues(0, 90 * (Math.PI / 180), 0),
-        glMatrix.vec3.fromValues(1, 1, 1),
-        'estanteria.obj',
-        'malla',
-        'grisclaro.jpeg',
-        -1,
-        null
-      )
-    );
-    this.ubicaciones.push(
-      await motor.crearModelo(
-        this.suelo,
-        glMatrix.vec3.fromValues(-2, 0, 17),
-        glMatrix.vec3.fromValues(0, 90 * (Math.PI / 180), 0),
-        glMatrix.vec3.fromValues(1, 1, 1),
-        'estanteria.obj',
-        'malla',
-        'grisclaro.jpeg',
-        -1,
-        null
-      )
-    );
-    this.ubicaciones.push(
-      await motor.crearModelo(
-        this.suelo,
-        glMatrix.vec3.fromValues(-14, 0, 14),
-        glMatrix.vec3.fromValues(0, 90 * (Math.PI / 180), 0),
-        glMatrix.vec3.fromValues(1, 1, 1),
-        'estanteria.obj',
-        'malla',
-        'grisclaro.jpeg',
-        -1,
-        null
-      )
-    );
-    this.ubicaciones.push(
-      await motor.crearModelo(
-        this.suelo,
-        glMatrix.vec3.fromValues(-8, 0, 14),
-        glMatrix.vec3.fromValues(0, 90 * (Math.PI / 180), 0),
-        glMatrix.vec3.fromValues(1, 1, 1),
-        'estanteria.obj',
-        'malla',
-        'grisclaro.jpeg',
-        -1,
-        null
-      )
-    );
-    this.ubicaciones.push(
-      await motor.crearModelo(
-        this.suelo,
-        glMatrix.vec3.fromValues(-2, 0, 14),
-        glMatrix.vec3.fromValues(0, 90 * (Math.PI / 180), 0),
-        glMatrix.vec3.fromValues(1, 1, 1),
-        'estanteria.obj',
-        'malla',
-        'grisclaro.jpeg',
-        -1,
-        null
-      )
-    );
-
-    //Estanterias pasillo 3
     this.ubicaciones.push(
       await motor.crearModelo(
         this.suelo,
@@ -442,11 +282,171 @@ export class MotorComponent implements AfterViewInit {
       )
     );
 
+    //Estanterias pasillo 2
+    this.ubicaciones.push(
+      await motor.crearModelo(
+        this.suelo,
+        glMatrix.vec3.fromValues(-14, 0, -3),
+        glMatrix.vec3.fromValues(0, 90 * (Math.PI / 180), 0),
+        glMatrix.vec3.fromValues(1, 1, 1),
+        'estanteria.obj',
+        'malla',
+        'grisclaro.jpeg',
+        -1,
+        null
+      )
+    );
+    this.ubicaciones.push(
+      await motor.crearModelo(
+        this.suelo,
+        glMatrix.vec3.fromValues(-8, 0, -3),
+        glMatrix.vec3.fromValues(0, 90 * (Math.PI / 180), 0),
+        glMatrix.vec3.fromValues(1, 1, 1),
+        'estanteria.obj',
+        'malla',
+        'grisclaro.jpeg',
+        -1,
+        null
+      )
+    );
+    this.ubicaciones.push(
+      await motor.crearModelo(
+        this.suelo,
+        glMatrix.vec3.fromValues(-2, 0, -3),
+        glMatrix.vec3.fromValues(0, 90 * (Math.PI / 180), 0),
+        glMatrix.vec3.fromValues(1, 1, 1),
+        'estanteria.obj',
+        'malla',
+        'grisclaro.jpeg',
+        -1,
+        null
+      )
+    );
+    this.ubicaciones.push(
+      await motor.crearModelo(
+        this.suelo,
+        glMatrix.vec3.fromValues(-14, 0, -6),
+        glMatrix.vec3.fromValues(0, 90 * (Math.PI / 180), 0),
+        glMatrix.vec3.fromValues(1, 1, 1),
+        'estanteria.obj',
+        'malla',
+        'grisclaro.jpeg',
+        -1,
+        null
+      )
+    );
+    this.ubicaciones.push(
+      await motor.crearModelo(
+        this.suelo,
+        glMatrix.vec3.fromValues(-8, 0, -6),
+        glMatrix.vec3.fromValues(0, 90 * (Math.PI / 180), 0),
+        glMatrix.vec3.fromValues(1, 1, 1),
+        'estanteria.obj',
+        'malla',
+        'grisclaro.jpeg',
+        -1,
+        null
+      )
+    );
+    this.ubicaciones.push(
+      await motor.crearModelo(
+        this.suelo,
+        glMatrix.vec3.fromValues(-2, 0, -6),
+        glMatrix.vec3.fromValues(0, 90 * (Math.PI / 180), 0),
+        glMatrix.vec3.fromValues(1, 1, 1),
+        'estanteria.obj',
+        'malla',
+        'grisclaro.jpeg',
+        -1,
+        null
+      )
+    );
+
+    //Estanterias pasillo 3
+    this.ubicaciones.push(
+      await motor.crearModelo(
+        this.suelo,
+        glMatrix.vec3.fromValues(-14, 0, -13),
+        glMatrix.vec3.fromValues(0, 90 * (Math.PI / 180), 0),
+        glMatrix.vec3.fromValues(1, 1, 1),
+        'estanteria.obj',
+        'malla',
+        'grisclaro.jpeg',
+        -1,
+        null
+      )
+    );
+    this.ubicaciones.push(
+      await motor.crearModelo(
+        this.suelo,
+        glMatrix.vec3.fromValues(-8, 0, -13),
+        glMatrix.vec3.fromValues(0, 90 * (Math.PI / 180), 0),
+        glMatrix.vec3.fromValues(1, 1, 1),
+        'estanteria.obj',
+        'malla',
+        'grisclaro.jpeg',
+        -1,
+        null
+      )
+    );
+    this.ubicaciones.push(
+      await motor.crearModelo(
+        this.suelo,
+        glMatrix.vec3.fromValues(-2, 0, -13),
+        glMatrix.vec3.fromValues(0, 90 * (Math.PI / 180), 0),
+        glMatrix.vec3.fromValues(1, 1, 1),
+        'estanteria.obj',
+        'malla',
+        'grisclaro.jpeg',
+        -1,
+        null
+      )
+    );
+    this.ubicaciones.push(
+      await motor.crearModelo(
+        this.suelo,
+        glMatrix.vec3.fromValues(-14, 0, -16),
+        glMatrix.vec3.fromValues(0, 90 * (Math.PI / 180), 0),
+        glMatrix.vec3.fromValues(1, 1, 1),
+        'estanteria.obj',
+        'malla',
+        'grisclaro.jpeg',
+        -1,
+        null
+      )
+    );
+    this.ubicaciones.push(
+      await motor.crearModelo(
+        this.suelo,
+        glMatrix.vec3.fromValues(-8, 0, -16),
+        glMatrix.vec3.fromValues(0, 90 * (Math.PI / 180), 0),
+        glMatrix.vec3.fromValues(1, 1, 1),
+        'estanteria.obj',
+        'malla',
+        'grisclaro.jpeg',
+        -1,
+        null
+      )
+    );
+    this.ubicaciones.push(
+      await motor.crearModelo(
+        this.suelo,
+        glMatrix.vec3.fromValues(-2, 0, -16),
+        glMatrix.vec3.fromValues(0, 90 * (Math.PI / 180), 0),
+        glMatrix.vec3.fromValues(1, 1, 1),
+        'estanteria.obj',
+        'malla',
+        'grisclaro.jpeg',
+        -1,
+        null
+      )
+    );
+
     //Estanterias fondo
     this.ubicaciones.push(
       await motor.crearModelo(
         this.suelo,
-        glMatrix.vec3.fromValues(12, 0, 10),
+        glMatrix.vec3.fromValues(12, 0, -10),
         glMatrix.vec3.fromValues(0, 90 * (Math.PI / 180), 0),
         glMatrix.vec3.fromValues(1, 1, 1),
         'estanteria.obj',
@@ -459,7 +459,7 @@ export class MotorComponent implements AfterViewInit {
     this.ubicaciones.push(
       await motor.crearModelo(
         this.suelo,
-        glMatrix.vec3.fromValues(12, 0, 13),
+        glMatrix.vec3.fromValues(12, 0, -7),
         glMatrix.vec3.fromValues(0, 90 * (Math.PI / 180), 0),
         glMatrix.vec3.fromValues(1, 1, 1),
         'estanteria.obj',
@@ -472,7 +472,7 @@ export class MotorComponent implements AfterViewInit {
     this.ubicaciones.push(
       await motor.crearModelo(
         this.suelo,
-        glMatrix.vec3.fromValues(18, 0, 10),
+        glMatrix.vec3.fromValues(18, 0, -10),
         glMatrix.vec3.fromValues(0, 90 * (Math.PI / 180), 0),
         glMatrix.vec3.fromValues(1, 1, 1),
         'estanteria.obj',
@@ -485,7 +485,7 @@ export class MotorComponent implements AfterViewInit {
     this.ubicaciones.push(
       await motor.crearModelo(
         this.suelo,
-        glMatrix.vec3.fromValues(18, 0, 13),
+        glMatrix.vec3.fromValues(18, 0, -7),
         glMatrix.vec3.fromValues(0, 90 * (Math.PI / 180), 0),
         glMatrix.vec3.fromValues(1, 1, 1),
         'estanteria.obj',
@@ -499,7 +499,7 @@ export class MotorComponent implements AfterViewInit {
     this.ubicaciones.push(
       await motor.crearModelo(
         this.suelo,
-        glMatrix.vec3.fromValues(12, 0, 18),
+        glMatrix.vec3.fromValues(12, 0, -2),
         glMatrix.vec3.fromValues(0, 90 * (Math.PI / 180), 0),
         glMatrix.vec3.fromValues(1, 1, 1),
         'estanteria.obj',
@@ -512,7 +512,7 @@ export class MotorComponent implements AfterViewInit {
     this.ubicaciones.push(
       await motor.crearModelo(
         this.suelo,
-        glMatrix.vec3.fromValues(12, 0, 21),
+        glMatrix.vec3.fromValues(12, 0, 1),
         glMatrix.vec3.fromValues(0, 90 * (Math.PI / 180), 0),
         glMatrix.vec3.fromValues(1, 1, 1),
         'estanteria.obj',
@@ -525,7 +525,7 @@ export class MotorComponent implements AfterViewInit {
     this.ubicaciones.push(
       await motor.crearModelo(
         this.suelo,
-        glMatrix.vec3.fromValues(18, 0, 18),
+        glMatrix.vec3.fromValues(18, 0, -2),
         glMatrix.vec3.fromValues(0, 90 * (Math.PI / 180), 0),
         glMatrix.vec3.fromValues(1, 1, 1),
         'estanteria.obj',
@@ -538,7 +538,7 @@ export class MotorComponent implements AfterViewInit {
     this.ubicaciones.push(
       await motor.crearModelo(
         this.suelo,
-        glMatrix.vec3.fromValues(18, 0, 21),
+        glMatrix.vec3.fromValues(18, 0, 1),
         glMatrix.vec3.fromValues(0, 90 * (Math.PI / 180), 0),
         glMatrix.vec3.fromValues(1, 1, 1),
         'estanteria.obj',
@@ -553,7 +553,7 @@ export class MotorComponent implements AfterViewInit {
     this.ubicaciones.push(
       await motor.crearModelo(
         this.suelo,
-        glMatrix.vec3.fromValues(7, 0, -5),
+        glMatrix.vec3.fromValues(7, 0, -25),
         glMatrix.vec3.fromValues(0, 0, 0),
         glMatrix.vec3.fromValues(2, 2, 2),
         'armario.obj',
@@ -566,7 +566,7 @@ export class MotorComponent implements AfterViewInit {
     this.ubicaciones.push(
       await motor.crearModelo(
         this.suelo,
-        glMatrix.vec3.fromValues(14, 0, -5),
+        glMatrix.vec3.fromValues(14, 0, -25),
         glMatrix.vec3.fromValues(0, 0, 0),
         glMatrix.vec3.fromValues(2, 2, 2),
         'armario.obj',
@@ -579,7 +579,7 @@ export class MotorComponent implements AfterViewInit {
     this.ubicaciones.push(
       await motor.crearModelo(
         this.suelo,
-        glMatrix.vec3.fromValues(21, 0, -5),
+        glMatrix.vec3.fromValues(21, 0, -25),
         glMatrix.vec3.fromValues(0, 0, 0),
         glMatrix.vec3.fromValues(2, 2, 2),
         'armario.obj',
@@ -594,7 +594,7 @@ export class MotorComponent implements AfterViewInit {
     this.ubicaciones.push(
       await motor.crearModelo(
         this.suelo,
-        glMatrix.vec3.fromValues(28, 0, 12),
+        glMatrix.vec3.fromValues(28, 0, -8),
         glMatrix.vec3.fromValues(0, 0, 0),
         glMatrix.vec3.fromValues(2, 2, 2),
         'frigo.obj',
@@ -607,7 +607,7 @@ export class MotorComponent implements AfterViewInit {
     this.ubicaciones.push(
       await motor.crearModelo(
         this.suelo,
-        glMatrix.vec3.fromValues(28, 0, 15),
+        glMatrix.vec3.fromValues(28, 0, -5),
         glMatrix.vec3.fromValues(0, 0, 0),
         glMatrix.vec3.fromValues(2, 2, 2),
         'frigo.obj',
@@ -620,7 +620,7 @@ export class MotorComponent implements AfterViewInit {
     this.ubicaciones.push(
       await motor.crearModelo(
         this.suelo,
-        glMatrix.vec3.fromValues(28, 0, 18),
+        glMatrix.vec3.fromValues(28, 0, -2),
         glMatrix.vec3.fromValues(0, 0, 0),
         glMatrix.vec3.fromValues(2, 2, 2),
         'frigo.obj',
@@ -633,7 +633,7 @@ export class MotorComponent implements AfterViewInit {
     this.ubicaciones.push(
       await motor.crearModelo(
         this.suelo,
-        glMatrix.vec3.fromValues(28, 0, 21),
+        glMatrix.vec3.fromValues(28, 0, 1),
         glMatrix.vec3.fromValues(0, 0, 0),
         glMatrix.vec3.fromValues(2, 2, 2),
         'frigo.obj',
@@ -648,7 +648,7 @@ export class MotorComponent implements AfterViewInit {
     this.ubicaciones.push(
       await motor.crearModelo(
         this.suelo,
-        glMatrix.vec3.fromValues(-1, 0, -5),
+        glMatrix.vec3.fromValues(-1, 0, -25),
         glMatrix.vec3.fromValues(0, 180 * (Math.PI / 180), 0),
         glMatrix.vec3.fromValues(3.3, 3.3, 3.3),
         'muebledoble.obj',
@@ -661,7 +661,7 @@ export class MotorComponent implements AfterViewInit {
     this.ubicaciones.push(
       await motor.crearModelo(
         this.suelo,
-        glMatrix.vec3.fromValues(-8, 0, -5),
+        glMatrix.vec3.fromValues(-8, 0, -25),
         glMatrix.vec3.fromValues(0, 180 * (Math.PI / 180), 0),
         glMatrix.vec3.fromValues(3.3, 3.3, 3.3),
         'muebledoble.obj',
@@ -674,7 +674,7 @@ export class MotorComponent implements AfterViewInit {
     this.ubicaciones.push(
       await motor.crearModelo(
         this.suelo,
-        glMatrix.vec3.fromValues(-15, 0, -5),
+        glMatrix.vec3.fromValues(-15, 0, -25),
         glMatrix.vec3.fromValues(0, 180 * (Math.PI / 180), 0),
         glMatrix.vec3.fromValues(3.3, 3.3, 3.3),
         'muebledoble.obj',
@@ -688,7 +688,7 @@ export class MotorComponent implements AfterViewInit {
     //Cajas registradoras
     const caja1: TNodo = await motor.crearModelo(
       this.suelo,
-      glMatrix.vec3.fromValues(-25, 0, 6),
+      glMatrix.vec3.fromValues(-25, 0, -14),
       glMatrix.vec3.fromValues(0, 0, 0),
       glMatrix.vec3.fromValues(4, 4, 4),
       'cajaregistradora.obj',
@@ -699,7 +699,7 @@ export class MotorComponent implements AfterViewInit {
     );
     const caja2: TNodo = await motor.crearModelo(
       this.suelo,
-      glMatrix.vec3.fromValues(-25, 0, 12),
+      glMatrix.vec3.fromValues(-25, 0, -8),
       glMatrix.vec3.fromValues(0, 0, 0),
       glMatrix.vec3.fromValues(4, 4, 4),
       'cajaregistradora.obj',
@@ -710,7 +710,7 @@ export class MotorComponent implements AfterViewInit {
     );
     const caja3: TNodo = await motor.crearModelo(
       this.suelo,
-      glMatrix.vec3.fromValues(-25, 0, 18),
+      glMatrix.vec3.fromValues(-25, 0, -2),
       glMatrix.vec3.fromValues(0, 0, 0),
       glMatrix.vec3.fromValues(4, 4, 4),
       'cajaregistradora.obj',
@@ -721,7 +721,7 @@ export class MotorComponent implements AfterViewInit {
     );
     const caja4: TNodo = await motor.crearModelo(
       this.suelo,
-      glMatrix.vec3.fromValues(-25, 0, 24),
+      glMatrix.vec3.fromValues(-25, 0, 4),
       glMatrix.vec3.fromValues(0, 0, 0),
       glMatrix.vec3.fromValues(4, 4, 4),
       'cajaregistradora.obj',
@@ -827,7 +827,7 @@ export class MotorComponent implements AfterViewInit {
         const deltaDistance = this.lastPinchDistance - distance;
     
         // Ajusta el factor de zoom en función de la diferencia de distancia
-        this.zoomSpeed = 0.05; // Velocidad de zoom
+        this.zoomSpeed = 0.005; // Velocidad de zoom
         this.zoomFactor *= 1 + deltaDistance * this.zoomSpeed;
     
         // Actualiza la última distancia de pellizco
