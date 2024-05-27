@@ -51,7 +51,32 @@ export class EstadisticasService {
   getCountMasBuscadosFecha(inicio: string, fin: string): Observable<any>{
     const fechaInicioCodificada = encodeURIComponent(inicio);
     const fechaFinCodificada = encodeURIComponent(fin);
+    console.log('BUSCADOS');
     let urlCompleta = this.url + '?nombre=masbuscado&inicio=' + fechaInicioCodificada + '&fin=' + fechaFinCodificada;
+    return this.http.get(urlCompleta, {headers: this.cabeceras});
+  }
+
+  getCountMasEliminadosFecha(inicio: string, fin: string): Observable<any>{
+    const fechaInicioCodificada = encodeURIComponent(inicio);
+    const fechaFinCodificada = encodeURIComponent(fin);
+    console.log('ELIMINADOS');
+    let urlCompleta = this.url + '?nombre=maseliminado&inicio=' + fechaInicioCodificada + '&fin=' + fechaFinCodificada;
+    return this.http.get(urlCompleta, {headers: this.cabeceras});
+  }
+
+  getCountMasCompradosFecha(inicio: string, fin: string): Observable<any>{
+    const fechaInicioCodificada = encodeURIComponent(inicio);
+    const fechaFinCodificada = encodeURIComponent(fin);
+    console.log('COMPRADOS');
+    let urlCompleta = this.url + '?nombre=mascomprado&inicio=' + fechaInicioCodificada + '&fin=' + fechaFinCodificada;
+    return this.http.get(urlCompleta, {headers: this.cabeceras});
+  }
+
+  getCountMasAnadidosFecha(inicio: string, fin: string): Observable<any>{
+    const fechaInicioCodificada = encodeURIComponent(inicio);
+    const fechaFinCodificada = encodeURIComponent(fin);
+    console.log('AÑADIDOS');
+    let urlCompleta = this.url + '?nombre=masanadido&inicio=' + fechaInicioCodificada + '&fin=' + fechaFinCodificada;
     return this.http.get(urlCompleta, {headers: this.cabeceras});
   }
 
@@ -86,7 +111,7 @@ export class EstadisticasService {
   getCountMediaTiempo(inicio: string, fin: string): Observable<any>{
     const fechaInicioCodificada = encodeURIComponent(inicio);
     const fechaFinCodificada = encodeURIComponent(fin);
-    let urlCompleta = this.url + '?nombre=mediatiempo&inicio=' + fechaInicioCodificada + '&fin=' + fechaFinCodificada;
+    let urlCompleta = this.url + '?nombre=mediatiempos&inicio=' + fechaInicioCodificada + '&fin=' + fechaFinCodificada;
     return this.http.get(urlCompleta, {headers: this.cabeceras});
   }
 

@@ -85,6 +85,9 @@ export class EstadisticasComponent {
   totalMedia: number = 0;
   usuariosUnicos: number = 0;
 
+  //VARIABLE LISTADO MAS...
+  opcionListado: string = "buscado";
+
 
   //VARIABLES TENDENCIA 
   tendenciaAnadidos: number = 0;
@@ -141,8 +144,8 @@ export class EstadisticasComponent {
   }
 
   async actualizarDatos(opcion: string){
-    this.getContadoresMasBuscados();
-    this.getContadoresMasEliminados(opcion);
+    this.cambioListado(this.opcionListado);
+    this.getContadoresEliminados(opcion);
     this.getContadoresActivos(opcion);
     this.getContadoresComprados(opcion);
     this.getContadoresListados(opcion);
@@ -185,7 +188,7 @@ export class EstadisticasComponent {
     this.tendenciaFechaFin = fechaTendenciaFin.toISOString().split('T')[0];
     this.tendenciaFechaInicio = fechaTendenciaInicio.toISOString().split('T')[0];
 
-    console.log('Fecha inicio tendencia: calculadas' + this.tendenciaFechaInicio + 'al ' + this.tendenciaFechaFin);
+    //console.log('Fecha inicio tendencia: calculadas' + this.tendenciaFechaInicio + 'al ' + this.tendenciaFechaFin);
 
     this.actualizarDatos(opcion);
   
@@ -199,7 +202,7 @@ export class EstadisticasComponent {
   ngOnInit(): void {
     this.fechasDefecto();
     this.getContadoresMasBuscados();
-    this.getContadoresMasEliminados('7d');
+    this.getContadoresEliminados('7d');
     this.getContadoresActivos('7d');
     this.getContadoresComprados('7d');
     this.getContadoresListados('7d');
@@ -425,15 +428,33 @@ export class EstadisticasComponent {
     return diasSemana[fecha.getDay()];
   }
 
+  async cambioListado(opcion: any){
+    this.opcionListado = opcion;
+    
+    if(opcion ="buscado"){
+      this.getContadoresMasBuscados();
+      console.log(this.opcionListado);
+    }
+    if(opcion ="eliminado"){
+      this.getContadoresMasEliminados();
+      console.log(this.opcionListado);
+    }
+    if(opcion ="anadido"){
+      this.getContadoresMasListados();
+      console.log(this.opcionListado);
+    }
+    if(opcion = "comprado"){
+      this.getContadoresMasComprados();
+      console.log(this.opcionListado);
+    }
+  }
 
   //CRUD
   async getContadoresMasBuscados() {
     this.buscados = [];
-    this.totalBuscados = 0;
-    if(this.fechaFin !== "" && this.fechaInicio !== ""){
       try {
         const res = await this.estadisticasService.getCountMasBuscadosFecha(this.fechaInicio, this.fechaFin).toPromise();
-        //console.log(res);
+        console.log(res);
         for (let index = 0; index < 7; index++) {
           let contador = new DatosContadores();
     
@@ -442,30 +463,13 @@ export class EstadisticasComponent {
           contador.value = res.datosContadores[index].totalCount;
           contador.foto = res2.productos.foto;
           this.buscados.push(contador);
-          //this.totalBuscados += parseInt(contador.value);
         }
       } catch (error) {
         console.error(error);
       }
-    }
-    else{
-      try {
-        const res = await this.estadisticasService.getCountAnadidos().toPromise();
-    
-        for (let index = 0; index < res.datosContadores.length; index++) {
-          let contador = new DatosContadores();
-    
-          const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
-          //contador.name = res2.productos.nombre;
-          contador.value = res.datosContadores[index].totalCount;
-          this.anadidos.push(contador);
-        }
-        //this.configurarGraficoAnadidos();
-      } catch (error) {
-        console.error(error);
-      }
-    }
   }
+
+  
 
   async getContadoresBuscados(opcion:string) {
     //this.buscados = [];
@@ -492,8 +496,29 @@ export class EstadisticasComponent {
     
   }
 
-  async getContadoresMasEliminados(opcion:string) {
+  async getContadoresMasEliminados() {
+    console.log('He entrado a eliminados');
     this.eliminados = [];
+    //this.totalBuscados = 0;
+      try {
+        const res = await this.estadisticasService.getCountMasEliminadosFecha(this.fechaInicio, this.fechaFin).toPromise();
+        console.log(res);
+        for (let index = 0; index < 7; index++) {
+          let contador = new DatosContadores();
+    
+          const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
+          contador.name = res2.productos.nombre;
+          contador.value = res.datosContadores[index].totalCount;
+          contador.foto = res2.productos.foto;
+          this.eliminados.push(contador);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+  }
+
+  async getContadoresEliminados(opcion:string) {
+    //this.eliminados = [];
     this.totalEliminados = 0;
       try {
         const res = await this.estadisticasService.getCountEliminadosFecha(this.fechaInicio, this.fechaFin).toPromise();
@@ -508,7 +533,7 @@ export class EstadisticasComponent {
           const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
           //contador.name = res2.productos.nombre;
           contador.value = res.datosContadores[index].totalCount;
-          this.eliminados.push(contador);
+          //this.eliminados.push(contador);
           this.totalEliminados += parseInt(contador.value);
         }
       await this.getTendenciaEliminados();
@@ -552,8 +577,28 @@ export class EstadisticasComponent {
     }
   }
 
-  async getContadoresComprados(opcion: string) {
+  async getContadoresMasComprados() {
     this.comprados = [];
+    //this.totalBuscados = 0;
+      try {
+        const res = await this.estadisticasService.getCountMasCompradosFecha(this.fechaInicio, this.fechaFin).toPromise();
+        console.log(res);
+        for (let index = 0; index < 7; index++) {
+          let contador = new DatosContadores();
+    
+          const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
+          contador.name = res2.productos.nombre;
+          contador.value = res.datosContadores[index].totalCount;
+          contador.foto = res2.productos.foto;
+          this.comprados.push(contador);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+  }
+
+  async getContadoresComprados(opcion: string) {
+    //this.comprados = [];
     this.totalComprados = 0;
     try {
       const res = await this.estadisticasService.getCountCompradosFecha(this.fechaInicio, this.fechaFin).toPromise();
@@ -566,7 +611,7 @@ export class EstadisticasComponent {
         const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
         //contador.name = res2.productos.nombre;
         contador.value = res.datosContadores[index].totalCount;
-        this.comprados.push(contador);
+        //this.comprados.push(contador);
         this.totalComprados += parseInt(contador.value);
       }
       await this.getPorcentajeComprados();
@@ -576,21 +621,39 @@ export class EstadisticasComponent {
     }
   }
 
-  async getContadoresListados(opcion: string) {
+  async getContadoresMasListados() {
     this.anadidos = [];
+    //this.totalBuscados = 0;
+      try {
+        const res = await this.estadisticasService.getCountMasAnadidosFecha(this.fechaInicio, this.fechaFin).toPromise();
+        console.log(res);
+        for (let index = 0; index < 7; index++) {
+          let contador = new DatosContadores();
+    
+          const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
+          contador.name = res2.productos.nombre;
+          contador.value = res.datosContadores[index].totalCount;
+          contador.foto = res2.productos.foto;
+          this.anadidos.push(contador);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+  }
+  async getContadoresListados(opcion: string) {
+    //this.anadidos = [];
     this.totalAnadidos = 0;
     try {
       const res = await this.estadisticasService.getCountListadosFecha(this.fechaInicio, this.fechaFin).toPromise();
-      console.log(res);
+      //console.log(res);
       await this.graficoListados(opcion, res);
 
       for (let index = 0; index < res.datosContadores.length; index++) {
         let contador = new DatosContadores();
-  
         const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
         //contador.name = res2.productos.nombre;
         contador.value = res.datosContadores[index].totalCount;
-        this.anadidos.push(contador);
+       //this.anadidos.push(contador);
         this.totalAnadidos += parseInt(contador.value);
       }
       //console.log(this.totalAnadidos);
@@ -620,7 +683,7 @@ export class EstadisticasComponent {
         let contador = new DatosContadores();
         contador.value = res.datosContadores[index].total_usuarios;
         this.usuariosUnicos += parseInt(contador.value);
-        console.log(this.usuariosUnicos);
+        //console.log(this.usuariosUnicos);
       }
 
     } catch (error) {
@@ -687,9 +750,9 @@ export class EstadisticasComponent {
         console.error(error);
       }
       if(this.totalEliminados){
-        console.log('Tendencia Eliminados: totalEliminados = ' + this.totalEliminados + ' totalAnterior: ' + this.tendenciaEliminados );
+       // console.log('Tendencia Eliminados: totalEliminados = ' + this.totalEliminados + ' totalAnterior: ' + this.tendenciaEliminados );
         this.pEliminados = parseFloat((((this.totalEliminados - this.tendenciaEliminados) / this.tendenciaEliminados) * 100).toFixed(2));
-        console.log('Tendencia Eliminados: ' + this.pEliminados);    
+      //  console.log('Tendencia Eliminados: ' + this.pEliminados);    
 
           if(this.pEliminados < 0){
             this.cEliminados = true;
@@ -714,9 +777,9 @@ export class EstadisticasComponent {
       console.error(error);
     }
     if(this.totalComprados){
-      console.log('Tendencia comprados: totalcomprados = ' + this.totalComprados + ' totalAnterior: ' + this.tendenciaComprados );
+      //console.log('Tendencia comprados: totalcomprados = ' + this.totalComprados + ' totalAnterior: ' + this.tendenciaComprados );
       this.pComprados = parseFloat((((this.totalComprados - this.tendenciaComprados) / this.tendenciaComprados) * 100).toFixed(2));
-      console.log('Tendencia comprados: ' + this.pComprados);
+      //console.log('Tendencia comprados: ' + this.pComprados);
       if(this.pComprados < 0){
         this.cComprados = false;
       }else {
@@ -739,9 +802,9 @@ export class EstadisticasComponent {
       console.error(error);
     }
     if(this.totalBuscados){
-      console.log('Tendencia buscados: totalbuscados = ' + this.totalBuscados + ' totalAnterior: ' + this.tendenciaBuscados );
+     // console.log('Tendencia buscados: totalbuscados = ' + this.totalBuscados + ' totalAnterior: ' + this.tendenciaBuscados );
       this.pBuscados = parseFloat((((this.totalBuscados - this.tendenciaBuscados) / this.tendenciaBuscados) * 100).toFixed(2));
-      console.log('Tendencia Buscados: ' + this.pBuscados);
+     // console.log('Tendencia Buscados: ' + this.pBuscados);
       if(this.pBuscados < 0){
         this.cBuscados = false;
       }else{
