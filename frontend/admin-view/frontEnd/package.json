@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --output-path ../../../.local/build/web",
+    "build": "ng build --output-path ../../../dist/web",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "start:local": "ng serve --host 127.0.0.1 --port 4200 --proxy-config proxy.conf.json",

@@ -1,0 +1,325 @@
+{
+  "date": "2026-11-24T16:41:18.284Z",
+  "server": "MariaDB local",
+  "tables": {
+    "usuarios": 6,
+    "productos": 16,
+    "ubicaciones": 41,
+    "tipo_promocion": 3,
+    "promociones": 3,
+    "en_ubicacion": 16,
+    "en_promocion": 5,
+    "lista_compra": 10,
+    "datos_contadores": 336,
+    "datos_tiempo": 10
+  },
+  "apiChecks": 61,
+  "imageChecks": 16,
+  "results": [
+    {
+      "method": "POST",
+      "endpoint": "/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "endpoint": "/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "endpoint": "/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "endpoint": "/token",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "endpoint": "/dataset/productos",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "endpoint": "/allproductos",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "endpoint": "/productos?desde=4",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "endpoint": "/productos?id=60",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "endpoint": "/productos/Manzana",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "endpoint": "/usuarios",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "endpoint": "/ubicaciones?referencia=A&posicion=1",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "endpoint": "/ubicaciones",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "endpoint": "/enubicacion?id=1",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "endpoint": "/enubicacion?idProd=60",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "endpoint": "/tipopromo",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "endpoint": "/promociones",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "endpoint": "/enpromocion?id=1",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "endpoint": "/listacompra?id=1",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "endpoint": "/contadores?nombre=buscado&inicio=2026-10-25&fin=2026-11-25&idUsu=1",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "endpoint": "/contadores?nombre=activo&inicio=2026-10-25&fin=2026-11-25&idUsu=1",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "endpoint": "/contadores?nombre=anadido&inicio=2026-10-25&fin=2026-11-25&idUsu=1",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "endpoint": "/contadores?nombre=eliminado&inicio=2026-10-25&fin=2026-11-25&idUsu=1",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "endpoint": "/contadores?nombre=comprado&inicio=2026-10-25&fin=2026-11-25&idUsu=1",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "endpoint": "/contadores?nombre=localizado&inicio=2026-10-25&fin=2026-11-25&idUsu=1",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "endpoint": "/contadores?nombre=buscadousu&inicio=2026-10-25&fin=2026-11-25&idUsu=1",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "endpoint": "/contadores?nombre=mediatiempos&inicio=2026-10-25&fin=2026-11-25&idUsu=1",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "endpoint": "/contadores?nombre=usuariounico&inicio=2026-10-25&fin=2026-11-25&idUsu=1",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "endpoint": "/contadores?nombre=masbuscado&inicio=2026-10-25&fin=2026-11-25",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "endpoint": "/contadores?nombre=masanadido&inicio=2026-10-25&fin=2026-11-25",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "endpoint": "/contadores?nombre=maseliminado&inicio=2026-10-25&fin=2026-11-25",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "endpoint": "/contadores?nombre=mascomprado&inicio=2026-10-25&fin=2026-11-25",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "endpoint": "/contadores?nombre=anadido",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "endpoint": "/contadores?nombre=eliminado",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "endpoint": "/contadores?nombre=buscado&inicio=2026-10-25&fin=2026-11-25",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "endpoint": "/usuarios",
+      "status": 200
+    },
+    {
+      "method": "PUT",
+      "endpoint": "/usuarios/10",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "endpoint": "/ubicaciones",
+      "status": 200
+    },
+    {
+      "method": "PUT",
+      "endpoint": "/ubicaciones/44",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "endpoint": "/tiempos?nombre=compra",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "endpoint": "/productos",
+      "status": 200
+    },
+    {
+      "method": "PUT",
+      "endpoint": "/productos/71",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "endpoint": "/uploads/fotoproducto/:id",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "endpoint": "/tipopromo",
+      "status": 200
+    },
+    {
+      "method": "PUT",
+      "endpoint": "/tipopromo/6",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "endpoint": "/promociones",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "endpoint": "/enpromocion",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "endpoint": "/enubicacion",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "endpoint": "/listacompra",
+      "status": 200
+    },
+    {
+      "method": "PUT",
+      "endpoint": "/listacompra/20",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "endpoint": "/contadores",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "endpoint": "/tiempos",
+      "status": 200
+    },
+    {
+      "method": "DELETE",
+      "endpoint": "/tiempos/13",
+      "status": 200
+    },
+    {
+      "method": "DELETE",
+      "endpoint": "/contadores/370",
+      "status": 200
+    },
+    {
+      "method": "DELETE",
+      "endpoint": "/listacompra/20",
+      "status": 200
+    },
+    {
+      "method": "DELETE",
+      "endpoint": "/enubicacion/19",
+      "status": 200
+    },
+    {
+      "method": "DELETE",
+      "endpoint": "/enpromocion/8",
+      "status": 200
+    },
+    {
+      "method": "DELETE",
+      "endpoint": "/promociones/6",
+      "status": 200
+    },
+    {
+      "method": "DELETE",
+      "endpoint": "/tipopromo/6",
+      "status": 200
+    },
+    {
+      "method": "DELETE",
+      "endpoint": "/productos/71",
+      "status": 200
+    },
+    {
+      "method": "DELETE",
+      "endpoint": "/ubicaciones/44",
+      "status": 200
+    },
+    {
+      "method": "DELETE",
+      "endpoint": "/usuarios/10",
+      "status": 200
+    }
+  ]
+}

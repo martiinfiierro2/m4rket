@@ -1,0 +1,20 @@
+{
+  "name": "m4rket-local",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Arranque local del proyecto m4rket recuperado",
+  "scripts": {
+    "setup": "node scripts/local.cjs setup",
+    "start": "node scripts/local.cjs dev",
+    "start:api": "node scripts/local.cjs api",
+    "start:web": "node scripts/local.cjs web",
+    "start:mobile": "node scripts/local.cjs mobile",
+    "build": "node scripts/local.cjs build",
+    "build:web": "node scripts/local.cjs build:web",
+    "build:mobile": "node scripts/local.cjs build:mobile",
+    "check:api": "node scripts/local.cjs check"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
