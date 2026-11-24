@@ -431,19 +431,19 @@ export class EstadisticasComponent {
   async cambioListado(opcion: any){
     this.opcionListado = opcion;
     
-    if(opcion ="buscado"){
+    if(opcion =="buscado"){
       this.getContadoresMasBuscados();
       console.log(this.opcionListado);
     }
-    if(opcion ="eliminado"){
+    if(opcion =="eliminado"){
       this.getContadoresMasEliminados();
       console.log(this.opcionListado);
     }
-    if(opcion ="anadido"){
+    if(opcion =="anadido"){
       this.getContadoresMasListados();
       console.log(this.opcionListado);
     }
-    if(opcion = "comprado"){
+    if(opcion == "comprado"){
       this.getContadoresMasComprados();
       console.log(this.opcionListado);
     }
@@ -455,7 +455,7 @@ export class EstadisticasComponent {
       try {
         const res = await this.estadisticasService.getCountMasBuscadosFecha(this.fechaInicio, this.fechaFin).toPromise();
         console.log(res);
-        for (let index = 0; index < 7; index++) {
+        for (let index = 0; index < Math.min(7, res.datosContadores.length); index++) {
           let contador = new DatosContadores();
     
           const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
@@ -483,7 +483,6 @@ export class EstadisticasComponent {
         for (let index = 0; index < res.datosContadores.length; index++) {
           let contador = new DatosContadores();
     
-          const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
           //contador.name = res2.productos.nombre;
           contador.value = res.datosContadores[index].totalCount;
           //this.buscados.push(contador);
@@ -503,7 +502,7 @@ export class EstadisticasComponent {
       try {
         const res = await this.estadisticasService.getCountMasEliminadosFecha(this.fechaInicio, this.fechaFin).toPromise();
         console.log(res);
-        for (let index = 0; index < 7; index++) {
+        for (let index = 0; index < Math.min(7, res.datosContadores.length); index++) {
           let contador = new DatosContadores();
     
           const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
@@ -530,7 +529,6 @@ export class EstadisticasComponent {
         for (let index = 0; index < res.datosContadores.length; index++) {
           let contador = new DatosContadores();
     
-          const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
           //contador.name = res2.productos.nombre;
           contador.value = res.datosContadores[index].totalCount;
           //this.eliminados.push(contador);
@@ -565,12 +563,12 @@ export class EstadisticasComponent {
       for (let index = 0; index < res.datosContadores.length; index++) {
         let contador = new DatosContadores();
   
-        const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
         //contador.name = res2.productos.nombre;
         contador.value = res.datosContadores[index].media_tiempo_uso;
         this.mediaActivos.push(contador);
-        this.media += parseInt(contador.value);
+        this.media += Number(contador.value);
       }
+      this.media = res.datosContadores.length ? this.media / res.datosContadores.length : 0;
 
     } catch (error) {
       console.error(error);
@@ -583,7 +581,7 @@ export class EstadisticasComponent {
       try {
         const res = await this.estadisticasService.getCountMasCompradosFecha(this.fechaInicio, this.fechaFin).toPromise();
         console.log(res);
-        for (let index = 0; index < 7; index++) {
+        for (let index = 0; index < Math.min(7, res.datosContadores.length); index++) {
           let contador = new DatosContadores();
     
           const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
@@ -608,7 +606,6 @@ export class EstadisticasComponent {
       for (let index = 0; index < res.datosContadores.length; index++) {
         let contador = new DatosContadores();
   
-        const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
         //contador.name = res2.productos.nombre;
         contador.value = res.datosContadores[index].totalCount;
         //this.comprados.push(contador);
@@ -627,7 +624,7 @@ export class EstadisticasComponent {
       try {
         const res = await this.estadisticasService.getCountMasAnadidosFecha(this.fechaInicio, this.fechaFin).toPromise();
         console.log(res);
-        for (let index = 0; index < 7; index++) {
+        for (let index = 0; index < Math.min(7, res.datosContadores.length); index++) {
           let contador = new DatosContadores();
     
           const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
@@ -650,7 +647,6 @@ export class EstadisticasComponent {
 
       for (let index = 0; index < res.datosContadores.length; index++) {
         let contador = new DatosContadores();
-        const res2 = await this.productoService.getProductoId(res.datosContadores[index].idProd).toPromise();
         //contador.name = res2.productos.nombre;
         contador.value = res.datosContadores[index].totalCount;
        //this.anadidos.push(contador);
@@ -724,7 +720,7 @@ export class EstadisticasComponent {
     } catch (error) {
       console.error(error);
     }
-    if(this.totalAnadidos){
+    if(this.totalAnadidos && this.tendenciaAnadidos > 0){
       this.pAnadidos = parseFloat((((this.totalAnadidos - this.tendenciaAnadidos) / this.tendenciaAnadidos) * 100).toFixed(2));
       if(this.pAnadidos < 0){
         this.cAnadidos = false;
@@ -749,7 +745,7 @@ export class EstadisticasComponent {
       } catch (error) {
         console.error(error);
       }
-      if(this.totalEliminados){
+      if(this.totalEliminados && this.tendenciaEliminados > 0){
        // console.log('Tendencia Eliminados: totalEliminados = ' + this.totalEliminados + ' totalAnterior: ' + this.tendenciaEliminados );
         this.pEliminados = parseFloat((((this.totalEliminados - this.tendenciaEliminados) / this.tendenciaEliminados) * 100).toFixed(2));
       //  console.log('Tendencia Eliminados: ' + this.pEliminados);    
@@ -776,7 +772,7 @@ export class EstadisticasComponent {
     } catch (error) {
       console.error(error);
     }
-    if(this.totalComprados){
+    if(this.totalComprados && this.tendenciaComprados > 0){
       //console.log('Tendencia comprados: totalcomprados = ' + this.totalComprados + ' totalAnterior: ' + this.tendenciaComprados );
       this.pComprados = parseFloat((((this.totalComprados - this.tendenciaComprados) / this.tendenciaComprados) * 100).toFixed(2));
       //console.log('Tendencia comprados: ' + this.pComprados);
@@ -801,7 +797,7 @@ export class EstadisticasComponent {
     } catch (error) {
       console.error(error);
     }
-    if(this.totalBuscados){
+    if(this.totalBuscados && this.tendenciaBuscados > 0){
      // console.log('Tendencia buscados: totalbuscados = ' + this.totalBuscados + ' totalAnterior: ' + this.tendenciaBuscados );
       this.pBuscados = parseFloat((((this.totalBuscados - this.tendenciaBuscados) / this.tendenciaBuscados) * 100).toFixed(2));
      // console.log('Tendencia Buscados: ' + this.pBuscados);

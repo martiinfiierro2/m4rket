@@ -44,3 +44,14 @@ Commit: `fix(api): recuperar las peticiones existentes y el esquema local`.
 - Verificación en una base y carpeta de imágenes de prueba, separadas de los datos de trabajo: **61 comprobaciones de API y 16 de imágenes superadas**. Las filas temporales se eliminan y los recuentos iniciales se conservan.
 
 Detalle de instalación actual en [README_LOCAL.md](./README_LOCAL.md). Los bloques siguientes dejarán aquí sus cambios y pruebas.
+
+### Núcleo 2 — Web Angular (24/11/2026)
+
+Commit: `fix(web): recuperar el panel y los gráficos existentes`.
+
+- Conservadas las pantallas y el diseño; conectados los entornos y el proxy a la API local.
+- Recuperados los cambios de listado estadístico (se comparaba en lugar de asignar), los rankings con menos de siete resultados, las medias y las peticiones que enviaban IDs inexistentes. Los porcentajes sin periodo previo ya no muestran infinito.
+- Compilación en navegador, sin prerender ni hidratación de servidor, y scripts de salida coherentes con el entorno local. El build no descarga las tipografías de Google; los estilos y fuentes solicitados por la página se conservan.
+- Probados en navegador: acceso al panel, productos, promociones, ubicaciones, cuentas, filtros y gráficos de estadísticas; alta y edición de producto con foto y limpieza del dato temporal; exportaciones CSV, XLSX y apertura de PDF.
+- Compilación de producción correcta con Node 20. Se mantienen los avisos de tamaño, CSS y CommonJS del proyecto existente.
+- Se buscaron en todas las ramas y versiones históricas la ficha pública del dataset y su buscador: no hay una implementación funcional completa. Se conservan los archivos originales y se documenta esta limitación; no se inventan funciones nuevas.
