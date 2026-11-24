@@ -38,6 +38,15 @@ Los nombres y las líneas de las secciones son anotaciones exteriores del boceto
 
 Las imágenes se generaron con la herramienta integrada a partir del estilo A y las fotografías del catálogo. Instrucciones principales: ampliar la superficie y agrupar muebles por departamento, conservar el estilo 3D marfil/salvia y las fotos, y colocar los rótulos únicamente fuera del mapa en la lámina explicativa.
 
+## Estanterías llenas
+
+- [Vista limpia con mercancía](./Mapa-3D-estanterias-llenas-limpio.png).
+- [Lámina por secciones con mercancía](./Mapa-3D-estanterias-llenas-secciones.png).
+
+Revisión visual del mapa ampliado: estanterías abastecidas según su departamento, conservando la distribución general y las fotos de los marcadores. Despensa contiene arroz, pasta y conservas; snacks incluye referencias visuales de Valor y Lay’s; higiene incluye Gillette y otros envases; bollería incorpora Dulcesol junto al pan existente. La mercancía adicional es ilustrativa, no un inventario recuperado ni nuevos datos de la base.
+
+Edición realizada con la herramienta de imágenes integrada, usando cada lámina como destino y las cuatro fotos del catálogo como referencia. Se conservan las versiones anteriores. No hay cambios en el motor ni en la aplicación.
+
 ## Recomendación
 
 Empezaría por A: encuadre y cámara, separación visual entre suelo y muebles, sombras discretas y marcadores legibles. Tomaría de C la paleta y el acabado de las piezas. B sirve para comparar un acabado con más detalle y mayor carga de recursos.

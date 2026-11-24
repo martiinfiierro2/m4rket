@@ -122,3 +122,9 @@ Entregados C revisada, su SVG y un detalle ampliado: corregidos apoyos, penetrac
 Commit: `docs(design): añadir boceto ampliado del mapa por secciones`.
 
 Entregadas una vista limpia y una lámina explicativa del supermercado 3D ampliado, con siete departamentos y las zonas de cajas y acceso. Las etiquetas de sección están fuera del plano y solo pertenecen al boceto; no se incorporan al motor. Propuesta visual sin cambios de código ni de base de datos. Archivos en [docs/bocetos-mapa](./docs/bocetos-mapa/LEEME.md).
+
+#### Estanterías abastecidas en el boceto (24/11/2026)
+
+Commit: `docs(design): llenar las estanterias de los bocetos del mapa`.
+
+Actualizadas las dos referencias del mapa ampliado con mercancía coherente con cada sección. Se mantienen las fotos de producto, la vista 3D y las etiquetas exteriores de la lámina explicativa. Solo imágenes de boceto: no se modifican la aplicación, el motor ni el inventario de MariaDB. Archivos en [docs/bocetos-mapa](./docs/bocetos-mapa/LEEME.md).
