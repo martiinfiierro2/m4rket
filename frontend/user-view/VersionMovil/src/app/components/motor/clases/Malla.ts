@@ -347,7 +347,10 @@ export class Malla {
     
 
   async loadTexture(nomTextura: any) {
-    let textura = await motor.gestorRecursos.getRecurso(nomTextura, 'textura')
+    const texturaLocal = ['gris.jpg', 'grisclaro.jpeg', 'blanco.jpeg'].includes(nomTextura);
+    let textura = texturaLocal
+        ? await motor.gestorRecursos.getRecurso(nomTextura, 'textura')
+        : await motor.gestorRecursos.getRecursoAPI(nomTextura, 'textura');
     
         //Cargar textura
         const texture = this.gl!.createTexture();

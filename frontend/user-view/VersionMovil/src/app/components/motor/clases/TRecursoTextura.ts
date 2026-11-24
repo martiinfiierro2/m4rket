@@ -7,7 +7,7 @@ export class TRecursoTextura extends TRecurso {
         super(nombre)
     }
     
-    private url = 'https://m4rket.ovh/api/uploads/fotoproducto/'
+    private url = '/api/uploads/fotoproducto/'
     private http: HttpClient = {} as HttpClient; 
     private token: string | null = localStorage.getItem('tokenUsuario');
     private cabeceras = {

@@ -170,7 +170,7 @@ export class HomePage {
     this.getListaCompraUsu();
     //this.CargarModelo();
     //this.RecargarModelo();
-    this.loadChatbotScript();
+    // Chatbot externo excluido de la recuperación local.
   }
 
   borrarProductosCompradosEnServidorHome(){

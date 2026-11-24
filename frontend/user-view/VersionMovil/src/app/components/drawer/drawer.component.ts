@@ -170,6 +170,7 @@ export class DrawerComponent implements AfterViewInit {
 
   async getContadoresMasBuscados() {
     this.buscados = [];
+    this.favoritos = [];
     if(this.fechaFin !== "" && this.fechaInicio !== ""){
       try {
         const res = await this.estadisticasService.getCountBuscadosFecha(this.fechaInicio, this.fechaFin, this.idUsu).toPromise();
@@ -190,8 +191,8 @@ export class DrawerComponent implements AfterViewInit {
       }
     }
   }
-  compararListaFavoritos() {
-    this.getListaCompraUsu();
+  async compararListaFavoritos() {
+    await this.getListaCompraUsu();
     
     this.listaCompra.forEach((productoCompra) => {
       const productoEncontrado = this.favoritos.find(
@@ -257,11 +258,11 @@ export class DrawerComponent implements AfterViewInit {
         Promise.all(deletePromises).then(() => {
           this.getListaCompraUsu();
           this.refrescarDrawer();
+          this.motorServicio.getMotor().eliminarTodosPines();
         }).catch((error) => {
         });
       }
     });
-    this.motorServicio.getMotor().eliminarTodosPines();
   }
 
   onInputChange(event: Event) {
@@ -623,7 +624,7 @@ export class DrawerComponent implements AfterViewInit {
       this.estadistica(producto.id, tipo, fecha, tiempo);
       try{
         await this.getListaCompraUsu();
-        this.nuevoPin.push({id: producto.id, estado: producto.estado});
+        this.nuevoPin.push({id: producto.id, estado: false});
         await this.motorServicio.getMotor().crearPines(this.nuevoPin, 0)
         this.refrescarDrawer();
         this.EliminarProductoSelect();
@@ -639,7 +640,7 @@ export class DrawerComponent implements AfterViewInit {
 
 
   getBusquedaProducto(event: any) {
-    const query = event.toLowerCase();
+    const query = (event || '').toLowerCase();
     this.mostrarBusqueda = true;
 
     this.productosService.getBusquedaProducto(query).subscribe((res) => {
@@ -654,7 +655,7 @@ export class DrawerComponent implements AfterViewInit {
     this.mostrarBusqueda = false;
   }
   async getListaCompraUsu() {
-    this.productosService.getListaCompra(this.idUsu).subscribe((result) => {
+    const result = await this.productosService.getListaCompra(this.idUsu).toPromise();
       if (result.listacompra) {
         this.listaCompra = result.listacompra.map((item: ListaCompra) => ({
           idProd: item.idProd,
@@ -676,7 +677,6 @@ export class DrawerComponent implements AfterViewInit {
           a.innerHTML =
         '<p>' + this.totalComprados + '/' + this.totalProductos + '<i style="margin-left: 10px; font-size: 16px;" class="fa-solid fa-cart-shopping"></i></p>';
       }
-    });
   }
 
   compararListaBusqueda() {
@@ -697,17 +697,9 @@ export class DrawerComponent implements AfterViewInit {
   }
 
   async borrarProd(idLista: string) {
-    this.productosService.deleteListaCompra(idLista).subscribe(async (result) => {
-      //this.getProductos(); //Recarga la lista de producto
-      this.EliminarProductoSelect();
-      this.getListaCompraUsu();
-      try{
-        await this.getListaCompraUsu()
-        //await this.motorServicio.getMotor().cargarNodosPines(1);
-      } catch (error) {
-        console.error('Error al recargar el modelo:', error);
-      }
-    });
+    await this.productosService.deleteListaCompra(idLista).toPromise();
+    this.EliminarProductoSelect();
+    await this.getListaCompraUsu();
   }
 
   actualizarCantidad(
@@ -758,6 +750,7 @@ export class DrawerComponent implements AfterViewInit {
 
   eliminarComprado(producto: any) {
     producto.comprado = false;
+    this.motorServicio.getMotor().marcarComoComprado(producto.id, false);
     this.actualizarCantidad(
       producto.id,
       producto.cantidad,
@@ -818,6 +811,8 @@ export class DrawerComponent implements AfterViewInit {
   logoutAndRedirectToLogin(): void {
     this.homeService.stopTimer().then(() => {
         setTimeout(() => {
+            sessionStorage.removeItem('tokenUsuario');
+            sessionStorage.removeItem('idUsuario');
             localStorage.removeItem('tokenUsuario');
             localStorage.removeItem('idUsuario');
             window.location.href = '/login';

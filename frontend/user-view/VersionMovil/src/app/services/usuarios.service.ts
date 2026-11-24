@@ -46,7 +46,7 @@ export class UsuariosService {
 
     this.cargarCabeceras();
   
-    if (this.token === '') {
+    if (!this.token) {
       return  of(false);
     }
     else{
@@ -57,6 +57,9 @@ export class UsuariosService {
                   if ('token' in res) {
                     let tokenBueno = '' + res.token;
                     localStorage.setItem("tokenUsuario", tokenBueno);
+                    if (sessionStorage.getItem("tokenUsuario")) {
+                      sessionStorage.setItem("tokenUsuario", tokenBueno);
+                    }
                   }
               }),
               map( resp =>{

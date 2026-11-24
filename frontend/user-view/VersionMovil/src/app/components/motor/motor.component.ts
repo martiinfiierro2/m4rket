@@ -974,40 +974,30 @@ export class MotorComponent implements AfterViewInit {
   }
 
   eliminarTodosPines(){
-    for(let i = 3; i  < motor.nodos.length; i++){
-      const entidad = motor.nodos[i]!.getEntidad();
-      const recMalla = entidad!.getRecursoMalla();
-
+    for(let i = motor.nodos.length - 1; i >= 3; i--){
+      const nodo = motor.nodos[i];
+      const entidad = nodo.getEntidad();
+      const recMalla = entidad.getRecursoMalla();
       if(recMalla.getNombre().startsWith('pin')){
-        for(let i = 0; i < recMalla.mallas.length; i++){
-          recMalla.mallas[i].deleteBuffers();
-          motor.gestorRecursos.borrarRecursos(recMalla, recMalla.mallas, entidad.recursoMalla.getNombre(), entidad.recursoTextura.getNombre());
-        }
-          
+        for(const malla of recMalla.mallas){ malla.deleteBuffers(); }
+        motor.gestorRecursos.borrarRecursos(recMalla, recMalla.mallas, entidad.recursoMalla.getNombre(), entidad.recursoTextura.getNombre());
+        nodo.getPadre()!.eliminarHijo(nodo);
+        motor.nodos.splice(i, 1);
       }
-      motor.nodos[i]!.getPadre()!.eliminarHijo(motor.nodos[i]);
     }
     this.mercado.recorrer(mat4.create());
   }
 
   eliminarPin(idProd: number){
-    for(let i = 3; i  < motor.nodos.length; i++){
-      if(motor.nodos[i].getID() == idProd){
-        var nodo = motor.nodos[i];
-        const entidad = motor.nodos[i].getEntidad();
-        const recMalla = entidad!.getRecursoMalla();
-
-        for(let i = 0; i < recMalla.mallas.length; i++){
-          recMalla.mallas[i].deleteBuffers();
-          motor.gestorRecursos.borrarRecursos(recMalla, recMalla.mallas, entidad.recursoMalla.getNombre(), entidad.recursoTextura.getNombre());
-          nodo!.getPadre()!.eliminarHijo(nodo);
-          for (let i = 0; i < motor.nodos.length; i++) {
-              if (motor.nodos[i].getID() == nodo!.getID()) {
-                  motor.nodos.splice(i, 1);
-                  return;
-              }
-          }
-        }
+    for(let i = 3; i < motor.nodos.length; i++){
+      const nodo = motor.nodos[i];
+      const entidad = nodo.getEntidad();
+      const recMalla = entidad.getRecursoMalla();
+      if(nodo.getID() == idProd && recMalla.getNombre().startsWith('pin')){
+        for(const malla of recMalla.mallas){ malla.deleteBuffers(); }
+        motor.gestorRecursos.borrarRecursos(recMalla, recMalla.mallas, entidad.recursoMalla.getNombre(), entidad.recursoTextura.getNombre());
+        nodo.getPadre()!.eliminarHijo(nodo);
+        motor.nodos.splice(i, 1);
         break;
       }
     }
@@ -1021,31 +1011,26 @@ export class MotorComponent implements AfterViewInit {
     return nuevoNombre;
   }
 
-  marcarComoComprado(idProd: number){
+  marcarComoComprado(idProd: number, comprado = true){
     for(let i = 0; i < motor.nodos.length; i++){
       if(motor.nodos[i].getID() == idProd){
-        motor.nodos[i].setComprado(true);
+        motor.nodos[i].setComprado(comprado);
         console.log(motor.nodos[i], idProd)
       }
     }
   }
 
   eliminarPinesComprados(){
-    for(let i = 3; i  < motor.nodos.length; i++){
-      
-      if(motor.nodos[i].getComprado() == true){
-        const entidad = motor.nodos[i]!.getEntidad();
-        const recMalla = entidad!.getRecursoMalla();
-
-        if(recMalla.getNombre().startsWith('pin')){
-          for(let i = 0; i < recMalla.mallas.length; i++){
-            recMalla.mallas[i].deleteBuffers();
-            motor.gestorRecursos.borrarRecursos(recMalla, recMalla.mallas, entidad.recursoMalla.getNombre(), entidad.recursoTextura.getNombre());
-          }
-            
-        }
+    for(let i = motor.nodos.length - 1; i >= 3; i--){
+      const nodo = motor.nodos[i];
+      const entidad = nodo.getEntidad();
+      const recMalla = entidad.getRecursoMalla();
+      if(nodo.getComprado() && recMalla.getNombre().startsWith('pin')){
+        for(const malla of recMalla.mallas){ malla.deleteBuffers(); }
+        motor.gestorRecursos.borrarRecursos(recMalla, recMalla.mallas, entidad.recursoMalla.getNombre(), entidad.recursoTextura.getNombre());
+        nodo.getPadre()!.eliminarHijo(nodo);
+        motor.nodos.splice(i, 1);
       }
-      motor.nodos[i]!.getPadre()!.eliminarHijo(motor.nodos[i]);
     }
     this.mercado.recorrer(mat4.create());
   }
@@ -1053,17 +1038,18 @@ export class MotorComponent implements AfterViewInit {
   async crearPines(lista: lista[], number: number) {
     const canvas = document.querySelector("#mercado") as HTMLCanvasElement;
 
-    let valor!: number;
     for (let i = 0; i < lista.length; i++) {
+        let valor = -1;
         let nameMalla = this.crearPinObj('pin.obj', this.numero);
         this.numero++;
         const producto: any = await this.productosService.getProductoId(lista[i].id).toPromise();
 
 
-        await producto.productos.Ubicacions.forEach((ubicacion: any) => {
+        producto.productos.Ubicacions.forEach((ubicacion: any) => {
             valor = this.letraANumero(ubicacion.referencia) + ubicacion.posicion;
         });
 
+      if (!Number.isInteger(valor) || !this.ubicaciones[valor]) { continue; }
       let pin;
       if(valor <= 4){
         pin = await motor.crearModelo(
@@ -1075,7 +1061,7 @@ export class MotorComponent implements AfterViewInit {
           'malla',
           producto.productos.foto,
           producto.productos.id,
-          false
+          Boolean(lista[i].estado)
         );
       }
       else if(valor > 4 && valor <= 30){
@@ -1088,7 +1074,7 @@ export class MotorComponent implements AfterViewInit {
           'malla',
           producto.productos.foto,
           producto.productos.id,
-          false
+          Boolean(lista[i].estado)
         );
       }
       else if(valor > 30 && valor <= 33){
@@ -1101,7 +1087,7 @@ export class MotorComponent implements AfterViewInit {
           'malla',
           producto.productos.foto,
           producto.productos.id,
-          false
+          Boolean(lista[i].estado)
         );
       }
       else if(valor > 33 && valor <= 37){
@@ -1114,7 +1100,7 @@ export class MotorComponent implements AfterViewInit {
           'malla',
           producto.productos.foto,
           producto.productos.id,
-          false
+          Boolean(lista[i].estado)
         );
       }
       else if(valor > 37 && valor <= 40){
@@ -1127,7 +1113,7 @@ export class MotorComponent implements AfterViewInit {
           'malla',
           producto.productos.foto,
           producto.productos.id,
-          false
+          Boolean(lista[i].estado)
         );
       }
       if(number == 0){

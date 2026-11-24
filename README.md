@@ -55,3 +55,17 @@ Commit: `fix(web): recuperar el panel y los gráficos existentes`.
 - Probados en navegador: acceso al panel, productos, promociones, ubicaciones, cuentas, filtros y gráficos de estadísticas; alta y edición de producto con foto y limpieza del dato temporal; exportaciones CSV, XLSX y apertura de PDF.
 - Compilación de producción correcta con Node 20. Se mantienen los avisos de tamaño, CSS y CommonJS del proyecto existente.
 - Se buscaron en todas las ramas y versiones históricas la ficha pública del dataset y su buscador: no hay una implementación funcional completa. Se conservan los archivos originales y se documenta esta limitación; no se inventan funciones nuevas.
+
+### Núcleo 3 — Aplicación Ionic y mapa (24/11/2026)
+
+Commit: `fix(mobile): recuperar la lista y los pines del mapa local`.
+
+- Conectados ambos entornos de Ionic y las fotos del motor a la API local; conservados el diseño y los recursos originales del supermercado.
+- Corregidos los métodos existentes de pines: conservan el estado comprado al recargar, desmarcan correctamente, eliminan solo los pines previstos y mantienen las estanterías. Los productos sin ubicación válida no interrumpen la carga del mapa.
+- Corregida la recarga de fotografías compartidas tras borrar un pin. Las fotos de producto se solicitan a la API, también cuando ya no están en la caché del motor.
+- La lista espera las respuestas antes de las operaciones que dependen de ellas; los favoritos no se acumulan en cada actualización y vaciar el buscador no provoca un error.
+- Renovación y cierre de sesión coherentes entre almacenamiento de sesión y local, incluido el registro seguido de salir y entrar con otra cuenta.
+- Desactivada la carga del chatbot externo, excluido expresamente de esta recuperación. Su código histórico se conserva.
+- Verificados en navegador de escritorio a 390 × 844: acceso, registro, búsqueda, alta en lista, cantidades, marcar/desmarcar compra, persistencia tras recarga, borrado individual, solo comprados y lista completa. Lista y pines coinciden y se conservan las 41 ubicaciones.
+- Verificados WebGL2 y selección de ficha tocando un pin; gestos táctiles simulados de desplazamiento y zoom y control de rotación. No equivale a una prueba en un dispositivo físico ni a una compilación nativa.
+- TypeScript y compilación de producción correctos con Node 20; última regresión móvil sin errores de JavaScript. Pruebas realizadas en la base temporal, sin modificar la base de trabajo.
