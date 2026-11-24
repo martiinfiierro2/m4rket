@@ -6,6 +6,7 @@ const Promocion = sequelize.define('Promocion', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
+        autoIncrement: true,
     },
     nombre: {
         type: DataTypes.STRING,
@@ -22,7 +23,7 @@ const Promocion = sequelize.define('Promocion', {
     id_tipoPromo: {
         type: DataTypes.INTEGER,
         allowNull: true,
-        eferences: {
+        references: {
             model: tipopromo,
             key: 'id',
         },

@@ -1,1 +1,9 @@
 *.glb
+
+# Entorno y artefactos locales
+.local/
+**/node_modules/
+backend/.env.local
+*.log
+**/.angular/
+.playwright-cli/

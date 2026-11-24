@@ -86,10 +86,10 @@ const actualizarTipoPromocion = async(req, res) => {
 
 
         const tipopromocion = await tipopromo.findOne({ where: {nombre: nombre}});
-        if(!tipopromocion){
+        if(tipopromocion && tipopromocion.id !== Number(id)){
             return res.status(400).json({
                 ok: false,
-                msg: 'No existe este tipo de promoción'
+                msg: 'Ya existe un tipo de promoción con ese nombre'
             });
         }
 

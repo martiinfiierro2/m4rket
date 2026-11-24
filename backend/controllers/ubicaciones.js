@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { Ubicacion } = require('../models/ubicaciones');
 
 
@@ -105,6 +106,7 @@ const actualizarUbicacion = async(req,res) => {
 
         const exiteReferencia = await Ubicacion.findOne({ 
             where: { 
+                id: { [Op.ne]: id },
                 referencia: referencia,
                 posicion: posicion
             } 

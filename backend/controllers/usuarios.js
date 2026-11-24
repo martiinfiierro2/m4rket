@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const bcrypt = require('bcryptjs'); //Para cifrar contraseñas
 const { generarJWT } = require('../helpers/jwt');
 const { Usuario, serializeUsuario, serializarListaUsuarios } = require('../models/usuarios');
@@ -25,7 +26,7 @@ const obtenerUsuarios = async(req, res) => {
         }
         else{
             //Promise.All ejecuta todas las peticiones a la vez
-            const [usuarios, total] = await Promise.all([
+            [usuarios, total] = await Promise.all([
                 Usuario.findAll({
                     offset: desde,
                     limit: registropp
@@ -70,7 +71,7 @@ const crearUsuarios = async (req, res) => {
 
         //Ciframos la contraseña
         const salt = bcrypt.genSaltSync(); // generamos un salt, una cadena aleatoria
-        password = bcrypt.hashSync(pwd, salt); // y aquí ciframos la contraseña
+        const password = bcrypt.hashSync(pwd, salt); // y aquí ciframos la contraseña
 
         //Creamos el usuario
         const usuario = new Usuario(req.body);
@@ -102,7 +103,7 @@ const actualizarUsuario = async(req, res) => {
         const { email, nombre, apellido, genero, pwd, rol } = req.body;
 
         //Comprobamos que el email no se repita
-        const exiteEmail = await Usuario.findOne({ where: { email: email } });
+        const exiteEmail = await Usuario.findOne({ where: { email, id: { [Op.ne]: id } } });
             if (exiteEmail) {
                 return res.status(400).json({
                 ok: false,
@@ -112,7 +113,7 @@ const actualizarUsuario = async(req, res) => {
 
         //Ciframos la contraseña
         const salt = bcrypt.genSaltSync(); // generamos un salt, una cadena aleatoria
-        password = bcrypt.hashSync(pwd, salt); // y aquí ciframos la contraseña
+        const password = bcrypt.hashSync(pwd, salt); // y aquí ciframos la contraseña
 
         const usuario = await Usuario.findByPk(id);
 

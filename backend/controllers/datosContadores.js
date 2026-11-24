@@ -4,110 +4,60 @@ const { Sequelize } = require('sequelize');
 const { Op } = require('sequelize');
 
 async function obtenerDatosContadores(req, res) {
-    const nombre = req.query.nombre; //?nombre=nombre_estadistica
-    const inicio = req.query.inicio || null;
-    const fin = req.query.fin || null;
-    const idUsuario = req.query.idUsu || null;
-
+    const nombre = req.query.nombre;
+    const inicio = req.query.inicio;
+    const fin = req.query.fin;
+    const idUsuario = req.query.idUsu;
+    const eventos = ['buscado', 'activo', 'anadido', 'eliminado', 'comprado', 'localizado', 'qr', 'secciones'];
+    const rankings = { masbuscado: 'buscado', masanadido: 'anadido', maseliminado: 'eliminado', mascomprado: 'comprado' };
 
     try {
+        const filtroFecha = {};
+        if (inicio) filtroFecha[Op.gte] = inicio;
+        if (fin) {
+            if (/^\d{4}-\d{2}-\d{2}$/.test(fin)) {
+                const siguiente = new Date(fin + 'T00:00:00Z');
+                siguiente.setUTCDate(siguiente.getUTCDate() + 1);
+                filtroFecha[Op.lt] = siguiente;
+            } else filtroFecha[Op.lte] = fin;
+        }
+        const where = (inicio || fin) ? { fecha: filtroFecha } : {};
         let datosContadores;
-        if (nombre === "buscado") {
-            if (inicio !== null && fin !== null) {
-                datosContadores = await DatosContadores.findAll({
-                    attributes: ['idProd', [Sequelize.fn('COUNT', Sequelize.col('*')), 'totalCount']],
-                    where: {
-                        nombre: nombre,
-                        fecha: {
-                            [Sequelize.Op.between]: [inicio, fin]
-                        }
-                    },
-                    group: ['idProd'],
-                    order: [[Sequelize.literal('totalCount'), 'DESC']]
-                });
-            } else {
-                datosContadores = await DatosContadores.findAll({
-                    attributes: ['idProd', [Sequelize.fn('COUNT', Sequelize.col('*')), 'totalCount']],
-                    where: { nombre: nombre },
-                    group: ['idProd'],
-                    order: [[Sequelize.literal('totalCount'), 'DESC']]
-                });
-            }
-        }
-        else if(nombre === "activo" || nombre === "eliminado" || nombre === "anadido"|| nombre === "comprado" || nombre === "localizado"){
-            datosContadores = await DatosContadores.findAll({
-                attributes: [
-                    [Sequelize.literal('DATE(fecha)'), 'fecha'],
-                    [Sequelize.fn('COUNT', Sequelize.col('*')), 'totalCount']
-                ],
-                where: {
-                    nombre: nombre,
-                    fecha: {
-                        [Sequelize.Op.between]: [inicio, fin]
-                    }
-                },
-                group: [Sequelize.literal('DATE(fecha)')], 
-                order: [[Sequelize.literal('fecha'), 'ASC']] 
-            });
-        }
-        else if(nombre === "buscadousu"){
+        const porProducto = rankings[nombre] || (nombre === 'buscadousu' ? 'buscado' : (!inicio && !fin && eventos.includes(nombre) ? nombre : null));
+        if (porProducto) {
+            where.nombre = porProducto;
+            if (nombre === 'buscadousu') where.id_usuario = idUsuario;
             datosContadores = await DatosContadores.findAll({
                 attributes: ['idProd', [Sequelize.fn('COUNT', Sequelize.col('*')), 'totalCount']],
-                where: {
-                    nombre: 'buscado',
-                    fecha: {
-                        [Sequelize.Op.between]: [inicio, fin]
-                    },
-                    id_usuario: idUsuario
-                },
+                where,
                 group: ['idProd'],
-                order: [[Sequelize.literal('totalCount'), 'DESC']],
-                limit: 5
+                order: [[Sequelize.literal('totalCount'), 'DESC'], ['idProd', 'ASC']],
+                ...(nombre === 'buscadousu' ? { limit: 5 } : {})
             });
-            
-        }
-        else if(nombre === "mediatiempos") {
+        } else if (eventos.includes(nombre)) {
             datosContadores = await DatosContadores.findAll({
-                attributes: [
-                    'id_usuario',
-                    [Sequelize.literal('AVG(tiempo_uso)'), 'media_tiempo_uso'] 
-                ],
-                where: {
-                    nombre: 'activo',
-                    fecha: {
-                        [Sequelize.Op.between]: [inicio, fin]
-                    },
-                    tiempo_uso: {
-                        [Sequelize.Op.not]: null
-                    }
-                },
+                attributes: [[Sequelize.literal('DATE(fecha)'), 'fecha'], [Sequelize.fn('COUNT', Sequelize.col('*')), 'totalCount']],
+                where: { ...where, nombre },
+                group: [Sequelize.literal('DATE(fecha)')],
+                order: [[Sequelize.literal('fecha'), 'ASC']]
+            });
+        } else if (nombre === 'mediatiempos') {
+            datosContadores = await DatosContadores.findAll({
+                attributes: ['id_usuario', [Sequelize.fn('AVG', Sequelize.col('tiempo_uso')), 'media_tiempo_uso']],
+                where: { ...where, nombre: 'activo', tiempo_uso: { [Op.not]: null } },
                 group: ['id_usuario']
             });
-        }else if (nombre === "usuariounico") {
+        } else if (nombre === 'usuariounico') {
             datosContadores = await DatosContadores.findAll({
-                attributes: [
-                    [Sequelize.literal('COUNT(DISTINCT id_usuario)'), 'total_usuarios'] 
-                ],
-                where: {
-                    nombre: 'activo',
-                    fecha: {
-                        [Sequelize.Op.between]: [inicio, fin]
-                    }
-                }
+                attributes: [[Sequelize.literal('COUNT(DISTINCT id_usuario)'), 'total_usuarios']],
+                where: { ...where, nombre: 'activo' }
             });
+        } else {
+            return res.status(400).json({ ok: false, msg: 'Estadística no válida' });
         }
-        
-        res.json({
-            ok: true,
-            msg: 'getDatosContadores',
-            datosContadores: datosContadores,
-        });
+        return res.json({ ok: true, msg: 'getDatosContadores', datosContadores });
     } catch (error) {
-        return res.status(400).json({
-            ok: false,
-            msg: 'Error obteniendo los datos',
-            error: error
-        });
+        return res.status(400).json({ ok: false, msg: 'Error obteniendo los datos', error });
     }
 }
 

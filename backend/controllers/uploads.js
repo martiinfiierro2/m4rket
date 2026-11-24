@@ -100,6 +100,10 @@ const enviarArchivo = async(req, res = response) => {
     const tipo = req.params.tipo; // fotoproducto
     const nombreArchivo = req.params.nombrearchivo;
 
+    if (tipo !== 'fotoproducto' || !nombreArchivo || /[\\/]/.test(nombreArchivo) || nombreArchivo === '.' || nombreArchivo === '..') {
+        return res.status(400).json({ ok: false, msg: 'Ruta de imagen no válida' });
+    }
+
     const directorio = `${process.env.PATHUPLOAD}/${tipo}`;
     const pathArchivo = path.resolve(directorio, nombreArchivo);
 

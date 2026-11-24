@@ -14,12 +14,14 @@ const actualizarBD = async(tipo, path, nombreArchivo, id) => {
 
             const fotoVieja = producto.foto;
             const pathFotoVieja = `${path}/${fotoVieja}`;
-            if (fotoVieja && fs.existsSync(pathFotoVieja)) {
-                fs.unlinkSync(pathFotoVieja);
-            }
-
             producto.foto = nombreArchivo;
             await producto.save();
+
+            // La imagen por defecto y las fotos compartidas siguen siendo necesarias.
+            if (fotoVieja && fotoVieja !== 'no-imagen.png' && fs.existsSync(pathFotoVieja)
+                && await Producto.count({ where: { foto: fotoVieja } }) === 0) {
+                fs.unlinkSync(pathFotoVieja);
+            }
 
             return true;
 

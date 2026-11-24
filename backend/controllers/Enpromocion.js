@@ -13,7 +13,7 @@ async function obtenerProductoPromocion(req, res) {
         let prodPromo, total;
         if (id) {
             prodPromo = await Enpromocion.findOne({ where: { id: id } });
-            if (!prodUbi) {
+            if (!prodPromo) {
                 return res.json({
                     ok: false,
                     msg: 'El id de la relación producto-promoción debe ser válido'
