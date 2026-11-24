@@ -104,3 +104,9 @@ Commit: `docs(design): añadir referencias visuales para el supermercado 3d`.
 - Preparadas tres referencias visuales en [docs/bocetos-mapa](./docs/bocetos-mapa/LEEME.md): mejora sobre la captura del motor actual, maqueta 3D más detallada y ejemplo vectorial con la misma skill del escritorio del portafolio.
 - Entregadas imágenes PNG y un SVG real para la referencia vectorial. Comprobadas apertura del SVG como imagen y validez XML.
 - Solo bocetos: no se modifica el motor, la interfaz, sus funcionalidades ni el arranque. Las distribuciones dibujadas son ilustrativas y no constituyen una recuperación exacta de las posiciones originales.
+
+#### Revisión de los bocetos A y C — fotos de producto (24/11/2026)
+
+Commit: `docs(design): incorporar fotos reales a los bocetos A y C`.
+
+Incorporadas las fotos de productos del repositorio a los marcadores y fichas de los bocetos A y C, según la aclaración del usuario. Se entregan PNG y un SVG híbrido para C, conservando los bocetos iniciales. No cambia ningún archivo de la aplicación ni del motor. Referencias en [docs/bocetos-mapa](./docs/bocetos-mapa/LEEME.md).

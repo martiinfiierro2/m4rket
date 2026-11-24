@@ -12,6 +12,14 @@ El [SVG de C](./C-maqueta-vectorial.svg) es vectorial real: 112 piezas sólidas,
 
 Las distribuciones de B y C son ilustrativas: no reproducen exactamente las 41 ubicaciones de la base recuperada. Las tres propuestas mantienen la idea de localizar productos de la lista en una escena 3D; no proponen navegación, GPS, rutas ni chatbot.
 
+## Revisión con las fotos reales de productos
+
+- [A v2 · con fotos](./A-v2-con-fotos.png): los marcadores y el listado usan como referencia las fotografías del catálogo de Valor, Dulcesol, Lay’s y Gillette. Generado con la herramienta de imágenes a partir del boceto A y esas cuatro fotografías; el cambio solicitado se centra en reconocer el producto por su envase.
+- [C v2 · con fotos](./C-v2-con-fotos.png): conserva la maqueta vectorial e incorpora las cuatro fotografías originales en los marcadores, más la foto de chocolate en la ficha. Los números han sido sustituidos por las imágenes.
+- [SVG de C v2](./C-v2-con-fotos.svg): composición híbrida de geometría vectorial y fotografías PNG originales incrustadas, sin enlaces externos. La primera versión de C sigue siendo vectorial pura.
+
+Ambas son bocetos. La aplicación, su motor y sus datos permanecen intactos. Se conservan las versiones iniciales para comparar.
+
 ## Recomendación
 
 Empezaría por A: encuadre y cámara, separación visual entre suelo y muebles, sombras discretas y marcadores legibles. Tomaría de C la paleta y el acabado de las piezas. B sirve para comparar un acabado con más detalle y mayor carga de recursos.
