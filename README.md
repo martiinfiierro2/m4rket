@@ -96,3 +96,11 @@ Commit: `chore(local): preparar el arranque npm y la guia de MariaDB`.
 - Actualizadas las instrucciones de importación SQL, conexión MariaDB, usuarios/roles demo, arranque, parada y comprobación. Explicado el contenido de `.local` y que es opcional para el arranque normal; se conservan sus datos anteriores.
 - Verificados setup, preservación de configuración, ambas compilaciones, arranque conjunto y parada con Node 24.15.0 instalado. El catálogo y el mapa cargan sin errores en el recorrido final; la API vuelve a superar 61 comprobaciones y 16 imágenes.
 - Informe actualizado en [docs/validacion-local.md](./docs/validacion-local.md), con evidencia de API sin credenciales. No se ha hecho push; el único remoto sigue siendo el espejo local.
+
+### Núcleo 5 — Bocetos del aspecto del motor 3D (24/11/2026)
+
+Commit: `docs(design): añadir referencias visuales para el supermercado 3d`.
+
+- Preparadas tres referencias visuales en [docs/bocetos-mapa](./docs/bocetos-mapa/LEEME.md): mejora sobre la captura del motor actual, maqueta 3D más detallada y ejemplo vectorial con la misma skill del escritorio del portafolio.
+- Entregadas imágenes PNG y un SVG real para la referencia vectorial. Comprobadas apertura del SVG como imagen y validez XML.
+- Solo bocetos: no se modifica el motor, la interfaz, sus funcionalidades ni el arranque. Las distribuciones dibujadas son ilustrativas y no constituyen una recuperación exacta de las posiciones originales.
