@@ -20,6 +20,15 @@ Las distribuciones de B y C son ilustrativas: no reproducen exactamente las 41 u
 
 Ambas son bocetos. La aplicación, su motor y sus datos permanecen intactos. Se conservan las versiones iniciales para comparar.
 
+## Revisión geométrica de C y vistas de A
+
+- [C v3 · revisada](./C-v3-revisada.png), [SVG](./C-v3-revisada.svg) y [detalle ampliado](./C-v3-detalle.png): baldas y paneles ya no se penetran; las tapas apoyan sobre los laterales; las puertas de los frigoríficos están unidas a sus cuerpos; los soportes de monitores quedan bajo las pantallas. Los marcadores conservan las fotos originales y terminan en su punto de anclaje.
+- El orden de dibujo se ha resuelto por la superposición de las piezas individuales, en lugar de ordenar cada mueble por su centro. Esto recupera elementos que quedaban ocultos por superficies que debían estar detrás.
+- Comprobadas las 112 piezas del boceto: sin piezas sin apoyo, penetraciones ni conflictos de profundidad en la vista entregada. Comprobado también un detalle ampliado de baldas y caja.
+- [A · cuatro vistas](./A-vistas-frontal-trasera-laterales.png): frontal, trasera y los dos laterales en una lámina. Son vistas conceptuales generadas usando A como referencia; no son giros matemáticos del modelo original ni planos técnicos.
+
+No hay cambios de implementación. Las fotos y los bocetos anteriores se conservan.
+
 ## Recomendación
 
 Empezaría por A: encuadre y cámara, separación visual entre suelo y muebles, sombras discretas y marcadores legibles. Tomaría de C la paleta y el acabado de las piezas. B sirve para comparar un acabado con más detalle y mayor carga de recursos.

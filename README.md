@@ -110,3 +110,9 @@ Commit: `docs(design): añadir referencias visuales para el supermercado 3d`.
 Commit: `docs(design): incorporar fotos reales a los bocetos A y C`.
 
 Incorporadas las fotos de productos del repositorio a los marcadores y fichas de los bocetos A y C, según la aclaración del usuario. Se entregan PNG y un SVG híbrido para C, conservando los bocetos iniciales. No cambia ningún archivo de la aplicación ni del motor. Referencias en [docs/bocetos-mapa](./docs/bocetos-mapa/LEEME.md).
+
+#### Revisión geométrica de C y vistas de A (24/11/2026)
+
+Commit: `docs(design): corregir la maqueta vectorial y añadir vistas de A`.
+
+Entregados C revisada, su SVG y un detalle ampliado: corregidos apoyos, penetraciones y orden de dibujo de las 112 piezas de la maqueta. Añadida una lámina conceptual de A con vista frontal, trasera y ambos laterales. Se conservan las fotos de producto y las versiones anteriores. Solo referencias visuales; no se modifica la aplicación ni su motor.
