@@ -29,6 +29,15 @@ Ambas son bocetos. La aplicación, su motor y sus datos permanecen intactos. Se 
 
 No hay cambios de implementación. Las fotos y los bocetos anteriores se conservan.
 
+## Mapa 3D ampliado por secciones
+
+- [Lámina con secciones](./Mapa-3D-ampliado-secciones.png): propuesta de supermercado más grande, dividida en frutas y verduras, lácteos y frío, despensa, snacks y chocolates, pan y bollería, bebidas, higiene, cajas y acceso/salida.
+- [Vista limpia](./Mapa-3D-ampliado-limpio.png): la misma propuesta sin rótulos de departamento, con los marcadores fotográficos.
+
+Los nombres y las líneas de las secciones son anotaciones exteriores del boceto: no se añaden al motor. Se conservan el volumen 3D y las fotos de productos usadas como referencia. Es una propuesta de ampliación visual, no la distribución exacta de las 41 ubicaciones recuperadas; no cambia geometría, datos ni código de la aplicación.
+
+Las imágenes se generaron con la herramienta integrada a partir del estilo A y las fotografías del catálogo. Instrucciones principales: ampliar la superficie y agrupar muebles por departamento, conservar el estilo 3D marfil/salvia y las fotos, y colocar los rótulos únicamente fuera del mapa en la lámina explicativa.
+
 ## Recomendación
 
 Empezaría por A: encuadre y cámara, separación visual entre suelo y muebles, sombras discretas y marcadores legibles. Tomaría de C la paleta y el acabado de las piezas. B sirve para comparar un acabado con más detalle y mayor carga de recursos.

@@ -116,3 +116,9 @@ Incorporadas las fotos de productos del repositorio a los marcadores y fichas de
 Commit: `docs(design): corregir la maqueta vectorial y añadir vistas de A`.
 
 Entregados C revisada, su SVG y un detalle ampliado: corregidos apoyos, penetraciones y orden de dibujo de las 112 piezas de la maqueta. Añadida una lámina conceptual de A con vista frontal, trasera y ambos laterales. Se conservan las fotos de producto y las versiones anteriores. Solo referencias visuales; no se modifica la aplicación ni su motor.
+
+#### Mapa 3D ampliado por secciones (24/11/2026)
+
+Commit: `docs(design): añadir boceto ampliado del mapa por secciones`.
+
+Entregadas una vista limpia y una lámina explicativa del supermercado 3D ampliado, con siete departamentos y las zonas de cajas y acceso. Las etiquetas de sección están fuera del plano y solo pertenecen al boceto; no se incorporan al motor. Propuesta visual sin cambios de código ni de base de datos. Archivos en [docs/bocetos-mapa](./docs/bocetos-mapa/LEEME.md).
