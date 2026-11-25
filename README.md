@@ -132,3 +132,13 @@ Actualizadas las dos referencias del mapa ampliado con mercancía coherente con 
 #### Propuestas visuales conservadas (25/11/2026)
 
 Guardadas las vistas pendientes y las opciones de aspecto en [docs/bocetos-mapa](./docs/bocetos-mapa/LEEME.md). El usuario aplaza la mejora visual y prioriza el despliegue de la base de datos local. No hay cambios en la aplicación.
+
+### Núcleo 6 — Despliegue de MariaDB local (25/11/2026)
+
+Commit: `chore(database): desplegar MariaDB local y documentar la conexion`.
+
+- Importado `database/m4rket_local.sql` en el MariaDB 10.4.32 de XAMPP, puerto 3306: 10 tablas InnoDB, 9 claves foráneas, 6 usuarios, 16 productos y 41 ubicaciones, además de promociones, listas y estadísticas demo.
+- Creada la cuenta de conexión `m4rket_app` con permisos SELECT, INSERT, UPDATE y DELETE solo sobre `m4rket_local`. La API ya utiliza esa cuenta y el puerto 3306.
+- Conservada la clave JWT y guardada la configuración anterior en un checkpoint local privado. Las contraseñas de MariaDB permanecen fuera del repositorio.
+- Verificadas **61 peticiones de API y 16 imágenes** contra la base recién desplegada, incluidos los accesos de los tres roles y las operaciones temporales de alta, edición y borrado. Los recuentos finales coinciden con los importados.
+- Actualizadas la [guía de arranque](./README_LOCAL.md) y la [validación](./docs/validacion-local.md). Para esta copia basta iniciar MySQL en XAMPP y ejecutar `npm start`; la instancia de pruebas en 3307 queda fuera del arranque.

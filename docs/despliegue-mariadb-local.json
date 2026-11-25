@@ -1,0 +1,77 @@
+{
+  "date": "2026-11-25T17:34:07.984Z",
+  "host": "127.0.0.1",
+  "port": 3306,
+  "database": "m4rket_local",
+  "databaseUser": "m4rket_app",
+  "account": "m4rket_app@localhost",
+  "permissions": [
+    "GRANT USAGE ON *.*",
+    "GRANT SELECT, INSERT, UPDATE, DELETE ON `m4rket_local`.*"
+  ],
+  "charset": "utf8mb4",
+  "collation": "utf8mb4_unicode_ci",
+  "foreignKeys": 9,
+  "tables": {
+    "usuarios": 6,
+    "productos": 16,
+    "ubicaciones": 41,
+    "tipo_promocion": 3,
+    "promociones": 3,
+    "en_ubicacion": 16,
+    "en_promocion": 5,
+    "lista_compra": 10,
+    "datos_contadores": 336,
+    "datos_tiempo": 10
+  },
+  "seedSha256": "3cee023cfd0a6a054010de6c65b536eea7dcd15d3182630e7f09b0af3b52f272",
+  "jwtPreserved": true,
+  "version": "10.4.32-MariaDB",
+  "engines": [
+    {
+      "name": "datos_contadores",
+      "engine": "InnoDB"
+    },
+    {
+      "name": "datos_tiempo",
+      "engine": "InnoDB"
+    },
+    {
+      "name": "en_promocion",
+      "engine": "InnoDB"
+    },
+    {
+      "name": "en_ubicacion",
+      "engine": "InnoDB"
+    },
+    {
+      "name": "lista_compra",
+      "engine": "InnoDB"
+    },
+    {
+      "name": "productos",
+      "engine": "InnoDB"
+    },
+    {
+      "name": "promociones",
+      "engine": "InnoDB"
+    },
+    {
+      "name": "tipo_promocion",
+      "engine": "InnoDB"
+    },
+    {
+      "name": "ubicaciones",
+      "engine": "InnoDB"
+    },
+    {
+      "name": "usuarios",
+      "engine": "InnoDB"
+    }
+  ],
+  "apiChecks": 61,
+  "imageChecks": 16,
+  "verificationDate": "2026-11-25T17:34:55.581Z",
+  "temporaryRowsRemoved": true,
+  "apiStoppedAfterVerification": true
+}

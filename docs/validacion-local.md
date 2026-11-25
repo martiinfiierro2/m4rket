@@ -1,6 +1,6 @@
 # Validación de la recuperación local
 
-Fecha: 24 de noviembre de 2026. Rama: `feat/recuperacion-local`. La preparación inicial del 4 de noviembre se amplió con las correcciones y pruebas descritas aquí. El registro por commit está en el [README](../README.md#registro-de-recuperación).
+Validación inicial: 24 de noviembre de 2026. Despliegue local comprobado: 25 de noviembre de 2026. Rama: `feat/recuperacion-local`. La preparación inicial del 4 de noviembre se amplió con las correcciones y pruebas descritas aquí. El registro por commit está en el [README](../README.md#registro-de-recuperación).
 
 ## Entorno probado
 
@@ -57,3 +57,13 @@ Se mantienen el diseño y las funciones originales. No se han actualizado framew
 Los permisos originales de la API se conservan por decisión expresa del usuario. Chatbot, infraestructura OVH/Prometheus, dominio y builds nativos quedan fuera. La carga del chatbot externo está desactivada.
 
 El histórico heredado aún contiene credenciales, certificados y archivos antiguos que requieren revisión antes de publicarlo. No se ha hecho push ni reescrito el historial; el remoto sigue siendo el espejo local original.
+
+## Despliegue en el MariaDB habitual de XAMPP (25/11/2026)
+
+Importado el SQL de demostración en una base nueva `m4rket_local`, en `127.0.0.1:3306` con MariaDB 10.4.32. Comprobados UTF-8 (`utf8mb4_unicode_ci`), las 10 tablas InnoDB, las 9 claves foráneas y los recuentos del manifiesto. La cuenta `m4rket_app` conecta con permisos SELECT, INSERT, UPDATE y DELETE limitados a esa base; la configuración y su copia anterior permanecen privadas. La clave JWT se ha conservado.
+
+`npm run check:api` ha superado 61 comprobaciones de API y 16 imágenes utilizando la conexión definitiva del backend. Los accesos de usuario, admin y superAdmin, las asociaciones del catálogo, listas, estadísticas y operaciones temporales funcionan. El verificador ha limpiado sus filas y su imagen temporal, y las diez tablas mantienen los recuentos iniciales.
+
+La API usada para verificar se ha detenido al terminar; MariaDB permanece arrancada. El arranque habitual es MySQL en XAMPP y `npm start` desde la raíz del repositorio. No se reinstalan dependencias ni se reimporta el SQL para cada arranque.
+
+Evidencia de este despliegue, sin credenciales: [despliegue-mariadb-local.json](./despliegue-mariadb-local.json). El informe de [peticiones](./verificacion-local.json) corresponde ahora a esta comprobación en el puerto 3306. Las compilaciones y los recorridos de navegador descritos arriba son los realizados el 24/11/2026.

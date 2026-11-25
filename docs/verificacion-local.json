@@ -1,5 +1,5 @@
 {
-  "date": "2026-11-24T16:41:18.284Z",
+  "date": "2026-11-25T17:34:55.581Z",
   "server": "MariaDB local",
   "tables": {
     "usuarios": 6,
@@ -108,67 +108,67 @@
     },
     {
       "method": "GET",
-      "endpoint": "/contadores?nombre=buscado&inicio=2026-10-25&fin=2026-11-25&idUsu=1",
+      "endpoint": "/contadores?nombre=buscado&inicio=2026-10-26&fin=2026-11-26&idUsu=1",
       "status": 200
     },
     {
       "method": "GET",
-      "endpoint": "/contadores?nombre=activo&inicio=2026-10-25&fin=2026-11-25&idUsu=1",
+      "endpoint": "/contadores?nombre=activo&inicio=2026-10-26&fin=2026-11-26&idUsu=1",
       "status": 200
     },
     {
       "method": "GET",
-      "endpoint": "/contadores?nombre=anadido&inicio=2026-10-25&fin=2026-11-25&idUsu=1",
+      "endpoint": "/contadores?nombre=anadido&inicio=2026-10-26&fin=2026-11-26&idUsu=1",
       "status": 200
     },
     {
       "method": "GET",
-      "endpoint": "/contadores?nombre=eliminado&inicio=2026-10-25&fin=2026-11-25&idUsu=1",
+      "endpoint": "/contadores?nombre=eliminado&inicio=2026-10-26&fin=2026-11-26&idUsu=1",
       "status": 200
     },
     {
       "method": "GET",
-      "endpoint": "/contadores?nombre=comprado&inicio=2026-10-25&fin=2026-11-25&idUsu=1",
+      "endpoint": "/contadores?nombre=comprado&inicio=2026-10-26&fin=2026-11-26&idUsu=1",
       "status": 200
     },
     {
       "method": "GET",
-      "endpoint": "/contadores?nombre=localizado&inicio=2026-10-25&fin=2026-11-25&idUsu=1",
+      "endpoint": "/contadores?nombre=localizado&inicio=2026-10-26&fin=2026-11-26&idUsu=1",
       "status": 200
     },
     {
       "method": "GET",
-      "endpoint": "/contadores?nombre=buscadousu&inicio=2026-10-25&fin=2026-11-25&idUsu=1",
+      "endpoint": "/contadores?nombre=buscadousu&inicio=2026-10-26&fin=2026-11-26&idUsu=1",
       "status": 200
     },
     {
       "method": "GET",
-      "endpoint": "/contadores?nombre=mediatiempos&inicio=2026-10-25&fin=2026-11-25&idUsu=1",
+      "endpoint": "/contadores?nombre=mediatiempos&inicio=2026-10-26&fin=2026-11-26&idUsu=1",
       "status": 200
     },
     {
       "method": "GET",
-      "endpoint": "/contadores?nombre=usuariounico&inicio=2026-10-25&fin=2026-11-25&idUsu=1",
+      "endpoint": "/contadores?nombre=usuariounico&inicio=2026-10-26&fin=2026-11-26&idUsu=1",
       "status": 200
     },
     {
       "method": "GET",
-      "endpoint": "/contadores?nombre=masbuscado&inicio=2026-10-25&fin=2026-11-25",
+      "endpoint": "/contadores?nombre=masbuscado&inicio=2026-10-26&fin=2026-11-26",
       "status": 200
     },
     {
       "method": "GET",
-      "endpoint": "/contadores?nombre=masanadido&inicio=2026-10-25&fin=2026-11-25",
+      "endpoint": "/contadores?nombre=masanadido&inicio=2026-10-26&fin=2026-11-26",
       "status": 200
     },
     {
       "method": "GET",
-      "endpoint": "/contadores?nombre=maseliminado&inicio=2026-10-25&fin=2026-11-25",
+      "endpoint": "/contadores?nombre=maseliminado&inicio=2026-10-26&fin=2026-11-26",
       "status": 200
     },
     {
       "method": "GET",
-      "endpoint": "/contadores?nombre=mascomprado&inicio=2026-10-25&fin=2026-11-25",
+      "endpoint": "/contadores?nombre=mascomprado&inicio=2026-10-26&fin=2026-11-26",
       "status": 200
     },
     {
@@ -183,7 +183,7 @@
     },
     {
       "method": "GET",
-      "endpoint": "/contadores?nombre=buscado&inicio=2026-10-25&fin=2026-11-25",
+      "endpoint": "/contadores?nombre=buscado&inicio=2026-10-26&fin=2026-11-26",
       "status": 200
     },
     {
@@ -193,7 +193,7 @@
     },
     {
       "method": "PUT",
-      "endpoint": "/usuarios/10",
+      "endpoint": "/usuarios/7",
       "status": 200
     },
     {
@@ -203,7 +203,7 @@
     },
     {
       "method": "PUT",
-      "endpoint": "/ubicaciones/44",
+      "endpoint": "/ubicaciones/42",
       "status": 200
     },
     {
@@ -218,7 +218,7 @@
     },
     {
       "method": "PUT",
-      "endpoint": "/productos/71",
+      "endpoint": "/productos/68",
       "status": 200
     },
     {
@@ -233,7 +233,7 @@
     },
     {
       "method": "PUT",
-      "endpoint": "/tipopromo/6",
+      "endpoint": "/tipopromo/4",
       "status": 200
     },
     {
@@ -258,7 +258,7 @@
     },
     {
       "method": "PUT",
-      "endpoint": "/listacompra/20",
+      "endpoint": "/listacompra/11",
       "status": 200
     },
     {
@@ -273,52 +273,52 @@
     },
     {
       "method": "DELETE",
-      "endpoint": "/tiempos/13",
+      "endpoint": "/tiempos/11",
       "status": 200
     },
     {
       "method": "DELETE",
-      "endpoint": "/contadores/370",
+      "endpoint": "/contadores/337",
       "status": 200
     },
     {
       "method": "DELETE",
-      "endpoint": "/listacompra/20",
+      "endpoint": "/listacompra/11",
       "status": 200
     },
     {
       "method": "DELETE",
-      "endpoint": "/enubicacion/19",
+      "endpoint": "/enubicacion/17",
       "status": 200
     },
     {
       "method": "DELETE",
-      "endpoint": "/enpromocion/8",
+      "endpoint": "/enpromocion/6",
       "status": 200
     },
     {
       "method": "DELETE",
-      "endpoint": "/promociones/6",
+      "endpoint": "/promociones/4",
       "status": 200
     },
     {
       "method": "DELETE",
-      "endpoint": "/tipopromo/6",
+      "endpoint": "/tipopromo/4",
       "status": 200
     },
     {
       "method": "DELETE",
-      "endpoint": "/productos/71",
+      "endpoint": "/productos/68",
       "status": 200
     },
     {
       "method": "DELETE",
-      "endpoint": "/ubicaciones/44",
+      "endpoint": "/ubicaciones/42",
       "status": 200
     },
     {
       "method": "DELETE",
-      "endpoint": "/usuarios/10",
+      "endpoint": "/usuarios/7",
       "status": 200
     }
   ]

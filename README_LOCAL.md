@@ -18,6 +18,10 @@ Instala las dependencias de los tres proyectos con `npm ci --ignore-scripts` y c
 
 ## Tu MariaDB
 
+**En este equipo ya está preparada (25/11/2026):** base `m4rket_local` en el MariaDB de XAMPP, `127.0.0.1:3306`, con el usuario de conexión `m4rket_app`. La importación y la conexión de la API están hechas. Para usar esta copia, arranca **MySQL** en XAMPP y ejecuta `npm start` desde la raíz del repositorio. La base permanece guardada al apagar el equipo; no hace falta volver a importarla.
+
+Las instrucciones siguientes permiten repetir la instalación en otra copia:
+
 1. Instala o inicia MariaDB, o el servicio MySQL/MariaDB de tu XAMPP. Se ha validado MariaDB 10.4.32.
 2. En una consola SQL con permisos para crear bases, importa el fichero de este repositorio:
 
@@ -29,7 +33,7 @@ También puedes importarlo desde HeidiSQL o phpMyAdmin. Crea `m4rket_local`, sus
 
 3. Abre `backend/.env.local` y configura `HOSTBD`, `PORTBD`, `BD`, `USERBD` y `PWDBD` con el usuario y la contraseña de tu instalación. El ejemplo usa `127.0.0.1:3306`, base `m4rket_local` y usuario `root` sin contraseña; sustituye esos valores por los tuyos. Conserva la clave JWT generada.
 
-En esta copia se ha conservado el fichero local anterior: apunta a la instancia aislada de pruebas en 3307. **Cambia el puerto y las credenciales al pasar a tu MariaDB habitual.** El arranque npm no inicia la instancia antigua.
+La configuración privada de esta copia ya apunta al puerto 3306 y al usuario `m4rket_app`, con contraseña generada en `backend/.env.local`. Esa cuenta solo tiene permisos de lectura y escritura sobre `m4rket_local`. La clave JWT anterior se conserva. No necesitas cambiar esos valores ni usar `root` para arrancar la API. Las credenciales y su copia de seguridad local están ignoradas por Git.
 
 El SQL no contiene `DROP`, `TRUNCATE` ni actualizaciones de las filas existentes. Al importarlo de nuevo añade los IDs ausentes y conserva los existentes. No es una migración de una base anterior ni reinicia los datos: para una demostración limpia, importa en una base nueva. Las fechas demo se calculan en la primera importación; repetirla no mueve las fechas de filas ya existentes.
 
