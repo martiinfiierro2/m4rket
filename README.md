@@ -23,17 +23,17 @@ cd "C:\Users\Martin\OneDrive\Documentos\Github\m4rket\local"
 git branch
 ```
 
-La rama de recuperación es `feat/recuperacion-local`. El nombre `local` es una elección para esta copia: si clonas el repositorio en otra ubicación, utiliza la carpeta que contenga su `README.md` y su directorio `.git`.
+La rama de recuperación es `local`. El nombre `local` es una elección para esta copia: si clonas el repositorio en otra ubicación, utiliza la carpeta que contenga su `README.md` y su directorio `.git`.
 
 `local` y `.local` son carpetas distintas: la primera es el repositorio de trabajo; la segunda guarda pruebas y archivos de la preparación anterior y no se versiona. El arranque normal usa Node/npm instalados y tu propia MariaDB, sin depender de `.local`. No borres su antiguo directorio MariaDB si quieres conservar esos datos.
 
 ## Ramas y sincronización con GitHub
 
-Destino personal público: [martiinfiierro2/m4rket](https://github.com/martiinfiierro2/m4rket). La copia histórica contiene 21 ramas originales, con sus commits, autores y fechas. `main` conserva la línea histórica del proyecto; el espejo local mantiene el commit original `70c9d37a`. La copia pública retira credenciales y, por ello, sus hashes difieren. La recuperación se desarrolla en `feat/recuperacion-local`. `local` es el nombre de la carpeta de trabajo, no una rama.
+Destino personal público: [martiinfiierro2/m4rket](https://github.com/martiinfiierro2/m4rket). La copia histórica contiene 21 ramas originales, con sus commits, autores y fechas. `main` conserva la línea histórica del proyecto; el espejo local mantiene el commit original `70c9d37a`. La copia pública retira credenciales y, por ello, sus hashes difieren. La recuperación se desarrolla en `local`. `local` es el nombre de la carpeta de trabajo, no una rama.
 
 En esta copia, `origin` apunta al repositorio personal y `espejo-local` al archivo histórico `m4rket.git`. La publicación del original se hace desde las ramas del espejo; después se publica la rama de recuperación desde `local`. No es necesario mezclar la recuperación en `main` para conservarla en GitHub.
 
-Se acuerda terminar cada apartado con su explicación en el README, un commit y un push de `feat/recuperacion-local`. Se informará de si la subida se ha completado. Tras el primer push con seguimiento, los siguientes usan `git push`; `git pull --ff-only` sirve para traer cambios publicados desde otra copia. Los cambios hechos en esta misma carpeta ya aparecen directamente.
+Se acuerda terminar cada apartado con su explicación en el README, un commit y un push de `local`. Se informará de si la subida se ha completado. Tras el primer push con seguimiento, los siguientes usan `git push`; `git pull --ff-only` sirve para traer cambios publicados desde otra copia. Los cambios hechos en esta misma carpeta ya aparecen directamente.
 
 El espejo local conserva íntegro el original universitario. La copia preparada para GitHub mantiene las ramas, autores, fechas, mensajes y relaciones entre commits, retirando credenciales, claves y archivos empaquetados que podían incluirlas. Sus hashes cambian y seis firmas originales no se trasladan. La configuración actual de MariaDB y JWT se guarda en `backend/.env.local`, ignorado por Git.
 
@@ -55,7 +55,7 @@ npm start
 
 ## Registro de recuperación
 
-La recuperación se realiza por núcleos y con un commit y un push por bloque en la rama `feat/recuperacion-local`. Se conservan las funcionalidades y el diseño existentes; los cambios de mayor alcance se consultan antes de aplicarlos.
+La recuperación se realiza por núcleos y con un commit y un push por bloque en la rama `local`. Se conservan las funcionalidades y el diseño existentes; los cambios de mayor alcance se consultan antes de aplicarlos.
 
 ### Núcleo 1 — API y base de datos (24/11/2026)
 
@@ -168,8 +168,17 @@ Commit: `docs(git): aclarar el historico y la rama de recuperacion`.
 Commit: `docs(publicacion): documentar el historico sin credenciales`.
 
 - Preparada una copia aislada para publicar el proyecto como referencia de portafolio. El espejo y la copia de recuperación originales permanecen guardados localmente.
-- Conservados los 504 commits anteriores: 492 del original y 12 de recuperación/documentación. Verificados sus autores, fechas, mensajes y relaciones entre padres, además de las 21 ramas originales y `feat/recuperacion-local`. Esta nota se añade como un commit posterior.
+- Conservados los 504 commits anteriores: 492 del original y 12 de recuperación/documentación. Verificados sus autores, fechas, mensajes y relaciones entre padres, además de las 21 ramas originales y `local`. Esta nota se añade como un commit posterior.
 - Retirados archivos `.env`, claves, certificados y copias empaquetadas antiguas; también ejemplos de claves en documentación y pruebas de dependencias históricas. Sustituidos los dos valores de configuración heredados y un token fijo antiguo. Las rutas retiradas figuran en [el informe](./docs/publicacion-historico.json).
 - Los archivos actuales de lógica de API, Angular, Ionic y motor coinciden con los de la recuperación anterior. En su última versión solo se retiran seis archivos heredados; este commit añade documentación y reglas para ignorar esos archivos privados.
 - Comprobados 22.462 objetos Git: ningún valor secreto conocido ni cabecera de clave privada restante. Las 2.056 alertas genéricas de Gitleaks se han verificado como identificadores VDOM y expresiones de código compilado; quedan cero alertas sin clasificar.
 - La limpieza cambia los hashes de los commits afectados y no puede conservar sus seis firmas criptográficas originales. La referencia exacta continúa en el espejo local, sin publicar.
+
+### Núcleo 9 — Rama de recuperación llamada local (25/11/2026)
+
+Commit: `docs(git): usar local como rama de recuperacion`.
+
+- La recuperación se continúa en la rama `local`, separada de `main`, con seguimiento de `origin/local`. Se publican también las 21 ramas históricas de la copia revisada.
+- `local` es una rama de Git; el nombre de la carpeta donde se guardan los archivos en el ordenador es independiente. GitHub muestra los archivos directamente en cada rama, sin una carpeta contenedora `local`.
+- Conservados el espejo original y una copia de respaldo de la recuperación anterior a la publicación. La copia de trabajo habitual utiliza el historial revisado, manteniendo la configuración de MariaDB, los datos y las dependencias instaladas.
+- El cierre de cada apartado incluye su explicación en el README, commit y push a esta rama.

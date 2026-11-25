@@ -4,7 +4,7 @@
   "recoveryBranches": 1,
   "preservedOriginalCommits": 492,
   "preservedRecoveryCommits": 12,
-  "publicationNoteCommits": 1,
+  "publicationNoteCommits": 2,
   "authorsAndDatesPreserved": true,
   "messagesPreserved": true,
   "parentGraphPreserved": true,
@@ -42,5 +42,6 @@
       "unclassified": 0
     },
     "unresolved": []
-  }
+  },
+  "recoveryBranch": "local"
 }

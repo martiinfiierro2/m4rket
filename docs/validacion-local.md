@@ -1,6 +1,6 @@
 # Validación de la recuperación local
 
-Validación inicial: 24 de noviembre de 2026. Despliegue local comprobado: 25 de noviembre de 2026. Rama: `feat/recuperacion-local`. La preparación inicial del 4 de noviembre se amplió con las correcciones y pruebas descritas aquí. El registro por commit está en el [README](../README.md#registro-de-recuperación).
+Validación inicial: 24 de noviembre de 2026. Despliegue local comprobado: 25 de noviembre de 2026. Rama: `local`. La preparación inicial del 4 de noviembre se amplió con las correcciones y pruebas descritas aquí. El registro por commit está en el [README](../README.md#registro-de-recuperación).
 
 ## Entorno probado
 
@@ -56,7 +56,7 @@ Se mantienen el diseño y las funciones originales. No se han actualizado framew
 
 Los permisos originales de la API se conservan por decisión expresa del usuario. Chatbot, infraestructura OVH/Prometheus, dominio y builds nativos quedan fuera. La carga del chatbot externo está desactivada.
 
-En la validación del 24/11/2026 el remoto era el espejo local y no se había publicado el histórico. El 25/11/2026 se configura el destino personal público `martiinfiierro2/m4rket`; el usuario indica conservar el historial original y mantener la recuperación en `feat/recuperacion-local`. La configuración actual de MariaDB y JWT continúa en el fichero local ignorado por Git.
+En la validación del 24/11/2026 el remoto era el espejo local y no se había publicado el histórico. El 25/11/2026 se configura el destino personal público `martiinfiierro2/m4rket`; el usuario indica conservar el historial original y mantener la recuperación en `local`. La configuración actual de MariaDB y JWT continúa en el fichero local ignorado por Git.
 
 ## Despliegue en el MariaDB habitual de XAMPP (25/11/2026)
 

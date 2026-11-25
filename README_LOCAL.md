@@ -1,6 +1,6 @@
 # m4rket: recuperación para ejecución local
 
-Rama: `feat/recuperacion-local`. Se conserva la aplicación original y su diseño; los commits por núcleo y sus pruebas están en el [README](./README.md#registro-de-recuperación). Esta guía corresponde al arranque local actual.
+Rama: `local`. Se conserva la aplicación original y su diseño; los commits por núcleo y sus pruebas están en el [README](./README.md#registro-de-recuperación). Esta guía corresponde al arranque local actual.
 
 ## Preparación
 
@@ -123,4 +123,4 @@ Esta copia conserva dentro de `.local` el Node portable anterior, descargas y ce
 - El filtro anual de estadísticas conserva su etiqueta original «2024»; su consulta usa el año actual. No se ha rediseñado la pantalla.
 - Chatbot, OVH, Prometheus, dominio y compilación nativa Android/iOS quedan fuera. No se necesita contratar servicios para ejecutar esta copia local.
 - Las pruebas de navegador no cubren todos los dispositivos, gestos posibles ni todas las combinaciones de datos. Se detallan los recorridos comprobados en el informe.
-- El espejo local conserva el original completo. La copia preparada para publicación pública en `martiinfiierro2/m4rket` retira credenciales y claves del historial, conservando autores, fechas, mensajes y ramas. Sus hashes cambian y seis firmas originales no se trasladan. La recuperación continúa en `feat/recuperacion-local`, separada de `main`. El remoto `origin` apunta a GitHub y `espejo-local` conserva la referencia histórica. Las credenciales actuales de MariaDB y JWT están en `backend/.env.local`, ignorado por Git.
+- El espejo local conserva el original completo. La copia preparada para publicación pública en `martiinfiierro2/m4rket` retira credenciales y claves del historial, conservando autores, fechas, mensajes y ramas. Sus hashes cambian y seis firmas originales no se trasladan. La recuperación continúa en `local`, separada de `main`. El remoto `origin` apunta a GitHub y `espejo-local` conserva la referencia histórica. Las credenciales actuales de MariaDB y JWT están en `backend/.env.local`, ignorado por Git.
