@@ -56,7 +56,7 @@ Se mantienen el diseño y las funciones originales. No se han actualizado framew
 
 Los permisos originales de la API se conservan por decisión expresa del usuario. Chatbot, infraestructura OVH/Prometheus, dominio y builds nativos quedan fuera. La carga del chatbot externo está desactivada.
 
-El histórico heredado aún contiene credenciales, certificados y archivos antiguos que requieren revisión antes de publicarlo. No se ha hecho push ni reescrito el historial; el remoto sigue siendo el espejo local original.
+En la validación del 24/11/2026 el remoto era el espejo local y no se había publicado el histórico. El 25/11/2026 se configura el destino personal público `martiinfiierro2/m4rket`; el usuario indica conservar el historial original y mantener la recuperación en `feat/recuperacion-local`. La configuración actual de MariaDB y JWT continúa en el fichero local ignorado por Git.
 
 ## Despliegue en el MariaDB habitual de XAMPP (25/11/2026)
 

@@ -27,6 +27,16 @@ La rama de recuperación es `feat/recuperacion-local`. El nombre `local` es una 
 
 `local` y `.local` son carpetas distintas: la primera es el repositorio de trabajo; la segunda guarda pruebas y archivos de la preparación anterior y no se versiona. El arranque normal usa Node/npm instalados y tu propia MariaDB, sin depender de `.local`. No borres su antiguo directorio MariaDB si quieres conservar esos datos.
 
+## Ramas y sincronización con GitHub
+
+Destino personal público: [martiinfiierro2/m4rket](https://github.com/martiinfiierro2/m4rket). La copia histórica contiene 21 ramas originales, con sus commits, autores y fechas. `main` permanece en el commit original `70c9d37a`; la recuperación se desarrolla en `feat/recuperacion-local`. `local` es el nombre de la carpeta de trabajo, no una rama.
+
+En esta copia, `origin` apunta al repositorio personal y `espejo-local` al archivo histórico `m4rket.git`. La publicación del original se hace desde las ramas del espejo; después se publica la rama de recuperación desde `local`. No es necesario mezclar la recuperación en `main` para conservarla en GitHub.
+
+Se acuerda terminar cada apartado con su explicación en el README, un commit y un push de `feat/recuperacion-local`. Se informará de si la subida se ha completado. Tras el primer push con seguimiento, los siguientes usan `git push`; `git pull --ff-only` sirve para traer cambios publicados desde otra copia. Los cambios hechos en esta misma carpeta ya aparecen directamente.
+
+El historial original incluye archivos de configuración y certificados heredados. El usuario ha indicado conservarlo íntegro y público para documentar el trabajo universitario. La configuración actual de MariaDB y JWT se guarda en `backend/.env.local`, ignorado por Git.
+
 Ejecución local y base de demostración: [README_LOCAL.md](./README_LOCAL.md).
 
 ## Arranque local
@@ -45,7 +55,7 @@ npm start
 
 ## Registro de recuperación
 
-La recuperación se realiza por núcleos y con un commit por bloque en la rama `feat/recuperacion-local`. Se conservan las funcionalidades y el diseño existentes; los cambios de mayor alcance se consultan antes de aplicarlos.
+La recuperación se realiza por núcleos y con un commit y un push por bloque en la rama `feat/recuperacion-local`. Se conservan las funcionalidades y el diseño existentes; los cambios de mayor alcance se consultan antes de aplicarlos.
 
 ### Núcleo 1 — API y base de datos (24/11/2026)
 
@@ -142,3 +152,13 @@ Commit: `chore(database): desplegar MariaDB local y documentar la conexion`.
 - Conservada la clave JWT y guardada la configuración anterior en un checkpoint local privado. Las contraseñas de MariaDB permanecen fuera del repositorio.
 - Verificadas **61 peticiones de API y 16 imágenes** contra la base recién desplegada, incluidos los accesos de los tres roles y las operaciones temporales de alta, edición y borrado. Los recuentos finales coinciden con los importados.
 - Actualizadas la [guía de arranque](./README_LOCAL.md) y la [validación](./docs/validacion-local.md). Para esta copia basta iniciar MySQL en XAMPP y ejecutar `npm start`; la instancia de pruebas en 3307 queda fuera del arranque.
+
+### Núcleo 7 — Histórico original y remoto personal (25/11/2026)
+
+Commit: `docs(git): aclarar el historico y la rama de recuperacion`.
+
+- Comprobadas las 21 ramas del espejo original y su integridad; `main` de la copia de trabajo coincide con el original, sin incorporar la recuperación.
+- Configurado `origin` con `https://github.com/martiinfiierro2/m4rket.git` y conservado el acceso al espejo como `espejo-local`. En el espejo, `personal` identifica el destino de publicación.
+- Documentada la diferencia entre carpeta de trabajo, espejo y rama, y el flujo de commit y push por apartado. La publicación se prepara conservando el historial original y la recuperación en una rama aparte.
+- Conservado el carácter público del repositorio por indicación expresa del usuario. La configuración actual de conexión local permanece ignorada por Git.
+- Configurado Git de esta copia para usar los certificados de Windows y la cuenta `martiinfiierro2`. Comprobación de objetos Git correcta; este bloque solo modifica documentación y configuración local de Git.
