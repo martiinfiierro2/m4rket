@@ -67,3 +67,7 @@ Importado el SQL de demostración en una base nueva `m4rket_local`, en `127.0.0.
 La API usada para verificar se ha detenido al terminar; MariaDB permanece arrancada. El arranque habitual es MySQL en XAMPP y `npm start` desde la raíz del repositorio. No se reinstalan dependencias ni se reimporta el SQL para cada arranque.
 
 Evidencia de este despliegue, sin credenciales: [despliegue-mariadb-local.json](./despliegue-mariadb-local.json). El informe de [peticiones](./verificacion-local.json) corresponde ahora a esta comprobación en el puerto 3306. Las compilaciones y los recorridos de navegador descritos arriba son los realizados el 24/11/2026.
+
+## Preparación de la copia pública (25/11/2026)
+
+Verificados en una copia aislada los 504 commits previos y 22 ramas, con autores, fechas, mensajes y relaciones entre padres conservados. Retirados secretos, claves, copias empaquetadas y ejemplos de claves de dependencias históricas; los hashes y seis firmas originales cambian. El espejo original permanece local. Los archivos actuales de lógica coinciden con la recuperación ya validada; este bloque solo añade documentación y reglas de exclusión. No se repiten las compilaciones al no cambiar esa lógica. Detalle en [publicacion-historico.json](./publicacion-historico.json).

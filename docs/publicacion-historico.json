@@ -1,0 +1,46 @@
+{
+  "date": "2026-11-25T18:21:54.856Z",
+  "originalBranches": 21,
+  "recoveryBranches": 1,
+  "preservedOriginalCommits": 492,
+  "preservedRecoveryCommits": 12,
+  "publicationNoteCommits": 1,
+  "authorsAndDatesPreserved": true,
+  "messagesPreserved": true,
+  "parentGraphPreserved": true,
+  "commitIdsChanged": true,
+  "originalSignaturesNotTransferred": 6,
+  "removedHistoricalPaths": [
+    "backend.tar",
+    "backend/.env",
+    "backend/cert/cert.pem",
+    "backend/cert/key.pem",
+    "frontend.tar",
+    "frontend/admin-view/frontEnd/frontend.tar",
+    "frontend/admin-view/frontEnd/frontend.zip",
+    "frontend/user-view/MobileApp/node_modules/browser-sync/certs/browsersync.pfx",
+    "frontend/user-view/MobileApp/node_modules/browser-sync/certs/server.crt",
+    "frontend/user-view/MobileApp/node_modules/browser-sync/certs/server.key",
+    "frontend/user-view/MobileApp/node_modules/dotenv/README-es.md",
+    "frontend/user-view/MobileApp/node_modules/dotenv/README.md",
+    "frontend/user-view/MobileApp/node_modules/npm-registry-fetch/README.md",
+    "frontend/user-view/MobileApp/node_modules/selfsigned/README.md",
+    "frontend/user-view/MobileApp/node_modules/spdy/test/fixtures.js",
+    "frontend/user-view/VersionMovil/app.tar"
+  ],
+  "secretValuesRemoved": 3,
+  "objectsInspected": 22462,
+  "knownSecretsRemaining": 0,
+  "privateKeyMarkersRemaining": 0,
+  "currentLogicFilesChanged": 0,
+  "secretScan": {
+    "tool": "Gitleaks 8.30.1",
+    "alerts": 2056,
+    "classifiedGeneratedCode": {
+      "vdomIdentifiers": 1924,
+      "localStorageCode": 132,
+      "unclassified": 0
+    },
+    "unresolved": []
+  }
+}

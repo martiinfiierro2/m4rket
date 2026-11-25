@@ -29,13 +29,13 @@ La rama de recuperación es `feat/recuperacion-local`. El nombre `local` es una 
 
 ## Ramas y sincronización con GitHub
 
-Destino personal público: [martiinfiierro2/m4rket](https://github.com/martiinfiierro2/m4rket). La copia histórica contiene 21 ramas originales, con sus commits, autores y fechas. `main` permanece en el commit original `70c9d37a`; la recuperación se desarrolla en `feat/recuperacion-local`. `local` es el nombre de la carpeta de trabajo, no una rama.
+Destino personal público: [martiinfiierro2/m4rket](https://github.com/martiinfiierro2/m4rket). La copia histórica contiene 21 ramas originales, con sus commits, autores y fechas. `main` conserva la línea histórica del proyecto; el espejo local mantiene el commit original `70c9d37a`. La copia pública retira credenciales y, por ello, sus hashes difieren. La recuperación se desarrolla en `feat/recuperacion-local`. `local` es el nombre de la carpeta de trabajo, no una rama.
 
 En esta copia, `origin` apunta al repositorio personal y `espejo-local` al archivo histórico `m4rket.git`. La publicación del original se hace desde las ramas del espejo; después se publica la rama de recuperación desde `local`. No es necesario mezclar la recuperación en `main` para conservarla en GitHub.
 
 Se acuerda terminar cada apartado con su explicación en el README, un commit y un push de `feat/recuperacion-local`. Se informará de si la subida se ha completado. Tras el primer push con seguimiento, los siguientes usan `git push`; `git pull --ff-only` sirve para traer cambios publicados desde otra copia. Los cambios hechos en esta misma carpeta ya aparecen directamente.
 
-El historial original incluye archivos de configuración y certificados heredados. El usuario ha indicado conservarlo íntegro y público para documentar el trabajo universitario. La configuración actual de MariaDB y JWT se guarda en `backend/.env.local`, ignorado por Git.
+El espejo local conserva íntegro el original universitario. La copia preparada para GitHub mantiene las ramas, autores, fechas, mensajes y relaciones entre commits, retirando credenciales, claves y archivos empaquetados que podían incluirlas. Sus hashes cambian y seis firmas originales no se trasladan. La configuración actual de MariaDB y JWT se guarda en `backend/.env.local`, ignorado por Git.
 
 Ejecución local y base de demostración: [README_LOCAL.md](./README_LOCAL.md).
 
@@ -162,3 +162,14 @@ Commit: `docs(git): aclarar el historico y la rama de recuperacion`.
 - Documentada la diferencia entre carpeta de trabajo, espejo y rama, y el flujo de commit y push por apartado. La publicación se prepara conservando el historial original y la recuperación en una rama aparte.
 - Conservado el carácter público del repositorio por indicación expresa del usuario. La configuración actual de conexión local permanece ignorada por Git.
 - Configurado Git de esta copia para usar los certificados de Windows y la cuenta `martiinfiierro2`. Comprobación de objetos Git correcta; este bloque solo modifica documentación y configuración local de Git.
+
+### Núcleo 8 — Copia histórica preparada para publicación pública (25/11/2026)
+
+Commit: `docs(publicacion): documentar el historico sin credenciales`.
+
+- Preparada una copia aislada para publicar el proyecto como referencia de portafolio. El espejo y la copia de recuperación originales permanecen guardados localmente.
+- Conservados los 504 commits anteriores: 492 del original y 12 de recuperación/documentación. Verificados sus autores, fechas, mensajes y relaciones entre padres, además de las 21 ramas originales y `feat/recuperacion-local`. Esta nota se añade como un commit posterior.
+- Retirados archivos `.env`, claves, certificados y copias empaquetadas antiguas; también ejemplos de claves en documentación y pruebas de dependencias históricas. Sustituidos los dos valores de configuración heredados y un token fijo antiguo. Las rutas retiradas figuran en [el informe](./docs/publicacion-historico.json).
+- Los archivos actuales de lógica de API, Angular, Ionic y motor coinciden con los de la recuperación anterior. En su última versión solo se retiran seis archivos heredados; este commit añade documentación y reglas para ignorar esos archivos privados.
+- Comprobados 22.462 objetos Git: ningún valor secreto conocido ni cabecera de clave privada restante. Las 2.056 alertas genéricas de Gitleaks se han verificado como identificadores VDOM y expresiones de código compilado; quedan cero alertas sin clasificar.
+- La limpieza cambia los hashes de los commits afectados y no puede conservar sus seis firmas criptográficas originales. La referencia exacta continúa en el espejo local, sin publicar.

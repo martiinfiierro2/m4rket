@@ -8,3 +8,15 @@ backend/.env.local
 **/.angular/
 .playwright-cli/
 /dist/
+
+# Configuración y copias privadas heredadas
+backend/.env
+backend/cert/
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+*.tar
+*.tgz
+*.zip
