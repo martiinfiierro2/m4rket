@@ -56,3 +56,9 @@ Empezaría por A: encuadre y cámara, separación visual entre suelo y muebles, 
 A y B se generaron con la herramienta de imágenes integrada. A utiliza la captura local real como referencia; B explora otra vista 3D. Resumen de las instrucciones: conservar la escena como volumen 3D, mejorar cámara/materiales/contraste, mantener la lista y los pines, sin funciones nuevas. C se dibujó con el kit vectorial de anatomy-asset, siguiendo como referencia el escritorio personal del portafolio.
 
 Los scripts y páginas temporales usados para dibujar y capturar permanecen en .local, ignorados por Git. Esta entrega contiene únicamente imágenes, el SVG y esta explicación. No se ha hecho ningún cambio de implementación.
+
+## Punto de recuperación de las propuestas (25/11/2026)
+
+Se conservan como opciones la maqueta 3D A y el acabado vectorial C, ambos con fotos, así como las dos últimas láminas del mapa ampliado abastecido: limpia y con secciones. Las mejoras visuales quedan aplazadas mientras se prepara la base de datos local. No se ha implementado ningún cambio gráfico.
+
+Las vistas generadas desde esquinas, lados y arriba están guardadas en [vistas-completas](./vistas-completas). Son referencias conceptuales, no capturas del motor real; no garantizan una geometría idéntica entre imágenes.

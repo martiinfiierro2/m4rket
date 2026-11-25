@@ -128,3 +128,7 @@ Entregadas una vista limpia y una lámina explicativa del supermercado 3D amplia
 Commit: `docs(design): llenar las estanterias de los bocetos del mapa`.
 
 Actualizadas las dos referencias del mapa ampliado con mercancía coherente con cada sección. Se mantienen las fotos de producto, la vista 3D y las etiquetas exteriores de la lámina explicativa. Solo imágenes de boceto: no se modifican la aplicación, el motor ni el inventario de MariaDB. Archivos en [docs/bocetos-mapa](./docs/bocetos-mapa/LEEME.md).
+
+#### Propuestas visuales conservadas (25/11/2026)
+
+Guardadas las vistas pendientes y las opciones de aspecto en [docs/bocetos-mapa](./docs/bocetos-mapa/LEEME.md). El usuario aplaza la mejora visual y prioriza el despliegue de la base de datos local. No hay cambios en la aplicación.
