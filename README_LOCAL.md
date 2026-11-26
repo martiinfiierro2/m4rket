@@ -6,15 +6,19 @@ Rama: `local`. Se conserva la aplicación original y su diseño; los commits por
 
 Se necesitan Node/npm instalados y una instancia de MariaDB. En esta máquina ya están instaladas las dependencias de API, Angular e Ionic. Los lockfiles originales fijan sus versiones; no se han actualizado Angular ni Ionic. Se han probado Node 20.20.1 y, para el arranque final, el Node 24.15.0 que ya tienes instalado. `.nvmrc` deja 20.20.1 como referencia opcional para un gestor de versiones, sin descargarlo ni sustituir el Node global.
 
-La raíz actual del proyecto es `C:\Users\Martin\OneDrive\Documentos\Github\m4rket\local`. Abre esa carpeta en el editor. La carpeta contenedora `m4rket` no es un repositorio; `local` sí lo es.
+La raíz actual del proyecto es `C:\Users\Martin\OneDrive\Documentos\Github\m4rket`. Abre esa carpeta en el editor. Esta carpeta es la raíz del repositorio; la rama de recuperación se llama `local`.
 
-Para una copia nueva, desde su raíz:
+Para una copia nueva, clona la rama de recuperación desde tu carpeta `Github`:
 
 ```powershell
+git clone --branch local https://github.com/martiinfiierro2/m4rket.git
+cd m4rket
 npm run setup
 ```
 
-Instala las dependencias de los tres proyectos con `npm ci --ignore-scripts` y crea `backend/.env.local` con una clave JWT aleatoria si aún no existe. Si existe, lo conserva. No instala ni inicia MariaDB, no importa datos y no cambia el Node global. Se omiten los scripts de instalación de SQLite porque el backend recuperado usa MariaDB/MySQL, y las compilaciones se han validado así.
+En esta copia ya preparada, utiliza el apartado de arranque; las dependencias y la conexión de MariaDB están conservadas.
+
+`npm run setup` instala las dependencias de los tres proyectos con `npm ci --ignore-scripts` y crea `backend/.env.local` con una clave JWT aleatoria si aún no existe. Si existe, lo conserva. No instala ni inicia MariaDB, no importa datos y no cambia el Node global. Se omiten los scripts de instalación de SQLite porque el backend recuperado usa MariaDB/MySQL, y las compilaciones se han validado así.
 
 ## Tu MariaDB
 
@@ -26,7 +30,7 @@ Las instrucciones siguientes permiten repetir la instalación en otra copia:
 2. En una consola SQL con permisos para crear bases, importa el fichero de este repositorio:
 
 ```sql
-SOURCE C:/Users/Martin/OneDrive/Documentos/Github/m4rket/local/database/m4rket_local.sql;
+SOURCE C:/Users/Martin/OneDrive/Documentos/Github/m4rket/database/m4rket_local.sql;
 ```
 
 También puedes importarlo desde HeidiSQL o phpMyAdmin. Crea `m4rket_local`, sus 10 tablas y los datos demo.
@@ -111,7 +115,7 @@ El [informe de validación](./docs/validacion-local.md) recoge las versiones y r
 
 ## Qué contiene .local y si hace falta
 
-`local` es el nombre de esta copia Git; `.local`, con punto, es una carpeta ignorada de archivos de trabajo.
+`local` es el nombre de la rama de recuperación. `.local`, con punto, es una carpeta ignorada de archivos de trabajo.
 
 `npm start`, `npm run setup` y `npm run build` **no necesitan** `.local`. Usan Node/npm instalados, tu MariaDB y la salida `dist`. El verificador sí puede crear `.local` para guardar su informe.
 
@@ -123,4 +127,4 @@ Esta copia conserva dentro de `.local` el Node portable anterior, descargas y ce
 - El filtro anual de estadísticas conserva su etiqueta original «2024»; su consulta usa el año actual. No se ha rediseñado la pantalla.
 - Chatbot, OVH, Prometheus, dominio y compilación nativa Android/iOS quedan fuera. No se necesita contratar servicios para ejecutar esta copia local.
 - Las pruebas de navegador no cubren todos los dispositivos, gestos posibles ni todas las combinaciones de datos. Se detallan los recorridos comprobados en el informe.
-- El espejo local conserva el original completo. La copia preparada para publicación pública en `martiinfiierro2/m4rket` retira credenciales y claves del historial, conservando autores, fechas, mensajes y ramas. Sus hashes cambian y seis firmas originales no se trasladan. La recuperación continúa en `local`, separada de `main`. El remoto `origin` apunta a GitHub y `espejo-local` conserva la referencia histórica. Las credenciales actuales de MariaDB y JWT están en `backend/.env.local`, ignorado por Git.
+- El espejo local conserva el original completo. La copia preparada para publicación pública en `martiinfiierro2/m4rket` retira credenciales y claves del historial, conservando autores, fechas, mensajes y ramas. Sus hashes cambian y seis firmas originales no se trasladan. La recuperación continúa en `local`, separada de `main`. El remoto `origin` apunta a GitHub y `espejo-local` apunta al respaldo privado `.git/respaldo-original.git`. Las credenciales actuales de MariaDB y JWT están en `backend/.env.local`, ignorado por Git.

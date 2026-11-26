@@ -71,3 +71,9 @@ Evidencia de este despliegue, sin credenciales: [despliegue-mariadb-local.json](
 ## Preparación de la copia pública (25/11/2026)
 
 Verificados en una copia aislada los 504 commits previos y 22 ramas, con autores, fechas, mensajes y relaciones entre padres conservados. Retirados secretos, claves, copias empaquetadas y ejemplos de claves de dependencias históricas; los hashes y seis firmas originales cambian. El espejo original permanece local. Los archivos actuales de lógica coinciden con la recuperación ya validada; este bloque solo añade documentación y reglas de exclusión. No se repiten las compilaciones al no cambiar esa lógica. Detalle en [publicacion-historico.json](./publicacion-historico.json).
+
+## Reubicación en la raíz del proyecto (26/11/2026)
+
+El repositorio está directamente en `C:\Users\Martin\OneDrive\Documentos\Github\m4rket`, en la rama `local`, con seguimiento de `origin/local`. Se conserva el espejo original en `.git/respaldo-original.git`; comprobadas sus referencias y la integridad de la configuración privada. Las dependencias instaladas se han trasladado junto con el proyecto.
+
+`npm run build` supera las compilaciones de producción web e Ionic con Node 24.15.0 en la nueva ruta. `npm start` inicia los tres servicios: índices HTML en 4200 y 4201, API en 3030, catálogo a través de ambos proxies e imagen pública con HTTP 200. El catálogo devuelve 16 productos y MariaDB utiliza `m4rket_local` en 3306. Son peticiones de lectura, sin altas, ediciones ni borrados de datos. Los procesos de aplicación se detienen al finalizar. Se mantienen los avisos de compilación existentes; no se cambia la lógica ni el diseño.

@@ -3,35 +3,36 @@
 
 ## Organización de las carpetas
 
-Durante la recuperación se creó la carpeta `local` clonando el espejo `m4rket.git`. Es una copia de trabajo independiente con los archivos del proyecto, preparada para modificarlos y ejecutarlos. El espejo original se conserva intacto como referencia.
-
-En la instalación actual, la carpeta contenedora tiene esta estructura:
-
-```text
-m4rket/
-├── m4rket.git/   Espejo original: historial, ramas y objetos de Git.
-└── local/        Copia de trabajo: código, scripts y base de demostración.
-    ├── database/  SQL con esquema y datos de demostración.
-    ├── dist/      Compilaciones generadas; ignoradas por Git.
-    └── .local/    Pruebas y entorno aislado anterior; opcional, ignorado por Git.
-```
-
-La carpeta `m4rket` que contiene ambas copias no es por sí misma un repositorio. Para ejecutar Git o los comandos de la aplicación, abre `local` en el editor o entra en ella desde PowerShell:
+El repositorio y sus archivos están directamente en `C:\Users\Martin\OneDrive\Documentos\Github\m4rket`. Abre esa carpeta en el editor y ejecuta los comandos desde ella:
 
 ```powershell
-cd "C:\Users\Martin\OneDrive\Documentos\Github\m4rket\local"
+cd "C:\Users\Martin\OneDrive\Documentos\Github\m4rket"
 git branch
 ```
 
-La rama de recuperación es `local`. El nombre `local` es una elección para esta copia: si clonas el repositorio en otra ubicación, utiliza la carpeta que contenga su `README.md` y su directorio `.git`.
+La estructura de esta instalación es:
 
-`local` y `.local` son carpetas distintas: la primera es el repositorio de trabajo; la segunda guarda pruebas y archivos de la preparación anterior y no se versiona. El arranque normal usa Node/npm instalados y tu propia MariaDB, sin depender de `.local`. No borres su antiguo directorio MariaDB si quieres conservar esos datos.
+```text
+m4rket/
+├── .git/       Metadatos Git y respaldo original privado en respaldo-original.git.
+├── backend/    API y configuración local.
+├── frontend/   Panel Angular y aplicación Ionic.
+├── database/   SQL con esquema y datos de demostración.
+├── scripts/    Preparación, arranque y comprobación.
+├── uploads/    Fotografías recuperadas.
+├── dist/       Compilaciones generadas; ignoradas por Git.
+└── .local/     Archivos auxiliares y pruebas; opcional, ignorado por Git.
+```
+
+La rama de recuperación se llama `local`, separada de `main`. Las ramas se seleccionan con Git dentro de esta misma carpeta. El espejo original se conserva en `.git/respaldo-original.git` como archivo privado de esta instalación, y el remoto `espejo-local` apunta a él.
+
+`.local`, con punto, guarda los archivos de preparación anteriores. El arranque normal usa Node/npm instalados y MariaDB de XAMPP. La [guía local](./README_LOCAL.md) detalla el entorno y las cuentas demo.
 
 ## Ramas y sincronización con GitHub
 
-Destino personal público: [martiinfiierro2/m4rket](https://github.com/martiinfiierro2/m4rket). La copia histórica contiene 21 ramas originales, con sus commits, autores y fechas. `main` conserva la línea histórica del proyecto; el espejo local mantiene el commit original `70c9d37a`. La copia pública retira credenciales y, por ello, sus hashes difieren. La recuperación se desarrolla en `local`. `local` es el nombre de la carpeta de trabajo, no una rama.
+Destino personal público: [martiinfiierro2/m4rket](https://github.com/martiinfiierro2/m4rket). La copia histórica contiene 21 ramas originales, con sus commits, autores y fechas. `main` conserva la línea histórica del proyecto; el espejo local mantiene el commit original `70c9d37a`. La copia pública retira credenciales y, por ello, sus hashes difieren. La recuperación se desarrolla en `local`. `local` identifica la rama de recuperación y `m4rket` la carpeta del proyecto.
 
-En esta copia, `origin` apunta al repositorio personal y `espejo-local` al archivo histórico `m4rket.git`. La publicación del original se hace desde las ramas del espejo; después se publica la rama de recuperación desde `local`. No es necesario mezclar la recuperación en `main` para conservarla en GitHub.
+En esta copia, `origin` apunta al repositorio personal y `espejo-local` al respaldo privado `.git/respaldo-original.git`. En GitHub se conservan las 21 ramas históricas de la copia revisada y la rama de recuperación `local`, separada de `main`.
 
 Se acuerda terminar cada apartado con su explicación en el README, un commit y un push de `local`. Se informará de si la subida se ha completado. Tras el primer push con seguimiento, los siguientes usan `git push`; `git pull --ff-only` sirve para traer cambios publicados desde otra copia. Los cambios hechos en esta misma carpeta ya aparecen directamente.
 
@@ -182,3 +183,13 @@ Commit: `docs(git): usar local como rama de recuperacion`.
 - `local` es una rama de Git; el nombre de la carpeta donde se guardan los archivos en el ordenador es independiente. GitHub muestra los archivos directamente en cada rama, sin una carpeta contenedora `local`.
 - Conservados el espejo original y una copia de respaldo de la recuperación anterior a la publicación. La copia de trabajo habitual utiliza el historial revisado, manteniendo la configuración de MariaDB, los datos y las dependencias instaladas.
 - El cierre de cada apartado incluye su explicación en el README, commit y push a esta rama.
+
+### Núcleo 10 — Proyecto directamente en Github/m4rket (26/11/2026)
+
+Commit: `chore(local): dejar el proyecto en la raiz de m4rket`.
+
+- Movido el repositorio completo a `Github/m4rket`, con la rama `local` y seguimiento de `origin/local`. Eliminada la subcarpeta contenedora anterior.
+- Conservado el espejo original íntegro dentro de `.git/respaldo-original.git`, como archivo privado, y actualizada su referencia `espejo-local`. Reparadas las rutas de las herramientas auxiliares y del entorno MariaDB anterior.
+- Actualizadas la guía, las instrucciones de clonación de la rama `local` y la ruta de importación SQL. Conservados Node/npm, dependencias, configuración privada, datos, fotos y la edición previa del usuario en el README local.
+- Compilaciones de Angular e Ionic correctas con Node 24.15.0 desde la nueva raíz. Arranque conjunto mediante `npm start` comprobado: API 3030, web 4200 e Ionic 4201, con HTTP 200, proxies funcionales, catálogo de 16 productos e imagen recuperada. MariaDB responde en 3306.
+- Comprobaciones de lectura; detenidos los tres procesos de aplicación al terminar. No se modifican los archivos de lógica de la aplicación.
