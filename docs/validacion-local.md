@@ -87,3 +87,25 @@ Detectados errores Aria 176 en `mysql.proxies_priv` y `mysql.db`. Tras respaldar
 **Límite de la recuperación:** el motor descartó cinco filas de permisos ilegibles y una recuperación adicional sobre una copia tampoco pudo reconstruirlas. Se repusieron los permisos conocidos de la aplicación; el contenido exacto de las filas descartadas sigue sin recuperarse. Los archivos originales y los respaldos permanecen privados en `.local/checkpoints`. La reparación no ejecutó cambios sobre las tablas de `m4rket_local`; los diez recuentos coinciden antes y después.
 
 Comprobados HTTP 200 para catálogo en API 3030, proxy web 4200 y proxy Ionic 4201; login y consulta autenticada con usuario, admin y superAdmin; e imagen pública. Conservados 7 usuarios y 16 productos. Los servicios existentes siguieron en ejecución. No se repiten los builds porque no cambia el código. La evidencia está en [verificacion-api-20261127.json](./verificacion-api-20261127.json). Referencia de la operación: [REPAIR TABLE de MariaDB](https://mariadb.com/docs/server/reference/sql-statements/table-statements/repair-table).
+
+## Registro de Ionic y enlace corporativo (27/11/2026)
+
+Reproducido HTTP 400 al registrar sin cambiar el género: el control enviaba una cadena vacía y no había aviso visible. El alta funcionaba al seleccionar expresamente Hombre o Mujer. Se corrige exclusivamente el formulario Ionic existente, conservando su petición a la API, el rol de usuario y la entrada automática al mapa tras el alta. No se modifica la API ni el formulario web.
+
+Comprobación manual automatizada con Chromium a 390 × 844, sobre API 3030 y proxy Ionic 4201:
+
+1. Género pendiente visible; datos incompletos con aviso y sin enviar petición.
+2. Correo inválido sin enviar petición.
+3. Correo ya registrado: HTTP 400, aviso «Email ya existe» y botón disponible para corregirlo.
+4. Fallo de red simulado: aviso y posibilidad de reintentar.
+5. Alta con Mujer: HTTP 200, rol usuario y navegación a home.
+6. Segundo envío mientras se espera la respuesta: una sola petición de alta.
+7. Token de sesión e identificador presentes tras registrarse.
+8. Login posterior de la cuenta nueva: HTTP 200 y acceso a home.
+9. Alta con Hombre: HTTP 200 y acceso automático a home.
+
+Retiradas exclusivamente las dos cuentas temporales de esta verificación y la cuenta temporal de la reproducción inicial. Los recuentos de las diez tablas antes y después de la verificación coinciden: 7 usuarios, 16 productos, 41 ubicaciones, 3 tipos de promoción, 3 promociones, 16 asociaciones de ubicación, 5 de promoción, 6 líneas de compra, 338 contadores y 10 tiempos. Estos datos corresponden a la base en uso durante esta prueba, no al manifiesto de importación inicial. Las pruebas dejan huecos normales en el autoincremento de usuarios.
+
+`npm run build:mobile` termina con código 0 en Node 24.15.0. Permanecen los 20 avisos conocidos del optimizador de CSS de Ionic. No se recompila la web porque no se modifica su código. Se mantienen los procesos del usuario en ejecución; se cierra únicamente la sesión aislada de navegador utilizada para las pruebas.
+
+El enlace de cabecera «4AM» de la landing web se reproduce en el puerto 4200: apunta a `/corp`, pero esa ruta no está declarada en Angular. No se ha localizado su página corporativa original en las ramas ni en el historial consultado; la búsqueda de otro repositorio conectado llamado 4AM tampoco devuelve resultados. El usuario indica que pudo estar solo en el antiguo servidor universitario. Su recuperación queda pendiente de localizar esos archivos; no se ha creado una página sustituta.

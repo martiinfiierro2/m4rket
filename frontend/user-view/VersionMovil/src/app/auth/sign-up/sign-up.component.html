@@ -47,11 +47,15 @@
       <label for="genero" class="genero"
         >Género
         <select name="genero" id="genero" formControlName="genero">
-          <option value="hombre">Hombre</option>
-          <option value="mujer">Mujer</option>
+          <option value="" disabled>Selecciona tu género</option>
+          <option value="Hombre">Hombre</option>
+          <option value="Mujer">Mujer</option>
         </select>
       </label>
-      <input type="submit" value="Enviar" class="botonEnviar" />
+      <div id="avisos" role="alert" *ngIf="avisoError">
+        <p>{{ avisoError }}</p>
+      </div>
+      <input type="submit" value="Enviar" class="botonEnviar" [disabled]="esperando" />
     </form>
 
     <div class="registro">

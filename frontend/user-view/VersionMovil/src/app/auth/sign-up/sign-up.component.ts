@@ -19,6 +19,9 @@ export class SignUpComponent {
   private tokenUsuario = '';
   private idUsuario = '';
   private email = '';
+
+  public esperando = false;
+  public avisoError = '';
   
   constructor( private fb: FormBuilder,
                private usuarioService: UsuariosService,
@@ -35,21 +38,34 @@ export class SignUpComponent {
 
 
   sign_up(){
-    console.log(this.sign_upForm);
+    if (this.esperando) {
+      return;
+    }
+
+    this.avisoError = '';
+    if (this.sign_upForm.invalid) {
+      this.sign_upForm.markAllAsTouched();
+      this.avisoError = 'Completa todos los campos y utiliza un correo válido.';
+      return;
+    }
+
+    this.esperando = true;
     this.usuarioService.registro(this.sign_upForm.value)
-      .subscribe( res =>{
-        console.log(res);
-        console.log('tetas');
-        console.log(res.idUsuario);
-        this.idUsuario = res.usuario.id;
-        this.tokenUsuario = res.token;
-        this.email = res.usuario.email;
-        console.log(this.idUsuario);
-        console.log(this.tokenUsuario);
-        sessionStorage.setItem('tokenUsuario', this.tokenUsuario);
-        localStorage.setItem('idUsuario', this.idUsuario);
-        localStorage.setItem('email', this.email);
-        this.route.navigate(['/home']);
-      }) 
+      .subscribe({
+        next: res => {
+          this.idUsuario = res.usuario.id;
+          this.tokenUsuario = res.token;
+          this.email = res.usuario.email;
+          sessionStorage.setItem('tokenUsuario', this.tokenUsuario);
+          localStorage.setItem('idUsuario', this.idUsuario);
+          localStorage.setItem('email', this.email);
+          this.esperando = false;
+          this.route.navigate(['/home']);
+        },
+        error: error => {
+          this.esperando = false;
+          this.avisoError = error.error?.msg || 'No se ha podido crear la cuenta. Revisa los datos e inténtalo de nuevo.';
+        }
+      });
   }
-} 
+}

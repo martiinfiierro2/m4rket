@@ -204,3 +204,13 @@ Commit: `fix(local): recuperar la conexion de la API a MariaDB`.
 - El motor descartó cinco filas ilegibles de permisos. Se conservan los respaldos, se han verificado los permisos disponibles de las seis cuentas y se han repuesto los permisos conocidos de m4rket. No se pudo recuperar el contenido exacto de las filas descartadas.
 - Verificados acceso y consulta autenticada con los tres roles, catálogo directo y a través de ambos proxies, y lectura de imagen, todos con HTTP 200. Conservados los recuentos de las diez tablas de la aplicación, incluidos 7 usuarios y 16 productos. Sin reiniciar los servicios en uso.
 - Documentada la ruta real de prueba de la API y la diferencia entre las cuentas de conexión y de aplicación. La lógica y el diseño de API, web, Ionic y motor se mantienen. Evidencia en [docs/verificacion-api-20261127.json](./docs/verificacion-api-20261127.json).
+
+### Núcleo 12 — Registro de usuarios en Ionic y enlace 4AM (27/11/2026)
+
+Commit: `fix(mobile): recuperar la validacion del registro`.
+
+- Reproducido el rechazo del registro en el puerto 4201: el selector podía enviar el género vacío y el formulario no mostraba el motivo del error. Seleccionar expresamente un género permitía crear la cuenta.
+- Corregido el formulario existente: opción inicial explícita, valores de género coherentes con el modelo, validación antes de enviar, aviso de error y bloqueo de envíos repetidos mientras se tramita el alta. Se conserva el acceso automático a la app después del registro y el rol de usuario.
+- Verificadas nueve comprobaciones de navegador a 390 × 844: campos incompletos, correo inválido, correo repetido, fallo de red y reintento, altas con ambos géneros, sesión, login posterior y envío único. Compilación de producción de Ionic correcta con Node 24.15.0; se mantienen los avisos CSS anteriores.
+- Retiradas las cuentas temporales y comprobados los mismos recuentos en las diez tablas antes y después de la verificación. No se reimporta ni reinicia MariaDB.
+- El enlace «4AM» pertenece a la cabecera de la web del puerto 4200 y apunta a `/corp`, sin ruta ni página de destino en la versión recuperada. No se ha localizado su implementación en el repositorio ni en el historial consultado; el usuario indica que pudo quedar solo en el servidor de la universidad. Pendiente de encontrar sus archivos originales.
