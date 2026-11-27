@@ -193,3 +193,14 @@ Commit: `chore(local): dejar el proyecto en la raiz de m4rket`.
 - Actualizadas la guía, las instrucciones de clonación de la rama `local` y la ruta de importación SQL. Conservados Node/npm, dependencias, configuración privada, datos, fotos y la edición previa del usuario en el README local.
 - Compilaciones de Angular e Ionic correctas con Node 24.15.0 desde la nueva raíz. Arranque conjunto mediante `npm start` comprobado: API 3030, web 4200 e Ionic 4201, con HTTP 200, proxies funcionales, catálogo de 16 productos e imagen recuperada. MariaDB responde en 3306.
 - Comprobaciones de lectura; detenidos los tres procesos de aplicación al terminar. No se modifican los archivos de lógica de la aplicación.
+
+### Núcleo 11 — Acceso de la API a MariaDB (27/11/2026)
+
+Commit: `fix(local): recuperar la conexion de la API a MariaDB`.
+
+- Localizado el fallo de consultas: MariaDB rechazaba la cuenta de conexión `m4rket_app`, que no existía. La API y los dos clientes estaban arrancados y sus proxies funcionaban.
+- Restaurada la cuenta para localhost y 127.0.0.1, reutilizando la contraseña privada existente, con SELECT, INSERT, UPDATE y DELETE solo sobre `m4rket_local`. Conservada la configuración de la API y su JWT.
+- Detectada corrupción Aria en `mysql.proxies_priv` y en el archivo de datos de `mysql.db`. Guardados respaldos privados; reparada la primera tabla y, con autorización del usuario, reconstruida la segunda. Las siete tablas internas de permisos comprobadas pasan CHECK TABLE EXTENDED y FLUSH PRIVILEGES vuelve a funcionar.
+- El motor descartó cinco filas ilegibles de permisos. Se conservan los respaldos, se han verificado los permisos disponibles de las seis cuentas y se han repuesto los permisos conocidos de m4rket. No se pudo recuperar el contenido exacto de las filas descartadas.
+- Verificados acceso y consulta autenticada con los tres roles, catálogo directo y a través de ambos proxies, y lectura de imagen, todos con HTTP 200. Conservados los recuentos de las diez tablas de la aplicación, incluidos 7 usuarios y 16 productos. Sin reiniciar los servicios en uso.
+- Documentada la ruta real de prueba de la API y la diferencia entre las cuentas de conexión y de aplicación. La lógica y el diseño de API, web, Ionic y motor se mantienen. Evidencia en [docs/verificacion-api-20261127.json](./docs/verificacion-api-20261127.json).

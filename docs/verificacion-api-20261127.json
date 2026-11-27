@@ -1,0 +1,97 @@
+{
+  "date": "2026-11-27T17:55:50.764Z",
+  "diagnosis": {
+    "missingApplicationDatabaseAccount": true,
+    "corruptedSystemTables": [
+      "mysql.proxies_priv",
+      "mysql.db"
+    ],
+    "ariaError": 176
+  },
+  "repair": {
+    "backupRetained": true,
+    "userApprovedDataFileRepair": true,
+    "permissionTablesHealthy": {
+      "global_priv": true,
+      "db": true,
+      "tables_priv": true,
+      "columns_priv": true,
+      "procs_priv": true,
+      "roles_mapping": true,
+      "proxies_priv": true
+    },
+    "privilegesReloaded": true,
+    "accountAuthenticationPreserved": true,
+    "savedAccountsVerified": 6,
+    "knownApplicationPrivilegesRestored": true,
+    "corruptPrivilegeRowsDiscarded": 5,
+    "exactDiscardedRowContentsRecovered": false
+  },
+  "application": {
+    "tablesBefore": {
+      "usuarios": 7,
+      "productos": 16,
+      "ubicaciones": 41,
+      "tipo_promocion": 3,
+      "promociones": 3,
+      "en_ubicacion": 16,
+      "en_promocion": 5,
+      "lista_compra": 10,
+      "datos_contadores": 336,
+      "datos_tiempo": 10
+    },
+    "tablesAfter": {
+      "usuarios": 7,
+      "productos": 16,
+      "ubicaciones": 41,
+      "tipo_promocion": 3,
+      "promociones": 3,
+      "en_ubicacion": 16,
+      "en_promocion": 5,
+      "lista_compra": 10,
+      "datos_contadores": 336,
+      "datos_tiempo": 10
+    },
+    "countsUnchanged": true,
+    "codeChanged": false,
+    "privateConfigUnchanged": true,
+    "serversRestarted": false
+  },
+  "checks": {
+    "http": [
+      {
+        "port": 3030,
+        "status": 200,
+        "products": 16
+      },
+      {
+        "port": 4200,
+        "status": 200,
+        "products": 16
+      },
+      {
+        "port": 4201,
+        "status": 200,
+        "products": 16
+      }
+    ],
+    "authentication": [
+      {
+        "role": "usuario",
+        "loginStatus": 200,
+        "authenticatedReadStatus": 200
+      },
+      {
+        "role": "admin",
+        "loginStatus": 200,
+        "authenticatedReadStatus": 200
+      },
+      {
+        "role": "superAdmin",
+        "loginStatus": 200,
+        "authenticatedReadStatus": 200
+      }
+    ],
+    "imageStatus": 200
+  }
+}

@@ -77,3 +77,13 @@ Verificados en una copia aislada los 504 commits previos y 22 ramas, con autores
 El repositorio está directamente en `C:\Users\Martin\OneDrive\Documentos\Github\m4rket`, en la rama `local`, con seguimiento de `origin/local`. Se conserva el espejo original en `.git/respaldo-original.git`; comprobadas sus referencias y la integridad de la configuración privada. Las dependencias instaladas se han trasladado junto con el proyecto.
 
 `npm run build` supera las compilaciones de producción web e Ionic con Node 24.15.0 en la nueva ruta. `npm start` inicia los tres servicios: índices HTML en 4200 y 4201, API en 3030, catálogo a través de ambos proxies e imagen pública con HTTP 200. El catálogo devuelve 16 productos y MariaDB utiliza `m4rket_local` en 3306. Son peticiones de lectura, sin altas, ediciones ni borrados de datos. Los procesos de aplicación se detienen al finalizar. Se mantienen los avisos de compilación existentes; no se cambia la lógica ni el diseño.
+
+## Reparación del acceso a MariaDB (27/11/2026)
+
+La API escuchaba en 3030, pero las consultas devolvían HTTP 400 por falta de la cuenta `m4rket_app`. Restauradas las cuentas de localhost y 127.0.0.1 y sus permisos CRUD sobre `m4rket_local`, con la contraseña privada ya configurada.
+
+Detectados errores Aria 176 en `mysql.proxies_priv` y `mysql.db`. Tras respaldar los archivos y los permisos disponibles de seis cuentas, se repararon ambas tablas; la reconstrucción del archivo de datos de `mysql.db` fue autorizada expresamente. La recarga de permisos funciona y las siete tablas internas comprobadas pasan CHECK TABLE EXTENDED. Se conservaron la autenticación de las seis cuentas, los permisos presentes en el respaldo y la configuración privada.
+
+**Límite de la recuperación:** el motor descartó cinco filas de permisos ilegibles y una recuperación adicional sobre una copia tampoco pudo reconstruirlas. Se repusieron los permisos conocidos de la aplicación; el contenido exacto de las filas descartadas sigue sin recuperarse. Los archivos originales y los respaldos permanecen privados en `.local/checkpoints`. La reparación no ejecutó cambios sobre las tablas de `m4rket_local`; los diez recuentos coinciden antes y después.
+
+Comprobados HTTP 200 para catálogo en API 3030, proxy web 4200 y proxy Ionic 4201; login y consulta autenticada con usuario, admin y superAdmin; e imagen pública. Conservados 7 usuarios y 16 productos. Los servicios existentes siguieron en ejecución. No se repiten los builds porque no cambia el código. La evidencia está en [verificacion-api-20261127.json](./verificacion-api-20261127.json). Referencia de la operación: [REPAIR TABLE de MariaDB](https://mariadb.com/docs/server/reference/sql-statements/table-statements/repair-table).

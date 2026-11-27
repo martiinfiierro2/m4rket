@@ -65,6 +65,14 @@ También puedes usar tres terminales con `npm run start:api`, `npm run start:web
 
 Los clientes usan `/api` y su proxy local. Abrir directamente un HTML de la compilación con `file://` o usar Live Server sin ese proxy no sustituye este arranque. Para una demostración Ionic en la red local, existe `npm --prefix frontend/user-view/VersionMovil run start:lan`; desde el teléfono se accede a la IP del ordenador en el puerto 4201. No se ha validado en un teléfono físico.
 
+## Comprobar la API y su conexión
+
+Con `npm start` y MariaDB arrancados, abre <http://127.0.0.1:3030/api/dataset/productos>. La respuesta correcta es JSON con `ok: true`, productos y paginación. `/api` a secas no tiene una página o ruta GET definida y devuelve 404. El panel de administración se abre en el puerto 4200.
+
+Que la API escuche en 3030 no confirma por sí solo su acceso a MariaDB. Si devuelve `Error obteniendo productos para el dataset` y en la consola aparece `Access denied`, hay que comprobar la cuenta de conexión indicada por `USERBD` y `PWDBD` en `backend/.env.local`. Es distinta de las cuentas de demostración de la aplicación. La cuenta `m4rket_app` de esta instalación tiene SELECT, INSERT, UPDATE y DELETE sobre `m4rket_local` para localhost y 127.0.0.1.
+
+La incidencia del 27/11/2026 incluía la ausencia de esa cuenta y errores de Aria en tablas internas de permisos de XAMPP. Se guardaron respaldos privados antes de repararlas. La recuperación descartó cinco filas ilegibles de permisos; se repusieron los permisos conocidos y se verificaron las seis cuentas del respaldo. El contenido exacto de esas filas no se pudo reconstruir. Las tablas y los recuentos de la aplicación se conservaron. El [informe de verificación](./docs/verificacion-api-20261127.json) recoge el resultado sin credenciales.
+
 ## Cuentas de demostración y roles
 
 Contraseña compartida: **`M4rketDemo!2026`**.
