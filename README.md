@@ -214,3 +214,13 @@ Commit: `fix(mobile): recuperar la validacion del registro`.
 - Verificadas nueve comprobaciones de navegador a 390 × 844: campos incompletos, correo inválido, correo repetido, fallo de red y reintento, altas con ambos géneros, sesión, login posterior y envío único. Compilación de producción de Ionic correcta con Node 24.15.0; se mantienen los avisos CSS anteriores.
 - Retiradas las cuentas temporales y comprobados los mismos recuentos en las diez tablas antes y después de la verificación. No se reimporta ni reinicia MariaDB.
 - El enlace «4AM» pertenece a la cabecera de la web del puerto 4200 y apunta a `/corp`, sin ruta ni página de destino en la versión recuperada. No se ha localizado su implementación en el repositorio ni en el historial consultado; el usuario indica que pudo quedar solo en el servidor de la universidad. Pendiente de encontrar sus archivos originales.
+
+### Núcleo 13 — Bocetos de app, web y administración (27/11/2026)
+
+Commit: `docs(design): anadir bocetos de app web y administracion`.
+
+- Preparados ocho bocetos PNG independientes en [docs/bocetos-redisenio](./docs/bocetos-redisenio/LEEME.md): mapa 3D, alternativa con acabado vectorial, lista y ficha de producto; dos secciones de la web pública; estadísticas y stock del panel de empleados.
+- Aplicados criterios de diseño de Impeccable, imagegen-frontend-mobile e imagegen-frontend-web. Una identidad marfil/pino/salvia, jerarquía tipográfica más clara, fotos del catálogo y el motor tridimensional como elemento principal.
+- Conservadas las referencias anteriores A y C. Las nuevas imágenes usan los bocetos del supermercado y las fotografías de producto como referencias; la distribución y las cifras del panel son ilustrativas.
+- Entrega exclusivamente visual: no cambia el código, el diseño en ejecución, la lógica, los datos ni el arranque. El acabado vectorial de esta entrega es PNG; los SVG originales de C siguen disponibles por separado.
+- Revisados los ocho archivos y sus enlaces en la galería. Este bloque solo incorpora imágenes y documentación; no requiere repetir compilaciones.
