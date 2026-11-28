@@ -1,0 +1,758 @@
+{
+  "date": "2026-11-28",
+  "node": "v24.15.0",
+  "databaseVersion": "10.4.32-MariaDB",
+  "workingDatabase": {
+    "counts": {
+      "usuarios": 7,
+      "productos": 16,
+      "ubicaciones": 41,
+      "tipo_promocion": 3,
+      "promociones": 3,
+      "en_ubicacion": 16,
+      "en_promocion": 5,
+      "lista_compra": 6,
+      "datos_contadores": 342,
+      "datos_tiempo": 10
+    },
+    "countsUnchanged": true,
+    "configurationUnchanged": true
+  },
+  "builds": {
+    "web": {
+      "exitCode": 0,
+      "initialBundle": "4.30 MB",
+      "estimatedTransfer": "1.20 MB"
+    },
+    "mobile": {
+      "exitCode": 0,
+      "initialBundle": "584.27 kB",
+      "lazyHome": "1.74 MB"
+    }
+  },
+  "api": {
+    "date": "2026-11-28T17:51:28.807Z",
+    "server": "MariaDB local",
+    "tables": {
+      "usuarios": 6,
+      "productos": 16,
+      "ubicaciones": 41,
+      "tipo_promocion": 3,
+      "promociones": 3,
+      "en_ubicacion": 16,
+      "en_promocion": 5,
+      "lista_compra": 10,
+      "datos_contadores": 336,
+      "datos_tiempo": 10
+    },
+    "apiChecks": 61,
+    "imageChecks": 16,
+    "results": [
+      {
+        "method": "POST",
+        "endpoint": "/login",
+        "status": 200
+      },
+      {
+        "method": "POST",
+        "endpoint": "/login",
+        "status": 200
+      },
+      {
+        "method": "POST",
+        "endpoint": "/login",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "endpoint": "/token",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "endpoint": "/dataset/productos",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "endpoint": "/allproductos",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "endpoint": "/productos?desde=4",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "endpoint": "/productos?id=60",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "endpoint": "/productos/Manzana",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "endpoint": "/usuarios",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "endpoint": "/ubicaciones?referencia=A&posicion=1",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "endpoint": "/ubicaciones",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "endpoint": "/enubicacion?id=1",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "endpoint": "/enubicacion?idProd=60",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "endpoint": "/tipopromo",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "endpoint": "/promociones",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "endpoint": "/enpromocion?id=1",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "endpoint": "/listacompra?id=1",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "endpoint": "/contadores?nombre=buscado&inicio=2026-10-29&fin=2026-11-29&idUsu=1",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "endpoint": "/contadores?nombre=activo&inicio=2026-10-29&fin=2026-11-29&idUsu=1",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "endpoint": "/contadores?nombre=anadido&inicio=2026-10-29&fin=2026-11-29&idUsu=1",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "endpoint": "/contadores?nombre=eliminado&inicio=2026-10-29&fin=2026-11-29&idUsu=1",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "endpoint": "/contadores?nombre=comprado&inicio=2026-10-29&fin=2026-11-29&idUsu=1",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "endpoint": "/contadores?nombre=localizado&inicio=2026-10-29&fin=2026-11-29&idUsu=1",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "endpoint": "/contadores?nombre=buscadousu&inicio=2026-10-29&fin=2026-11-29&idUsu=1",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "endpoint": "/contadores?nombre=mediatiempos&inicio=2026-10-29&fin=2026-11-29&idUsu=1",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "endpoint": "/contadores?nombre=usuariounico&inicio=2026-10-29&fin=2026-11-29&idUsu=1",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "endpoint": "/contadores?nombre=masbuscado&inicio=2026-10-29&fin=2026-11-29",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "endpoint": "/contadores?nombre=masanadido&inicio=2026-10-29&fin=2026-11-29",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "endpoint": "/contadores?nombre=maseliminado&inicio=2026-10-29&fin=2026-11-29",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "endpoint": "/contadores?nombre=mascomprado&inicio=2026-10-29&fin=2026-11-29",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "endpoint": "/contadores?nombre=anadido",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "endpoint": "/contadores?nombre=eliminado",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "endpoint": "/contadores?nombre=buscado&inicio=2026-10-29&fin=2026-11-29",
+        "status": 200
+      },
+      {
+        "method": "POST",
+        "endpoint": "/usuarios",
+        "status": 200
+      },
+      {
+        "method": "PUT",
+        "endpoint": "/usuarios/7",
+        "status": 200
+      },
+      {
+        "method": "POST",
+        "endpoint": "/ubicaciones",
+        "status": 200
+      },
+      {
+        "method": "PUT",
+        "endpoint": "/ubicaciones/42",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "endpoint": "/tiempos?nombre=compra",
+        "status": 200
+      },
+      {
+        "method": "POST",
+        "endpoint": "/productos",
+        "status": 200
+      },
+      {
+        "method": "PUT",
+        "endpoint": "/productos/68",
+        "status": 200
+      },
+      {
+        "method": "POST",
+        "endpoint": "/uploads/fotoproducto/:id",
+        "status": 200
+      },
+      {
+        "method": "POST",
+        "endpoint": "/tipopromo",
+        "status": 200
+      },
+      {
+        "method": "PUT",
+        "endpoint": "/tipopromo/4",
+        "status": 200
+      },
+      {
+        "method": "POST",
+        "endpoint": "/promociones",
+        "status": 200
+      },
+      {
+        "method": "POST",
+        "endpoint": "/enpromocion",
+        "status": 200
+      },
+      {
+        "method": "POST",
+        "endpoint": "/enubicacion",
+        "status": 200
+      },
+      {
+        "method": "POST",
+        "endpoint": "/listacompra",
+        "status": 200
+      },
+      {
+        "method": "PUT",
+        "endpoint": "/listacompra/11",
+        "status": 200
+      },
+      {
+        "method": "POST",
+        "endpoint": "/contadores",
+        "status": 200
+      },
+      {
+        "method": "POST",
+        "endpoint": "/tiempos",
+        "status": 200
+      },
+      {
+        "method": "DELETE",
+        "endpoint": "/tiempos/11",
+        "status": 200
+      },
+      {
+        "method": "DELETE",
+        "endpoint": "/contadores/337",
+        "status": 200
+      },
+      {
+        "method": "DELETE",
+        "endpoint": "/listacompra/11",
+        "status": 200
+      },
+      {
+        "method": "DELETE",
+        "endpoint": "/enubicacion/17",
+        "status": 200
+      },
+      {
+        "method": "DELETE",
+        "endpoint": "/enpromocion/6",
+        "status": 200
+      },
+      {
+        "method": "DELETE",
+        "endpoint": "/promociones/4",
+        "status": 200
+      },
+      {
+        "method": "DELETE",
+        "endpoint": "/tipopromo/4",
+        "status": 200
+      },
+      {
+        "method": "DELETE",
+        "endpoint": "/productos/68",
+        "status": 200
+      },
+      {
+        "method": "DELETE",
+        "endpoint": "/ubicaciones/42",
+        "status": 200
+      },
+      {
+        "method": "DELETE",
+        "endpoint": "/usuarios/7",
+        "status": 200
+      }
+    ]
+  },
+  "edgeCases": [
+    {
+      "case": "protectedWithoutToken",
+      "status": 400,
+      "ok": false
+    },
+    {
+      "case": "regularUserReadsOtherList",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "case": "filteredSearchCount",
+      "status": 200,
+      "returned": 1,
+      "reportedTotal": 16
+    },
+    {
+      "case": "missingProductHttpContract",
+      "status": 200,
+      "ok": false,
+      "message": "El id del producto debe ser válido"
+    },
+    {
+      "case": "publicRegistrationAcceptsAdmin",
+      "status": 200,
+      "role": "admin",
+      "passwordHashIncluded": true
+    },
+    {
+      "case": "invalidEmailAcceptedByApi",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "case": "regularUserCreatesProductWithNegativeValues",
+      "status": 200,
+      "stock": -10,
+      "price": -5
+    },
+    {
+      "case": "zeroQuantityAccepted",
+      "status": 200,
+      "quantity": 0
+    },
+    {
+      "case": "duplicateProductRows",
+      "statuses": [
+        200,
+        200
+      ],
+      "sameProductRows": 2
+    }
+  ],
+  "mobile": {
+    "isolatedBackend": 3031,
+    "checks": [
+      {
+        "name": "Mapa 3D con cuatro pines iniciales",
+        "passed": true,
+        "pins": [
+          {
+            "id": 60,
+            "bought": false
+          },
+          {
+            "id": 62,
+            "bought": true
+          },
+          {
+            "id": 11,
+            "bought": false
+          },
+          {
+            "id": 13,
+            "bought": false
+          }
+        ]
+      },
+      {
+        "name": "Busqueda de producto existente",
+        "passed": true
+      },
+      {
+        "name": "Añadir a la lista",
+        "passed": true
+      },
+      {
+        "name": "Ficha de producto cargada",
+        "passed": true,
+        "unitPriceDisplayed": "Disponible\n\n1.22€\n\n1.35€",
+        "expectedDemoPricePerKg": 2.7,
+        "unitPriceCorrect": false
+      },
+      {
+        "name": "Incrementar cantidad",
+        "passed": true
+      },
+      {
+        "name": "Marcar comprado",
+        "passed": true
+      },
+      {
+        "name": "Persistencia y estado del pin tras recargar",
+        "passed": true
+      },
+      {
+        "name": "Quitar solo comprados",
+        "passed": true
+      },
+      {
+        "name": "Vaciar lista mantiene el supermercado",
+        "passed": true,
+        "fixtures": 41
+      },
+      {
+        "name": "Salida de la cuenta",
+        "passed": true
+      },
+      {
+        "name": "Registro incompleto muestra aviso",
+        "passed": true
+      },
+      {
+        "name": "Registro valido y entrada automatica",
+        "passed": true
+      }
+    ]
+  },
+  "web": {
+    "isolatedBackend": 3031,
+    "checks": [
+      {
+        "name": "Web rechaza acceso de rol usuario",
+        "passed": true
+      },
+      {
+        "name": "Admin entra al stock y no muestra Cuentas",
+        "passed": true
+      },
+      {
+        "name": "Pantalla administrativa promociones",
+        "passed": true
+      },
+      {
+        "name": "Pantalla administrativa ubicaciones",
+        "passed": true
+      },
+      {
+        "name": "Pantalla administrativa estadisticas",
+        "passed": true
+      },
+      {
+        "name": "Pantalla administrativa datos",
+        "passed": true
+      },
+      {
+        "name": "Estadisticas renderiza graficos",
+        "passed": true
+      },
+      {
+        "name": "Estadisticas sin NaN ni Infinity",
+        "passed": true
+      },
+      {
+        "name": "Superadmin muestra Cuentas",
+        "passed": true
+      },
+      {
+        "name": "Alta administrativa existente",
+        "passed": true
+      },
+      {
+        "name": "Exportacion CSV",
+        "passed": true
+      },
+      {
+        "name": "Exportacion XLSX",
+        "passed": true
+      },
+      {
+        "name": "Exportacion PDF abre documento",
+        "passed": true
+      }
+    ],
+    "findings": [
+      {
+        "name": "mobileUnitPrice",
+        "displayed": "0.95€/kg",
+        "expectedPricePerKg": 1.9,
+        "correct": false
+      },
+      {
+        "name": "annualComparisonRange",
+        "start": "2025-11-28",
+        "end": "2026-11-28",
+        "comparisonStart": "2023-11-28",
+        "comparisonEnd": "2024-11-28"
+      },
+      {
+        "name": "accountsPagination",
+        "uiTotal": 10,
+        "apiTotal": 12,
+        "visibleRows": 10
+      },
+      {
+        "name": "accountsSearch",
+        "rowsBefore": 10,
+        "rowsAfter": 10
+      },
+      {
+        "name": "accountsEdit",
+        "editMethodEmpty": true,
+        "urlAfterClick": "http://127.0.0.1:4200/usuarios",
+        "editForms": 0
+      },
+      {
+        "name": "datasetSearch",
+        "itemsBefore": 4,
+        "itemsAfter": 4
+      },
+      {
+        "name": "datasetDetail",
+        "visibleText": "M4RKET - Dataset",
+        "hasProductMain": false
+      },
+      {
+        "name": "missingPublicRoute",
+        "route": "corp",
+        "bodyTextLength": 0
+      },
+      {
+        "name": "missingPublicRoute",
+        "route": "objetoAprendizaje",
+        "bodyTextLength": 0
+      }
+    ]
+  },
+  "quality": [
+    {
+      "check": "unit-web",
+      "exitCode": 1
+    },
+    {
+      "check": "unit-mobile",
+      "exitCode": 0
+    },
+    {
+      "check": "lint-mobile",
+      "exitCode": 1
+    }
+  ],
+  "dependencyAudit": [
+    {
+      "project": "api",
+      "exitCode": 1,
+      "counts": {
+        "info": 0,
+        "low": 6,
+        "moderate": 5,
+        "high": 17,
+        "critical": 4,
+        "total": 32
+      },
+      "highDirect": [
+        {
+          "package": "express",
+          "severity": "high",
+          "fixAvailable": true
+        },
+        {
+          "package": "mysql2",
+          "severity": "critical",
+          "fixAvailable": true
+        },
+        {
+          "package": "sequelize",
+          "severity": "critical",
+          "fixAvailable": true
+        },
+        {
+          "package": "sqlite3",
+          "severity": "high",
+          "fixAvailable": true
+        }
+      ]
+    },
+    {
+      "project": "web",
+      "exitCode": 1,
+      "counts": {
+        "info": 0,
+        "low": 4,
+        "moderate": 8,
+        "high": 14,
+        "critical": 2,
+        "total": 28
+      },
+      "highDirect": [
+        {
+          "package": "@angular/common",
+          "severity": "high",
+          "fixAvailable": true
+        },
+        {
+          "package": "@angular/compiler",
+          "severity": "high",
+          "fixAvailable": true
+        },
+        {
+          "package": "@angular/core",
+          "severity": "high",
+          "fixAvailable": true
+        },
+        {
+          "package": "@angular/platform-server",
+          "severity": "high",
+          "fixAvailable": true
+        },
+        {
+          "package": "@angular/router",
+          "severity": "high",
+          "fixAvailable": true
+        },
+        {
+          "package": "@angular/ssr",
+          "severity": "critical",
+          "fixAvailable": true
+        },
+        {
+          "package": "express",
+          "severity": "high",
+          "fixAvailable": true
+        },
+        {
+          "package": "xlsx",
+          "severity": "high",
+          "fixAvailable": false
+        }
+      ]
+    },
+    {
+      "project": "mobile",
+      "exitCode": 1,
+      "counts": {
+        "info": 0,
+        "low": 8,
+        "moderate": 27,
+        "high": 39,
+        "critical": 4,
+        "total": 78
+      },
+      "highDirect": [
+        {
+          "package": "@angular-devkit/build-angular",
+          "severity": "high",
+          "fixAvailable": true
+        },
+        {
+          "package": "@angular/common",
+          "severity": "high",
+          "fixAvailable": true
+        },
+        {
+          "package": "@angular/compiler",
+          "severity": "high",
+          "fixAvailable": true
+        },
+        {
+          "package": "@angular/core",
+          "severity": "high",
+          "fixAvailable": true
+        },
+        {
+          "package": "@angular/router",
+          "severity": "high",
+          "fixAvailable": true
+        }
+      ]
+    }
+  ],
+  "exports": {
+    "csvRows": 4,
+    "catalogTotal": 16,
+    "xlsxDownloaded": true
+  },
+  "scope": {
+    "writeTests": "base temporal independiente, API 3031 y fotos copiadas",
+    "applicationCodeChanged": false,
+    "physicalDeviceTested": false,
+    "nativeBuildsTested": false,
+    "testDatabaseRemoved": true,
+    "servicesRestoredToInitialStoppedState": true
+  },
+  "mobileLoginProbe": {
+    "status": 400,
+    "errorVisible": false,
+    "validLoginStatus": 200,
+    "disabledWhilePending": false
+  }
+}

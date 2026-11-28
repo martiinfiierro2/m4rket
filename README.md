@@ -224,3 +224,14 @@ Commit: `docs(design): anadir bocetos de app web y administracion`.
 - Conservadas las referencias anteriores A y C. Las nuevas imágenes usan los bocetos del supermercado y las fotografías de producto como referencias; la distribución y las cifras del panel son ilustrativas.
 - Entrega exclusivamente visual: no cambia el código, el diseño en ejecución, la lógica, los datos ni el arranque. El acabado vectorial de esta entrega es PNG; los SVG originales de C siguen disponibles por separado.
 - Revisados los ocho archivos y sus enlaces en la galería. Este bloque solo incorpora imágenes y documentación; no requiere repetir compilaciones.
+
+### Núcleo 14 — Diagnóstico fullstack y plan de mejoras (28/11/2026)
+
+Commit: `docs(audit): diagnosticar el estado fullstack y priorizar mejoras`.
+
+- Revisados API, MariaDB, app Ionic, motor y web Angular, conservando el código. Entregados [diagnóstico completo](./docs/diagnostico-fullstack-20261128.md) y [evidencia](./docs/diagnostico-fullstack-20261128.json), con enlaces a los ocho bocetos y a las referencias 3D anteriores.
+- Comprobados catálogo directo y proxies; builds de producción correctos; 61 comprobaciones API, 16 imágenes, 12 del recorrido móvil y 13 del recorrido web sobre una base temporal independiente.
+- Reproducidos errores de login móvil, precio unitario, comparativa anual, paginación de cuentas, validación y duplicados; identificados buscadores/edición incompletos y rutas ausentes. Documentados los permisos originales que el usuario decidió conservar y la exposición del hash en respuestas, sin cambiar su comportamiento.
+- Tests web bloqueados por una importación de node:console; test básico de Ionic correcto; lint móvil con 10 errores y 3 avisos. Auditoría de dependencias registrada por proyecto, diferenciando avisos del árbol y explotación demostrada; no se actualizan paquetes.
+- Propuesto un orden de mejoras de lógica, pruebas, interfaz y rendimiento. Los cambios de permisos, esquema, frameworks y funciones incompletas quedan sujetos a decisión antes de implementar.
+- Conservados los recuentos de las diez tablas de trabajo y la configuración privada. Eliminada únicamente la base creada para las pruebas; cerrados navegador y procesos propios, restaurando el estado inicial detenido.
